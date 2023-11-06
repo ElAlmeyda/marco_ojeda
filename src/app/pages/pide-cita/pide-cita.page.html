@@ -13,31 +13,75 @@
 <ion-content [fullscreen]="true">
 
 
-    <ion-card >
+  <ion-card>
+    <ion-card-header>
 
-    
       <ion-item> 
-        <ion-card-title style="margin: auto;"> Cita Previa </ion-card-title>
+        <ion-card-title style="margin: auto;"> Pedir Cita </ion-card-title>
       </ion-item>
+
+
+    </ion-card-header>
+    <ion-card-content>
+
       <form style="text-align: center;">
         <ion-item>
-          <ion-avatar slot="start">
-            <ion-img src="../../../assets/icon/o_1glaaj6u81utcgl26hqrpg1sbca.jpg" ></ion-img>
-          </ion-avatar>
-          <ion-label slot="end" style="font-size: 12px;"> Clinica Lomo los Frailes</ion-label>
-          <ion-label  style="font-size: 20px;"> Pino Yañez</ion-label>
+          <ion-icon name="clipboard-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-list id="open-modal"> Que servicio necesita </ion-list>
+          <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+            <ion-header>
+              <ion-toolbar>
+                <ion-buttons slot="start">
+                  <ion-back-button defaultHref="/folder"></ion-back-button>
+              </ion-buttons>
+                <ion-img src="../../assets/icon/o_1cj31qpibjo51a4vtqf4m65ia.png" style="width: 300px;"></ion-img>
+              </ion-toolbar>
+            </ion-header>
+            <ion-content>
+              <ion-list>
+                <ion-input
+                  label="Primera Visita"
+                  labelPlacement="stacked"
+                  type="text"
+                  placeholder="Your name"
+                  [(ngModel)]="name"
+                ></ion-input>
+              </ion-list>
+            </ion-content>
+          </ion-modal>
         </ion-item>
+
         <ion-item>
-          <ion-label> Semana </ion-label>
-          <ion-datetime dayValues="2,4,6,8" style="font-weight: 20px;"></ion-datetime>
-        </ion-item>
-        <ion-item style="padding: 8px;">
-          <ion-checkbox style="padding-bottom: 10px;"> Acepto el aviso legal y la politica privacidad </ion-checkbox>
-        </ion-item>
-        <ion-item>
-          <ion-button> Enviar Consulta </ion-button>
+          <ion-icon name="person-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input id="nombre" name="nombre" placeholder="Nombre"></ion-input>
         </ion-item>
         
+        <ion-item>
+          <ion-icon name="call-sharp" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input  name="telefono" placeholder="Telefono"></ion-input>
+        </ion-item>
+        
+        <ion-item>
+          <ion-icon name="accessibility-sharp" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input  name="dentista" placeholder="Preferencia dentista"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="calendar-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input  name="dia" placeholder="Dia"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="calendar-number-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input name="horario" placeholder="Horario"></ion-input>
+        </ion-item>
+        
+        <br>
+        <ion-button color="yellow"> Aceptar </ion-button>
+        
       </form>
-    </ion-card>
+    
+    </ion-card-content>
+    
+  </ion-card>
 </ion-content>

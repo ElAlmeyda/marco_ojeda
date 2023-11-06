@@ -58,6 +58,10 @@ const routes: Routes = [
   {
     path: 'noticia/:id',
     loadChildren: () => import('./pages/noticia/noticia.module').then( m => m.NoticiaPageModule)
+  },
+  {
+    path: 'administrador',
+    loadChildren: () => import('./pages/administrador/administrador.module').then( m => m.AdministradorPageModule)
   }
 ];
 
