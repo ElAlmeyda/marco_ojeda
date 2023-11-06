@@ -11,19 +11,42 @@ export class PideCitaPage implements OnInit {
   @ViewChild(IonModal)
   modal!: IonModal;
 
-  message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
+  messageDentista = '';
+  messageDia = '';
+  messageHorario = '';
+  messageServicio = '';
   name!: string;
+
+
+  public servicioDentista = [
+    {
+      id: 0,
+      nombre: "Primera Visita"
+    },
+    {
+      id: 1,
+      nombre: "Aparatos"
+    },
+    {
+      id: 2,
+      nombre: "Extraer Muela"
+    },
+  ];
+  
 
   constructor() { }
 
   ngOnInit() {
   }
+  
 
-  onWillDismiss(event: Event) {
-    const ev = event as CustomEvent<OverlayEventDetail<string>>;
-    if (ev.detail.role === 'confirm') {
-      this.message = `Hello, ${ev.detail.data}!`;
-    }
+  cancel() {
+    return this.modal.dismiss(null, 'cancel');
+  }
+
+  confirm() {
+    this.messageServicio = "Primera Visita";
+    this.modal.dismiss(null, this.messageServicio);
   }
 
 }
