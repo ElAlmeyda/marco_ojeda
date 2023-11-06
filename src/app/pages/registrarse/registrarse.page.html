@@ -1,0 +1,47 @@
+<ion-header [translucent]="true">
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card>
+    <ion-card-header>
+
+      <ion-item> 
+        <ion-card-title style="margin: auto;"> Registrarse </ion-card-title>
+      </ion-item>
+
+
+    </ion-card-header>
+    <ion-card-content>
+
+      <form style="text-align: center;">
+        <ion-item>
+          <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input [(ngModel)]="crearUser.nombre" name="nombre" placeholder="Nombre"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="call" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input id="movil" [(ngModel)]="crearUser.movil" name="movil" placeholder="Movil"></ion-input>
+        </ion-item>
+        
+        <ion-item>
+          <ion-icon name="at-circle" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input [(ngModel)]="crearUser.correo" name="correo" placeholder="Correo"></ion-input>
+        </ion-item>
+        
+        <ion-item>
+          <ion-icon name="key" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input type="password" [(ngModel)]="crearUser.password" name="password" placeholder="Contraseña"></ion-input>
+        </ion-item>
+        
+        <br>
+        <ion-button> Aceptar </ion-button>
+        <ion-button routerLink="/inicio-sesion"> Loguearse </ion-button>
+        
+      </form>
+    
+    </ion-card-content>
+    
+  </ion-card>
+  
+</ion-content>

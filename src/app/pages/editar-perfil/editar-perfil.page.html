@@ -1,0 +1,57 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/folder"></ion-back-button>
+  </ion-buttons>
+    <ion-img src="../../assets/icon/o_1cj31qpibjo51a4vtqf4m65ia.png" style="width: 300px;"></ion-img>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large"> Perfil </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-card >
+    <ion-card-header>
+
+      <ion-item> 
+        <ion-card-title style="margin: auto;"> Bienvenido Dario Almeida Garcia </ion-card-title>
+      </ion-item>
+
+
+    </ion-card-header>
+    <ion-card-content>
+
+      <form style="text-align: center;">
+        <ion-item>
+          <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input name="nombre" placeholder="Nombre"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="call" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input id="movil" name="movil" placeholder="Movil"></ion-input>
+        </ion-item>
+        
+        <ion-item>
+          <ion-icon name="at-circle" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input  name="correo" placeholder="Correo"></ion-input>
+        </ion-item>
+        
+        <ion-item>
+          <ion-icon name="key" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input type="password" name="password" placeholder="Contraseña"></ion-input>
+        </ion-item>
+        
+        
+        <br>
+        <ion-button> Editar </ion-button>
+      </form>
+    
+    </ion-card-content>
+    
+  </ion-card>
+</ion-content>

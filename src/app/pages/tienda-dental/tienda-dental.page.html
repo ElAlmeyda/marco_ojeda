@@ -1,0 +1,27 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-img src="../../assets/icon/o_1cj31qpibjo51a4vtqf4m65ia.png" style="width: 300px;"></ion-img>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <ion-searchbar animated="true" placeholder="Busca tu producto"></ion-searchbar>
+    <ion-item [routerLink]="['/especialista', ]">
+        <ion-avatar slot="start">
+          <ion-img></ion-img>
+        </ion-avatar>
+        <ion-label> Producto </ion-label>
+    </ion-item>
+    <ion-infinite-scroll>
+      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ion-list>
+
+</ion-content>
+
+

@@ -1,0 +1,37 @@
+<ion-header [translucent]="true">
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card>
+    <ion-card-header>
+
+      <ion-item> 
+        <ion-card-title style="margin: auto;">Inicia Sesion </ion-card-title>
+      </ion-item>
+
+
+    </ion-card-header>
+    <ion-card-content>
+
+      <form style="text-align: center;">
+        <ion-item>
+          <ion-icon name="at-circle" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input [(ngModel)]="credenciales.correo" name="correo" placeholder="Correo"></ion-input>
+        </ion-item>
+      
+        <ion-item>
+          <ion-icon name="key" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+          <ion-input type="password" [(ngModel)]="credenciales.password" name="password" placeholder="Contraseña"></ion-input>
+        </ion-item>
+        <ion-toggle style="padding: 20px;"> Recordar contraseña</ion-toggle><br/>
+        
+        <br>
+        <ion-button (click)="login()"> Login </ion-button>
+        <ion-button routerLink="/registrarse"> Registrate </ion-button>
+      </form>
+    
+    </ion-card-content>
+    
+  </ion-card>
+  
+</ion-content>
