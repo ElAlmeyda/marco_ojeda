@@ -12,7 +12,7 @@
   <ion-item>
     Atencion al cliente
   </ion-item>
-  <ion-grid *ngFor="let item  equipo">
+  <ion-grid *ngFor="let item of equipo">
     <ion-row>
       <ion-col style="font-size: 50%;">
         <ion-card [routerLink]="['/especialista', item.id]">
@@ -20,7 +20,6 @@
           <ion-card-header>
             <ion-card-title>{{item.nombre}}</ion-card-title>
           </ion-card-header>
-          <ion-card-content>{{item.descripcion}}</ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>

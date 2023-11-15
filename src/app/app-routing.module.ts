@@ -62,7 +62,16 @@ const routes: Routes = [
   {
     path: 'administrador',
     loadChildren: () => import('./pages/administrador/administrador.module').then( m => m.AdministradorPageModule)
+  },
+  {
+    path: 'la-clinica',
+    loadChildren: () => import('./pages/la-clinica/la-clinica.module').then( m => m.LaClinicaPageModule)
+  },  {
+    path: 'foto-clinica',
+    loadChildren: () => import('./pages/foto-clinica/foto-clinica.module').then( m => m.FotoClinicaPageModule)
   }
+
+
 ];
 
 @NgModule({
