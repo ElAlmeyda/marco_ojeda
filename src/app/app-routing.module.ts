@@ -20,10 +20,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/equipo/equipo.module').then( m => m.EquipoPageModule)
   },
   {
-    path: 'especialidad',
-    loadChildren: () => import('./pages/especialidad/especialidad.module').then( m => m.EspecialidadPageModule)
-  },
-  {
     path: 'folder',
     loadChildren: () => import('./pages/folder/folder.module').then( m => m.FolderPageModule)
   },
@@ -66,10 +62,25 @@ const routes: Routes = [
   {
     path: 'la-clinica',
     loadChildren: () => import('./pages/la-clinica/la-clinica.module').then( m => m.LaClinicaPageModule)
-  },  {
+  },
+  {
     path: 'foto-clinica',
     loadChildren: () => import('./pages/foto-clinica/foto-clinica.module').then( m => m.FotoClinicaPageModule)
+  },
+  {
+    path: 'carrito',
+    loadChildren: () => import('./pages/carrito/carrito.module').then( m => m.CarritoPageModule)
+  },
+  {
+    path: 'fotos/:id',
+    loadChildren: () => import('./pages/fotos/fotos.module').then( m => m.FotosPageModule)
+  },
+  {
+    path: 'producto/:id',
+    loadChildren: () => import('./pages/producto/producto.module').then( m => m.ProductoPageModule)
   }
+
+
 
 
 ];

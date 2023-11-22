@@ -3,7 +3,13 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-img src="../../assets/icon/o_1cj31qpibjo51a4vtqf4m65ia.png" style="width: 300px;"></ion-img>
+    <ion-item>
+      <ion-avatar style="height: 100px; width: 100px; margin-left: 34%;">
+        <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
+        </ion-img>
+      </ion-avatar>
+      <ion-icon slot="end" name="basket" routerLink="/carrito"></ion-icon>
+    </ion-item>
   </ion-toolbar>
 </ion-header>
 
@@ -11,7 +17,7 @@
 
   <ion-list>
     <ion-searchbar animated="true" placeholder="Busca tu producto"></ion-searchbar>
-    <ion-item [routerLink]="['/especialista', ]">
+    <ion-item [routerLink]="['/producto', 1]">
         <ion-avatar slot="start">
           <ion-img></ion-img>
         </ion-avatar>

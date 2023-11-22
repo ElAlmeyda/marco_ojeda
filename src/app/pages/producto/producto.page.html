@@ -1,5 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-menu-button slot="start"></ion-menu-button>
+    <ion-title></ion-title>
     <ion-item>
       <ion-avatar style="height: 100px; width: 100px; margin-left: 30%;">
         <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
@@ -10,4 +12,10 @@
   </ion-toolbar>
 </ion-header>
 
-
+<ion-content [fullscreen]="true">
+  <ion-item>
+    <ion-label> Nombre del producto </ion-label>
+    <ion-img alt="producto"></ion-img>
+    <p> Decripcion </p>
+  </ion-item>
+</ion-content>

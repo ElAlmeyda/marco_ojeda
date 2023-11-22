@@ -3,12 +3,35 @@
     <ion-menu-button slot="start"></ion-menu-button>
     <ion-title></ion-title>
     <ion-item>
-        <ion-img alt="avatar" src="../../../assets/icon/A03018B1-3DBF-4955-AE58-F2CC6C509380.PNG" style="width: 250px;">
+      <ion-avatar style="height: 100px; width: 100px; margin-left: 30%;">
+        <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
         </ion-img>
+      </ion-avatar>
+      
     </ion-item>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+
+  <ion-label>
+    <ion-item> Imagenes de la clinica </ion-item>
+    <ion-list style="padding:20px;" routerLink="/fotos/0">
+      Planta -1
+    </ion-list>
+    <ion-list style="padding:20px;" routerLink="/fotos/1">
+      Planta 0
+    </ion-list>
+    <ion-list style="padding:20px;" routerLink="/fotos/2">
+      Planta 1
+    </ion-list>
+    <ion-list style="padding:20px;" routerLink="/fotos/3">
+      Planta 2
+    </ion-list>
+    <ion-list style="padding:20px;" routerLink="/fotos/4">
+      Roof Terrace
+    </ion-list>
+
+  </ion-label>
   
 </ion-content>

@@ -1,10 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar >
     <ion-menu-button slot="start"></ion-menu-button>
-    <ion-title></ion-title>
     <ion-item>
-        <ion-img alt="avatar" src="../../../assets/icon/A03018B1-3DBF-4955-AE58-F2CC6C509380.PNG" style="width: 250px;">
+      <ion-avatar style="height: 100px; width: 100px; margin-left: 30%;">
+        <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
         </ion-img>
+      </ion-avatar>
+      
     </ion-item>
   </ion-toolbar>
 </ion-header>
@@ -21,7 +23,13 @@
             <ion-buttons slot="start">
               <ion-back-button defaultHref (click)="cancel()"></ion-back-button>
             </ion-buttons>
-            <ion-img src="../../assets/icon/o_1cj31qpibjo51a4vtqf4m65ia.png" style="width: 300px;"></ion-img>
+            <ion-item>
+              <ion-avatar style="height: 100px; width: 100px; margin-left: 30%;">
+                <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
+                </ion-img>
+              </ion-avatar>
+              
+            </ion-item>
           </ion-toolbar>
         </ion-header>
         <ion-content>
@@ -41,8 +49,13 @@
         </ion-content>
       </ng-template>
     </ion-modal>
-    <h1 style="font-family: 'Montserrat', sans-serif; padding: 10px; margin: 10px;" id="novedades">
+    
+    <h1 style="font-family: 'Montserrat', sans-serif; padding: 10px; margin: 10px;" routerLink="/foto-clinica">
       Imagenes de la clinica
     </h1>
+
+    <p>
+      Mapa de la clinica con google maps
+    </p>
   </ion-label>
 </ion-content>
