@@ -82,7 +82,11 @@ const routes: Routes = [
   {
     path: 'kid_planet',
     loadChildren: () => import('./pages/kid-planet/kid-planet.module').then( m => m.KidPlanetPageModule)
+  },  {
+    path: 'confirmar-prediagnostico',
+    loadChildren: () => import('./pages/confirmar-prediagnostico/confirmar-prediagnostico.module').then( m => m.ConfirmarPrediagnosticoPageModule)
   }
+
 
 
 

@@ -25,7 +25,32 @@
     <form style="text-align: center;">
       <ion-item>
         <ion-icon name="send" style="font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-textarea placeholder="Escriba su consulta"></ion-textarea>
+        <ion-textarea placeholder="Nombre"></ion-textarea>
+      </ion-item>
+      
+      <ion-item>
+        <ion-icon name="send" style="font-size: 30px; padding-right: 10px;"></ion-icon>
+        <ion-textarea placeholder="Fecha de nacimiento"></ion-textarea>
+      </ion-item>
+      
+      <ion-item>
+        <ion-icon name="send" style="font-size: 30px; padding-right: 10px;"></ion-icon>
+        <ion-textarea placeholder="Padece alguna enfermedad"></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="send" style="font-size: 30px; padding-right: 10px;"></ion-icon>
+        <ion-textarea placeholder="Medicamento"></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="send" style="font-size: 30px; padding-right: 10px;"></ion-icon>
+        <ion-textarea placeholder="Embarazada"></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="send" style="font-size: 30px; padding-right: 10px;"></ion-icon>
+        <ion-textarea placeholder="Alergias"></ion-textarea>
       </ion-item>
 
       <ion-item>
@@ -33,16 +58,11 @@
         <ion-input name="foto" type="file"></ion-input>
       </ion-item>
 
-
       <ion-item>
-        <ion-icon name="send" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input name="mensaje" placeholder="RECAPTCHA"></ion-input>
+        <ion-buttons slot="end">
+          <ion-button routerLink="/confirmar-prediagnostico"> Siguiente Paso </ion-button>
+        </ion-buttons>
       </ion-item>
-
-      
-      <br>
-      <ion-checkbox style="padding-bottom: 10px;"> Acepto el aviso legal y la politica privacidad </ion-checkbox>
-      <ion-button> Enviar Prediagnostico </ion-button>
     </form>
   
   </ion-card-content>
