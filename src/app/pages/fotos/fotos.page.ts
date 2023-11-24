@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Swiper, SwiperSlide } from 'swiper/vue';
 
 
 @Component({
