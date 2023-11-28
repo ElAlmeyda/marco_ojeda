@@ -85,6 +85,26 @@ const routes: Routes = [
   },  {
     path: 'confirmar-prediagnostico',
     loadChildren: () => import('./pages/confirmar-prediagnostico/confirmar-prediagnostico.module').then( m => m.ConfirmarPrediagnosticoPageModule)
+  },
+  {
+    path: 'admin-equipo',
+    loadChildren: () => import('./pages/admin-equipo/admin-equipo.module').then( m => m.AdminEquipoPageModule)
+  },
+  {
+    path: 'admin-noticia',
+    loadChildren: () => import('./pages/admin-noticia/admin-noticia.module').then( m => m.AdminNoticiaPageModule)
+  },
+  {
+    path: 'admin-producto',
+    loadChildren: () => import('./pages/admin-producto/admin-producto.module').then( m => m.AdminProductoPageModule)
+  },
+  {
+    path: 'gestor-calendario',
+    loadChildren: () => import('./pages/gestor-calendario/gestor-calendario.module').then( m => m.GestorCalendarioPageModule)
+  },
+  {
+    path: 'perfil',
+    loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
   }
 
 

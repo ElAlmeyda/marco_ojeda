@@ -1,19 +1,26 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>administrador</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-menu-button></ion-menu-button>
+  </ion-buttons>
+  <ion-title></ion-title>
+  <ion-item>
+    <ion-avatar style="height: 100px; width: 100px; margin-left: 30%;">
+      <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
+      </ion-img>
+    </ion-avatar>
+    
+  </ion-item>
+</ion-toolbar>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-item>
-        <ion-avatar style="height: 100px; width: 100px; margin-left: 30%;">
-          <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
-          </ion-img>
-        </ion-avatar>
-        
-      </ion-item>
-    </ion-toolbar>
-  </ion-header>
+  
+  <ion-list style="padding: 10px;">
+    <ion-item> Equipo <ion-icon slot="end" name="arrow-forward-outline" routerLink="/admin-equipo"></ion-icon>
+    </ion-item>
+    
+    <ion-item> Noticia <ion-icon slot="end" name="arrow-forward-outline" routerLink="/admin-noticia"></ion-icon>
+    </ion-item>
+    <ion-item> Producto <ion-icon slot="end" name="arrow-forward-outline" routerLink="/admin-producto"></ion-icon>
+    </ion-item>
+  </ion-list>
 </ion-content>
