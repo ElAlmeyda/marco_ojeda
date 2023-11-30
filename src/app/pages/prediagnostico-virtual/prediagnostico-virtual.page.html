@@ -24,33 +24,46 @@
 
     <form style="text-align: center;">
       <ion-item>
-        <ion-icon name="send" style="font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-textarea placeholder="Nombre"></ion-textarea>
+        <ion-icon name="person-outline" style="font-size: 30px; padding-right: 10px;"></ion-icon>
+        <ion-input placeholder="Nombre"></ion-input>
       </ion-item>
       
       <ion-item>
-        <ion-icon name="send" style="font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-textarea placeholder="Fecha de nacimiento"></ion-textarea>
+        <ion-icon name="calendar-outline" style="font-size: 30px; padding-right: 10px;"></ion-icon>
+        <ion-input placeholder="Fecha de nacimiento"></ion-input>
       </ion-item>
       
       <ion-item>
-        <ion-icon name="send" style="font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-textarea placeholder="Padece alguna enfermedad"></ion-textarea>
+        <ion-icon name="clipboard-outline" style="font-size: 30px; padding-right: 10px;"></ion-icon>
+        <ion-input placeholder="Padece alguna enfermedad"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="bag-add-outline" style="font-size: 30px; padding-right: 10px;"></ion-icon>
+        <ion-input placeholder="Medicamento"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-icon name="send" style="font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-textarea placeholder="Medicamento"></ion-textarea>
+        <ion-label>Embarazada</ion-label>
+        <ion-radio-group value="end">
+          <ion-grid>
+            <ion-row>
+              <ion-col col-6>
+                <ion-radio> Si</ion-radio>
+              </ion-col>
+              <ion-col col-6>
+                <ion-radio value="end"> No</ion-radio>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-radio-group>
+        
       </ion-item>
 
       <ion-item>
-        <ion-icon name="send" style="font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-textarea placeholder="Embarazada"></ion-textarea>
-      </ion-item>
-
-      <ion-item>
-        <ion-icon name="send" style="font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-textarea placeholder="Alergias"></ion-textarea>
+        <ion-icon name="bandage-outline" style="font-size: 30px; padding-right: 10px;"></ion-icon>
+        <ion-input placeholder="Alergias"></ion-input>
       </ion-item>
 
       <ion-item>
@@ -59,9 +72,7 @@
       </ion-item>
 
       <ion-item>
-        <ion-buttons slot="end">
-          <ion-button routerLink="/confirmar-prediagnostico"> Siguiente Paso </ion-button>
-        </ion-buttons>
+        <ion-button slot="end" color="primary" routerLink="/confirmar-prediagnostico" > Siguiente Paso </ion-button>
       </ion-item>
     </form>
   

@@ -1,11 +1,16 @@
 <ion-header [translucent]="true">
-  <ion-item>
-    <ion-avatar style="height: 100px; width: 100px; margin-left: 30%;">
-      <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
-      </ion-img>
-    </ion-avatar>
-    
-  </ion-item>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-item>
+      <ion-avatar style="height: 100px; width: 100px; margin-left: 30%;">
+        <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
+        </ion-img>
+      </ion-avatar>
+      
+    </ion-item>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -30,11 +35,11 @@
           <ion-icon name="key" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
           <ion-input type="password" [(ngModel)]="credenciales.password" name="password" placeholder="Contraseña"></ion-input>
         </ion-item>
-        <ion-toggle style="padding: 20px;"> Recordar contraseña</ion-toggle><br/>
+        <ion-toggle style="padding: 20px;" color="primary"> Recordar contraseña</ion-toggle><br/>
         
         <br>
-        <ion-button (click)="login()"> Login </ion-button>
-        <ion-button routerLink="/registrarse"> Registrate </ion-button>
+        <ion-button color="primary" (click)="login()"> Login </ion-button>
+        <ion-button color="primary" routerLink="/registrarse"> Registrate </ion-button>
       </form>
     
     </ion-card-content>

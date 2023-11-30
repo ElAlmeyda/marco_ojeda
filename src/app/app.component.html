@@ -3,8 +3,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
   
-  <ion-menu contentId="main-content" type="overlay">
-    <ion-content>
+  <ion-menu color="primary" contentId="main-content" type="overlay">
+    <ion-content class="custom-dropdown-menu">
       <ion-list id="inbox-list">
         <ion-item>
           <ion-avatar>
@@ -15,7 +15,7 @@
         </ion-item>
       </ion-list>
       <ion-list>
-        <ion-item routerLink="/folder">
+        <ion-item routerLink="/la-clinica">
           <ion-icon name="home" style="padding-right: 10px;"></ion-icon>
           La clinica
         </ion-item>
@@ -26,14 +26,10 @@
         <ion-item routerLink="/noticias">
           <ion-icon name="newspaper" style="padding-right: 10px;"></ion-icon>
           Noticias
-        </ion-item>
-        <ion-item routerLink="/contacto">
-          <ion-icon name="send" style="padding-right: 10px;"></ion-icon>
-          Contacta
         </ion-item> 
-        <ion-item routerLink="/especialidad">
+        <ion-item routerLink="/kid_planet">
           <ion-icon name="send" style="padding-right: 10px;"></ion-icon>
-          Especialidades
+          Kid Planet
         </ion-item>
       </ion-list>
     </ion-content>
@@ -41,7 +37,6 @@
   </ion-menu>
   <ion-router-outlet id="main-content" main></ion-router-outlet>
 
-  
   <ion-content [fullscreen]="true">
     <ion-tabs>
       <ion-tab-bar slot="bottom">
