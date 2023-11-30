@@ -5,7 +5,7 @@
   
   <ion-menu color="primary" contentId="main-content" type="overlay">
     <ion-content class="custom-dropdown-menu">
-      <ion-list id="inbox-list">
+      <ion-list id="inbox-list" lines="none">
         <ion-item>
           <ion-avatar>
             <ion-icon name="person-outline" style="font-size: 30px;" routerLink="/perfil"></ion-icon>
@@ -14,7 +14,7 @@
           <ion-icon name="log-out" style="font-size: 30px;" (onclick)="logout()"></ion-icon>
         </ion-item>
       </ion-list>
-      <ion-list>
+      <ion-list id="inbox-list" lines="none">
         <ion-item routerLink="/la-clinica">
           <ion-icon name="home" style="padding-right: 10px;"></ion-icon>
           La clinica
@@ -30,6 +30,19 @@
         <ion-item routerLink="/kid_planet">
           <ion-icon name="send" style="padding-right: 10px;"></ion-icon>
           Kid Planet
+        </ion-item>
+      </ion-list>
+      <ion-list lines="none">
+        <ion-item>
+          Su cita:
+          <ion-icon slot="end" name="arrow-down-outline" *ngIf="!showList" (click)="toggleList()"></ion-icon>
+          <ion-icon slot="end" name="arrow-up-outline" *ngIf="showList" (click)="toggleList()"></ion-icon>
+        </ion-item>
+        <div style="margin-left: 1em;" *ngIf="showList" >
+          <ion-item *ngFor="let item of citas"> {{item.dia}} {{item.hora}}</ion-item> 
+        </div>
+        <ion-item>
+          Mapa va aqui
         </ion-item>
       </ion-list>
     </ion-content>

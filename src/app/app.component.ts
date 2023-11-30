@@ -14,7 +14,26 @@ export class AppComponent {
     { title: 'Spam', url: '/folder/spam', icon: 'warning' },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+  showList = false;
+
+  public citas = [
+    {
+      dia :"13/02/2023",
+      hora : "09:00"
+    },
+    {
+      dia :"14/02/2023",
+      hora : "10:00"
+    }
+
+];
+
+  toggleList() {
+    this.showList = !this.showList;
+  }
+
   constructor() {}
+
 
 
   logout(){
