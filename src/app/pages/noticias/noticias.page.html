@@ -14,13 +14,8 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">noticias</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <ion-card *ngFor="let item of noticias">
+  <ion-card *ngFor="let item of noticias" style="font-family: 'Montserrat', sans-serif;">
     <ion-card-header [routerLink]="['/noticia', item.id]">
       <ion-card-title > {{item.titulo}} </ion-card-title>
     </ion-card-header>

@@ -17,23 +17,14 @@
 <ion-content [fullscreen]="true">
 
   <ion-label>
-    <ion-item> Imagenes de la clinica </ion-item>
-    <ion-list style="padding:20px;" routerLink="/fotos/0">
-      Planta -1
+    <ion-item class="toggle"> Imagenes de la clinica </ion-item>
+    <ion-list style="padding-left: 20px;"> 
+      <ion-item routerLink="/fotos/0" class="toggle"> Planta -1</ion-item>
+      <ion-item routerLink="/fotos/1" class="toggle"> Planta 0</ion-item>
+      <ion-item routerLink="/fotos/2" class="toggle"> Planta 1</ion-item>
+      <ion-item routerLink="/fotos/3" class="toggle"> Planta 2</ion-item>
+      <ion-item routerLink="/fotos/4" class="toggle"> Roof Terrace</ion-item>
     </ion-list>
-    <ion-list style="padding:20px;" routerLink="/fotos/1">
-      Planta 0
-    </ion-list>
-    <ion-list style="padding:20px;" routerLink="/fotos/2">
-      Planta 1
-    </ion-list>
-    <ion-list style="padding:20px;" routerLink="/fotos/3">
-      Planta 2
-    </ion-list>
-    <ion-list style="padding:20px;" routerLink="/fotos/4">
-      Roof Terrace
-    </ion-list>
-
   </ion-label>
   
 </ion-content>
