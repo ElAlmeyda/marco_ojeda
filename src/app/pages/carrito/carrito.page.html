@@ -15,5 +15,32 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  
+    <!-- Lista de productos en el carrito -->
+    <ion-card>
+      <ion-list>
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <ion-img src="#"></ion-img>
+          </ion-thumbnail>
+          <ion-label>
+            <h2>Nombre del producto</h2>
+            <p>Precio: 10€ </p>
+          </ion-label>
+
+          <ion-icon name="remove-outline"></ion-icon>
+          <label> 1 </label>
+          <ion-icon name="add-outline"></ion-icon>
+          
+          
+          <ion-icon name="trash-outline" slot="end"></ion-icon>
+        </ion-item>
+      </ion-list>
+    
+      <!-- Mensaje si el carrito está vacío -->
+    
+      <!-- Botón para proceder al pago -->
+      <ion-button expand="full" color="primary" >
+        Pasarela de pago (10€)
+      </ion-button>
+    </ion-card>
 </ion-content>
