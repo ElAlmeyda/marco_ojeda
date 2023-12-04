@@ -1,21 +1,42 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-menu-button slot="start"></ion-menu-button>
-    <ion-title></ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tienda-dental"></ion-back-button>
+    </ion-buttons>
     <ion-item>
-      <ion-avatar style="height: 100px; width: 100px; margin-left: 30%;">
+      <ion-avatar style="height: 100px; width: 100px; margin-left: 33.8%;">
         <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
         </ion-img>
       </ion-avatar>
-      
+      <ion-icon slot="end" name="basket" routerLink="/carrito"></ion-icon>
     </ion-item>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-item>
-    <ion-label> Nombre del producto </ion-label>
-    <ion-img alt="producto"></ion-img>
-    <p> Decripcion </p>
-  </ion-item>
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-img alt="producto" src="#"></ion-img>
+        </ion-col>
+        <ion-col size="5">
+          <ion-card-header>
+            <ion-card-title>Título</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti veritatis, 
+           ab quidem debitis provident quas temporibus ducimus perferendis et tempore, officia voluptatibus quis, 
+           sunt perspiciatis nihil ipsam nam vero blanditiis!.
+          </ion-card-content>
+          
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="auto">
+          <ion-button> Añadir </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
 </ion-content>
