@@ -24,12 +24,12 @@
           </ion-thumbnail>
           <ion-label>
             <h2>Nombre del producto</h2>
-            <p>Precio: 10€ </p>
+            <p>Precio: {{precio}}€ </p>
           </ion-label>
 
-          <ion-icon name="remove-outline"></ion-icon>
-          <label> 1 </label>
-          <ion-icon name="add-outline"></ion-icon>
+          <ion-icon name="remove-outline" (click)="menos()"></ion-icon>
+          <label> {{cantidad}} </label>
+          <ion-icon name="add-outline" (click)="mas()"></ion-icon>
           
           
           <ion-icon name="trash-outline" slot="end"></ion-icon>
@@ -40,7 +40,7 @@
     
       <!-- Botón para proceder al pago -->
       <ion-button expand="full" color="primary" >
-        Pasarela de pago (10€)
+        Pasarela de pago ({{precio_final}}€)
       </ion-button>
     </ion-card>
 </ion-content>
