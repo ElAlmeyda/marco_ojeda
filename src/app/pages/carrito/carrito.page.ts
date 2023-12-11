@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CarritoService } from '../../service/carrito.service';
 
 @Component({
   selector: 'app-carrito',
@@ -11,7 +12,9 @@ export class CarritoPage implements OnInit {
   precio: number =10;
   precio_final:number=0;
 
-  constructor() { 
+  public carrito = [];
+
+  constructor(private carritoService: CarritoService) { 
     
   }
 
@@ -31,6 +34,10 @@ export class CarritoPage implements OnInit {
       this.precio_final= this.precio * this.cantidad;
     }
     
+  }
+
+  ionViewDidEnter() {
+    this.carrito = this.carritoService.obtenerCarrito();
   }
 
 }

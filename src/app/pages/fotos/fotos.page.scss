@@ -1,0 +1,23 @@
+img {
+    padding:2em;
+    width: 100%;
+    height: auto;
+  }
+
+  .arrow-button {
+    position: absolute;
+    top: 50%;
+    font-size: 24px;
+  
+  }
+
+  .arrow-button-left{
+    
+  }
+  
+  .arrow-button:last-child {
+    margin-left: 5px;
+    padding-right: 19px;
+    right: 0;
+  }
+  
