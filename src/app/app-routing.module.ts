@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
+
+
 const routes: Routes = [
   {
     path: '',
@@ -82,7 +84,8 @@ const routes: Routes = [
   {
     path: 'kid_planet',
     loadChildren: () => import('./pages/kid-planet/kid-planet.module').then( m => m.KidPlanetPageModule)
-  },  {
+  },
+  {
     path: 'confirmar-prediagnostico',
     loadChildren: () => import('./pages/confirmar-prediagnostico/confirmar-prediagnostico.module').then( m => m.ConfirmarPrediagnosticoPageModule)
   },
@@ -106,11 +109,6 @@ const routes: Routes = [
     path: 'perfil',
     loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
   }
-
-
-
-
-
 
 ];
 

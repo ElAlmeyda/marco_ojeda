@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { interval } from 'rxjs';
 
 
@@ -9,6 +10,8 @@ import { interval } from 'rxjs';
 })
 export class FotosPage implements OnInit {
 
+  id = -1;
+
   images = [
     'assets/icon/A03018B1-3DBF-4955-AE58-F2CC6C509380.PNG',
     'assets/icon/o_1cj31qpibjo51a4vtqf4m65ia.png',
@@ -16,12 +19,22 @@ export class FotosPage implements OnInit {
   ];
   currentIndex = 0;
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      // Obtener el valor del parámetro 'id' y convertirlo a un número
+      const idFromUrl = params.get('id');
+
+      // Verificar la nulidad antes de intentar la conversión
+      this.id = idFromUrl !== null ? parseInt(idFromUrl, 10) : 0;
+    });
+
     // Cambia la imagen cada 5 segundos (ajusta según sea necesario)
     interval(5000).subscribe(() => this.showNext());
 
+    // Suscribirse a los cambios en los parámetros de la URL
+    
   }
 
   showNext() {
