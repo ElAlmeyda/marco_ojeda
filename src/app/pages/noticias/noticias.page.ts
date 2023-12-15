@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NoticiasService } from 'src/app/service/noticias.service';
 
 @Component({
   selector: 'app-noticias',
@@ -7,32 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NoticiasPage implements OnInit {
 
-  public noticias = [
-    {
-      id: 0,
-      titulo: "Tener Protesis",
-      informacion: "Lorem impusm"
-    },
-    {
-      id: 1,
-      titulo: "No Tener Protesis",
-      informacion: "Lorem impusm"
-    },
-    {
-      id: 2,
-      titulo: "Dientes nuevos",
-      informacion: "Lorem impusm"
-    },
-    {
-      id: 3,
-      titulo: "Caries",
-      informacion: "Lorem impusm"
-    }
-  ]
+  public noticias: any = []
 
-  constructor() { }
+  constructor(private producto: NoticiasService) { }
 
   ngOnInit() {
+    this.noticias= this.producto.obtenerListaDeNoticia();
   }
 
 }

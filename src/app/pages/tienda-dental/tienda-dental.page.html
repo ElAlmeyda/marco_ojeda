@@ -17,12 +17,13 @@
 
   <ion-list>
     <ion-searchbar animated="true" placeholder="Busca tu producto"></ion-searchbar>
-    <ion-list *ngFor="let item of items" lines="none">
+    <ion-list *ngFor="let item of store" lines="none">
       <ion-item [routerLink]="['/producto', item.id]">
         <ion-avatar slot="start">
-          <ion-img></ion-img>
+          <ion-img [src]="item.imagen"></ion-img>
         </ion-avatar>
-        <ion-label> {{item.name}} </ion-label>
+        <ion-label> {{item.nombre}} </ion-label>
+        <ion-label>{{item.precio}}€</ion-label>
       </ion-item>
     </ion-list>
     <ion-infinite-scroll>

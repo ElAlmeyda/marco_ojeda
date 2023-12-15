@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EquipoPage } from '../equipo/equipo.page';
 
+
 import { HttpClient } from '@angular/common/http'
 import { EquipoServiceService } from 'src/app/service/equipo-service.service';
 
@@ -13,7 +14,7 @@ import { EquipoServiceService } from 'src/app/service/equipo-service.service';
 })
 export class EspecialistaPage implements OnInit {
 
-  public especialista = [];
+  public especialista: any = [];
   public id:any;
   
 
@@ -26,10 +27,11 @@ export class EspecialistaPage implements OnInit {
   }
 
   ngOnInit() {
-    this.id= this.activatedRoute.snapshot.paramMap.get('id');
-
-    let especial = this.equipoService.encontrarEspecialista(this.id);
-   
+    this.activatedRoute.params.subscribe(params => {
+      const cadena = params['cadena'];
+      const numero = +params['numero'];
+      this.especialista = this.equipoService.encontrarEspecialista(cadena, numero);
+    });
   }
 
 

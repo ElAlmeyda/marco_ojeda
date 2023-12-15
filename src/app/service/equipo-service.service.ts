@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EquipoModule } from '../equipo/equipo.module';
+import { EquipoModule } from '../module/equipo/equipo.module';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class EquipoServiceService {
 
   constructor() { }
 
-  public equipo: EquipoModule = [
+  public equipoAtencionAlPaciente = [
     {
       id: 0,
       nombre: 'Pino Yañez',
@@ -37,8 +37,50 @@ export class EquipoServiceService {
     }
   ];
 
+  public equipoOdontologos = [
+    {
+      id: 0,
+      nombre: 'Juan',
+      descripcion: 'Att. al paciente, control de calidad y gestión de proveedores',
+      imagen: ""
+    },
+    {
+      id: 1,
+      nombre: 'Pepe',
+      descripcion: 'Recepción y atención al paciente en Odontopediatría',
+      imagen: ""
+    },
+    {
+      id: 2,
+      nombre: 'Julio',
+      descripcion: 'Gerente, recursos humanos',
+      imagen: ""
+    },
+    {
+      id: 3,
+      nombre: 'Roberto',
+      descripcion: 'Recepcion y admistracion',
+      imagen: ""
+    }
+  ];
 
-  encontrarEspecialista(id:number){
+  obtenerAtencionAlPaciente() {
+    return this.equipoAtencionAlPaciente;
+  }
 
+  obtenerOdontologo() {
+    return this.equipoOdontologos;
+  }
+
+
+  encontrarEspecialista(ruta:any, id: any){
+    const idBuscado = parseInt(ruta, 10);
+    let producto;
+    if(ruta == id){
+      producto = this.equipoAtencionAlPaciente.find(equipoAtencionAlPaciente => equipoAtencionAlPaciente.id === idBuscado);
+      return producto ? [producto] : [];
+    }
+
+    return producto ? [producto] : [];
   }
 }

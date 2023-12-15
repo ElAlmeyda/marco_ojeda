@@ -20,8 +20,8 @@
 
   <ion-grid >
     <ion-row>
-      <ion-col size="6" *ngFor="let item of equipo">
-        <ion-card [routerLink]="['/especialista', item.id]">
+      <ion-col size="6" *ngFor="let item of odontologo">
+        <ion-card [routerLink]="['/especialista/odontologo', item.id]">
           <ion-img src="{{item.imagen}}" ></ion-img>
           <ion-card-header>
             <ion-card-title>{{item.nombre}}</ion-card-title>
@@ -37,8 +37,8 @@
 
   <ion-grid >
     <ion-row>
-      <ion-col size="6" *ngFor="let item of equipo">
-        <ion-card [routerLink]="['/especialista', item.id]">
+      <ion-col size="6" *ngFor="let item of higuienista">
+        <ion-card [routerLink]="['/especialista/higienistas', item.id]">
           <ion-img src="{{item.imagen}}" ></ion-img>
           <ion-card-header>
             <ion-card-title>{{item.nombre}}</ion-card-title>
@@ -54,8 +54,8 @@
 
   <ion-grid >
     <ion-row>
-      <ion-col size="6" *ngFor="let item of equipo">
-        <ion-card [routerLink]="['/especialista', item.id]">
+      <ion-col size="6" *ngFor="let item of auxiliares">
+        <ion-card [routerLink]="['/especialista/auxiliar', item.id]">
           <ion-img src="{{item.imagen}}" ></ion-img>
           <ion-card-header>
             <ion-card-title>{{item.nombre}}</ion-card-title>
@@ -70,8 +70,8 @@
   </ion-item>
   <ion-grid >
     <ion-row>
-      <ion-col size="6" *ngFor="let item of equipo">
-        <ion-card [routerLink]="['/especialista', item.id]">
+      <ion-col size="6" *ngFor="let item of atencionAlcliente">
+        <ion-card [routerLink]="['/especialista/atencion', item.id]">
           <ion-img src="{{item.imagen}}" ></ion-img>
           <ion-card-header>
             <ion-card-title>{{item.nombre}}</ion-card-title>

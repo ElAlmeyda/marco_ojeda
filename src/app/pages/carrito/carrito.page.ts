@@ -35,9 +35,4 @@ export class CarritoPage implements OnInit {
     }
     
   }
-
-  ionViewDidEnter() {
-    this.carrito = this.carritoService.obtenerCarrito();
-  }
-
 }
