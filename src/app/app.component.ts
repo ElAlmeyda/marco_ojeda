@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UsuariosService } from './service/usuarios.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -15,6 +16,7 @@ export class AppComponent {
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
   showList = false;
+  change = false;
 
   public citas = [
     {
@@ -32,11 +34,12 @@ export class AppComponent {
     this.showList = !this.showList;
   }
 
-  constructor() {}
-
-
+  constructor(private changeLogin: UsuariosService) {
+    this.change= changeLogin.getLogin();
+  }
 
   logout(){
-    
+    this.change = !this.change;
+    this.changeLogin.changeUserLogin(this.change);
   }
 }

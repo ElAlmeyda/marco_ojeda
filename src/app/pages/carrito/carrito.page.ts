@@ -12,13 +12,23 @@ export class CarritoPage implements OnInit {
   precio: number =10;
   precio_final:number=0;
 
-  public carrito = [];
+  public carrito: any = [];
 
   constructor(private carritoService: CarritoService) { 
     
   }
 
   ngOnInit() {
+    this.carrito = this.carritoService.obtenerCarrito();
+  }
+
+  private actualizarProductosEnCarrito() {
+    this.carrito = this.carritoService.obtenerCarrito();
+  }
+
+  eliminarDelCarrito(indice: number) {
+    this.carritoService.eliminarDelCarrito(indice);
+    this.actualizarProductosEnCarrito();
   }
 
   mas(){

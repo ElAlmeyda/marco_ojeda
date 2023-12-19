@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UsuariosService } from 'src/app/service/usuarios.service';
 
 @Component({
   selector: 'app-inicio-sesion',
@@ -9,11 +10,11 @@ export class InicioSesionPage implements OnInit {
 
   
   credenciales = {
-    correo: null,
-    password: null
+    correo: '',
+    password: ''
   }
 
-  constructor() { 
+  constructor(private user: UsuariosService) { 
 
   }
 
@@ -21,7 +22,8 @@ export class InicioSesionPage implements OnInit {
   }
 
   login() {
-    console.log(this.credenciales.correo, this.credenciales.password);
+    alert("Usuario inicio sesion correctamente");
+    this.user.leerUser(this.credenciales.correo, this.credenciales.password);
   }
 
 

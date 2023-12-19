@@ -6,7 +6,13 @@
   <ion-menu color="primary" contentId="main-content" type="overlay">
     <ion-content class="custom-dropdown-menu">
       <ion-list id="inbox-list" lines="none" >
-        <ion-item>
+        <ion-item *ngIf="change">
+          <ion-avatar>
+            <ion-icon name="person-outline" style="font-size: 30px;" routerLink="/inicio-sesion"></ion-icon>
+          </ion-avatar>
+          <ion-list-header style="font-size: 16px;"> Iniciar sesion </ion-list-header>  
+        </ion-item>
+        <ion-item *ngIf="!change">
           <ion-avatar>
             <ion-icon name="person-outline" style="font-size: 30px;" routerLink="/perfil"></ion-icon>
           </ion-avatar>

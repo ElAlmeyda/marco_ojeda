@@ -16,7 +16,6 @@ export class ProductoModule {
       id: 0,
       nombre: 'Enjuague',
       precio: 5,
-      cantidad: 0,
       imagen: ['../../assets/icon/o_1glaaj6u81utcgl26hqrpg1sbca.jpg'],
       descripcion: 'Lorem ipsum '
     },
@@ -24,7 +23,6 @@ export class ProductoModule {
       id: 1,
       nombre: 'Cepillo de dientes',
       precio: 6,
-      cantidad: 0,
       imagen: ['../../assets/icon/o_1glaaj6u81utcgl26hqrpg1sbca.jpg'],
       descripcion: 'Lorem ipsum '
     },
@@ -32,7 +30,6 @@ export class ProductoModule {
       id: 2,
       nombre: 'Brackets',
       precio: 10,
-      cantidad: 0,
       imagen: ['../../assets/icon/o_1glaaj6u81utcgl26hqrpg1sbca.jpg'],
       descripcion: 'Lorem ipsum '
     },
@@ -40,7 +37,6 @@ export class ProductoModule {
       id: 3,
       nombre: 'Implanties',
       precio: 20,
-      cantidad: 0,
       imagen: ['../../assets/icon/o_1glaaj6u81utcgl26hqrpg1sbca.jpg'],
       descripcion: 'Lorem ipsum '
     }

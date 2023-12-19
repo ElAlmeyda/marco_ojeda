@@ -1,6 +1,10 @@
+import { DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
+import { UsuariosService } from 'src/app/service/usuarios.service';
+
 
 @Component({
   selector: 'app-pide-cita',
@@ -11,32 +15,35 @@ export class PideCitaPage implements OnInit {
   @ViewChild(IonModal)
   modal!: IonModal;
 
-  messageDentista = '';
-  messageDia = '';
-  messageHorario = '';
-  messageServicio = '';
-  name!: string;
+
+  dia: Date | null = null;
+  nombre='';
+  phone='';
+  especialista='';
+  hora='';
+  servicio='';
+  fechaModificada = '';
+  today:any;
 
 
-  public servicioDentista = [
-    {
-      id: 0,
-      nombre: "Primera Visita"
-    },
-    {
-      id: 1,
-      nombre: "Aparatos"
-    },
-    {
-      id: 2,
-      nombre: "Extraer Muela"
-    },
-  ];
+  userLogin= false;
+  isWeekday = (dateString: string) => {
+    const date = new Date(dateString);
+    const utcDay = date.getUTCDay();
+
+    /**
+     * Date will be enabled if it is not
+     * Sunday or Saturday
+     */
+    return utcDay !== 0 && utcDay !== 6;
+  };
   
 
-  constructor() { }
+  constructor(private user: UsuariosService, private datePipe: DatePipe) { }
 
   ngOnInit() {
+    this.userLogin= this.user.getLogin();
+    this.getDate();
   }
   
 
@@ -45,8 +52,15 @@ export class PideCitaPage implements OnInit {
   }
 
   confirm() {
-    this.messageServicio = "Primera Visita";
-    this.modal.dismiss(null, this.messageServicio);
+    this.fechaModificada = this.dia ? this.datePipe.transform(this.dia, 'dd-MM-yyyy') ?? '' : '';
+    return this.modal.dismiss(null, 'cancel');
   }
 
+  enviar(){
+
+    console.log(this.hora, this.especialista, this.servicio, this.nombre, this.fechaModificada, this.phone);
+  }
+
+  getDate() { const date = new Date(); this.today = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2); }
 }
+

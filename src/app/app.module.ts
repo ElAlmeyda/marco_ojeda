@@ -8,11 +8,12 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { EquipoServiceService } from './service/equipo-service.service';
+import { CommonModule, DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, HttpClientModule, IonicModule.forRoot(), AppRoutingModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, EquipoServiceService],
+  imports: [BrowserModule, HttpClientModule, IonicModule.forRoot(), AppRoutingModule, CommonModule],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, EquipoServiceService, DatePipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -17,14 +17,15 @@
 <ion-content [fullscreen]="true">
     <!-- Lista de productos en el carrito -->
     <ion-card>
-      <ion-list>
+      <ion-list *ngFor="let item of carrito; let i = index">
         <ion-item>
           <ion-thumbnail slot="start">
             <ion-img src="#"></ion-img>
           </ion-thumbnail>
           <ion-label>
-            <h2>Nombre del producto</h2>
-            <p>Precio: {{precio}}€ </p>
+            <h2>{{item.nombre}}</h2>
+            <p>Precio: {{item.precio}}€ </p>
+            <script> console.log(item.precio) </script>
           </ion-label>
 
           <ion-icon name="remove-outline" (click)="menos()"></ion-icon>
@@ -32,7 +33,7 @@
           <ion-icon name="add-outline" (click)="mas()"></ion-icon>
           
           
-          <ion-icon name="trash-outline" slot="end"></ion-icon>
+          <ion-icon name="trash-outline" slot="end" (click)="eliminarDelCarrito(i)"></ion-icon>
         </ion-item>
       </ion-list>
     

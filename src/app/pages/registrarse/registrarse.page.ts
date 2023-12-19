@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UsuariosService } from 'src/app/service/usuarios.service';
 
 @Component({
   selector: 'app-registrarse',
@@ -7,37 +8,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegistrarsePage implements OnInit {
 
-  // Initialize Firebase
-  //app = initializeApp(environment.firebaseConfig);
-
-  // Initialize Cloud Firestore and get a reference to the service
-  //db = getFirestore(this.app);
 
   crearUser = {
-    nombre: null,
-    movil: null,
-    correo: null,
-    password: null
+    nombre: '',
+    movil: '',
+    correo: '',
+    password: ''
   }
 
+  correcto = false;
 
-  constructor() { }
+
+  constructor(private user: UsuariosService) { }
 
   ngOnInit() {
   }
-  /*
-  async guardar(){
-    console.log(this.crearUser.correo, this.crearUser.movil, this.crearUser.nombre, this.crearUser.password);
-    try {
-      const docRef = await addDoc(collection(this.db, "users"), {
-        nombre: this.crearUser.nombre,
-        correo: this.crearUser.correo,
-        password: this.crearUser.password,
-        movil: this.crearUser.movil
-      });
-      console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
+ 
+
+
+  guardar(){
+    console.log("Funciona el boton");
+    this.correcto = this.user.nuevoUser(this.crearUser.nombre, this.crearUser.correo, this.crearUser.password, this.crearUser.movil);
+    if(this.correcto){
+      alert(this.crearUser.nombre + " se ha registrado correctamente");
+    } else {
+      alert(this.crearUser.nombre + " ya existe uno con ese correo");
     }
-  }*/
+  }
 }
