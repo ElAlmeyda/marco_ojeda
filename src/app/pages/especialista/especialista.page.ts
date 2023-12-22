@@ -16,6 +16,7 @@ export class EspecialistaPage implements OnInit {
 
   public especialista: any = [];
   public id:any;
+  tipo: string | null='';
   
 
   constructor(
@@ -27,11 +28,12 @@ export class EspecialistaPage implements OnInit {
   }
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe(params => {
-      const cadena = params['cadena'];
-      const numero = +params['numero'];
-      this.especialista = this.equipoService.encontrarEspecialista(cadena, numero);
-    });
+
+    this.tipo= this.activatedRoute.snapshot.paramMap.get('tipo')
+    this.id= this.activatedRoute.snapshot.paramMap.get('id')
+
+
+    this.especialista= this.equipoService.encontrarEspecialista(this.tipo, this.id);
   }
 
 

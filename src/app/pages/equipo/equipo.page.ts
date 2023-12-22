@@ -15,13 +15,23 @@ export class EquipoPage implements OnInit {
   public auxiliares: any = [];
   public atencionAlcliente: any = [];
 
+  public tiposEspecialistas: any = [];
+
   constructor(private producto: EquipoServiceService) { 
 
   }
 
   ngOnInit() {
-    this.atencionAlcliente= this.producto.obtenerAtencionAlPaciente();
-    this.odontologo= this.producto.obtenerOdontologo();
+    this.atencionAlcliente=this.producto.obtenerEquipoPorTipoEspecialista('atencion');
+    this.odontologo=this.producto.obtenerEquipoPorTipoEspecialista('odontologo');
+    this.higuienista=this.producto.obtenerEquipoPorTipoEspecialista('higienista');
+    this.auxiliares=this.producto.obtenerEquipoPorTipoEspecialista('auxiliar');
+    this.tiposEspecialistas = [
+      { tipo: 'odontologo', nombre: 'Odontólogos', datos: this.odontologo },
+      { tipo: 'higienista', nombre: 'Higienistas', datos: this.higuienista },
+      { tipo: 'auxiliar', nombre: 'Auxiliares', datos: this.auxiliares },
+      { tipo: 'atencion', nombre: 'Atención al Paciente', datos: this.atencionAlcliente }
+    ];
   }
 
 }

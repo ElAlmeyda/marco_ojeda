@@ -9,7 +9,25 @@ export class EquipoServiceService {
   
 
   constructor() { }
+  public tipoEspecialista = [
+    {
+      id: 0,
+      especialista: 'Atencion al Cliente',
+    },
+    {
+      id: 1,
+      especialista: 'Auxiliar',
+    },
+    {
+      id: 2,
+      especialista: 'Odontologo',
+    },
+    {
+      id: 3,
+      especialista: 'higienista',
+    }
 
+  ]
   public equipoAtencionAlPaciente = [
     {
       id: 0,
@@ -64,20 +82,98 @@ export class EquipoServiceService {
     }
   ];
 
-  obtenerAtencionAlPaciente() {
-    return this.equipoAtencionAlPaciente;
+  public equipoAuxiliar = [
+    {
+      id: 0,
+      nombre: 'Pepillo',
+      descripcion: 'Att. al paciente, control de calidad y gestión de proveedores',
+      imagen: ""
+    },
+    {
+      id: 1,
+      nombre: 'Pepin',
+      descripcion: 'Recepción y atención al paciente en Odontopediatría',
+      imagen: ""
+    },
+    {
+      id: 2,
+      nombre: 'Pepe Jesus',
+      descripcion: 'Gerente, recursos humanos',
+      imagen: ""
+    },
+    {
+      id: 3,
+      nombre: 'Pep',
+      descripcion: 'Recepcion y admistracion',
+      imagen: ""
+    }
+  ];
+
+  public equipoHiguienista = [
+    {
+      id: 0,
+      nombre: 'Dolores',
+      descripcion: 'Att. al paciente, control de calidad y gestión de proveedores',
+      imagen: ""
+    },
+    {
+      id: 1,
+      nombre: 'Lisney',
+      descripcion: 'Recepción y atención al paciente en Odontopediatría',
+      imagen: ""
+    },
+    {
+      id: 2,
+      nombre: 'Sara',
+      descripcion: 'Gerente, recursos humanos',
+      imagen: ""
+    },
+    {
+      id: 3,
+      nombre: 'Alexis',
+      descripcion: 'Recepcion y admistracion',
+      imagen: ""
+    }
+  ];
+
+  public obtenerEquipoPorTipoEspecialista(tipoEspecialista: string) {
+    switch (tipoEspecialista) {
+      case 'atencion':
+        return this.equipoAtencionAlPaciente;
+      case 'auxiliar':
+        return this.equipoAuxiliar;
+      case 'odontologo':
+        return this.equipoOdontologos;
+      case 'higienista':
+        return this.equipoHiguienista;
+      default:
+        // Puedes manejar un caso por defecto si el tipo de especialista no coincide con ninguna categoría conocida.
+        return [];
+    }
   }
 
-  obtenerOdontologo() {
-    return this.equipoOdontologos;
+  obtenerIdTipoEspecialista(){
+    return this.tipoEspecialista;
   }
-
 
   encontrarEspecialista(ruta:any, id: any){
-    const idBuscado = parseInt(ruta, 10);
+    const idBuscado = parseInt(id, 10);
     let producto;
-    if(ruta == id){
+    if(ruta == "atencion"){
       producto = this.equipoAtencionAlPaciente.find(equipoAtencionAlPaciente => equipoAtencionAlPaciente.id === idBuscado);
+      return producto ? [producto] : [];
+    }
+    if(ruta == "odontologo"){
+      producto = this.equipoOdontologos.find(equipoOdontologos => equipoOdontologos.id === idBuscado);
+      return producto ? [producto] : [];
+    }
+    if(ruta == "higienistas"){
+      producto = this.equipoHiguienista.find(equipoHiguienista => equipoHiguienista.id === idBuscado);
+      return producto ? [producto] : [];
+    }
+    if(ruta == "auxiliar"){
+      producto = this.equipoAuxiliar.find(equipoAuxiliar => equipoAuxiliar.id === idBuscado);
+      
       return producto ? [producto] : [];
     }
 

@@ -50,19 +50,19 @@ const routes: Routes = [
     loadChildren: () => import('./pages/prediagnostico-virtual/prediagnostico-virtual.module').then( m => m.PrediagnosticoVirtualPageModule)
   },
   {
-    path: 'especialista/odontologo/:id',
+    path: 'especialista/:tipo/:id',
     loadChildren: () => import('./pages/especialista/especialista.module').then( m => m.EspecialistaPageModule)
   },
   {
-    path: 'especialista/auxiliar/:id',
+    path: 'especialista/:tipo/:id',
     loadChildren: () => import('./pages/especialista/especialista.module').then( m => m.EspecialistaPageModule)
   },
   {
-    path: 'especialista/higienistas/:id',
+    path: 'especialista/:tipo/:id',
     loadChildren: () => import('./pages/especialista/especialista.module').then( m => m.EspecialistaPageModule)
   },
   {
-    path: 'especialista/atencion/:id',
+    path: 'especialista/:tipo/:id',
     loadChildren: () => import('./pages/especialista/especialista.module').then( m => m.EspecialistaPageModule)
   },
   {
