@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "servicio-4f831": {
+      "hosting": {
+        "app": [
+          "servicio-4f831"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "servicio-4f831"
+  }
+}
