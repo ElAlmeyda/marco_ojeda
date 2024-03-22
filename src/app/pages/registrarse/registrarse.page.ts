@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Usuario } from 'src/app/model';
 import { UsuariosService } from 'src/app/service/usuarios.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { UsuariosService } from 'src/app/service/usuarios.service';
 })
 export class RegistrarsePage implements OnInit {
 
-
+  
   crearUser = {
     nombre: '',
     movil: '',

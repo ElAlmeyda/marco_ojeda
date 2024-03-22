@@ -22,9 +22,14 @@ import { getPerformance, providePerformance } from '@angular/fire/performance';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
 
+import {  } from '@angular/fire';
+import { AngularFireModule } from '@angular/fire/compat';
+import { environment } from 'src/environments/environment';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, HttpClientModule, IonicModule.forRoot(), AppRoutingModule, CommonModule, 
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     provideFirebaseApp(() => 
     initializeApp({"projectId":"servicio-4f831","appId":"1:867441361379:web:4048cbd33afbfb169ee0d6","databaseURL":"https://servicio-4f831-default-rtdb.firebaseio.com","storageBucket":"servicio-4f831.appspot.com","apiKey":"AIzaSyBSx_zX2iUbKScJo__1dV9_luyxQzTpJpk","authDomain":"servicio-4f831.firebaseapp.com","messagingSenderId":"867441361379","measurementId":"G-12GCW4T1V0"})), 
     provideAuth(() => getAuth()), provideAnalytics(() => getAnalytics()), 

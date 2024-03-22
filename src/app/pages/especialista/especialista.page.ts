@@ -33,7 +33,7 @@ export class EspecialistaPage implements OnInit {
     this.id= this.activatedRoute.snapshot.paramMap.get('id')
 
 
-    this.especialista= this.equipoService.encontrarEspecialista(this.tipo, this.id);
+    //this.especialista= this.equipoService.encontrarEspecialista(this.tipo, this.id);
   }
 
 

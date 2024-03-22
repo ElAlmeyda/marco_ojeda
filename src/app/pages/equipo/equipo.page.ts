@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Empleado } from 'src/app/model';
 import { EquipoModule } from 'src/app/module/equipo/equipo.module';
 import { EquipoServiceService } from 'src/app/service/equipo-service.service';
+import { FirestoreService } from 'src/app/service/firestore.service';
 
 @Component({
   selector: 'app-equipo',
@@ -10,28 +12,33 @@ import { EquipoServiceService } from 'src/app/service/equipo-service.service';
 export class EquipoPage implements OnInit {
   [x: string]: any;
 
-  public odontologo: any = [];
+  public odontologo: Empleado[]=[];
   public higuienista: any = [];
   public auxiliares: any = [];
   public atencionAlcliente: any = [];
 
+  public equipo: Empleado[] = [];
+  private path = 'EquipoClinico/';
+
   public tiposEspecialistas: any = [];
 
-  constructor(private producto: EquipoServiceService) { 
+  constructor(private empleado: EquipoServiceService, public database: FirestoreService) { 
 
   }
 
   ngOnInit() {
-    this.atencionAlcliente=this.producto.obtenerEquipoPorTipoEspecialista('atencion');
-    this.odontologo=this.producto.obtenerEquipoPorTipoEspecialista('odontologo');
-    this.higuienista=this.producto.obtenerEquipoPorTipoEspecialista('higienista');
-    this.auxiliares=this.producto.obtenerEquipoPorTipoEspecialista('auxiliar');
-    this.tiposEspecialistas = [
-      { tipo: 'odontologo', nombre: 'Odontólogos', datos: this.odontologo },
-      { tipo: 'higienista', nombre: 'Higienistas', datos: this.higuienista },
-      { tipo: 'auxiliar', nombre: 'Auxiliares', datos: this.auxiliares },
-      { tipo: 'atencion', nombre: 'Atención al Paciente', datos: this.atencionAlcliente }
-    ];
+    this.empleado.getEquipo().subscribe(() => {
+      this.odontologo = this.empleado.getOdontologos();
+      this.higuienista = this.empleado.getHigienistas();
+      this.auxiliares = this.empleado.getAuxiliares();
+      this.atencionAlcliente = this.empleado.getAtencion();
+      this.tiposEspecialistas = [
+        { tipo: 'odontologo', nombre: 'Odontólogos', datos: this.odontologo },
+        { tipo: 'higienista', nombre: 'Higienistas', datos: this.higuienista },
+        { tipo: 'auxiliar', nombre: 'Auxiliares', datos: this.auxiliares },
+        { tipo: 'atencion', nombre: 'Atención al Paciente', datos: this.atencionAlcliente }
+      ];
+    });
   }
-
+  
 }

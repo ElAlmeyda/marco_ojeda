@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuariosService } from 'src/app/service/usuarios.service';
+import { FirestoreService } from 'src/app/service/firestore.service';
 
 @Component({
   selector: 'app-inicio-sesion',
