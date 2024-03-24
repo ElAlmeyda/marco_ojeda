@@ -13,7 +13,9 @@ export class NoticiasPage implements OnInit {
   constructor(private producto: NoticiasService) { }
 
   ngOnInit() {
-    this.noticias= this.producto.obtenerListaDeNoticia();
+    this.producto.getBlog().subscribe(() => {
+      this.noticias = this.producto.getNoticias();
+    });
   }
 
 }

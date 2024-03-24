@@ -17,6 +17,7 @@ export interface Producto {
 }
 
 export interface Blog {
+    [x: string]: unknown;
     nombre: string;
     descripcion: string;
     foto: string;

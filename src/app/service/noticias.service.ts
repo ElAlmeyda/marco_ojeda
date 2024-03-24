@@ -1,46 +1,32 @@
 import { Injectable } from '@angular/core';
+import { Blog } from '../model';
+import { FirestoreService } from './firestore.service';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NoticiasService {
 
-  constructor() { }
+  constructor(public database: FirestoreService) { }
 
-  public noticia= [
-    {
-      id: 0,
-      titulo: 'Enjuague',
-      imagen: ['../../assets/icon/o_1glaaj6u81utcgl26hqrpg1sbca.jpg'],
-      informacion: 'Lorem ipsum '
-    },
-    {
-      id: 1,
-      titulo: 'Cepillo de dientes',
-      imagen: ['../../assets/icon/o_1glaaj6u81utcgl26hqrpg1sbca.jpg'],
-      informacion: 'Lorem ipsum '
-    },
-    {
-      id: 2,
-      titulo: 'Brackets',
-      imagen: ['../../assets/icon/o_1glaaj6u81utcgl26hqrpg1sbca.jpg'],
-      informacion: 'Lorem ipsum '
-    },
-    {
-      id: 3,
-      titulo: 'Implanties',
-      imagen: ['../../assets/icon/o_1glaaj6u81utcgl26hqrpg1sbca.jpg'],
-      informacion: 'Lorem ipsum '
-    }
-  ];
+  private path = 'Noticias/';
+  noticias : Blog[] = [];
 
-  obtenerListaDeNoticia() {
-    return this.noticia;
+  getBlog() {
+    return this.database.getCollection<Blog>(this.path).pipe(
+      tap((res: Blog[]) => {
+        this.noticias = res;
+      })
+    );
   }
 
-  obtenerNoticia(ruta: any){
-    const idBuscado = parseInt(ruta, 10);
-    let producto = this.noticia.find(noticia => noticia.id === idBuscado);
-    return producto ? [producto] : [];
+  getNoticias(){
+    return this.noticias;
   }
+
+  getNoticia(id: string){
+    return this.noticias = this.noticias.filter(noticias => noticias.id === id);
+  }
+
 }

@@ -28,12 +28,11 @@ export class EspecialistaPage implements OnInit {
   }
 
   ngOnInit() {
-
-    this.tipo= this.activatedRoute.snapshot.paramMap.get('tipo')
     this.id= this.activatedRoute.snapshot.paramMap.get('id')
+    this.equipoService.getEquipo().subscribe(() => {
+      this.especialista= this.equipoService.getEspecialista(this.id);
+    });
 
-
-    //this.especialista= this.equipoService.encontrarEspecialista(this.tipo, this.id);
   }
 
 

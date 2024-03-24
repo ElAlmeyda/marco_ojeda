@@ -9,15 +9,17 @@ import { NoticiasService } from 'src/app/service/noticias.service';
 })
 export class NoticiaPage implements OnInit {
 
-  public noticias: any= [];
+  public noticia: any= [];
   public id:any;
 
-  constructor(private activatedRoute: ActivatedRoute, private noticia:NoticiasService ) { }
+  constructor(private activatedRoute: ActivatedRoute, private noticias:NoticiasService ) { }
 
   ngOnInit() {
 
     this.id= this.activatedRoute.snapshot.paramMap.get('id');
-    this.noticias = this.noticia.obtenerNoticia(this.id);
+    this.noticias.getBlog().subscribe(() => {
+      this.noticia= this.noticias.getNoticia(this.id);
+    });
   }
 
 }
