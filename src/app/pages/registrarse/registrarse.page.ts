@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from 'src/app/model';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
+import {  Router } from '@angular/router';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-registrarse',
@@ -17,10 +19,12 @@ export class RegistrarsePage implements OnInit {
     password: ''
   }
 
+  usuario: Usuario[]=[];
+
   correcto = false;
 
 
-  constructor(private user: UsuariosService) { }
+  constructor(private user: UsuariosService, public router: Router) { }
 
   ngOnInit() {
   }
@@ -28,12 +32,16 @@ export class RegistrarsePage implements OnInit {
 
 
   guardar(){
-    console.log("Funciona el boton");
-    this.correcto = this.user.nuevoUser(this.crearUser.nombre, this.crearUser.correo, this.crearUser.password, this.crearUser.movil);
-    if(this.correcto){
-      alert(this.crearUser.nombre + " se ha registrado correctamente");
-    } else {
-      alert(this.crearUser.nombre + " ya existe uno con ese correo");
-    }
+      this.user.getUsuarios().pipe(
+      ).subscribe(async () => {
+        this.usuario = this.user.getUsuario();
+        const check = await this.user.createUser(this.crearUser.nombre, this.crearUser.correo, this.crearUser.password, this.crearUser.movil);
+        if(check){
+          alert("Se ha creado su cuenta");
+          this.router.navigate(['/folder']);
+        } else {
+          alert("Ya existe una cuenta asociado a ese correo")
+        }
+    });
   }
 }

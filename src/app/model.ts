@@ -1,11 +1,10 @@
 
 
 export interface Usuario {
+    uid: string;
     nombre:string;
     correo:string;
-    password:string;
     movil:string;
-    id: string;
 }
 
 export interface Producto {
