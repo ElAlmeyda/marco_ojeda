@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NoticiasService } from 'src/app/service/noticias.service';
+import { NoticiasService } from 'src/app/backend/noticias.service';
 
 @Component({
   selector: 'app-noticia',

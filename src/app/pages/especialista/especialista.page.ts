@@ -4,7 +4,7 @@ import { EquipoPage } from '../equipo/equipo.page';
 
 
 import { HttpClient } from '@angular/common/http'
-import { EquipoServiceService } from 'src/app/service/equipo-service.service';
+import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
 
 
 @Component({

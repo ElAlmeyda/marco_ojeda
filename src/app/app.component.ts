@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UsuariosService } from './service/usuarios.service';
+import { UsuariosService } from './backend/usuarios.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',

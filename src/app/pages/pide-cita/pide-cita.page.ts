@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
-import { UsuariosService } from 'src/app/service/usuarios.service';
+import { UsuariosService } from 'src/app/backend/usuarios.service';
 
 
 @Component({

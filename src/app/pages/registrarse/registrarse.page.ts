@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from 'src/app/model';
-import { UsuariosService } from 'src/app/service/usuarios.service';
+import { UsuariosService } from 'src/app/backend/usuarios.service';
 
 @Component({
   selector: 'app-registrarse',

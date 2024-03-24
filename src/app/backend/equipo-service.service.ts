@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EquipoModule } from '../module/equipo/equipo.module';
-import { FirestoreService } from './firestore.service';
+import { FirestoreService } from '../service/firestore.service';
 import { Empleado } from '../model';
 import { EmptyError, Observable, tap, toArray } from 'rxjs';
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NoticiasService } from 'src/app/service/noticias.service';
+import { NoticiasService } from 'src/app/backend/noticias.service';
 
 @Component({
   selector: 'app-noticias',

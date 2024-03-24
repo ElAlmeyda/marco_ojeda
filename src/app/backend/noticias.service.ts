@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Blog } from '../model';
-import { FirestoreService } from './firestore.service';
+import { FirestoreService } from '../service/firestore.service';
 import { tap } from 'rxjs';
 
 @Injectable({

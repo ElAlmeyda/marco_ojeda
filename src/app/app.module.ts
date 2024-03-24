@@ -7,7 +7,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
-import { EquipoServiceService } from './service/equipo-service.service';
+import { EquipoServiceService } from './backend/equipo-service.service';
 import { CommonModule, DatePipe } from '@angular/common';
 
 import { getAuth, provideAuth} from '@angular/fire/auth';
