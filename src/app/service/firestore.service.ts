@@ -37,5 +37,9 @@ export class FirestoreService {
     const collection = this.database.collection<tipo>(path);
     return collection.valueChanges();
   }
-  
+
+  getDoc<tipo>(path: string, uid: string){
+    const collection = this.database.collection<tipo>(path);
+    return collection.doc(uid).valueChanges();
+  }
 }

@@ -3,6 +3,7 @@ import { Usuario } from 'src/app/model';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
 import {  Router } from '@angular/router';
 import { first } from 'rxjs';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-registrarse',
@@ -22,26 +23,39 @@ export class RegistrarsePage implements OnInit {
   usuario: Usuario[]=[];
 
   correcto = false;
+  guardarEjecutado = false;
 
 
-  constructor(private user: UsuariosService, public router: Router) { }
+  constructor(private user: UsuariosService, public router: Router, public toast: ToastController) { }
 
   ngOnInit() {
   }
  
 
 
-  guardar(){
-      this.user.getUsuarios().pipe(
-      ).subscribe(async () => {
-        this.usuario = this.user.getUsuario();
-        const check = await this.user.createUser(this.crearUser.nombre, this.crearUser.correo, this.crearUser.password, this.crearUser.movil);
-        if(check){
-          alert("Se ha creado su cuenta");
-          this.router.navigate(['/folder']);
-        } else {
-          alert("Ya existe una cuenta asociado a ese correo")
-        }
+  async guardar(){
+    const existeCorreo = this.user.verificarCorreoExiste(this.crearUser.correo); 
+    if (!existeCorreo) {
+      this.presentToast("Registrado fallido, el correo ya está asociado a otra cuenta");
+    } else {
+      const check = await this.user.createUser(this.crearUser.nombre, this.crearUser.correo, this.crearUser.password, this.crearUser.movil);
+      if (check) {
+        this.router.navigate(['/folder']);
+        this.presentToast("Registrado con éxito");
+      } else {          
+      this.presentToast("Registrado fallido, ocurrió un error al crear el usuario");
+      }
+    }
+  }
+
+
+  async presentToast(msg: string) {
+    const toast = await this.toast.create({
+      message: msg,
+      duration: 3000,
+      position: 'top',
     });
+
+    await toast.present();
   }
 }

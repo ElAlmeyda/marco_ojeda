@@ -1,22 +1,26 @@
 import { Component } from '@angular/core';
 import { UsuariosService } from './backend/usuarios.service';
+import { FirestoreAuthService } from './service/firestore-auth.service';
+import { FirestoreService } from './service/firestore.service';
+import { Usuario } from './model';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  public appPages = [
-    { title: 'Inbox', url: '/folder/inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/spam', icon: 'warning' },
-  ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+  
   showList = false;
   change = false;
+
+  usuario: Usuario = {
+    nombre: '',
+    uid: '',
+    correo: '',
+    movil: ''
+  };
+  userName="";
+  uid = "";
 
   public citas = [
     {
@@ -29,17 +33,47 @@ export class AppComponent {
     }
 
 ];
+  
 
   toggleList() {
     this.showList = !this.showList;
   }
 
-  constructor(private changeLogin: UsuariosService) {
-    this.change= changeLogin.getLogin();
+  constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService) {
+    console.log(this.change)
+    this.auth.stateAuth().subscribe(async res => {
+      if (res != null) {
+        this.uid = res.uid;
+        await this.obtenerUsuario();
+      } else {
+        this.uid= '';
+        this.user.changeUserLogin(false);
+        this.change = this.user.usuarioLogin;
+      }
+    });
+  }
+
+  obtenerUsuario() {
+    this.user.getUsuarios().subscribe(() => {
+      const usuario = this.user.getUsuarioConcreto(this.uid);
+      if (usuario) {
+        console.log(this.userName)
+        this.usuario = usuario;
+        this.userName = this.usuario.nombre;
+        this.user.changeUserLogin(true);
+        console.log(this.change)
+        this.change = this.user.usuarioLogin;
+        console.log(this.change)
+      } else {
+        console.log('Usuario no encontrado');
+      }
+    });
   }
 
   logout(){
-    this.change = !this.change;
-    this.changeLogin.changeUserLogin(this.change);
+    this.auth.logout();
+    console.log(this.change);
+    this.user.changeUserLogin(false);
+    this.change = this.user.usuarioLogin;
   }
 }

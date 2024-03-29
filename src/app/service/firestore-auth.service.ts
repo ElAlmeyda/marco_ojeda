@@ -29,4 +29,8 @@ export class FirestoreAuthService {
       return user.uid;
     }
   }
+
+  stateAuth(){
+    return this.auth.authState;
+  }
 }

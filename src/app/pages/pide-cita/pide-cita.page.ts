@@ -42,7 +42,6 @@ export class PideCitaPage implements OnInit {
   constructor(private user: UsuariosService, private datePipe: DatePipe) { }
 
   ngOnInit() {
-    this.userLogin= this.user.getLogin();
     this.getDate();
   }
   

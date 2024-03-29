@@ -19,13 +19,16 @@
     <ion-card-header>
 
       <ion-item> 
-        <ion-card-title style="margin: auto;"> Perfil de Dario Almeida </ion-card-title>
+        <ion-card-title style="margin: auto;"> Perfil de {{usuario.nombre}} </ion-card-title>
         <ion-icon slot="end" name="arrow-forward-outline" routerLink="/editar-perfil"></ion-icon>
       </ion-item>
 
 
     </ion-card-header>
     <ion-card-content>
+      <ion-item> Su movil: <br> {{usuario.movil}}</ion-item>
+      <ion-item> Su correo: <br> {{usuario.correo}}</ion-item>
+
       <ion-item> Su cita: <br> 13/01/2024 09:00</ion-item>
       <ion-item> Historial </ion-item>
         <ion-list>
