@@ -32,15 +32,16 @@ export class NoticiasService {
   crearNoticia(titulo: string, descripcion: string, foto: string){
     const data = {titulo, descripcion, foto, id:''};
     data['id']= this.database.getId();
-    return this.database.creatDoc(data, this.path, this.database.getId());
+    return this.database.creatDoc(data, this.path, data['id']);
   }
 
-  editarNoticia(){
-
+  editarNoticia(nombre: string, descripcion: string, foto: string, id: string){
+    const data = {nombre, descripcion, foto, id}
+    return this.database.updateDoc(data, this.path, id);
   }
 
-  deleteNoticia(){
-
+  deleteNoticia(id:string){
+    return this.database.deleteDoc(this.path, id);
   }
 
 }

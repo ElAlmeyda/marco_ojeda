@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
 import { Empleado } from 'src/app/model';
 import { FirestoreService } from 'src/app/service/firestore.service';
@@ -10,7 +11,7 @@ import { FirestoreService } from 'src/app/service/firestore.service';
 })
 export class AdminEquipoPage implements OnInit {
 
-  constructor(public empleado: EquipoServiceService, public firestore : FirestoreService) { }
+  constructor(public empleado: EquipoServiceService, public firestore : FirestoreService, public toastController: ToastController) { }
 
   equipo: Empleado[]=[];
 
@@ -20,4 +21,25 @@ export class AdminEquipoPage implements OnInit {
     });
   }
 
+
+  async delete(empleadoDelete: any){
+    try {
+      const idEmpleado = empleadoDelete.id;
+      await this.empleado.deleteEmpleado(idEmpleado);
+      this.mostrarToast("Empleado eliminado correctamente");
+    } catch (error) {
+      console.error("Error al crear el empleado:", error);
+      this.mostrarToast("Error al crear el empleado");
+    }
+    
+  }
+
+  async mostrarToast(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2000, // Duración del toast en milisegundos
+      position: 'bottom' // Posición del toast en la pantalla
+    });
+    toast.present();
+  }
 }

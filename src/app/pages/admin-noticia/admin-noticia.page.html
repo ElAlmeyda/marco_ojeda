@@ -23,5 +23,8 @@
       <ion-card-title > {{item.titulo}} </ion-card-title>
     </ion-card-header>
     <ion-card-content> {{item.descripcion}}</ion-card-content>
+    <ion-card-content style="text-align: right;"> 
+      <ion-icon name="trash-outline" (click)="delete(item)" style="font-size: 24px;"></ion-icon>
+    </ion-card-content>
   </ion-card>
 </ion-content>

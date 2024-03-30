@@ -62,7 +62,7 @@ export class EquipoServiceService {
   crearEmpleado(nombre: string, descripcion: string, foto: string, tipo: string){
     const data = {nombre, descripcion, foto, tipo, id:''};
     data['id']= this.database.getId();
-    return this.database.creatDoc(data, this.path, this.database.getId());
+    return this.database.creatDoc(data, this.path, data['id']);
   }
 
   actualizarEmpleado(nombre: string, descripcion: string, foto: string, tipo: string, id: string){
@@ -70,8 +70,8 @@ export class EquipoServiceService {
     return this.database.updateDoc(data, this.path, id);
   }
 
-  deleteEmpleado(){
-
+  deleteEmpleado(id: string){
+    return this.database.deleteDoc(this.path, id);
   }
 
 }

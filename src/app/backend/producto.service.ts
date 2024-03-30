@@ -33,14 +33,15 @@ export class ProductoService {
   crearProducto(nombre: string, descripcion: string, foto: string, precio: number){
     const data = {nombre, descripcion, foto, precio, id:''};
     data['id']= this.firestore.getId();
-    return this.firestore.creatDoc(data, this.path, this.firestore.getId());
+    return this.firestore.creatDoc(data, this.path, data['id']);
   }
 
-  editarProducto(){
-
+  editarProducto(nombre: string, descripcion: string, foto: string, precio: number, id:string){
+    const data = {nombre, descripcion, foto, precio, id};
+    return this.firestore.updateDoc(data, this.path, id);
   }
 
-  deleteProducto(){
-    
+  deleteProducto(id: string){
+    return this.firestore.deleteDoc(this.path, id);
   }
 }

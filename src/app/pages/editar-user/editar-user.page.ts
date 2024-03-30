@@ -30,7 +30,6 @@ export class EditarUserPage implements OnInit {
 
     this.equipo.getEquipo().subscribe(() => {
       this.empleado = this.equipo.getEspecialista(this.id);
-      console.log(this.empleado);
     });
   }
 
