@@ -19,7 +19,7 @@ export interface Producto {
 
 export interface Blog {
     [x: string]: unknown;
-    nombre: string;
+    titulo: string;
     descripcion: string;
     foto: string;
     id: string;

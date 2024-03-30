@@ -50,6 +50,7 @@ export class AppComponent {
         this.uid= '';
         this.user.changeUserLogin(false);
         this.change = this.user.usuarioLogin;
+        this.usuario.rol='';
       }
     });
   }
@@ -70,8 +71,8 @@ export class AppComponent {
 
   logout(){
     this.auth.logout();
-    console.log(this.change);
     this.user.changeUserLogin(false);
     this.change = this.user.usuarioLogin;
+    this.usuario.rol='';
   }
 }

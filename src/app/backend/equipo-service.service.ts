@@ -32,8 +32,7 @@ export class EquipoServiceService {
   }
 
   getOdontologos(){
-    this.equipoOdontologos = this.empleado.filter(empleado => empleado.tipo === 'Odontologos');
-    return this.equipoOdontologos;
+    return this.equipoOdontologos = this.empleado.filter(empleado => empleado.tipo === 'Odontologos');
   }
 
   getHigienistas(){
@@ -54,6 +53,25 @@ export class EquipoServiceService {
 
   getEspecialista(id: string){
     return this.empleado = this.empleado.filter(empleado => empleado.id === id);
+  }
+
+  getEmpleados(){
+    return this.empleado;
+  }
+
+  crearEmpleado(nombre: string, descripcion: string, foto: string, tipo: string){
+    const data = {nombre, descripcion, foto, tipo, id:''};
+    data['id']= this.database.getId();
+    return this.database.creatDoc(data, this.path, this.database.getId());
+  }
+
+  actualizarEmpleado(nombre: string, descripcion: string, foto: string, tipo: string, id: string){
+    const data = {nombre, descripcion, foto, tipo, id}
+    return this.database.updateDoc(data, this.path, id);
+  }
+
+  deleteEmpleado(){
+
   }
 
 }

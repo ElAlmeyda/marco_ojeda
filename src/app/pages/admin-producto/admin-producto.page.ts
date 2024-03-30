@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ProductoService } from 'src/app/backend/producto.service';
+import { Producto } from 'src/app/model';
+import { FirestoreService } from 'src/app/service/firestore.service';
 
 @Component({
   selector: 'app-admin-producto',
@@ -7,9 +10,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminProductoPage implements OnInit {
 
-  constructor() { }
+  constructor(public productos: ProductoService, public firestore : FirestoreService) { }
+
+  producto: Producto[]=[];
 
   ngOnInit() {
+    this.productos.getProdCollection().subscribe(() => {
+      this.producto = this.productos.getProductos();
+    });
   }
 
 }

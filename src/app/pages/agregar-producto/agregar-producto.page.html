@@ -1,0 +1,47 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/admin-producto"></ion-back-button>
+    </ion-buttons>
+    <ion-title></ion-title>
+    <ion-item>
+      <ion-avatar style="height: 100px; width: 100px; margin-left: 30%;">
+        <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
+        </ion-img>
+      </ion-avatar>
+      
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card-content>
+
+    <form style="text-align: center;">
+      <ion-item>
+        <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+        <ion-input name="nombre" placeholder="Nombre" [(ngModel)]="producto.nombre"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+        <ion-input id="movil" name="descripcion" placeholder="Descripcion" [(ngModel)]="producto.descripcion"></ion-input>
+      </ion-item>
+      
+      <ion-item>
+        <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+        <ion-input name="foto" type="file" placeholder="Foto" [(ngModel)]="producto.foto"></ion-input>
+      </ion-item>
+      
+      <ion-item>
+        <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
+        <ion-input name="foto" placeholder="precio" [(ngModel)]="producto.precio"></ion-input>
+      </ion-item>
+      
+      
+      <br>
+      <ion-button (click)="guardar()"> Guardar nuevo </ion-button>
+    </form>
+  
+  </ion-card-content>
+</ion-content>

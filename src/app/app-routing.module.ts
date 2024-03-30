@@ -120,7 +120,34 @@ const routes: Routes = [
   {
     path: 'perfil',
     loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
+  },
+  {
+    path: 'agregar-user',
+    loadChildren: () => import('./pages/agregar-user/agregar-user.module').then( m => m.AgregarUserPageModule)
+  },
+  {
+    path: 'editar-user/:id',
+    loadChildren: () => import('./pages/editar-user/editar-user.module').then( m => m.EditarUserPageModule)
+  },
+  {
+    path: 'agregar-producto',
+    loadChildren: () => import('./pages/agregar-producto/agregar-producto.module').then( m => m.AgregarProductoPageModule)
+  },
+  {
+    path: 'editar-producto/:id',
+    loadChildren: () => import('./pages/editar-producto/editar-producto.module').then( m => m.EditarProductoPageModule)
+  },
+  {
+    path: 'agregar-noticia',
+    loadChildren: () => import('./pages/agregar-noticia/agregar-noticia.module').then( m => m.AgregarNoticiaPageModule)
+  },
+  {
+    path: 'editar-noticia/:id',
+    loadChildren: () => import('./pages/editar-noticia/editar-noticia.module').then( m => m.EditarNoticiaPageModule)
   }
+
+
+
 
 ];
 

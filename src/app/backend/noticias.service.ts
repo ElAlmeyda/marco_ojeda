@@ -29,4 +29,18 @@ export class NoticiasService {
     return this.noticias = this.noticias.filter(noticias => noticias.id === id);
   }
 
+  crearNoticia(titulo: string, descripcion: string, foto: string){
+    const data = {titulo, descripcion, foto, id:''};
+    data['id']= this.database.getId();
+    return this.database.creatDoc(data, this.path, this.database.getId());
+  }
+
+  editarNoticia(){
+
+  }
+
+  deleteNoticia(){
+
+  }
+
 }
