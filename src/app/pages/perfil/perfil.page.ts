@@ -15,7 +15,9 @@ export class PerfilPage implements OnInit {
     nombre: '',
     uid: '',
     correo: '',
-    movil: ''
+    movil: '',
+    password: '',
+    rol:''
   };
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService) { 

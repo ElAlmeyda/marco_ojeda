@@ -16,8 +16,19 @@ export class EditarPerfilPage implements OnInit {
     nombre: '',
     uid: '',
     correo: '',
-    movil: ''
+    movil: '',
+    password: '',
+    rol:''
   };
+
+  actualizarUser: Usuario = {
+    nombre: '',
+    uid: '',
+    correo: '',
+    movil: '',
+    password: '',
+    rol:''
+  }
   
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, public toast: ToastController) { 
@@ -46,11 +57,26 @@ export class EditarPerfilPage implements OnInit {
   }
 
   async editar(){
-    const check = await this.user.actualizarInfo(this.usuario.nombre, this.usuario.correo, this.usuario.movil, this.uid);
-      if (check) {
+    // Mostrar cuadro de diálogo de confirmación
+    const confirmacion = window.confirm("¿Estás seguro de que deseas actualizar la información?");
+
+  // Verificar si el usuario confirmó la acción
+    if (confirmacion) {
+      const check = await this.user.actualizarInfo(this.actualizarUser.nombre, this.actualizarUser.correo, this.actualizarUser.movil, this.actualizarUser.password, this.uid);
+       if (check) {
         this.presentToast("Actualizado con éxito");
-    } else {          
-      this.presentToast("Actualizado fallido");
+      } else {          
+        this.presentToast("Actualizado fallido");
+      }
+    } else {
+      this. actualizarUser= {
+        nombre: '',
+        uid: '',
+        correo: '',
+        movil: '',
+        password: '',
+        rol:''
+      }
     }
   }
 

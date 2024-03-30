@@ -34,22 +34,22 @@
       <form style="text-align: center;">
         <ion-item>
           <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input name="nombre" placeholder="{{usuario.nombre}}" [(ngModel)]="usuario.nombre"></ion-input>
+          <ion-input name="nombre" placeholder="{{usuario.nombre}}" [(ngModel)]="actualizarUser.nombre"></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-icon name="call" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input id="movil" name="movil" placeholder="{{usuario.movil}}" [(ngModel)]="usuario.movil"></ion-input>
+          <ion-input id="movil" name="movil" placeholder="{{usuario.movil}}" [(ngModel)]="actualizarUser.movil"></ion-input>
         </ion-item>
         
         <ion-item>
           <ion-icon name="at-circle" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input  name="correo" placeholder="{{usuario.correo}}" [(ngModel)]="usuario.correo"></ion-input>
+          <ion-input name="correo" placeholder="{{usuario.correo}}" [(ngModel)]="actualizarUser.correo"></ion-input>
         </ion-item>
         
         <ion-item>
           <ion-icon name="key" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input type="password" name="password" placeholder="Contraseña" ></ion-input>
+          <ion-input type="password" name="password" placeholder="{{usuario.password}}" [(ngModel)]="actualizarUser.password"></ion-input>
         </ion-item>
         
         

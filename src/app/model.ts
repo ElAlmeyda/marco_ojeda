@@ -5,6 +5,8 @@ export interface Usuario {
     nombre:string;
     correo:string;
     movil:string;
+    password:string;
+    rol:string;
 }
 
 export interface Producto {

@@ -4,6 +4,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
+import { Usuario } from 'src/app/model';
+import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
+import { FirestoreService } from 'src/app/service/firestore.service';
 
 
 @Component({
@@ -14,7 +17,7 @@ import { UsuariosService } from 'src/app/backend/usuarios.service';
 export class PideCitaPage implements OnInit {
   @ViewChild(IonModal)
   modal!: IonModal;
-
+  uid='';
 
   dia: Date | null = null;
   nombre='';
@@ -24,6 +27,15 @@ export class PideCitaPage implements OnInit {
   servicio='';
   fechaModificada = '';
   today:any;
+
+  usuario: Usuario = {
+    nombre: '',
+    uid: '',
+    correo: '',
+    movil: '',
+    password: '',
+    rol:''
+  };
 
 
   userLogin= false;
@@ -39,7 +51,17 @@ export class PideCitaPage implements OnInit {
   };
   
 
-  constructor(private user: UsuariosService, private datePipe: DatePipe) { }
+  constructor(private user: UsuariosService, private datePipe: DatePipe, public auth: FirestoreAuthService, public firestore: FirestoreService) {
+    this.auth.stateAuth().subscribe(async res => {
+      if (res != null) {
+        this.uid = res.uid;
+        const usuario = this.user.getUsuario();
+
+      } else {
+        this.uid= '';
+      }
+    });
+   }
 
   ngOnInit() {
     this.getDate();

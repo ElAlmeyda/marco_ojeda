@@ -17,7 +17,9 @@ export class AppComponent {
     nombre: '',
     uid: '',
     correo: '',
-    movil: ''
+    movil: '',
+    password: '',
+    rol:''
   };
   userName="";
   uid = "";
@@ -40,7 +42,6 @@ export class AppComponent {
   }
 
   constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService) {
-    console.log(this.change)
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -57,13 +58,10 @@ export class AppComponent {
     this.user.getUsuarios().subscribe(() => {
       const usuario = this.user.getUsuarioConcreto(this.uid);
       if (usuario) {
-        console.log(this.userName)
         this.usuario = usuario;
         this.userName = this.usuario.nombre;
         this.user.changeUserLogin(true);
-        console.log(this.change)
         this.change = this.user.usuarioLogin;
-        console.log(this.change)
       } else {
         console.log('Usuario no encontrado');
       }

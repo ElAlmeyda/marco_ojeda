@@ -36,8 +36,8 @@ export class UsuariosService {
     );
   }
 
-  async createUser(nombre:string, correo:string, password:string, movil:string){
-    const data = {nombre, correo, password, movil, uid:''};
+  async createUser(nombre:string, correo:string, password:string, movil:string, rol:string){
+    const data = {nombre, correo, password, movil, uid:'', rol};
       try{
         await this.firestroreAuth.registrarse(correo, password);
         const uid: string | null = await this.firestroreAuth.getUid();
@@ -85,8 +85,8 @@ export class UsuariosService {
     return this.usuario.find(usuario => usuario.uid === id);
   }
 
-  async actualizarInfo(nombre: string, correo: string, movil: string, uid:string){
-    const data = {nombre, correo, movil, uid};
+  async actualizarInfo(nombre: string, correo: string, movil: string, password:string, uid:string){
+    const data = {nombre, correo, movil, password, uid};
     try {
       // Llama a la función updateDoc() para actualizar los datos en Firestore
       await this.firestoreService.updateDoc(data, this.path, uid);

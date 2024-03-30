@@ -19,6 +19,7 @@ export class RegistrarsePage implements OnInit {
     correo: '',
     password: ''
   }
+  rol="cliente";
 
   usuario: Usuario[]=[];
 
@@ -38,7 +39,7 @@ export class RegistrarsePage implements OnInit {
     if (!existeCorreo) {
       this.presentToast("Registrado fallido, el correo ya está asociado a otra cuenta");
     } else {
-      const check = await this.user.createUser(this.crearUser.nombre, this.crearUser.correo, this.crearUser.password, this.crearUser.movil);
+      const check = await this.user.createUser(this.crearUser.nombre, this.crearUser.correo, this.crearUser.password, this.crearUser.movil, this.rol);
       if (check) {
         this.router.navigate(['/folder']);
         this.presentToast("Registrado con éxito");
