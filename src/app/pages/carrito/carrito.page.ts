@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CarritoService } from '../../backend/carrito.service';
+import { Pedido, Producto, ProductoPedido, Usuario } from 'src/app/model';
+import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
+import { async } from 'rxjs';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-carrito',
@@ -7,42 +11,73 @@ import { CarritoService } from '../../backend/carrito.service';
   styleUrls: ['./carrito.page.scss'],
 })
 export class CarritoPage implements OnInit {
+  
+  uid='';
+  cliente !: Usuario;
+  public carrito: Pedido = {
+    cliente: this.cliente,
+    productos: [],
+    precioTotal: 0,
+    estado: '',
+    id: ''
+  };
 
-  cantidad: number=1;
-  precio: number =10;
-  precio_final:number=0;
+  public productoPedido!: ProductoPedido;
 
-  public carrito: any = [];
+  public producto: Producto={
+    nombre: '',
+    descripcion: '',
+    foto: '',
+    precio: 0,
+    id: '',
+  }
 
-  constructor(private carritoService: CarritoService) { 
-    
+  constructor(private carritoService: CarritoService, public fireAuth: FirestoreAuthService, public toastController: ToastController) { 
+    this.fireAuth.stateAuth().subscribe(res => {
+      if(res != null){
+        this.uid = res.uid;
+        this.cargarPedido();
+      }
+    });
   }
 
   ngOnInit() {
-    this.carrito = this.carritoService.obtenerCarrito();
+    
   }
 
-  private actualizarProductosEnCarrito() {
-    this.carrito = this.carritoService.obtenerCarrito();
+  cargarPedido(){
+    this.carritoService.getCarrito().subscribe(res =>{
+      this.carrito = res;
+      console.log(this.carrito);
+    });
   }
 
-  eliminarDelCarrito(indice: number) {
-    this.carritoService.eliminarDelCarrito(indice);
-    this.actualizarProductosEnCarrito();
+
+  eliminarDelCarrito(producto: ProductoPedido) {
+    this.carritoService.eliminarDelCarrito(producto);
   }
 
-  mas(){
-    if(this.cantidad<10){
-      this.cantidad= this.cantidad+1;
-      this.precio_final= this.precio * this.cantidad;
-    }
-  }
-
-  menos(){
-    if(this.cantidad> 1){
-      this.cantidad= this.cantidad-1;
-      this.precio_final= this.precio * this.cantidad;
+  mas(item: ProductoPedido){
+    if(item.cantidad < 10){
+      item.cantidad++;
+    this.carritoService.actualizarCantidadEnCarrito(item);
     }
     
+  }
+
+  menos(item: ProductoPedido){
+    if(item.cantidad > 1){
+      item.cantidad--;
+      this.carritoService.actualizarCantidadEnCarrito(item);
+    }
+  }
+
+  async mostrarToast(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2000, // Duración del toast en milisegundos
+      position: 'bottom' // Posición del toast en la pantalla
+    });
+    toast.present();
   }
 }

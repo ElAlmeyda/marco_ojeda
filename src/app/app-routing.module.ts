@@ -54,18 +54,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/especialista/especialista.module').then( m => m.EspecialistaPageModule)
   },
   {
-    path: 'especialista/:tipo/:id',
-    loadChildren: () => import('./pages/especialista/especialista.module').then( m => m.EspecialistaPageModule)
-  },
-  {
-    path: 'especialista/:tipo/:id',
-    loadChildren: () => import('./pages/especialista/especialista.module').then( m => m.EspecialistaPageModule)
-  },
-  {
-    path: 'especialista/:tipo/:id',
-    loadChildren: () => import('./pages/especialista/especialista.module').then( m => m.EspecialistaPageModule)
-  },
-  {
     path: 'noticia/:id',
     loadChildren: () => import('./pages/noticia/noticia.module').then( m => m.NoticiaPageModule)
   },

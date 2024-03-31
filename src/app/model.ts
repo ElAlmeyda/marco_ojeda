@@ -33,3 +33,16 @@ export interface Empleado {
     tipo: string;
     id: string;
 }
+
+export interface Pedido {
+    cliente: Usuario;
+    productos: ProductoPedido [];
+    precioTotal: number;
+    estado: string;
+    id: string;
+}
+
+export interface ProductoPedido {
+    producto: Producto;
+    cantidad: number;
+}

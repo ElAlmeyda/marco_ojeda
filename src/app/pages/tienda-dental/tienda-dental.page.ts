@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ProductoService } from 'src/app/backend/producto.service';
 import { ProductoModule } from 'src/app/module/producto/producto.module';
 
 @Component({
@@ -11,11 +12,13 @@ export class TiendaDentalPage implements OnInit {
 
   public store: any = [];
 
-  constructor(private producto: ProductoModule) {
+  constructor(public productos: ProductoService) {
    }
 
   ngOnInit() {
-    this.store= this.producto.obtenerListaDeProductos();
+    this.productos.getProdCollection().subscribe(() =>{
+      this.store = this.productos.getProductos();
+    });
   }
 
 }
