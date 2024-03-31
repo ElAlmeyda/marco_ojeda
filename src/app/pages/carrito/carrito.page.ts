@@ -72,6 +72,14 @@ export class CarritoPage implements OnInit {
     }
   }
 
+  limpiarCarrito(){
+      this.carritoService.clearCarrito();
+  }
+
+  calcularTotalEnCarrito(){
+    return this.carrito.precioTotal= this.carritoService.calcularTotal();
+  }
+
   async mostrarToast(mensaje: string) {
     const toast = await this.toastController.create({
       message: mensaje,

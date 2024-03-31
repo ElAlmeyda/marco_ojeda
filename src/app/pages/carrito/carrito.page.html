@@ -35,10 +35,19 @@
           <ion-icon name="trash-outline" slot="end" (click)="eliminarDelCarrito(item)"></ion-icon>
         </ion-item>
       </ion-list>
+
+      <ion-card *ngIf="carrito.productos.length === 0">
+        <ion-card-content>
+          <p>¡Tu carrito está vacío!</p>
+        </ion-card-content>
+      </ion-card>
         
       <!-- Botón para proceder al pago -->
       <ion-button expand="full" color="primary" >
-        Pasarela de pago ({{carrito.precioTotal}}€)
+        Pasarela de pago ({{calcularTotalEnCarrito()}}€)
       </ion-button>
+      <ion-button expand="full" color="danger" (click)="limpiarCarrito()">
+        Limpiar Carrito
+      </ion-button>      
     </ion-card>
 </ion-content>

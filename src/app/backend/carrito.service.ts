@@ -55,6 +55,7 @@ export class CarritoService {
         this.pedido.productos.push(add);
       }
       this.pedido.estado= 'pendiente';
+      this.calcularTotal();
       this.guardarCarritoEnBD();
     }
   }
@@ -96,7 +97,12 @@ export class CarritoService {
   }
 
   calcularTotal() {
-    // Implementa la lógica para calcular el precio total del carrito
+    let precioFinal = 0;
+    for (const item of this.pedido.productos) {
+      precioFinal += item.producto.precio * item.cantidad;
+    }
+    this.pedido.precioTotal = precioFinal
+    return this.pedido.precioTotal;
   }
 
   realizarPedido(){
@@ -104,7 +110,8 @@ export class CarritoService {
   }
 
   clearCarrito(){
-    // Implementa la lógica para limpiar el carrito
+    this.initCarrito(); // Reinicializa el carrito al estado inicial
+    this.guardarCarritoEnBD(); // Guarda el carrito limpio en la base de datos
   }
 
   actualizarCantidadEnCarrito(item: ProductoPedido) {
