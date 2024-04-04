@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { UsuariosService } from './backend/usuarios.service';
 import { FirestoreAuthService } from './service/firestore-auth.service';
 import { FirestoreService } from './service/firestore.service';
-import { Usuario } from './model';
+import { Cita, Usuario } from './model';
+import { CarritoService } from './backend/carrito.service';
+import { ActivatedRoute, Route, Router } from '@angular/router';
+import { CitaService } from './backend/cita.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -23,34 +26,26 @@ export class AppComponent {
   };
   userName="";
   uid = "";
-
-  public citas = [
-    {
-      dia :"13/02/2023",
-      hora : "09:00"
-    },
-    {
-      dia :"14/02/2023",
-      hora : "10:00"
-    }
-
-];
+  cita: Cita []= [];
   
 
   toggleList() {
     this.showList = !this.showList;
   }
 
-  constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService) {
+  constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, 
+              public carritoService: CarritoService, public router: Router, public citas: CitaService) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
         await this.obtenerUsuario();
+        this.obtenerCita();
       } else {
         this.uid= '';
         this.user.changeUserLogin(false);
         this.change = this.user.usuarioLogin;
         this.usuario.rol='';
+        this.router.navigate(['/folder']);
       }
     });
   }
@@ -69,10 +64,20 @@ export class AppComponent {
     });
   }
 
+  obtenerCita() {
+    this.citas.getCitas().subscribe(res => {
+      if (res != undefined) {
+        this.cita = res;
+      }
+    });
+  }
+
+
   logout(){
     this.auth.logout();
     this.user.changeUserLogin(false);
     this.change = this.user.usuarioLogin;
     this.usuario.rol='';
+    this.carritoService.clearCarrito();
   }
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +33,11 @@ export class FirestoreAuthService {
 
   stateAuth(){
     return this.auth.authState;
+  }
+
+  estaAutenticado(): Observable<boolean> {
+    return this.auth.authState.pipe(
+      map(user => user !== null) // Verifica si el usuario no es nulo (es decir, está autenticado)
+    );
   }
 }

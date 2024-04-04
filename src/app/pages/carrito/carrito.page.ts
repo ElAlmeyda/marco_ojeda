@@ -4,6 +4,7 @@ import { Pedido, Producto, ProductoPedido, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { async } from 'rxjs';
 import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-carrito',
@@ -32,17 +33,20 @@ export class CarritoPage implements OnInit {
     id: '',
   }
 
-  constructor(private carritoService: CarritoService, public fireAuth: FirestoreAuthService, public toastController: ToastController) { 
+  constructor(private carritoService: CarritoService, public fireAuth: FirestoreAuthService, public toastController: ToastController, public router: Router) { 
+    
+  }
+
+  ngOnInit() {
     this.fireAuth.stateAuth().subscribe(res => {
       if(res != null){
         this.uid = res.uid;
         this.cargarPedido();
+      } else {
+        alert("Usted no esta iniciado sesion");
+        this.router.navigate(["/inicio-sesion"]);
       }
     });
-  }
-
-  ngOnInit() {
-    
   }
 
   cargarPedido(){

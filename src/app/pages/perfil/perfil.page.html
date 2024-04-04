@@ -29,7 +29,11 @@
       <ion-item> Su movil: {{usuario.movil}}</ion-item>
       <ion-item> Su correo: {{usuario.correo}}</ion-item>
 
-      <ion-item> Su cita: 13/01/2024 09:00</ion-item>
+      <ion-item> Su cita: 
+        <ion-item *ngFor="let item of cita">
+          {{item.dia}} a la hora {{item.hora}}
+        </ion-item> 
+      </ion-item>
     </ion-card-content>
   </ion-card>
   

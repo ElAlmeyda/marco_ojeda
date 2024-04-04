@@ -42,21 +42,20 @@
 
         <ion-item>
           <ion-icon name="person-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input id="nombre" name="nombre" placeholder="Nombre" [(ngModel)]="nombre"></ion-input>
+          <ion-input id="nombre" name="nombre" value="{{usuario.nombre}}" [(ngModel)]="usuario.nombre"></ion-input>
         </ion-item>
         
         <ion-item>
           <ion-icon name="call-sharp" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input  name="telefono" placeholder="Telefono" [(ngModel)]="phone"></ion-input>
+          <ion-input  name="telefono" [value]="usuario.movil" [(ngModel)]="usuario.movil"></ion-input>
         </ion-item>
         
         <ion-item>
           <ion-icon name="accessibility-sharp" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
           <ion-select name="especialista" label="Dentista" label-placement="stacked" [(ngModel)]="especialista">
             <ion-select-option> Ninguna Preferencia </ion-select-option>
-            <ion-select-option> Marco Ojeda </ion-select-option>
-            <ion-select-option> Omar Ojeda </ion-select-option>
-            <ion-select-option> Lisney </ion-select-option>
+            <ion-select-option *ngFor="let opcion of empleado" [value]="opcion.nombre">{{ opcion.nombre }}</ion-select-option>
+            
           </ion-select>
         </ion-item>
 

@@ -30,6 +30,10 @@ export class FirestoreService {
     return collection.doc(id).update(data);
   }
 
+  addDoc(path:string, data: any){
+    return this.database.collection(path).add(data);
+  }
+
   getId(){
     return this.database.createId();
   }

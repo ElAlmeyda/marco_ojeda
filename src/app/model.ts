@@ -46,3 +46,13 @@ export interface ProductoPedido {
     producto: Producto;
     cantidad: number;
 }
+
+export interface Cita {
+    nombre: string;
+    servicio: string;
+    movil: string;
+    dentista: string;
+    dia: string;
+    hora: string;
+    estado:string;
+}

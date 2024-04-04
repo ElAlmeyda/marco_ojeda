@@ -3,7 +3,7 @@ import { Pedido, Producto, ProductoPedido, Usuario } from "../model";
 import { FirestoreAuthService } from "../service/firestore-auth.service";
 import { FirestoreService } from "../service/firestore.service";
 import { Injectable } from "@angular/core";
-import { Observable, Subject } from "rxjs";
+import { BehaviorSubject, Observable, Subject, Subscription } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +16,13 @@ export class CarritoService {
   pedido$ = new Subject<Pedido>;
   cliente!: Usuario;
 
+
   constructor(public fireAuth: FirestoreAuthService, public firestore: FirestoreService, public router: Router) { 
     this.fireAuth.stateAuth().subscribe(res => {
       if(res != null){
         this.uid = res.uid;
         this.loadCliente();
-        console.log(this.uid);
-      }
+      } 
     });
     this.initCarrito(); // Inicializa el carrito
   }
@@ -40,7 +40,6 @@ export class CarritoService {
 
   agregarAlCarrito(prod: Producto) {
     const idProd = prod.id;
-    console.log("idProd:", idProd);
     if(this.uid.length){
       const foundIndex = this.pedido.productos.findIndex(item => item.producto.id === prod.id);
       console.log(this.pedido.productos);
@@ -69,7 +68,6 @@ export class CarritoService {
       } else {
         this.initCarrito();
       }
-    console.log(this.pedido);
     });
   }
 
@@ -93,6 +91,9 @@ export class CarritoService {
   
 
   getCarrito(): Observable <Pedido>{
+    setTimeout(()=>{
+      this.pedido$.next(this.pedido);
+    }, 100);
     return this.pedido$.asObservable();
   }
 
@@ -111,7 +112,6 @@ export class CarritoService {
 
   clearCarrito(){
     this.initCarrito(); // Reinicializa el carrito al estado inicial
-    this.guardarCarritoEnBD(); // Guarda el carrito limpio en la base de datos
   }
 
   actualizarCantidadEnCarrito(item: ProductoPedido) {
