@@ -51,6 +51,10 @@
           Gestion de datos: 
           <ion-icon slot="end" name="arrow-forward-outline" routerLink="/administrador"></ion-icon>
         </ion-item>
+        <ion-item *ngIf="usuario.rol == 'gestor'">
+          Gestion de citas: 
+          <ion-icon slot="end" name="arrow-forward-outline" routerLink="/gestor-calendario"></ion-icon>
+        </ion-item>
         <ion-item>
           Mapa va aqui
         </ion-item>

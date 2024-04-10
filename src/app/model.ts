@@ -55,4 +55,6 @@ export interface Cita {
     dia: string;
     hora: string;
     estado:string;
+    id: string;
+    uid:string;
 }

@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Observable, map, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class FirestoreService {
 
   constructor(private database: AngularFirestore) { }
@@ -30,8 +32,8 @@ export class FirestoreService {
     return collection.doc(id).update(data);
   }
 
-  addDoc(path:string, data: any){
-    return this.database.collection(path).add(data);
+  addDoc(path:string, data: any, id:string){
+    return this.database.collection(path).doc(id).set(data);
   }
 
   getId(){
@@ -46,5 +48,9 @@ export class FirestoreService {
   getDoc<tipo>(path: string, uid: string){
     const collection = this.database.collection<tipo>(path);
     return collection.doc(uid).valueChanges();
+  }
+
+  getUserCitas(): Observable<any[]> {
+    return this.database.collectionGroup('Cita').valueChanges();
   }
 }

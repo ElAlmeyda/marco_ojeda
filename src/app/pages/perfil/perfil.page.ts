@@ -21,7 +21,8 @@ export class PerfilPage implements OnInit {
     rol:''
   };
 
-  cita: Cita [] = [];
+  citaPendiente: Cita [] = [];
+  citaConfirmada: Cita [] = [];
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, public citas: CitaService) { 
     this.auth.stateAuth().subscribe(async res => {
@@ -55,9 +56,18 @@ export class PerfilPage implements OnInit {
   obtenerCita() {
     this.citas.getCitas().subscribe(res => {
       if (res != undefined) {
-        this.cita = res;
+        this.citaPendiente = res.filter(cita => cita.estado === 'pendiente');;
+        this.citaConfirmada = res.filter(cita => cita.estado === 'aceptado');;
       }
     });
+  }
+
+  aceptar(item: Cita){
+
+  }
+
+  eliminar(item: Cita){
+    
   }
 
 }

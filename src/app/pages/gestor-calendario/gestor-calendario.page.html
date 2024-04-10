@@ -16,8 +16,10 @@
 
 
 <ion-content [fullscreen]="true">
-    <ion-card style="margin: 2em; text-align: center; padding: 1em;">
-      <ion-label> Juan Perez 30/12 09:00 Dentista:Omar  Limpieza</ion-label><br>
-      <ion-button style="padding-top: 1em;"> Aceptar </ion-button>
+    <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of cita">
+      <ion-label> Nombre: {{item.nombre}} Dia: {{item.dia}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}}  Servicio:{{item.servicio}}</ion-label><br>
+      <ion-button style="padding-top: 1em;" (click)="aceptar(item)"> Aceptar </ion-button>
+      <ion-button style="padding-top: 1em;" routerLink="/editar-calendario/{{item.id}}"> Editar </ion-button>
+      <ion-button style="padding-top: 1em;" (click)="eliminar(item)" color="danger"> Eliminar </ion-button>
     </ion-card>
 </ion-content>

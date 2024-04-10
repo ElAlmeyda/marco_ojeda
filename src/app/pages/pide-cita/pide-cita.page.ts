@@ -44,6 +44,7 @@ export class PideCitaPage implements OnInit {
   
   constructor(private user: UsuariosService, private datePipe: DatePipe, public auth: FirestoreAuthService, public firestore: FirestoreService, public equipo: EquipoServiceService,
               public cita: CitaService) {
+
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -77,12 +78,6 @@ export class PideCitaPage implements OnInit {
     });
   }
 
-  
-
-  cancel() {
-    return this.modal.dismiss(null, 'cancel');
-  }
-
   confirm() {
     this.fechaModificada = this.dia ? this.datePipe.transform(this.dia, 'dd-MM-yyyy') ?? '' : '';
     return this.modal.dismiss(null, 'cancel');
@@ -99,6 +94,10 @@ export class PideCitaPage implements OnInit {
     const date = new Date(dateString);
     const utcDay = date.getUTCDay();
     return utcDay !== 0 && utcDay !== 6;
-  };
+  }; 
+  
+  cancel() {
+    return this.modal.dismiss(null, 'cancel');
+  }
 }
 

@@ -132,7 +132,13 @@ const routes: Routes = [
   {
     path: 'editar-noticia/:id',
     loadChildren: () => import('./pages/editar-noticia/editar-noticia.module').then( m => m.EditarNoticiaPageModule)
+  },
+  {
+    path: 'editar-calendario/:id',
+    loadChildren: () => import('./pages/editar-calendario/editar-calendario.module').then( m => m.EditarCalendarioPageModule)
   }
+
+
 
 
 
