@@ -67,7 +67,7 @@ export class AppComponent {
   obtenerCita() {
     this.citas.getCitas().subscribe(res => {
       if (res != undefined) {
-        this.cita = res;
+        this.cita = res.filter(res=> res.estado === 'aceptado');
       }
     });
   }

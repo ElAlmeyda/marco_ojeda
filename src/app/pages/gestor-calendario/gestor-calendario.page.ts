@@ -41,6 +41,7 @@ export class GestorCalendarioPage implements OnInit {
   }
 
   aceptar(item: Cita){
+    item.estado="aceptado";
     this.citas.actualizarCita(item);
   }
 

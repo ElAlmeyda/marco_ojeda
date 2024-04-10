@@ -52,7 +52,6 @@ export class CitaService {
 
   actualizarCita(item: Cita){
     const path = '/Usuarios/' + item.uid + '/' + this.path;
-    item.estado = 'aceptado';
     this.firestrore.updateDoc(item, path, item.id);
   }
 
@@ -76,9 +75,5 @@ export class CitaService {
 
   getUserCitaCollection(){
     return this.citaCollection;
-  }
-
-  getCitaConcreta(id: string){
-    return this.citaCollection = this.citaCollection.filter(cita => this.cita.id === id);
   }
 }

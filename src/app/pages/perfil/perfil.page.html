@@ -40,7 +40,8 @@
         </ion-item> 
       </ion-item>
 
-        <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citaPendiente">
+        <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citaEditada">
+          <ion-label> Acepta la siguiente cita </ion-label><br>
           <ion-label> Nombre: {{item.nombre}} Dia: {{item.dia}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}}  Servicio:{{item.servicio}}</ion-label><br>
           <ion-button style="padding-top: 1em;" (click)="aceptar(item)"> Aceptar </ion-button>
           <ion-button style="padding-top: 1em;" (click)="eliminar(item)" color="danger"> Eliminar </ion-button>

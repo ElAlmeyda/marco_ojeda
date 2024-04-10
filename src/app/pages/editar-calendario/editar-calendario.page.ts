@@ -36,7 +36,19 @@ export class EditarCalendarioPage implements OnInit {
     rol:''
   };
 
-  public editarCita: any = [];
+  editarCita: Cita = {
+    nombre: '',
+    servicio: '',
+    movil: '',
+    dentista: '',
+    dia: '',
+    hora: '',
+    estado:'',
+    id: '',
+    uid:'',
+  };
+
+  actualizarCita!:Cita;
 
   public empleado: Empleado[] = [];
 
@@ -52,12 +64,15 @@ export class EditarCalendarioPage implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     await this.obtenerCitas();
     this.getEquipo();
-    console.log(this.editarCita);
   }
 
   async obtenerCitas(){
     this.cita.getUsuariosCitas().subscribe((res: Cita[]) =>{
-      this.editarCita = res.filter(res => res.id === this.id);
+      const citasFiltradas = res.filter(cita => cita.id == this.id);
+        if (citasFiltradas.length > 0) {
+            this.editarCita = citasFiltradas[0]; // Tomar el primer elemento del array
+        }
+      console.log(this.editarCita);
     });
   }
 
@@ -74,7 +89,22 @@ export class EditarCalendarioPage implements OnInit {
   }
 
   enviar(){
-
+    if (this.editarCita) {
+      this.actualizarCita = {
+        nombre: this.editarCita.nombre,
+        servicio: this.servicio,
+        movil: this.editarCita.movil,
+        dentista: this.especialista,
+        dia: this.editarCita.nombre,
+        hora: this.hora,
+        estado: 'editada',
+        id: this.id,
+        uid: this.editarCita.uid
+    };
+  }
+    console.log(this.actualizarCita);
+    
+    this.cita.actualizarCita(this.actualizarCita);
   }
 
   getDate() { const date = new Date(); this.today = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2); }
