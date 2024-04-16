@@ -29,23 +29,26 @@
       <ion-item> Su movil: {{usuario.movil}}</ion-item>
       <ion-item> Su correo: {{usuario.correo}}</ion-item>
 
-      <ion-item> Su cita pendiente:
-        <ion-item *ngFor="let item of citaPendiente">
-          {{item.dia}} a la hora {{item.hora}}
-        </ion-item> 
-      </ion-item>
-      <ion-item> Su cita confirmada: 
-        <ion-item *ngFor="let item of citaConfirmada">
-          {{item.dia}} a la hora {{item.hora}}
-        </ion-item> 
-      </ion-item>
-
-        <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citaEditada">
-          <ion-label> Acepta la siguiente cita </ion-label><br>
-          <ion-label> Nombre: {{item.nombre}} Dia: {{item.dia}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}}  Servicio:{{item.servicio}}</ion-label><br>
-          <ion-button style="padding-top: 1em;" (click)="aceptar(item)"> Aceptar </ion-button>
-          <ion-button style="padding-top: 1em;" (click)="eliminar(item)" color="danger"> Eliminar </ion-button>
-        </ion-card>
+      <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngIf="citaPendiente.length != 0">
+        <ion-label style ="font-weight: bold;"> Sus citas pendiente </ion-label><br>
+        <ion-card-content *ngFor="let item of citaPendiente">
+          <ion-label> Dia: {{item.dia}} Hora:{{item.hora}}</ion-label><br>
+          <ion-label> Dentista:{{item.dentista}}<br> Servicio:{{item.servicio}} </ion-label><br>
+        </ion-card-content>
+      </ion-card>
+      <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngIf="citaConfirmada.length != 0">
+        <ion-label style ="font-weight: bold;"> Sus citas confirmadas </ion-label><br>
+        <ion-card-content *ngFor="let item of citaConfirmada">
+          <ion-label> Dia: {{item.dia}} Hora:{{item.hora}}</ion-label><br>
+          <ion-label> Dentista:{{item.dentista}}<br> Servicio:{{item.servicio}} </ion-label><br>
+        </ion-card-content>
+      </ion-card>
+      <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citaEditada">
+        <ion-label> Acepta la siguiente cita </ion-label><br>
+        <ion-label> Nombre: {{item.nombre}} Dia: {{item.dia}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}}  Servicio:{{item.servicio}}</ion-label><br>
+        <ion-button style="padding-top: 1em;" (click)="aceptar(item)"> Aceptar </ion-button>
+        <ion-button style="padding-top: 1em;" (click)="eliminar(item)" color="danger"> Eliminar </ion-button>
+      </ion-card>
     </ion-card-content>
   </ion-card>
   
