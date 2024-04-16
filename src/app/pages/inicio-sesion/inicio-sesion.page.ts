@@ -31,20 +31,20 @@ export class InicioSesionPage implements OnInit {
       .then(() => {
         // Inicio de sesión exitoso
         this.router.navigate(['/folder']);
-        this.presentToast("Inicio de sesion con éxito");
+        this.presentToast("Inicio de sesion con éxito", 'success');
       })
-      .catch((error: any) => {
+      .catch(() => {
         // Error durante el inicio de sesión
-        console.error('Error al iniciar sesión:', error);
-        this.presentToast("Inicio de sesion sin exito");
+        this.presentToast("Contraseña o email son incorrectos", 'danger');
       });
   }
 
-  async presentToast(msg: string) {
+  async presentToast(msg: string, color: string) {
     const toast = await this.toast.create({
       message: msg,
       duration: 3000,
-      position: 'top',
+      position: 'bottom',
+      color: color
     });
 
     await toast.present();

@@ -37,24 +37,25 @@ export class RegistrarsePage implements OnInit {
   async guardar(){
     const existeCorreo = this.user.verificarCorreoExiste(this.crearUser.correo); 
     if (!existeCorreo) {
-      this.presentToast("Registrado fallido, el correo ya está asociado a otra cuenta");
+      this.presentToast("Registrado fallido, el correo ya está asociado a otra cuenta", 'danger');
     } else {
       const check = await this.user.createUser(this.crearUser.nombre, this.crearUser.correo, this.crearUser.password, this.crearUser.movil, this.rol);
       if (check) {
         this.router.navigate(['/folder']);
-        this.presentToast("Registrado con éxito");
+        this.presentToast("Registrado con éxito", 'success');
       } else {          
-      this.presentToast("Registrado fallido, ocurrió un error al crear el usuario");
+      this.presentToast("Registrado fallido, ocurrió un error al crear el usuario", 'danger');
       }
     }
   }
 
 
-  async presentToast(msg: string) {
+  async presentToast(msg: string, color: string) {
     const toast = await this.toast.create({
       message: msg,
       duration: 3000,
-      position: 'top',
+      position: 'bottom',
+      color: color
     });
 
     await toast.present();
