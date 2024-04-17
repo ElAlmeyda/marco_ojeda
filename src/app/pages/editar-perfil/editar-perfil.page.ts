@@ -49,7 +49,7 @@ export class EditarPerfilPage implements OnInit {
     this.user.getUsuarios().subscribe(() => {
       const usuario = this.user.getUsuarioConcreto(this.uid);
       if (usuario) {
-        this.usuario = usuario;
+        this.actualizarUser = usuario;
       } else {
         console.log('Usuario no encontrado');
       }
