@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { IonModal } from '@ionic/angular';
 import { CitaService } from 'src/app/backend/cita.service';
@@ -15,7 +15,9 @@ import { FirestoreService } from 'src/app/service/firestore.service';
   styleUrls: ['./editar-calendario.page.scss'],
 })
 export class EditarCalendarioPage implements OnInit {
+  @ViewChild(IonModal)
   modal!: IonModal;
+  modalAbierto = false;
   uid='';
   public id:any;
 
@@ -61,6 +63,7 @@ export class EditarCalendarioPage implements OnInit {
      }
 
   async ngOnInit() {
+    this.modalAbierto = false;
     this.id = this.route.snapshot.paramMap.get('id');
     await this.obtenerCitas();
     this.getEquipo();
@@ -82,29 +85,37 @@ export class EditarCalendarioPage implements OnInit {
     });
   }
 
-  
-  confirm() {
-    this.fechaModificada = this.dia ? this.datePipe.transform(this.dia, 'dd-MM-yyyy') ?? '' : '';
-    return this.modal.dismiss(null, 'cancel');
+  initCita() {
+    return this.editarCita = {
+      nombre: '',
+      servicio: '',
+      movil: '',
+      dentista: '',
+      dia: '',
+      hora: '',
+      estado: '',
+      id: '',
+      uid: '',
+    };
   }
+
 
   enviar(){
     if (this.editarCita) {
       this.actualizarCita = {
         nombre: this.editarCita.nombre,
-        servicio: this.servicio,
+        servicio: this.editarCita.servicio,
         movil: this.editarCita.movil,
-        dentista: this.especialista,
-        dia: this.editarCita.nombre,
-        hora: this.hora,
+        dentista: this.editarCita.dentista,
+        dia: this.editarCita.dia,
+        hora: this.editarCita.hora,
         estado: 'editada',
         id: this.id,
         uid: this.editarCita.uid
     };
   }
-    console.log(this.actualizarCita);
-    
     this.cita.actualizarCita(this.actualizarCita);
+    this.editarCita = this.initCita();
   }
 
   getDate() { const date = new Date(); this.today = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2); }
@@ -115,9 +126,18 @@ export class EditarCalendarioPage implements OnInit {
     const utcDay = date.getUTCDay();
     return utcDay !== 0 && utcDay !== 6;
   }; 
+
   
-  cancel() {
-    return this.modal.dismiss(null, 'cancel');
+  
+  confirm() {
+    this.fechaModificada = this.dia ? this.datePipe.transform(this.dia, 'dd-MM-yyyy') ?? '' : '';
+    this.modalAbierto = false;
+    this.modal.present();
+    this.modal.dismiss(null, 'confirm');
   }
 
+  cancel(isOpen: boolean) {
+    this.modalAbierto = isOpen;
+    this.modal.dismiss(null, 'cancel');
+  }
 }

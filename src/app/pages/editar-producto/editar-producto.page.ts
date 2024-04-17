@@ -31,6 +31,7 @@ export class EditarProductoPage implements OnInit {
 
     this.productos.getProdCollection().subscribe(() => {
       this.producto = this.productos.getProducto(this.id);
+      this.editarProducto = this.producto[0];
     });
   }
 
@@ -38,10 +39,10 @@ export class EditarProductoPage implements OnInit {
     try {
       await this.productos.editarProducto(this.editarProducto.nombre, this.editarProducto.descripcion, this.editarProducto.foto, this.editarProducto.precio, this.id);
       // Si no se ha lanzado ninguna excepción, significa que se ha creado el empleado correctamente
-      this.mostrarToast("Empleado actualizado correctamente");
+      this.mostrarToast("Producto actualizado correctamente");
     } catch (error) {
-      console.error("Error al actualizado el empleado:", error);
-      this.mostrarToast("Error al actualizado el empleado");
+      console.error("Error al actualizado el producto:", error);
+      this.mostrarToast("Error al actualizado el producto");
     }
 
   }

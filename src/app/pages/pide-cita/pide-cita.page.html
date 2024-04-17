@@ -59,11 +59,11 @@
           </ion-select>
         </ion-item>
 
-        <ion-item lines="none">
+        <ion-item lines="none" id="dia-modal">
           <ion-icon name="calendar-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-label id="dia-modal"> Dia <br> {{fechaModificada}}</ion-label>
+          <ion-label> Dia <br> {{fechaModificada}}</ion-label>
 
-          <ion-modal trigger="dia-modal">
+          <ion-modal trigger="dia-modal" [isOpen]="modalAbierto">
             <ng-template>
               <ion-header>
                 <ion-toolbar>

@@ -29,7 +29,7 @@
         <ion-item>
           <ion-icon name="clipboard-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
           
-          <ion-select name="servicio" label="Que servicio necesita" label-placement="stacked" [(ngModel)]="servicio" >
+          <ion-select name="servicio" label="Que servicio necesita" label-placement="stacked" [(ngModel)]="editarCita.servicio" value="{{editarCita.servicio}}">
             <ion-select-option> 1º Visita </ion-select-option>
             <ion-select-option> Brackets </ion-select-option>
             <ion-select-option> Limpieza </ion-select-option>
@@ -49,23 +49,23 @@
         
         <ion-item>
           <ion-icon name="accessibility-sharp" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-select name="especialista" label="Dentista" label-placement="stacked" [(ngModel)]="especialista">
+          <ion-select name="especialista" label="Dentista" label-placement="stacked" [(ngModel)]="editarCita.dentista" value="{{editarCita.dentista}}">
             <ion-select-option> Ninguna Preferencia </ion-select-option>
             <ion-select-option *ngFor="let opcion of empleado" [value]="opcion.nombre">{{ opcion.nombre }}</ion-select-option>
             
           </ion-select>
         </ion-item>
 
-        <ion-item lines="none">
+        <ion-item lines="none" id="diaModal">
           <ion-icon name="calendar-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-label id="dia-modal"> Dia <br> {{fechaModificada}}</ion-label>
+          <ion-label> Dia <br> {{editarCita.dia}} {{fechaModificada}}</ion-label>
 
-          <ion-modal trigger="dia-modal">
+          <ion-modal trigger="diaModal" [isOpen]="modalAbierto">
             <ng-template>
               <ion-header>
                 <ion-toolbar>
                   <ion-buttons slot="start">
-                    <ion-back-button defaultHref (click)="cancel()"></ion-back-button>
+                    <ion-back-button defaultHref (click)="cancel(false)"></ion-back-button>
                 </ion-buttons>
                   <ion-item>
                     <ion-avatar style="height: 100px; width: 100px; margin-left: 35%;">
@@ -80,8 +80,8 @@
               </ion-header>
               <ion-content class="ion-padding">
                 <ion-item>
-                  <ion-datetime displayFormat="MM/DD/YYYY" [isDateEnabled]="isWeekday" presentation="date" [(ngModel)]="dia" [ngModelOptions]="{ standalone: true }" [min]="today">
-                    <span slot="title">Seleccione su dia </span>
+                  <ion-datetime displayFormat="MM/DD/YYYY" [isDateEnabled]="isWeekday" presentation="date" [(ngModel)]="editarCita.dia" [ngModelOptions]="{ standalone: true }" [min]="today">
+                    <span slot="title">Seleccione su dia</span>
                   </ion-datetime>
                 </ion-item>
               </ion-content>
@@ -93,7 +93,7 @@
 
         <ion-item>
           <ion-icon name="calendar-number-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-select name="hora" label="Horario" label-placement="stacked" [(ngModel)]="hora">
+          <ion-select name="hora" label="Horario" label-placement="stacked" [(ngModel)]="editarCita.hora" value="{{editarCita.hora}}">
             <ion-select-option> 09:00 </ion-select-option>
             <ion-select-option> 10:00 </ion-select-option>
             <ion-select-option> 11:00 </ion-select-option>

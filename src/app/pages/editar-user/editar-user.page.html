@@ -20,21 +20,21 @@
     <form style="text-align: center;" >
       <ion-item>
         <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input name="nombre" placeholder="Nombre" [(ngModel)]="editarEmpleado.nombre"></ion-input>
+        <ion-input name="nombre" [(ngModel)]="editarEmpleado.nombre" value="{{editarEmpleado.nombre}}"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input id="movil" name="descripcion" placeholder="Descripcion" [(ngModel)]="editarEmpleado.descripcion"></ion-input>
+        <ion-input id="movil" name="descripcion" [(ngModel)]="editarEmpleado.descripcion" value="{{editarEmpleado.descripcion}}"></ion-input>
       </ion-item>
       
       <ion-item>
         <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input name="foto" type="file" placeholder="Foto" [(ngModel)]="editarEmpleado.foto"></ion-input>
+        <ion-input name="foto" type="file" placeholder="Foto" [(ngModel)]="editarEmpleado.foto" value="{{editarEmpleado.foto}}"></ion-input>
       </ion-item>
       
       <ion-item>
-        <ion-select name="tipo" label="De que trabaja" label-placement="stacked" placeholder="Tipo" [(ngModel)]="editarEmpleado.tipo">
+        <ion-select name="tipo" label="De que trabaja" label-placement="stacked" [(ngModel)]="editarEmpleado.tipo" value="{{editarEmpleado.tipo}}">
           <ion-select-option>Atencion al cliente</ion-select-option>
           <ion-select-option>Odontologos</ion-select-option>
           <ion-select-option>Auxiliares</ion-select-option>

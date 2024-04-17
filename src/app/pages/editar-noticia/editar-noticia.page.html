@@ -17,20 +17,20 @@
 <ion-content [fullscreen]="true" >
   <ion-card-content *ngIf="noticia">
 
-    <form style="text-align: center;" >
+    <form style="text-align: center;">
       <ion-item>
         <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input name="nombre" placeholder="Titulo" [(ngModel)]="actualizarNoticia.titulo"></ion-input>
+        <ion-input name="nombre" [(ngModel)]="actualizarNoticia.titulo" value="{{actualizarNoticia.titulo}}"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input id="movil" name="descripcion" placeholder="Descripcion" [(ngModel)]="actualizarNoticia.descripcion"></ion-input>
+        <ion-input id="movil" name="descripcion" placeholder="Descripcion" [(ngModel)]="actualizarNoticia.descripcion" value="{{actualizarNoticia.descripcion}}"></ion-input>
       </ion-item>
       
       <ion-item>
         <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input name="foto" type="file" placeholder="Foto" [(ngModel)]="actualizarNoticia.foto"></ion-input>
+        <ion-input name="foto" type="file" placeholder="Foto" [(ngModel)]="actualizarNoticia.foto" value="{{actualizarNoticia.foto}}"></ion-input>
       </ion-item>
       
       <br>

@@ -32,6 +32,7 @@ export class EditarNoticiaPage implements OnInit {
 
     this.noticias.getBlog().subscribe(() => {
       this.noticia = this.noticias.getNoticia(this.id);
+      this.actualizarNoticia = this.noticia[0];
     });
   }
 

@@ -19,6 +19,7 @@ import { FirestoreService } from 'src/app/service/firestore.service';
 export class PideCitaPage implements OnInit {
   @ViewChild(IonModal)
   modal!: IonModal;
+  modalAbierto = false;
   uid='';
 
   dia: Date | null = null;
@@ -57,6 +58,7 @@ export class PideCitaPage implements OnInit {
    }
 
   ngOnInit() {
+    this.modalAbierto = false;
     this.getDate();
     this.getEquipo();
   }
@@ -80,6 +82,7 @@ export class PideCitaPage implements OnInit {
 
   confirm() {
     this.fechaModificada = this.dia ? this.datePipe.transform(this.dia, 'dd-MM-yyyy') ?? '' : '';
+    this.modalAbierto = false;
     return this.modal.dismiss(null, 'cancel');
   }
 
@@ -97,6 +100,7 @@ export class PideCitaPage implements OnInit {
   }; 
   
   cancel() {
+    this.modalAbierto = false;
     return this.modal.dismiss(null, 'cancel');
   }
 }

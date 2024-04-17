@@ -20,22 +20,22 @@
     <form style="text-align: center;" >
       <ion-item>
         <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input name="nombre" placeholder="Nombre" [(ngModel)]="editarProducto.nombre"></ion-input>
+        <ion-input name="nombre" [(ngModel)]="editarProducto.nombre" value="{{editarProducto.nombre}}"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input id="movil" name="descripcion" placeholder="Descripcion" [(ngModel)]="editarProducto.descripcion"></ion-input>
+        <ion-input id="movil" name="descripcion" value="{{editarProducto.descripcion}}" [(ngModel)]="editarProducto.descripcion"></ion-input>
       </ion-item>
       
       <ion-item>
         <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input name="foto" type="file" placeholder="FFoto" [(ngModel)]="editarProducto.foto"></ion-input>
+        <ion-input name="foto" type="file" placeholder="Foto" [(ngModel)]="editarProducto.foto" value="{{editarProducto.foto}}"></ion-input>
       </ion-item>
       
       <ion-item>
         <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input id="movil" name="descripcion" placeholder="Precio" [(ngModel)]="editarProducto.precio"></ion-input>
+        <ion-input id="movil" name="descripcion" value="{{editarProducto.precio}}" [(ngModel)]="editarProducto.precio"></ion-input>
       </ion-item>
       
       
