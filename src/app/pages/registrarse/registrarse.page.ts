@@ -12,6 +12,10 @@ import { ToastController } from '@ionic/angular';
 })
 export class RegistrarsePage implements OnInit {
 
+  nombreInvalido: boolean = false;
+  correoInvalido: boolean = false;
+  passwordInvalido: boolean = false;
+  movilInvalido: boolean = false;
   
   crearUser = {
     nombre: '',
@@ -59,5 +63,14 @@ export class RegistrarsePage implements OnInit {
     });
 
     await toast.present();
+  }
+
+  validacionFormulario() {
+    this.nombreInvalido = this.crearUser.nombre.length < 4;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    this.correoInvalido = !emailRegex.test(this.crearUser.correo);
+    const passwordRegex = /(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_]).{6,}/;
+    this.passwordInvalido = !passwordRegex.test(this.crearUser.password);
+    this.movilInvalido = this.crearUser.movil.length !== 9;
   }
 }

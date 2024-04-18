@@ -32,7 +32,7 @@
         <ion-item>
           <ion-icon name="clipboard-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
           
-          <ion-select name="servicio" label="Que servicio necesita" label-placement="stacked" [(ngModel)]="servicio">
+          <ion-select name="servicio" label="Que servicio necesita" label-placement="stacked" [(ngModel)]="servicio" required>
             <ion-select-option> 1º Visita </ion-select-option>
             <ion-select-option> Brackets </ion-select-option>
             <ion-select-option> Limpieza </ion-select-option>
@@ -42,17 +42,17 @@
 
         <ion-item>
           <ion-icon name="person-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input id="nombre" name="nombre" value="{{usuario.nombre}}" [(ngModel)]="usuario.nombre"></ion-input>
+          <ion-input id="nombre" name="nombre" value="{{usuario.nombre}}" [(ngModel)]="usuario.nombre" required></ion-input>
         </ion-item>
         
         <ion-item>
           <ion-icon name="call-sharp" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input  name="telefono" [value]="usuario.movil" [(ngModel)]="usuario.movil"></ion-input>
+          <ion-input  name="telefono" [value]="usuario.movil" [(ngModel)]="usuario.movil" required></ion-input>
         </ion-item>
         
         <ion-item>
           <ion-icon name="accessibility-sharp" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-select name="especialista" label="Dentista" label-placement="stacked" [(ngModel)]="especialista">
+          <ion-select name="especialista" label="Dentista" label-placement="stacked" [(ngModel)]="especialista" required>
             <ion-select-option> Ninguna Preferencia </ion-select-option>
             <ion-select-option *ngFor="let opcion of empleado" [value]="opcion.nombre">{{ opcion.nombre }}</ion-select-option>
             
@@ -83,7 +83,7 @@
               </ion-header>
               <ion-content class="ion-padding">
                 <ion-item>
-                  <ion-datetime displayFormat="MM/DD/YYYY" [isDateEnabled]="isWeekday" presentation="date" [(ngModel)]="dia" [ngModelOptions]="{ standalone: true }" [min]="today">
+                  <ion-datetime displayFormat="MM/DD/YYYY" [isDateEnabled]="isWeekday" presentation="date" [(ngModel)]="dia" [ngModelOptions]="{ standalone: true }" [min]="today" required>
                     <span slot="title">Seleccione su dia </span>
                   </ion-datetime>
                 </ion-item>
@@ -96,7 +96,7 @@
 
         <ion-item>
           <ion-icon name="calendar-number-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-select name="hora" label="Horario" label-placement="stacked" [(ngModel)]="hora">
+          <ion-select name="hora" label="Horario" label-placement="stacked" [(ngModel)]="hora" required>
             <ion-select-option> 09:00 </ion-select-option>
             <ion-select-option> 10:00 </ion-select-option>
             <ion-select-option> 11:00 </ion-select-option>
@@ -112,7 +112,7 @@
         </ion-item>
         
         <br>
-        <ion-button color="primary" (click)="enviar()"> Aceptar </ion-button>
+        <ion-button color="primary" (click)="enviar()" [disabled]="miForm.invalid" > Aceptar </ion-button>
         
       </form>
     

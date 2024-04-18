@@ -25,20 +25,20 @@
     </ion-card-header>
     <ion-card-content>
 
-      <form style="text-align: center;">
+      <form style="text-align: center;" #miForm="ngForm">
         <ion-item>
           <ion-icon name="at-circle" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input [(ngModel)]="credenciales.correo" name="correo" placeholder="Correo"></ion-input>
+          <ion-input [(ngModel)]="credenciales.correo" name="correo" placeholder="Correo" required></ion-input>
         </ion-item>
       
         <ion-item>
           <ion-icon name="key" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input type="password" [(ngModel)]="credenciales.password" name="password" placeholder="Contraseña"></ion-input>
+          <ion-input type="password" [(ngModel)]="credenciales.password" name="password" placeholder="Contraseña" required></ion-input>
         </ion-item>
         <ion-toggle style="padding: 20px;" color="primary"> Recordar contraseña</ion-toggle><br/>
         
         <br>
-        <ion-button color="primary" (click)="login()"> Login </ion-button>
+        <ion-button color="primary" (click)="login()" [disabled]="miForm.invalid"> Login </ion-button>
         <ion-button color="primary" routerLink="/registrarse"> Registrate </ion-button>
       </form>
     

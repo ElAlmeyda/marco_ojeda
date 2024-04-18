@@ -49,5 +49,4 @@ export class InicioSesionPage implements OnInit {
 
     await toast.present();
   }
-
 }
