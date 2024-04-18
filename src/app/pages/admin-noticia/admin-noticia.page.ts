@@ -40,8 +40,8 @@ export class AdminNoticiaPage implements OnInit {
                 await this.noticias.deleteNoticia(idEmpleado);
                 this.mostrarToast("Noticia eliminado correctamente");
               } catch (error) {
-                console.error("Error al crear el noticia:", error);
-                this.mostrarToast("Error al crear el noticia");
+                console.error("Error al eliminar el noticia:", error);
+                this.mostrarToast("Error al eliminar el noticia");
               }  finally {
                   // Cierra la alerta después de ejecutar las operaciones de eliminación
                   await alert.dismiss();

@@ -40,8 +40,8 @@ export class AdminProductoPage implements OnInit {
               await this.productos.deleteProducto(idEmpleado);
               this.mostrarToast("Producto eliminado correctamente");
             } catch (error) {
-              console.error("Error al crear el producto:", error);
-              this.mostrarToast("Error al crear el producto");
+              console.error("Error al eliminar el producto:", error);
+              this.mostrarToast("Error al eliminar el producto");
             } finally {
               // Cierra la alerta después de ejecutar las operaciones de eliminación
               await alert.dismiss();

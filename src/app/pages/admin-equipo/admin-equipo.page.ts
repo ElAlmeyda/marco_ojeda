@@ -41,8 +41,8 @@ export class AdminEquipoPage implements OnInit {
               await this.empleado.deleteEmpleado(idEmpleado);
               this.mostrarToast("Empleado eliminado correctamente");
             } catch (error) {
-              console.error("Error al crear el empleado:", error);
-              this.mostrarToast("Error al crear el empleado");
+              console.error("Error al eliminar el empleado:", error);
+              this.mostrarToast("Error al eliminar el empleado");
             }finally {
               // Cierra la alerta después de ejecutar las operaciones de eliminación
               await alert.dismiss();

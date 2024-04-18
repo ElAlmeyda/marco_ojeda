@@ -3,7 +3,7 @@ import { CarritoService } from '../../backend/carrito.service';
 import { Pedido, Producto, ProductoPedido, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { async } from 'rxjs';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 @Component({
@@ -33,18 +33,44 @@ export class CarritoPage implements OnInit {
     id: '',
   }
 
-  constructor(private carritoService: CarritoService, public fireAuth: FirestoreAuthService, public toastController: ToastController, public router: Router) { 
+  constructor(private carritoService: CarritoService, public fireAuth: FirestoreAuthService, public toastController: ToastController, public router: Router,
+              public alertController: AlertController
+  ) { 
     
   }
 
   ngOnInit() {
-    this.fireAuth.stateAuth().subscribe(res => {
+    this.fireAuth.stateAuth().subscribe(async res => {
       if(res != null){
         this.uid = res.uid;
         this.cargarPedido();
       } else {
-        alert("Usted no esta iniciado sesion");
-        this.router.navigate(["/inicio-sesion"]);
+        const alert = await this.alertController.create({
+          header: 'No esta logueado',
+          message: 'Si quiere acceder a la tienda tiene que loguearse',
+          buttons: [
+            {
+              text: 'Cancelar',
+              role: 'cancel',
+              cssClass: 'secondary',
+              handler: () => {
+              }
+            }, {
+              text: 'Inicie sesion',
+              handler: async () => {
+                try {
+                  this.router.navigate(["/inicio-sesion"]);
+                } catch (error) {
+                  console.error("Error al crear el empleado:", error);
+                }finally {
+                  // Cierra la alerta después de ejecutar las operaciones de eliminación
+                  await alert.dismiss();
+                }
+              }
+            }
+          ]
+        });
+        await alert.present();
       }
     });
   }
@@ -57,8 +83,36 @@ export class CarritoPage implements OnInit {
   }
 
 
-  eliminarDelCarrito(producto: ProductoPedido) {
-    this.carritoService.eliminarDelCarrito(producto);
+  async eliminarDelCarrito(producto: ProductoPedido) {
+    const alert = await this.alertController.create({
+      header: 'Confirmación',
+      message: '¿Estás seguro de que deseas eliminar este elemento?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+          }
+        }, {
+          text: 'Eliminar',
+          handler: async () => {
+            try {
+              await this.carritoService.eliminarDelCarrito(producto);;
+              this.mostrarToast("Producto eliminado del carrito");
+            } catch (error) {
+              console.error("Error al eliminar el producto:", error);
+              this.mostrarToast("Error al eliminar el producto");
+            }finally {
+              // Cierra la alerta después de ejecutar las operaciones de eliminación
+              await alert.dismiss();
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
+    
   }
 
   mas(item: ProductoPedido){

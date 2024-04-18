@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonModal } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { AlertController, IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { CitaService } from 'src/app/backend/cita.service';
 import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
@@ -44,7 +45,7 @@ export class PideCitaPage implements OnInit {
   userLogin= false;
   
   constructor(private user: UsuariosService, private datePipe: DatePipe, public auth: FirestoreAuthService, public firestore: FirestoreService, public equipo: EquipoServiceService,
-              public cita: CitaService) {
+              public cita: CitaService, public alertController: AlertController, public router: Router) {
 
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
@@ -52,6 +53,32 @@ export class PideCitaPage implements OnInit {
         const usuario = this.user.getUsuario();
         this.obtenerUsuario();
       } else {
+        const alert = await this.alertController.create({
+          header: 'No esta logueado',
+          message: 'Si quiere acceder a la tienda tiene que loguearse',
+          buttons: [
+            {
+              text: 'Cancelar',
+              role: 'cancel',
+              cssClass: 'secondary',
+              handler: () => {
+              }
+            }, {
+              text: 'Inicie sesion',
+              handler: async () => {
+                try {
+                  this.router.navigate(["/inicio-sesion"]);
+                } catch (error) {
+                  console.error("Error al crear el empleado:", error);
+                }finally {
+                  // Cierra la alerta después de ejecutar las operaciones de eliminación
+                  await alert.dismiss();
+                }
+              }
+            }
+          ]
+        });
+        await alert.present();
         this.uid= '';
       }
     });
