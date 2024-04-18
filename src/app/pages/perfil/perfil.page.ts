@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 import { CitaService } from 'src/app/backend/cita.service';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { Cita, Usuario } from 'src/app/model';
@@ -25,7 +26,7 @@ export class PerfilPage implements OnInit {
   citaConfirmada: Cita [] = [];
   citaEditada: Cita [] = [];
 
-  constructor(public auth: FirestoreAuthService, public user: UsuariosService, public citas: CitaService) { 
+  constructor(public auth: FirestoreAuthService, public user: UsuariosService, public citas: CitaService, private alertController: AlertController) { 
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -69,8 +70,27 @@ export class PerfilPage implements OnInit {
     this.citas.actualizarCita(item);
   }
 
-  eliminar(item: Cita){
-    this.citas.eliminarCita(item);
+  async eliminar(item: Cita){
+    const alert = await this.alertController.create({
+      header: 'Confirmación',
+      message: '¿Estás seguro de que deseas eliminar este elemento?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+          }
+        }, {
+          text: 'Eliminar',
+          handler: () => {
+            this.citas.eliminarCita(item);
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
   }
 
 }

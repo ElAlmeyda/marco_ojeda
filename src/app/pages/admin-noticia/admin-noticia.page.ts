@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { NoticiasService } from 'src/app/backend/noticias.service';
 import { Blog } from 'src/app/model';
 import { FirestoreService } from 'src/app/service/firestore.service';
@@ -11,7 +11,7 @@ import { FirestoreService } from 'src/app/service/firestore.service';
 })
 export class AdminNoticiaPage implements OnInit {
 
-  constructor(public noticias: NoticiasService, public firestore: FirestoreService, public toastController: ToastController) { }
+  constructor(public noticias: NoticiasService, public firestore: FirestoreService, public toastController: ToastController, public alertController: AlertController) { }
 
   noticia: Blog[]= [];
 
@@ -22,16 +22,36 @@ export class AdminNoticiaPage implements OnInit {
   }
 
   async delete(empleadoDelete: any){
-    try {
-      const idEmpleado = empleadoDelete.id;
-      await this.noticias.deleteNoticia(idEmpleado);
-      this.mostrarToast("Empleado eliminado correctamente");
-    } catch (error) {
-      console.error("Error al crear el empleado:", error);
-      this.mostrarToast("Error al crear el empleado");
+      const alert = await this.alertController.create({
+        header: 'Confirmación',
+        message: '¿Estás seguro de que deseas eliminar este elemento?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: () => {
+            }
+          }, {
+            text: 'Eliminar',
+            handler: async () => {
+              try {
+                const idEmpleado = empleadoDelete.id;
+                await this.noticias.deleteNoticia(idEmpleado);
+                this.mostrarToast("Noticia eliminado correctamente");
+              } catch (error) {
+                console.error("Error al crear el noticia:", error);
+                this.mostrarToast("Error al crear el noticia");
+              }  finally {
+                  // Cierra la alerta después de ejecutar las operaciones de eliminación
+                  await alert.dismiss();
+                }
+              }
+            }
+          ]
+        });
+        await alert.present();
     }
-    
-  }
 
   async mostrarToast(mensaje: string) {
     const toast = await this.toastController.create({

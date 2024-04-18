@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { ProductoService } from 'src/app/backend/producto.service';
 import { Producto } from 'src/app/model';
 import { FirestoreService } from 'src/app/service/firestore.service';
@@ -11,7 +11,7 @@ import { FirestoreService } from 'src/app/service/firestore.service';
 })
 export class AdminProductoPage implements OnInit {
 
-  constructor(public productos: ProductoService, public firestore : FirestoreService, public toastController: ToastController) { }
+  constructor(public productos: ProductoService, public firestore : FirestoreService, public toastController: ToastController, public alertController:AlertController) { }
 
   producto: Producto[]=[];
 
@@ -22,15 +22,35 @@ export class AdminProductoPage implements OnInit {
   }
 
   async delete(empleadoDelete: any){
-    try {
-      const idEmpleado = empleadoDelete.id;
-      await this.productos.deleteProducto(idEmpleado);
-      this.mostrarToast("Empleado eliminado correctamente");
-    } catch (error) {
-      console.error("Error al crear el empleado:", error);
-      this.mostrarToast("Error al crear el empleado");
-    }
-    
+    const alert = await this.alertController.create({
+      header: 'Confirmación',
+      message: '¿Estás seguro de que deseas eliminar este elemento?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+          }
+        }, {
+          text: 'Eliminar',
+          handler: async () => {
+            try {
+              const idEmpleado = empleadoDelete.id;
+              await this.productos.deleteProducto(idEmpleado);
+              this.mostrarToast("Producto eliminado correctamente");
+            } catch (error) {
+              console.error("Error al crear el producto:", error);
+              this.mostrarToast("Error al crear el producto");
+            } finally {
+              // Cierra la alerta después de ejecutar las operaciones de eliminación
+              await alert.dismiss();
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   async mostrarToast(mensaje: string) {
