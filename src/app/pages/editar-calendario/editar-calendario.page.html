@@ -58,7 +58,7 @@
 
         <ion-item lines="none" id="diaModal">
           <ion-icon name="calendar-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-label> Dia <br> {{editarCita.dia}} {{fechaModificada}}</ion-label>
+          <ion-label> Dia <br> {{editarCita.dia | date: 'dd/MM/yyyy'}} {{fechaModificada | date: 'dd/MM/yyyy'}}</ion-label>
 
           <ion-modal trigger="diaModal" [isOpen]="modalAbierto">
             <ng-template>
