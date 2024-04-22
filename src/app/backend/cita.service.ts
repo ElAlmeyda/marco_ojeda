@@ -118,14 +118,17 @@ export class CitaService {
       map(citas => {
         // Obtiene la fecha de hoy en formato de cadena de texto YYYY-MM-DD
         const hoy = new Date().toISOString().split('T')[0]; // Extrae solo la parte de la fecha
+        const ahora = new Date();
   
         // Filtra las citas del día de hoy
         const citasHoy = citas.filter(cita => {
           const fechaCita = cita.dia.split('T')[0]; // Extrae solo la parte de la fecha de la cita
-          return fechaCita === hoy;
+          const horaCita = cita.hora.split(':'); // Divide la hora de la cita en horas y minutos
+          const horaCitaDate = new Date(); // Crea un nuevo objeto Date para la hora de la cita
+          horaCitaDate.setHours(Number(horaCita[0]), Number(horaCita[1]), 0, 0);
+          return fechaCita === hoy && cita.estado=='aceptado' && horaCitaDate > ahora;
         });
   
-        console.log(citasHoy);
         return citasHoy;
       })
     );

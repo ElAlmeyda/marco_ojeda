@@ -18,8 +18,8 @@
 <ion-content [fullscreen]="true">
   <div style="text-align: center; margin-top: 20px; ">
     <ion-segment value="defecto" (ionChange)="ordenarLista($event)">
-      <ion-segment-button value="Fecha">
-        <ion-label>Fecha</ion-label>
+      <ion-segment-button value="Hora">
+        <ion-label>Hora</ion-label>
       </ion-segment-button>
       <ion-segment-button value="Dentista">
         <ion-label>Dentista</ion-label>
@@ -29,7 +29,7 @@
   
     <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citasFuturas$ | async">
       <ion-label> Nombre: {{item.nombre}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}} Servicio:{{item.servicio}}</ion-label><br>
-      <ion-button style="padding-top: 1em;" (click)="adelantar(item)" color="success"> 30min </ion-button>
+      <ion-button style="padding-top: 1em;" (click)="adelantar(item)" color="success"> -30min </ion-button>
       <ion-button style="padding-top: 1em;" (click)="retrasar(item)"> 15min </ion-button>
       <ion-button style="padding-top: 1em;" (click)="retrasar(item)"> 30min </ion-button>
       <ion-button style="padding-top: 1em;" (click)="retrasar(item)" color="danger"> 1Hora </ion-button>

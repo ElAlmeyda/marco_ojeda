@@ -33,7 +33,7 @@ export class DiaPage implements OnInit {
   ordenarLista(event: any) {
     const criterio = event.detail.value;
     switch (criterio) {
-      case 'Fecha':
+      case 'Hora':
         this.citasFuturas$ = this.citasFuturas$.pipe(
           map(citas => {
             return citas.sort((a, b) => {
