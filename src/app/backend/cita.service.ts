@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FirestoreService } from '../service/firestore.service';
 import { FirestoreAuthService } from '../service/firestore-auth.service';
 import { Cita, Urgencia } from '../model';
-import { tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { idToken } from '@angular/fire/auth';
 
 @Injectable({
@@ -33,7 +33,7 @@ export class CitaService {
   }
 
 
-  guardarCita(nombre: string, servicio: string, movil: string, dentista: string, dia:string, hora: string, uid:string){
+  guardarCita(nombre: string, servicio: string, movil: string, dentista: string, dia:Date, hora: string, uid:string){
     const path = '/Usuarios/' + this.uid + '/' + this.path;
     const data= {nombre, servicio, movil, dentista, dia, hora, uid, estado:'pendiente', id:''};
     data['id']= this.firestrore.getId();
@@ -86,5 +86,29 @@ export class CitaService {
   getUrgencias() {    
     const path = '/Urgencias';
     return this.firestrore.getCollection<Urgencia>(path);
+  }
+
+
+  // Método para obtener citas futuras
+  getCitasFuturas(): Observable<Cita[]> {
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+
+    return this.getUsuariosCitas().pipe(
+      map(citas => {
+        const citasFuturas = citas.filter(cita => {
+          const fechaCita = new Date(cita.dia);
+          fechaCita.setHours(0, 0, 0, 0);
+          return fechaCita.getTime() >= hoy.getTime();
+        });
+
+        // Ordenar citas por fecha
+        return citasFuturas.sort((a, b) => {
+          const fechaA = new Date(a.dia);
+          const fechaB = new Date(b.dia);
+          return fechaA.getTime() - fechaB.getTime();
+        });
+      })
+    );
   }
 }

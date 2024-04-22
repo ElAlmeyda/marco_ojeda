@@ -16,8 +16,25 @@
 
 
 <ion-content [fullscreen]="true">
-    <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of cita">
-      <ion-label> Nombre: {{item.nombre}} Dia: {{item.dia}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}}  Servicio:{{item.servicio}}</ion-label><br>
+  <div style="text-align: center; margin-top: 20px; ">
+    <ion-segment value="defecto" (ionChange)="ordenarLista($event)">
+      <ion-segment-button value="Fecha">
+        <ion-label>Fecha</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Usuario">
+        <ion-label>Usuario</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Servicio">
+        <ion-label>Servicio</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Dentista">
+        <ion-label>Dentista</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+  
+    <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citasFuturas$ | async">
+      <ion-label> Nombre: {{item.nombre}} Dia: {{item.dia | date: 'dd/MM/yyyy'}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}}  Servicio:{{item.servicio}}</ion-label><br>
       <ion-button style="padding-top: 1em;" (click)="aceptar(item)"> Aceptar </ion-button>
       <ion-button style="padding-top: 1em;" routerLink="/editar-calendario/{{item.id}}"> Editar </ion-button>
       <ion-button style="padding-top: 1em;" (click)="eliminar(item)" color="danger"> Eliminar </ion-button>

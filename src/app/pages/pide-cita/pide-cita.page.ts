@@ -23,7 +23,7 @@ export class PideCitaPage implements OnInit {
   modalAbierto = false;
   uid='';
 
-  dia: Date | null = null;
+  dia!: Date;
   especialista='';
   hora='';
   servicio='';
@@ -109,12 +109,13 @@ export class PideCitaPage implements OnInit {
 
   confirm() {
     this.fechaModificada = this.dia ? this.datePipe.transform(this.dia, 'dd-MM-yyyy') ?? '' : '';
+    this.dia ? this.datePipe.transform(this.dia, 'dd-MM-yyyy') ?? '' : '';
     this.modalAbierto = false;
     return this.modal.dismiss(null, 'cancel');
   }
 
   enviar(){
-    this.cita.guardarCita(this.usuario.nombre, this.servicio, this.usuario.movil, this.especialista, this.fechaModificada, this.hora, this.uid);
+    this.cita.guardarCita(this.usuario.nombre, this.servicio, this.usuario.movil, this.especialista, this.dia, this.hora, this.uid);
   }
 
   getDate() { const date = new Date(); this.today = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2); }
