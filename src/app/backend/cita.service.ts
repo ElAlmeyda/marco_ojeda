@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirestoreService } from '../service/firestore.service';
 import { FirestoreAuthService } from '../service/firestore-auth.service';
-import { Cita } from '../model';
+import { Cita, Urgencia } from '../model';
 import { tap } from 'rxjs';
 import { idToken } from '@angular/fire/auth';
 
@@ -75,5 +75,16 @@ export class CitaService {
 
   getUserCitaCollection(){
     return this.citaCollection;
+  }
+
+  guardarUrgencia(urgencia: Urgencia){
+    const path = '/Urgencias';
+    urgencia.id= this.firestrore.getId();
+    this.firestrore.creatDoc(urgencia, path, urgencia.id);
+  }
+
+  getUrgencias() {    
+    const path = '/Urgencias';
+    return this.firestrore.getCollection<Urgencia>(path);
   }
 }

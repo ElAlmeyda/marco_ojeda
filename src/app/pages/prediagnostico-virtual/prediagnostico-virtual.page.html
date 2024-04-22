@@ -22,38 +22,42 @@
       <ion-card-title style="margin: auto;"> Prediagnostico Virtual </ion-card-title>
     </ion-item>
 
-    <form style="text-align: center;">
-      <ion-item>
-        <ion-icon name="person-outline" style="font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input placeholder="Nombre"></ion-input>
+    <form style="text-align: center;" #miForm="ngForm">
+      <ion-item lines="none">
+        <ion-icon name="person-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
+        <ion-input name="nombre" [(ngModel)]="urgencia.nombre" placeholder="Nombre" required></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-icon name="person-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
+        <ion-input name="movil" [(ngModel)]="urgencia.movil" placeholder="Telefono" required></ion-input>
       </ion-item>
       
-      <ion-item>
-        <ion-icon name="calendar-outline" style="font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input placeholder="Fecha de nacimiento"></ion-input>
+      <ion-item lines="none">
+        <ion-icon name="calendar-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
+        <ion-input name="fecha" [(ngModel)]="urgencia.fecha" placeholder="Fecha de nacimiento" required></ion-input>
       </ion-item>
       
-      <ion-item>
-        <ion-icon name="clipboard-outline" style="font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input placeholder="Padece alguna enfermedad"></ion-input>
+      <ion-item lines="none">
+        <ion-icon name="clipboard-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
+        <ion-input name="enfermedad" [(ngModel)]="urgencia.enfermedad" placeholder="Padece alguna enfermedad" required></ion-input>
       </ion-item>
 
-      <ion-item>
-        <ion-icon name="bag-add-outline" style="font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input placeholder="Medicamento"></ion-input>
+      <ion-item lines="none">
+        <ion-icon name="bag-add-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
+        <ion-input name="medicamento" [(ngModel)]="urgencia.medicamento" placeholder="Medicamento" required></ion-input>
       </ion-item>
 
-      <ion-item>
-        <ion-icon name="send" style="font-size: 30px; padding-right: 10px;"></ion-icon>
+      <ion-item lines="none">
+        <ion-icon name="send" style="font-size: 25px; padding-right: 10px;"></ion-icon>
         <ion-label>Embarazada</ion-label>
-        <ion-radio-group value="end">
+        <ion-radio-group name="embarazo" [(ngModel)]="urgencia.embarazo" required>
           <ion-grid>
             <ion-row>
               <ion-col col-6>
-                <ion-radio> Si</ion-radio>
+                <ion-radio  value="true"> Si</ion-radio>
               </ion-col>
               <ion-col col-6>
-                <ion-radio value="end"> No</ion-radio>
+                <ion-radio value="false"> No</ion-radio>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -61,18 +65,27 @@
         
       </ion-item>
 
-      <ion-item>
-        <ion-icon name="bandage-outline" style="font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input placeholder="Alergias"></ion-input>
+      <ion-item lines="none">
+        <ion-icon name="bandage-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
+        <ion-input name="alergias" [(ngModel)]="urgencia.alergias" placeholder="Alergias" required ></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-icon name="send" style="font-size: 25px; padding-right: 10px;"></ion-icon>
+        <ion-textarea name="sintomas" [(ngModel)]="urgencia.sintomas" placeholder="Sintomas que tiene" required ></ion-textarea>
       </ion-item>
 
-      <ion-item>
-        <ion-icon name="image-outline" style="font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input name="foto" type="file"></ion-input>
+      <ion-item lines="none">
+        <ion-icon name="image-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
+        <ion-input name="foto" type="file" [(ngModel)]="urgencia.foto"></ion-input>
       </ion-item>
 
-      <ion-item>
-        <ion-button slot="end" color="primary" routerLink="/confirmar-prediagnostico" > Siguiente Paso </ion-button>
+      <ion-item lines="none">
+        <ion-radio required> </ion-radio>
+        <ion-label style="padding: 10px;"> Acepto los terminos de la empresa</ion-label>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-button slot="end" color="primary" [disabled]="miForm.invalid" (click)=" aceptar()"> Confirmar </ion-button>
       </ion-item>
     </form>
   

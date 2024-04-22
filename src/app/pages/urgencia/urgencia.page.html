@@ -16,9 +16,12 @@
 
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">urgencia</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of cita">
+      <ion-label> Nombre: {{item.nombre}} Fecha de nacimiento: {{item.fecha}}</ion-label><br>
+      <ion-label> Enfermedad: {{item.enfermedad}} Medicamento: {{item.medicamento}}</ion-label><br>
+      <ion-label> Embarazo: {{embarazo}} Alergias: {{item.alergias}}</ion-label><br>
+      <ion-label> Sintomas: {{item.sintomas}} </ion-label><br>
+      <ion-label> Foto: {{item.foto}} </ion-label><br>
+      <ion-button style="padding-top: 1em;" (click)="aceptar(item)"> Aceptar </ion-button>
+    </ion-card>
 </ion-content>

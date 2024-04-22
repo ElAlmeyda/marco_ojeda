@@ -44,33 +44,6 @@ export class CarritoPage implements OnInit {
       if(res != null){
         this.uid = res.uid;
         this.cargarPedido();
-      } else {
-        const alert = await this.alertController.create({
-          header: 'No esta logueado',
-          message: 'Si quiere acceder a la tienda tiene que loguearse',
-          buttons: [
-            {
-              text: 'Cancelar',
-              role: 'cancel',
-              cssClass: 'secondary',
-              handler: () => {
-              }
-            }, {
-              text: 'Inicie sesion',
-              handler: async () => {
-                try {
-                  this.router.navigate(["/inicio-sesion"]);
-                } catch (error) {
-                  console.error("Error al crear el empleado:", error);
-                }finally {
-                  // Cierra la alerta después de ejecutar las operaciones de eliminación
-                  await alert.dismiss();
-                }
-              }
-            }
-          ]
-        });
-        await alert.present();
       }
     });
   }

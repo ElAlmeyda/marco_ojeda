@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Usuario } from 'src/app/model';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
 import {  Router } from '@angular/router';
-import { first } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 
 @Component({
@@ -25,7 +23,6 @@ export class RegistrarsePage implements OnInit {
   }
   rol="cliente";
 
-  usuario: Usuario[]=[];
 
   correcto = false;
   guardarEjecutado = false;

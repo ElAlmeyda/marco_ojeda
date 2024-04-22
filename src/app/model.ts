@@ -58,3 +58,16 @@ export interface Cita {
     id: string;
     uid:string;
 }
+
+export interface Urgencia {
+    nombre: string;
+    movil: string;
+    fecha: string;
+    enfermedad: string;
+    medicamento: string;
+    embarazo: boolean;
+    alergias: string;
+    sintomas:string;
+    foto: string;
+    id: string;
+}

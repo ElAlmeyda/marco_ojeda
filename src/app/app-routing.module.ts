@@ -86,10 +86,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/kid-planet/kid-planet.module').then( m => m.KidPlanetPageModule)
   },
   {
-    path: 'confirmar-prediagnostico',
-    loadChildren: () => import('./pages/confirmar-prediagnostico/confirmar-prediagnostico.module').then( m => m.ConfirmarPrediagnosticoPageModule)
-  },
-  {
     path: 'admin-equipo',
     loadChildren: () => import('./pages/admin-equipo/admin-equipo.module').then( m => m.AdminEquipoPageModule)
   },
@@ -136,7 +132,8 @@ const routes: Routes = [
   {
     path: 'editar-calendario/:id',
     loadChildren: () => import('./pages/editar-calendario/editar-calendario.module').then( m => m.EditarCalendarioPageModule)
-  },  {
+  },
+  {
     path: 'gestor',
     loadChildren: () => import('./pages/gestor/gestor.module').then( m => m.GestorPageModule)
   },
