@@ -101,13 +101,32 @@ export class CitaService {
           fechaCita.setHours(0, 0, 0, 0);
           return fechaCita.getTime() >= hoy.getTime();
         });
-
+  
         // Ordenar citas por fecha
         return citasFuturas.sort((a, b) => {
           const fechaA = new Date(a.dia);
           const fechaB = new Date(b.dia);
           return fechaA.getTime() - fechaB.getTime();
         });
+      }),
+      map(citas => citas.filter(cita => cita.estado === 'pendiente')) // Filtrar citas pendientes
+    );
+  }
+
+  getCitasHoy(){
+    return this.getCitas().pipe(
+      map(citas => {
+        // Obtiene la fecha de hoy en formato de cadena de texto YYYY-MM-DD
+        const hoy = new Date().toISOString().split('T')[0]; // Extrae solo la parte de la fecha
+  
+        // Filtra las citas del día de hoy
+        const citasHoy = citas.filter(cita => {
+          const fechaCita = cita.dia.split('T')[0]; // Extrae solo la parte de la fecha de la cita
+          return fechaCita === hoy;
+        });
+  
+        console.log(citasHoy);
+        return citasHoy;
       })
     );
   }

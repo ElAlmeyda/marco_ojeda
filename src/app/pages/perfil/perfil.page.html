@@ -32,20 +32,20 @@
       <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngIf="citaPendiente.length != 0">
         <ion-label style ="font-weight: bold;"> Sus citas pendiente </ion-label><br>
         <ion-card-content *ngFor="let item of citaPendiente">
-          <ion-label> Dia: {{item.dia}} Hora:{{item.hora}}</ion-label><br>
+          <ion-label> Dia: {{item.dia | date: 'dd/MM/yyyy'}} Hora:{{item.hora}}</ion-label><br>
           <ion-label> Dentista:{{item.dentista}}<br> Servicio:{{item.servicio}} </ion-label><br>
         </ion-card-content>
       </ion-card>
       <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngIf="citaConfirmada.length != 0">
         <ion-label style ="font-weight: bold;"> Sus citas confirmadas </ion-label><br>
         <ion-card-content *ngFor="let item of citaConfirmada">
-          <ion-label> Dia: {{item.dia}} Hora:{{item.hora}}</ion-label><br>
+          <ion-label> Dia: {{item.dia | date: 'dd/MM/yyyy'}} Hora:{{item.hora}}</ion-label><br>
           <ion-label> Dentista:{{item.dentista}}<br> Servicio:{{item.servicio}} </ion-label><br>
         </ion-card-content>
       </ion-card>
       <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citaEditada">
         <ion-label> Acepta la siguiente cita </ion-label><br>
-        <ion-label> Nombre: {{item.nombre}} Dia: {{item.dia}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}}  Servicio:{{item.servicio}}</ion-label><br>
+        <ion-label> Nombre: {{item.nombre}} Dia: {{item.dia | date: 'dd/MM/yyyy'}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}}  Servicio:{{item.servicio}}</ion-label><br>
         <ion-button style="padding-top: 1em;" (click)="aceptar(item)"> Aceptar </ion-button>
         <ion-button style="padding-top: 1em;" (click)="eliminar(item)" color="danger"> Eliminar </ion-button>
       </ion-card>

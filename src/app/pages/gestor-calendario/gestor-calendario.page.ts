@@ -14,12 +14,11 @@ import { FirestoreService } from 'src/app/service/firestore.service';
 })
 export class GestorCalendarioPage implements OnInit {
   cita: Cita[]= [];
-  fechaModificada = "";
 
   citasFuturas$!: Observable<any[]>;
 
   constructor(public fireAuth: FirestoreAuthService, public firestore: FirestoreService, public citas: CitaService, public router: Router) { 
-    ;
+    
   }
 
   ngOnInit() {
@@ -44,28 +43,6 @@ export class GestorCalendarioPage implements OnInit {
                 return horaA !== horaB ? horaA - horaB : minutoA - minutoB;
               }
               return fechaA.getTime() - fechaB.getTime();
-            });
-          })
-        );
-        break;
-      case 'Usuario':
-        this.citasFuturas$ = this.citasFuturas$.pipe(
-          map(citas => {
-            return citas.sort((a, b) => {
-              if (a.usuario && b.usuario) {
-              const usuarioComparison = a.usuario.localeCompare(b.usuario);
-              if (usuarioComparison === 0 && a.dia === b.dia) {
-                // Si el usuario y la fecha son iguales, compara por hora
-                const horaA = parseInt(a.hora.split(':')[0]);
-                const minutoA = parseInt(a.hora.split(':')[1]);
-                const horaB = parseInt(b.hora.split(':')[0]);
-                const minutoB = parseInt(b.hora.split(':')[1]);
-                return horaA !== horaB ? horaA - horaB : minutoA - minutoB;
-              }
-              return usuarioComparison;
-            } else {
-              return 0; // Devolver 0 si a o b no tienen la propiedad usuario
-            }
             });
           })
         );
@@ -116,7 +93,7 @@ export class GestorCalendarioPage implements OnInit {
 
   async obtenerCitas(){
     this.citas.getUsuariosCitas().subscribe((res: Cita[]) =>{
-      this.cita = res.filter(cita => cita.estado === 'pendiente');;
+      this.cita = res.filter(cita => cita.estado === 'pendiente');
     });
   }
 
