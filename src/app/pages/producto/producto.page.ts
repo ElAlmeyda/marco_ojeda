@@ -28,6 +28,7 @@ export class ProductoPage implements OnInit {
     this.id= this.router.snapshot.paramMap.get('id');
     this.producto.getProdCollection().subscribe(()=>{
       this.product = this.producto.getProducto(this.id);
+      this.actualizarImagenes(this.product);
     });
     console.log(this.carrito);
   }
@@ -67,6 +68,26 @@ export class ProductoPage implements OnInit {
       }
     });
     
+  }
+
+  async actualizarImagenes(prod: any[]) {
+    for (const prodFoto of prod) {
+      if (prodFoto.foto) {
+        try {
+          const url = this.producto.getDownloadUrl(prodFoto.foto).subscribe(
+            (url: string) => {
+              prodFoto.imagenUrl = url;
+            },
+            (error) => {
+              console.error('Error al obtener URL de descarga:', error);
+            }
+          );
+          prodFoto.imagenUrl = url;
+        } catch (error) {
+          console.error('Error al obtener URL de descarga:', error);
+        }
+      }
+    }
   }
 
 }

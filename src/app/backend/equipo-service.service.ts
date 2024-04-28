@@ -3,6 +3,7 @@ import { EquipoModule } from '../module/equipo/equipo.module';
 import { FirestoreService } from '../service/firestore.service';
 import { Empleado } from '../model';
 import { EmptyError, Observable, tap, toArray } from 'rxjs';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class EquipoServiceService {
 
   
 
-  constructor( public database: FirestoreService) { }
+  constructor( public database: FirestoreService, public storage: AngularFireStorage) { }
 
   private path = 'EquipoClinico/';
   empleado : Empleado[] = [];
@@ -32,7 +33,7 @@ export class EquipoServiceService {
   }
 
   getOdontologos(){
-    return this.equipoOdontologos = this.empleado.filter(empleado => empleado.tipo === 'Odontologos');
+    return this.equipoOdontologos = this.empleado.filter(empleado => empleado.tipo === 'Odontologos');    
   }
 
   getHigienistas(){
@@ -60,18 +61,33 @@ export class EquipoServiceService {
   }
 
   crearEmpleado(nombre: string, descripcion: string, foto: string, tipo: string){
+    const path ="gs://servicio-4f831.appspot.com/Empleados/" + foto;
+    foto = path;
     const data = {nombre, descripcion, foto, tipo, id:''};
     data['id']= this.database.getId();
     return this.database.creatDoc(data, this.path, data['id']);
   }
 
   actualizarEmpleado(nombre: string, descripcion: string, foto: string, tipo: string, id: string){
+    const path ="gs://servicio-4f831.appspot.com/Empleados/" + foto;
+    foto = path;
     const data = {nombre, descripcion, foto, tipo, id}
     return this.database.updateDoc(data, this.path, id);
   }
 
   deleteEmpleado(id: string){
     return this.database.deleteDoc(this.path, id);
+  }
+
+  public getDownloadUrl(imagenRef: string) {
+    const ref = this.storage.refFromURL(imagenRef);
+    return ref.getDownloadURL();
+  }
+
+  public subirImagen(file: any){
+    const nombre = file.name;
+    const path = "gs://servicio-4f831.appspot.com/Empleados/" + nombre;
+    return this.database.subirImagenes(file, path, nombre);
   }
 
 }

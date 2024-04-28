@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable, map, switchMap } from 'rxjs';
 
@@ -9,7 +10,7 @@ import { Observable, map, switchMap } from 'rxjs';
 
 export class FirestoreService {
 
-  constructor(private database: AngularFirestore) { }
+  constructor(private database: AngularFirestore, public storage: AngularFireStorage) { }
 
   creatDoc(data: any, path: string, id: string){
     const collection = this.database.collection(path);
@@ -52,5 +53,15 @@ export class FirestoreService {
 
   getUserCitas(): Observable<any[]> {
     return this.database.collectionGroup('Cita').valueChanges();
+  }
+
+
+  subirImagenes(file: any, path: string, nombre:string): Promise<string>{
+    return new Promise( resolve =>{
+      const filePath= path;
+      const ref = this.storage.refFromURL(filePath);
+      const tak = ref.put(file);
+      resolve('este es el enlace');
+    });
   }
 }

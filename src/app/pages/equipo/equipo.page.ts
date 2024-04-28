@@ -29,9 +29,13 @@ export class EquipoPage implements OnInit {
   ngOnInit() {
     this.empleado.getEquipo().subscribe(() => {
       this.odontologo = this.empleado.getOdontologos();
+      this.actualizarImagenes(this.odontologo);
       this.higuienista = this.empleado.getHigienistas();
+      this.actualizarImagenes(this.higuienista);
       this.auxiliares = this.empleado.getAuxiliares();
+      this.actualizarImagenes(this.auxiliares);
       this.atencionAlcliente = this.empleado.getAtencion();
+      this.actualizarImagenes(this.atencionAlcliente);
       this.tiposEspecialistas = [
         { tipo: 'odontologo', nombre: 'Odontólogos', datos: this.odontologo },
         { tipo: 'higienista', nombre: 'Higienistas', datos: this.higuienista },
@@ -39,6 +43,26 @@ export class EquipoPage implements OnInit {
         { tipo: 'atencion', nombre: 'Atención al Paciente', datos: this.atencionAlcliente }
       ];
     });
+  }
+
+  async actualizarImagenes(equipo: any[]) {
+    for (const odontologo of equipo) {
+      if (odontologo.foto) {
+        try {
+          const url = this.empleado.getDownloadUrl(odontologo.foto).subscribe(
+            (url: string) => {
+              odontologo.imagenUrl = url;
+            },
+            (error) => {
+              console.error('Error al obtener URL de descarga:', error);
+            }
+          );
+          odontologo.imagenUrl = url;
+        } catch (error) {
+          console.error('Error al obtener URL de descarga:', error);
+        }
+      }
+    }
   }
   
 }

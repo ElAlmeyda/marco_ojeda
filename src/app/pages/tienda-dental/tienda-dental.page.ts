@@ -18,7 +18,26 @@ export class TiendaDentalPage implements OnInit {
   ngOnInit() {
     this.productos.getProdCollection().subscribe(() =>{
       this.store = this.productos.getProductos();
+      this.actualizarImagenes(this.store);
     });
+  }
+
+
+  async actualizarImagenes(prod: any[]) {
+    for (const prodFoto of prod) {
+      if (prodFoto.foto) {
+        try {
+          const url = await this.productos.getDownloadUrl(prodFoto.foto).subscribe(
+            (url: string) => {
+              prodFoto.imagenUrl = url;
+            }
+          );
+          prodFoto.imagenUrl = url;
+        } catch (error) {
+          console.error('Error al obtener URL de descarga:', error);
+        }
+      }
+    }
   }
 
 }

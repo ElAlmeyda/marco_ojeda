@@ -29,9 +29,10 @@
       </ion-item>
       
       <ion-item>
-        <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-        <ion-input name="foto" type="file" placeholder="Foto" [(ngModel)]="noticia.foto"></ion-input>
-      </ion-item>      
+        <ion-icon name="images" style="font-size: 30px; padding-right: 10px;"></ion-icon>
+        <a (click)="openFileInput()" style="text-decoration: none; color: inherit;">{{ mostrarTextoSeleccionarFoto() }}</a>
+        <input type="file" #fileInput style="display: none;" (change)="nuevaImagen($event)">
+      </ion-item>    
       <br>
       <ion-button (click)="guardar()"> Guardar nuevo </ion-button>
     </form>

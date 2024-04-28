@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Blog } from '../model';
 import { FirestoreService } from '../service/firestore.service';
 import { tap } from 'rxjs';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NoticiasService {
 
-  constructor(public database: FirestoreService) { }
+  constructor(public database: FirestoreService, public storage: AngularFireStorage) { }
 
   private path = 'Noticias/';
   noticias : Blog[] = [];
@@ -30,18 +31,33 @@ export class NoticiasService {
   }
 
   crearNoticia(titulo: string, descripcion: string, foto: string){
+    const path ="gs://servicio-4f831.appspot.com/Noticias/" + foto;
+    foto = path;
     const data = {titulo, descripcion, foto, id:''};
     data['id']= this.database.getId();
     return this.database.creatDoc(data, this.path, data['id']);
   }
 
   editarNoticia(nombre: string, descripcion: string, foto: string, id: string){
+    const path ="gs://servicio-4f831.appspot.com/Noticias/" + foto;
+    foto = path;
     const data = {nombre, descripcion, foto, id}
     return this.database.updateDoc(data, this.path, id);
   }
 
   deleteNoticia(id:string){
     return this.database.deleteDoc(this.path, id);
+  }
+
+  public subirImagen(file: any){
+    const nombre = file.name;
+    const path = "gs://servicio-4f831.appspot.com/Noticias/" + nombre;
+    return this.database.subirImagenes(file, path, nombre);
+  }
+
+  public getDownloadUrl(imagenRef: string) {
+    const ref = this.storage.refFromURL(imagenRef);
+    return ref.getDownloadURL();
   }
 
 }

@@ -19,7 +19,31 @@ export class NoticiaPage implements OnInit {
     this.id= this.activatedRoute.snapshot.paramMap.get('id');
     this.noticias.getBlog().subscribe(() => {
       this.noticia= this.noticias.getNoticia(this.id);
+      this.actualizarImagenes(this.noticia);
+
     });
   }
+
+  async actualizarImagenes(noticiaF: any[]) {
+    for (const noti of noticiaF) {
+      if (noti.foto) {
+        try {
+          const url = await this.noticias.getDownloadUrl(noti.foto).subscribe(
+            (url: string) => {
+              noti.imagenUrl = url;
+            },
+            (error) => {
+              console.error('Error al obtener URL de descarga:', error);
+            }
+          );
+          noti.imagenUrl = url;
+        } catch (error) {
+          console.error('Error al obtener URL de descarga:', error);
+        }
+      }
+    }
+  }
+
+
 
 }

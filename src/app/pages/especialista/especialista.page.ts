@@ -31,9 +31,29 @@ export class EspecialistaPage implements OnInit {
     this.id= this.activatedRoute.snapshot.paramMap.get('id')
     this.equipoService.getEquipo().subscribe(() => {
       this.especialista= this.equipoService.getEspecialista(this.id);
+      this.actualizarImagenes(this.especialista);
     });
 
   }
 
+  async actualizarImagenes(especialista: any[]) {
+    for (const odontologo of especialista) {
+      if (odontologo.foto) {
+        try {
+          const url = await this.equipoService.getDownloadUrl(odontologo.foto).subscribe(
+            (url: string) => {
+              odontologo.imagenUrl = url;
+            },
+            (error) => {
+              console.error('Error al obtener URL de descarga:', error);
+            }
+          );
+          odontologo.imagenUrl = url;
+        } catch (error) {
+          console.error('Error al obtener URL de descarga:', error);
+        }
+      }
+    }
+  }
 
 }

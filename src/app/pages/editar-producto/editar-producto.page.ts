@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { ProductoService } from 'src/app/backend/producto.service';
@@ -10,9 +10,12 @@ import { Producto } from 'src/app/model';
   styleUrls: ['./editar-producto.page.scss'],
 })
 export class EditarProductoPage implements OnInit {
-
+  @ViewChild('fileInput') fileInput: any;
+  
   id: any;
   public producto: any = [];
+  imagenSubidaUrl ='';
+  file: any;
 
   editarProducto: Producto = {
     nombre: '',
@@ -37,7 +40,8 @@ export class EditarProductoPage implements OnInit {
 
   async editar(){
     try {
-      await this.productos.editarProducto(this.editarProducto.nombre, this.editarProducto.descripcion, this.editarProducto.foto, this.editarProducto.precio, this.id);
+      await this.productos.editarProducto(this.editarProducto.nombre, this.editarProducto.descripcion, this.file.name, this.editarProducto.precio, this.id);
+      await this.productos.subirImagen(this.file);
       // Si no se ha lanzado ninguna excepción, significa que se ha creado el empleado correctamente
       this.mostrarToast("Producto actualizado correctamente");
     } catch (error) {
@@ -45,6 +49,28 @@ export class EditarProductoPage implements OnInit {
       this.mostrarToast("Error al actualizado el producto");
     }
 
+  }
+
+  openFileInput() {
+    this.fileInput.nativeElement.click();
+  }
+
+  nuevaImagen(event:any) {
+    console.log(event);
+    if(event.target.files && event.target.files[0]) {
+      this.file = event.target.files[0];
+      const reader = new FileReader();
+      this.editarProducto.foto = this.file.name;
+      reader.onload = (async (image) =>{
+        this.imagenSubidaUrl = image.target?.result as string;
+      });
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+  }
+
+  mostrarTextoSeleccionarFoto(): string {
+    return this.editarProducto.foto ? this.editarProducto.foto : 'Seleccionar foto';
   }
 
   async mostrarToast(mensaje: string) {

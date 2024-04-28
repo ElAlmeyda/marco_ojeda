@@ -24,15 +24,14 @@ import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-confi
 
 import {  } from '@angular/fire';
 import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, HttpClientModule, IonicModule.forRoot(), AppRoutingModule, IonicModule, CommonModule, 
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    provideFirebaseApp(() => 
-    initializeApp({"projectId":"servicio-4f831","appId":"1:867441361379:web:4048cbd33afbfb169ee0d6","databaseURL":"https://servicio-4f831-default-rtdb.firebaseio.com","storageBucket":"servicio-4f831.appspot.com","apiKey":"AIzaSyBSx_zX2iUbKScJo__1dV9_luyxQzTpJpk","authDomain":"servicio-4f831.firebaseapp.com","messagingSenderId":"867441361379","measurementId":"G-12GCW4T1V0"})), 
-    provideAuth(() => getAuth()), provideAnalytics(() => getAnalytics()), 
+  imports: [BrowserModule, HttpClientModule, IonicModule.forRoot(), AppRoutingModule, IonicModule, CommonModule,  
+    AngularFireModule.initializeApp(environment.firebaseConfig), AngularFireStorageModule, AngularFirestoreModule,
     //provideAppCheck(() => { 
       // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_ //const provider = new ReCaptchaEnterpriseProvider(/* reCAPTCHA Enterprise site key */);
       //return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { NoticiasService } from 'src/app/backend/noticias.service';
@@ -11,6 +11,9 @@ import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
   styleUrls: ['./editar-noticia.page.scss'],
 })
 export class EditarNoticiaPage implements OnInit {
+  @ViewChild('fileInput') fileInput: any;
+  imagenSubidaUrl ='';
+  file: any;
 
   id: any;
   public noticia: any = [];
@@ -38,7 +41,8 @@ export class EditarNoticiaPage implements OnInit {
 
   async editar(){
     try {
-      await this.noticias.editarNoticia(this.actualizarNoticia.titulo, this.actualizarNoticia.descripcion, this.actualizarNoticia.foto, this.id);
+      await this.noticias.editarNoticia(this.actualizarNoticia.titulo, this.actualizarNoticia.descripcion, this.file.name, this.id);
+      await this.noticias.subirImagen(this.file);
       // Si no se ha lanzado ninguna excepción, significa que se ha creado el empleado correctamente
       this.mostrarToast("Empleado actualizado correctamente");
     } catch (error) {
@@ -55,6 +59,28 @@ export class EditarNoticiaPage implements OnInit {
       position: 'bottom' // Posición del toast en la pantalla
     });
     toast.present();
+  }
+
+  openFileInput() {
+    this.fileInput.nativeElement.click();
+  }
+
+  nuevaImagen(event:any) {
+    console.log(event);
+    if(event.target.files && event.target.files[0]) {
+      this.file = event.target.files[0];
+      const reader = new FileReader();
+      this.noticia.foto = this.file.name;
+      reader.onload = (async (image) =>{
+        this.imagenSubidaUrl = image.target?.result as string;
+      });
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+  }
+
+  mostrarTextoSeleccionarFoto(): string {
+    return this.noticia.foto ? this.noticia.foto : 'Seleccionar foto';
   }
 
 }
