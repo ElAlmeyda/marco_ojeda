@@ -21,8 +21,11 @@
       <ion-segment-button value="Citas">
         <ion-label>Citas</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="Urgencias">
-        <ion-label>Urgencias</ion-label>
+      <ion-segment-button value="Urgencias" >
+        <ion-label style="display: flex; align-items: center;">Urgencias
+          <ion-label *ngIf="urgencia.length != 0" style="color: gray; padding: 5px; font-size: 25px;"> ! </ion-label>
+        </ion-label>
+        
       </ion-segment-button>
     </ion-segment>
   </div>
