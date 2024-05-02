@@ -138,10 +138,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/gestor/gestor.module').then( m => m.GestorPageModule)
   },
   {
-    path: 'urgencia',
-    loadChildren: () => import('./pages/urgencia/urgencia.module').then( m => m.UrgenciaPageModule)
-  },
-  {
     path: 'dia',
     loadChildren: () => import('./pages/dia/dia.module').then( m => m.DiaPageModule)
   }

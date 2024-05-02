@@ -16,17 +16,25 @@
 
 
 <ion-content [fullscreen]="true">
-  <div style="text-align: center; margin-top: 20px; ">
-    <ion-segment value="defecto" (ionChange)="ordenarLista($event)">
-      <ion-segment-button value="Hora">
-        <ion-label>Hora</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="Dentista">
-        <ion-label>Dentista</ion-label>
-      </ion-segment-button>
-    </ion-segment>
-  </div>
-  
+  <ion-card class="inline-selectors">
+    <ion-item lines="none" class="ion-inline">
+      <ion-select [(ngModel)]="filtroDentista" multiple="true" cancelText="Cancelar" okText="Aceptar" placeholder="Dentista" (ionChange)="aplicarFiltro()">
+        <ion-select-option *ngFor="let dentista of empleado" [value]="dentista.nombre">{{ dentista.nombre }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item lines="none" class="ion-inline">
+      <ion-select [(ngModel)]="filtroServicio" multiple="true" cancelText="Cancelar" okText="Aceptar" placeholder="Servicio" (ionChange)="aplicarFiltro()">
+        <ion-select-option value="Brackets"> Brackets</ion-select-option>
+        <ion-select-option value="1Visita"> 1ºVisita</ion-select-option>
+        <ion-select-option value="Implantar"> Implantar</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item lines="none" class="ion-inline">
+      <ion-select [(ngModel)]="filtroDia" multiple="true" cancelText="Cancelar" okText="Aceptar" placeholder="Dia">
+        <ion-select-option value="Brackets"> Brackets</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-card>
     <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citasFuturas$ | async">
       <ion-label> Nombre: {{item.nombre}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}} Servicio:{{item.servicio}}</ion-label><br>
       <ion-button style="padding-top: 1em;" (click)="adelantar(item)" color="success"> -30min </ion-button>

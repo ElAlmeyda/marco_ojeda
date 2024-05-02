@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { CitaService } from 'src/app/backend/cita.service';
-import { Cita } from 'src/app/model';
+import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
+import { Cita, Empleado } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
 
@@ -15,11 +16,23 @@ export class DiaPage implements OnInit {
   cita: Cita[]= [];
 
   citasFuturas$!: Observable<any[]>;
+  filtroDentista: string[] = [];
+  filtroServicio: string[] = [];
+  filtroDia: string[] = [];
+  public empleado: Empleado[] = [];
 
-  constructor(public fireAuth: FirestoreAuthService, public firestore: FirestoreService, public citas: CitaService, public router: Router) { }
+
+  constructor(public fireAuth: FirestoreAuthService, public firestore: FirestoreService, public citas: CitaService, public router: Router, public equipo: EquipoServiceService) { }
   
   ngOnInit() {
     this.obtenerCitasHoy();
+    this.getEquipo();
+  }
+
+  getEquipo(){
+    this.equipo.getEquipo().subscribe(() => {
+      this.empleado = this.equipo.getOdontologos();
+    });
   }
 
   retrasar(item: Cita){
@@ -75,5 +88,24 @@ export class DiaPage implements OnInit {
 
   obtenerCitasHoy(){
     this.citasFuturas$ = this.citas.getCitasHoy();
+  }
+
+  aplicarFiltro() {
+    this.citasFuturas$ = this.citas.getCitasFuturas().pipe(
+      map(citas => {
+        let citasFiltradas = citas;
+
+      // Filtrar por dentista si se especifica
+      if (this.filtroDentista.length !== 0) {
+        citasFiltradas = citasFiltradas.filter(cita => this.filtroDentista.includes(cita.dentista));
+      }
+
+      // Filtrar por servicio si se especifica
+      if (this.filtroServicio.length !== 0) {
+        citasFiltradas = citasFiltradas.filter(cita => this.filtroServicio.some(servicio => cita.servicio.includes(servicio)));
+      }
+        return citasFiltradas; 
+      })
+    );
   }
 }

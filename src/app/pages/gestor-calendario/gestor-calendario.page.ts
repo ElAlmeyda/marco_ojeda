@@ -1,9 +1,10 @@
 import { state } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, map } from 'rxjs';
+import { Observable, map, switchMap } from 'rxjs';
 import { CitaService } from 'src/app/backend/cita.service';
-import { Cita } from 'src/app/model';
+import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
+import { Cita, Empleado, Urgencia } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
 
@@ -14,80 +15,68 @@ import { FirestoreService } from 'src/app/service/firestore.service';
 })
 export class GestorCalendarioPage implements OnInit {
   cita: Cita[]= [];
+  urgencia: Urgencia[]= [];
+  embarazo = '';
+  tipoCita='Citas';
+
+  urgencias=false;
+  citaPrivada=false;
+  filtroDentista: string[] = [];
+  filtroServicio: string[] = [];
+  filtroDia="";
+
+
+  public empleado: Empleado[] = [];
 
   citasFuturas$!: Observable<any[]>;
 
-  constructor(public fireAuth: FirestoreAuthService, public firestore: FirestoreService, public citas: CitaService, public router: Router) { 
+  constructor(public fireAuth: FirestoreAuthService, public firestore: FirestoreService, public citas: CitaService, public router: Router,
+              public equipo: EquipoServiceService) { 
     
   }
 
   ngOnInit() {
     this.obtenerCitasFuturas();
+    this.getEquipo()
   }
 
-  ordenarLista(event: any) {
-    const criterio = event.detail.value;
-    switch (criterio) {
-      case 'Fecha':
-        this.citasFuturas$ = this.citasFuturas$.pipe(
-          map(citas => {
-            return citas.sort((a, b) => {
-              const fechaA = new Date(a.dia);
-              const fechaB = new Date(b.dia);
-              if (fechaA.getTime() === fechaB.getTime()) {
-                // Si las fechas son iguales, compara por hora
-                const horaA = parseInt(a.hora.split(':')[0]);
-                const minutoA = parseInt(a.hora.split(':')[1]);
-                const horaB = parseInt(b.hora.split(':')[0]);
-                const minutoB = parseInt(b.hora.split(':')[1]);
-                return horaA !== horaB ? horaA - horaB : minutoA - minutoB;
-              }
-              return fechaA.getTime() - fechaB.getTime();
-            });
-          })
-        );
-        break;
-      case 'Servicio':
-        this.citasFuturas$ = this.citasFuturas$.pipe(
-          map(citas => {
-            return citas.sort((a, b) => {
-              const servicioComparison = a.servicio.localeCompare(b.servicio);
-              if (servicioComparison === 0 && a.dia === b.dia) {
-                // Si el servicio y la fecha son iguales, compara por hora
-                const horaA = parseInt(a.hora.split(':')[0]);
-                const minutoA = parseInt(a.hora.split(':')[1]);
-                const horaB = parseInt(b.hora.split(':')[0]);
-                const minutoB = parseInt(b.hora.split(':')[1]);
-                return horaA !== horaB ? horaA - horaB : minutoA - minutoB;
-              }
-              return servicioComparison;
-            });
-          })
-        );
-        break;
-        case 'Dentista':
-        this.citasFuturas$ = this.citasFuturas$.pipe(
-          map(citas => {
-            return citas.sort((a, b) => {
-              const dentistaComparison = a.dentista.localeCompare(b.dentista);
-              if (dentistaComparison === 0 && a.dia === b.dia) {
-                // Si el dentista y la fecha son iguales, compara por hora
-                const horaA = parseInt(a.hora.split(':')[0]);
-                const minutoA = parseInt(a.hora.split(':')[1]);
-                const horaB = parseInt(b.hora.split(':')[0]);
-                const minutoB = parseInt(b.hora.split(':')[1]);
-                return horaA !== horaB ? horaA - horaB : minutoA - minutoB;
-              }
-              return dentistaComparison;
-            });
-          })
-        );
-        break;
-    }
+  getEquipo(){
+    this.equipo.getEquipo().subscribe(() => {
+      this.empleado = this.equipo.getOdontologos();
+    });
   }
+
 
   obtenerCitasFuturas(){
     this.citasFuturas$ = this.citas.getCitasFuturas();
+    this.citas.getUrgencias().subscribe(res => {
+      this.urgencia = res;
+      this.embarazada();
+      console.log(this.urgencia);
+    });
+  }
+
+  citaOurgencia(event: any){
+    this.tipoCita = event.detail.value;
+  }
+
+  aplicarFiltro() {
+    this.citasFuturas$ = this.citas.getCitasFuturas().pipe(
+      map(citas => {
+        let citasFiltradas = citas;
+
+      // Filtrar por dentista si se especifica
+      if (this.filtroDentista.length !== 0) {
+        citasFiltradas = citasFiltradas.filter(cita => this.filtroDentista.includes(cita.dentista));
+      }
+
+      // Filtrar por servicio si se especifica
+      if (this.filtroServicio.length !== 0) {
+        citasFiltradas = citasFiltradas.filter(cita => this.filtroServicio.some(servicio => cita.servicio.includes(servicio)));
+      }
+        return citasFiltradas; 
+      })
+    );
   }
 
 
@@ -108,5 +97,18 @@ export class GestorCalendarioPage implements OnInit {
 
   editar(item: Cita){
     this.router.navigate(['/editar-calendario'], { state: {Cita: item}});
+  }
+
+  embarazada(){
+    this.citas.getUrgencias().subscribe(res => {
+        this.urgencia = res.map(urgencia =>{
+        if(urgencia.embarazo){
+          this.embarazo = "No";
+        } else {
+          this.embarazo = "Si";
+        }
+        return urgencia;
+        })
+    });
   }
 }
