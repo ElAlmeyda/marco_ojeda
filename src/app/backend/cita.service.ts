@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FirestoreService } from '../service/firestore.service';
 import { FirestoreAuthService } from '../service/firestore-auth.service';
 import { Cita, Urgencia } from '../model';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, concatMap, forkJoin, from, map, mergeMap, take, tap } from 'rxjs';
 import { idToken } from '@angular/fire/auth';
 
 @Injectable({
@@ -101,8 +101,6 @@ export class CitaService {
           fechaCita.setHours(0, 0, 0, 0);
           return fechaCita.getTime() >= hoy.getTime();
         });
-  
-        // Ordenar citas por fecha
         return citasFuturas.sort((a, b) => {
           const fechaA = new Date(a.dia);
           const fechaB = new Date(b.dia);
@@ -126,11 +124,71 @@ export class CitaService {
           const horaCita = cita.hora.split(':'); // Divide la hora de la cita en horas y minutos
           const horaCitaDate = new Date(); // Crea un nuevo objeto Date para la hora de la cita
           horaCitaDate.setHours(Number(horaCita[0]), Number(horaCita[1]), 0, 0);
+
           return fechaCita === hoy && cita.estado=='aceptado' && horaCitaDate > ahora;
+        });
+        citasHoy.sort((a, b) => {
+          const horaA = a.hora.split(':');
+          const horaB = b.hora.split(':');
+          const horaDateA = new Date();
+          horaDateA.setHours(Number(horaA[0]), Number(horaA[1]), 0, 0);
+          const horaDateB = new Date();
+          horaDateB.setHours(Number(horaB[0]), Number(horaB[1]), 0, 0);
+          return horaDateA.getTime() - horaDateB.getTime();
         });
   
         return citasHoy;
       })
     );
+  }
+
+  async atrasarCitasDentista(nombreDentista: string, retraso: number) {
+    try {
+      this.getCitasHoy().pipe(
+          take(1) // Completa la suscripción después de recibir una emisión
+      ).subscribe(res => {
+          const citasFiltradas = res.filter(cita => cita.dentista === nombreDentista);
+          citasFiltradas.forEach(cita => {
+              let hora = parseInt(cita.hora.substr(0, 2));
+              let minutos = parseInt(cita.hora.substr(3, 2));
+              minutos += retraso;
+              if (minutos >= 60) {
+                  const horasExtra = Math.floor(minutos / 60);
+                  hora += horasExtra;
+                  minutos = minutos % 60;
+              }
+              let nuevaHora = `${hora}:${minutos.toString().padStart(2, '0')}`;
+              cita.hora = nuevaHora;
+              this.actualizarCita(cita);
+          });
+      });
+      } catch (error) {
+        console.error('Error al atrasar las citas del dentista:', error);
+    }
+  }
+
+  adelantarCitasDentista(nombreDentista: string, retraso: number) {
+    try {
+      this.getCitasHoy().pipe(
+          take(1) // Completa la suscripción después de recibir una emisión
+      ).subscribe(res => {
+          const citasFiltradas = res.filter(cita => cita.dentista === nombreDentista);
+          citasFiltradas.forEach(cita => {
+            let hora = parseInt(cita.hora.substr(0, 2)); 
+            let minutos = parseInt(cita.hora.substr(3, 2)); 
+            if (minutos >= retraso) {
+              minutos -= retraso;
+            } else {
+              minutos = 60 - (retraso - minutos);
+              hora--;
+            }
+            let nuevaHora = `${hora}:${minutos.toString().padStart(2, '0')}`;
+            cita.hora = nuevaHora;
+            this.actualizarCita(cita);
+          });
+      });
+      } catch (error) {
+        console.error('Error al atrasar las citas del dentista:', error);
+    }
   }
 }

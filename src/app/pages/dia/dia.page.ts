@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { Observable, map } from 'rxjs';
 import { CitaService } from 'src/app/backend/cita.service';
 import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
@@ -14,15 +15,18 @@ import { FirestoreService } from 'src/app/service/firestore.service';
 })
 export class DiaPage implements OnInit {
   cita: Cita[]= [];
+  currentItem: any;
 
   citasFuturas$!: Observable<any[]>;
   filtroDentista: string[] = [];
   filtroServicio: string[] = [];
   filtroDia: string[] = [];
   public empleado: Empleado[] = [];
+  retraso=0;
 
 
-  constructor(public fireAuth: FirestoreAuthService, public firestore: FirestoreService, public citas: CitaService, public router: Router, public equipo: EquipoServiceService) { }
+  constructor(public fireAuth: FirestoreAuthService, public firestore: FirestoreService, public citas: CitaService, public router: Router, public equipo: EquipoServiceService,
+              public alertController: AlertController) { }
   
   ngOnInit() {
     this.obtenerCitasHoy();
@@ -35,63 +39,88 @@ export class DiaPage implements OnInit {
     });
   }
 
-  retrasar(item: Cita){
-
+  async retrasar(item: Cita){
+    const alert = await this.alertController.create({
+      header: 'Alerta Cita Aceptada',
+      message: 'Cuantas citas quieres adelantar',
+      buttons: [
+        {
+          text: 'Una Cita',
+          handler: () => {
+            let hora = parseInt(item.hora.substr(0, 2)); 
+            let minutos = parseInt(item.hora.substr(3, 2)); 
+            minutos += this.retraso;
+            if (minutos >= 60) {
+            const horasExtra = Math.floor(minutos / 60);
+            hora += horasExtra;
+            minutos = minutos % 60;
+            }
+            let nuevaHora = `${hora}:${minutos.toString().padStart(2, '0')}`;
+            item.hora = nuevaHora;
+            this.citas.actualizarCita(item);
+          }
+        }, {
+          text: 'Todas las citas',
+          handler: async () => {
+            try {
+              await this.citas.atrasarCitasDentista(item.dentista, this.retraso);
+            } catch (error) {
+              console.error("Error al crear el empleado:", error);
+            }finally {
+              await alert.dismiss();
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
   
-  adelantar(item: Cita){
+  async adelantar(item: Cita){
+    const alert = await this.alertController.create({
+      header: 'Alerta Cita Aceptada',
+      message: 'Cuantas citas quieres adelantar',
+      buttons: [
+        {
+          text: 'Una Cita',
+          handler: () => {
+            let hora = parseInt(item.hora.substr(0, 2)); 
+            let minutos = parseInt(item.hora.substr(3, 2)); 
+            if (minutos >= this.retraso) {
+              minutos -= this.retraso;
+            } else {
+              minutos = 60 - (this.retraso - minutos);
+              hora--;
+            }
+            let nuevaHora = `${hora}:${minutos.toString().padStart(2, '0')}`;
+            item.hora = nuevaHora;
 
+            this.citas.actualizarCita(item);
+          }
+        }, {
+          text: 'Todas las citas',
+          handler: async () => {
+            try {
+              await this.citas.adelantarCitasDentista(item.dentista, this.retraso);
+            } catch (error) {
+              console.error("Error al crear el empleado:", error);
+            }finally {
+              await alert.dismiss();
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
-  ordenarLista(event: any) {
-    const criterio = event.detail.value;
-    switch (criterio) {
-      case 'Hora':
-        this.citasFuturas$ = this.citasFuturas$.pipe(
-          map(citas => {
-            return citas.sort((a, b) => {
-              const fechaA = new Date(a.dia);
-              const fechaB = new Date(b.dia);
-              if (fechaA.getTime() === fechaB.getTime()) {
-                // Si las fechas son iguales, compara por hora
-                const horaA = parseInt(a.hora.split(':')[0]);
-                const minutoA = parseInt(a.hora.split(':')[1]);
-                const horaB = parseInt(b.hora.split(':')[0]);
-                const minutoB = parseInt(b.hora.split(':')[1]);
-                return horaA !== horaB ? horaA - horaB : minutoA - minutoB;
-              }
-              return fechaA.getTime() - fechaB.getTime();
-            });
-          })
-        );
-        break;
-        case 'Dentista':
-        this.citasFuturas$ = this.citasFuturas$.pipe(
-          map(citas => {
-            return citas.sort((a, b) => {
-              const dentistaComparison = a.dentista.localeCompare(b.dentista);
-              if (dentistaComparison === 0 && a.dia === b.dia) {
-                // Si el dentista y la fecha son iguales, compara por hora
-                const horaA = parseInt(a.hora.split(':')[0]);
-                const minutoA = parseInt(a.hora.split(':')[1]);
-                const horaB = parseInt(b.hora.split(':')[0]);
-                const minutoB = parseInt(b.hora.split(':')[1]);
-                return horaA !== horaB ? horaA - horaB : minutoA - minutoB;
-              }
-              return dentistaComparison;
-            });
-          })
-        );
-        break;
-    }
-  }
 
   obtenerCitasHoy(){
     this.citasFuturas$ = this.citas.getCitasHoy();
   }
 
   aplicarFiltro() {
-    this.citasFuturas$ = this.citas.getCitasFuturas().pipe(
+    this.citasFuturas$ = this.citas.getCitasHoy().pipe(
       map(citas => {
         let citasFiltradas = citas;
 

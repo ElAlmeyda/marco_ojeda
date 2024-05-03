@@ -16,7 +16,7 @@
 
 
 <ion-content [fullscreen]="true">
-  <ion-card class="inline-selectors">
+  <ion-card class="inline-selectors" style="display: flex; justify-content: center;">
     <ion-item lines="none" class="ion-inline">
       <ion-select [(ngModel)]="filtroDentista" multiple="true" cancelText="Cancelar" okText="Aceptar" placeholder="Dentista" (ionChange)="aplicarFiltro()">
         <ion-select-option *ngFor="let dentista of empleado" [value]="dentista.nombre">{{ dentista.nombre }}</ion-select-option>
@@ -29,17 +29,13 @@
         <ion-select-option value="Implantar"> Implantar</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-item lines="none" class="ion-inline">
-      <ion-select [(ngModel)]="filtroDia" multiple="true" cancelText="Cancelar" okText="Aceptar" placeholder="Dia">
-        <ion-select-option value="Brackets"> Brackets</ion-select-option>
-      </ion-select>
-    </ion-item>
   </ion-card>
     <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citasFuturas$ | async">
       <ion-label> Nombre: {{item.nombre}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}} Servicio:{{item.servicio}}</ion-label><br>
-      <ion-button style="padding-top: 1em;" (click)="adelantar(item)" color="success"> -30min </ion-button>
-      <ion-button style="padding-top: 1em;" (click)="retrasar(item)"> 15min </ion-button>
-      <ion-button style="padding-top: 1em;" (click)="retrasar(item)"> 30min </ion-button>
-      <ion-button style="padding-top: 1em;" (click)="retrasar(item)" color="danger"> 1Hora </ion-button>
+      <div style="display: flex; justify-content: center;align-items: center;">
+        <ion-icon name="remove-outline" (click)="adelantar(item)" style="font-size: 20px;"></ion-icon>
+        <ion-input style="width: 50px;" pattern="[0-9]*" type="number" placeholder="minutos" [(ngModel)]="retraso" inputmode="numeric"></ion-input>
+        <ion-icon name="add-outline" (click)="retrasar(item)" style="font-size: 20px;"></ion-icon>
+      </div>
     </ion-card>
 </ion-content>
