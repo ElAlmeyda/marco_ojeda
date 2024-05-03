@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { Observable, map } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { CitaService } from 'src/app/backend/cita.service';
 import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
 import { Cita, Empleado } from 'src/app/model';
@@ -15,6 +15,7 @@ import { FirestoreService } from 'src/app/service/firestore.service';
 })
 export class DiaPage implements OnInit {
   cita: Cita[]= [];
+  citaVencidas: Cita[]= [];
   currentItem: any;
 
   citasFuturas$!: Observable<any[]>;
@@ -31,12 +32,34 @@ export class DiaPage implements OnInit {
   ngOnInit() {
     this.obtenerCitasHoy();
     this.getEquipo();
+    this.getCitasVencida();
+    setInterval(() => {
+      this.getCitasVencida();
+    }, 15 * 60 * 1000); // 15 minutos en milisegundos
   }
 
   getEquipo(){
     this.equipo.getEquipo().subscribe(() => {
       this.empleado = this.equipo.getOdontologos();
     });
+  }
+
+  getCitasVencida() {
+    this.citas.getCitasHoy().subscribe(citas => {
+      console.log(citas);
+        const ahora = new Date();
+        this.citaVencidas = citas.filter(cita => {
+          const horaCita = cita.hora.split(':'); // Divide la hora de la cita en horas y minutos
+          const horaCitaDate = new Date(); // Crea un nuevo objeto Date para la hora de la cita
+          horaCitaDate.setHours(Number(horaCita[0]), Number(horaCita[1]), 0, 0);
+          const vencida = horaCitaDate < ahora;
+          if (vencida) {
+            this.citas.eliminarCita(cita); // Verifica si se detectan las citas vencidas correctamente
+          }
+          return vencida;
+        })
+        
+      });
   }
 
   async retrasar(item: Cita){
@@ -116,7 +139,17 @@ export class DiaPage implements OnInit {
 
 
   obtenerCitasHoy(){
-    this.citasFuturas$ = this.citas.getCitasHoy();
+    this.citasFuturas$ = this.citas.getCitasHoy().pipe(
+      map(citas => {
+        const ahora = new Date();
+        return citas.filter(cita => {
+          const horaCita = cita.hora.split(':'); // Divide la hora de la cita en horas y minutos
+          const horaCitaDate = new Date(); // Crea un nuevo objeto Date para la hora de la cita
+          horaCitaDate.setHours(Number(horaCita[0]), Number(horaCita[1]), 0, 0);
+          return horaCitaDate > ahora;
+        })
+      })
+    );
   }
 
   aplicarFiltro() {

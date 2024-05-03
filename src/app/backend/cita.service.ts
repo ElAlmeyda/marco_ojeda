@@ -125,7 +125,7 @@ export class CitaService {
           const horaCitaDate = new Date(); // Crea un nuevo objeto Date para la hora de la cita
           horaCitaDate.setHours(Number(horaCita[0]), Number(horaCita[1]), 0, 0);
 
-          return fechaCita === hoy && cita.estado=='aceptado' && horaCitaDate > ahora;
+          return fechaCita === hoy && cita.estado=='aceptado';
         });
         citasHoy.sort((a, b) => {
           const horaA = a.hora.split(':');
