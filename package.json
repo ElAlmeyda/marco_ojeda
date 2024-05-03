@@ -26,6 +26,7 @@
     "@ionic/vue": "^7.5.6",
     "@ionic/vue-router": "^7.5.6",
     "firebase": "^10.11.1",
+    "ion2-calendar": "^3.5.0",
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",
     "swiper": "^11.0.5",

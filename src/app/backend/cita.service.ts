@@ -83,6 +83,11 @@ export class CitaService {
     this.firestrore.creatDoc(urgencia, path, urgencia.id);
   }
 
+  eliminarUrgencia(urgencia: Urgencia){
+    const path = '/Urgencias';
+    this.firestrore.deleteDoc(path, urgencia.id);
+  }
+
   getUrgencias() {    
     const path = '/Urgencias';
     return this.firestrore.getCollection<Urgencia>(path);
