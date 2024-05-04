@@ -64,7 +64,7 @@
         <ion-label> Embarazo: {{embarazo}} Alergias: {{item.alergias}}</ion-label><br>
         <ion-label> Sintomas: {{item.sintomas}} </ion-label><br>
         <ion-label> Foto: {{item.foto}} </ion-label><br>
-        <ion-button style="padding-top: 1em;"> LLamar al {{item.movil}} </ion-button>
+        <ion-button style="padding-top: 1em;" (click)="eliminarUrgencia(item)"> LLamar al {{item.movil}} </ion-button>
       </ion-card>
     </div>
     

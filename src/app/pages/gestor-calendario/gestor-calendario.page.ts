@@ -1,7 +1,6 @@
-import { state } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, map, switchMap } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { CitaService } from 'src/app/backend/cita.service';
 import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
 import { Cita, Empleado, Urgencia } from 'src/app/model';
@@ -110,5 +109,9 @@ export class GestorCalendarioPage implements OnInit {
         return urgencia;
         })
     });
+  }
+
+  eliminarUrgencia(item: Urgencia){
+    this.citas.eliminarUrgencia(item);
   }
 }
