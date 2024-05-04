@@ -43,12 +43,22 @@
             <ion-select-option value="Implantar"> Implantar</ion-select-option>
           </ion-select>
         </ion-item>
-        <ion-item lines="none" class="ion-inline">
-          <ion-select [(ngModel)]="filtroDia" multiple="true" cancelText="Cancelar" okText="Aceptar" placeholder="Dia">
-            <ion-select-option value="Brackets"> Brackets</ion-select-option>
-          </ion-select>
+        <ion-item lines="none" style="display: flex; flex-direction: column;">
+          <ion-label (click)="abrirCalendario()" *ngIf="filtroDia.length == 0"> Dia </ion-label>
+          <ion-text (click)="abrirCalendario()" >{{filtroDia | date: 'dd/MM/yyyy'}}</ion-text>
         </ion-item>
       </ion-card>
+      <ion-datetime *ngIf="showCalendar" 
+                        [presentation]="selectmode" 
+                        [min]="today"
+                        (ionChange)="seleccionaDia($event)" 
+                        style="margin-top: 2em; width: 100%; margin: 0 auto;"
+                        (ionChange)="aplicarFiltro()">
+                        <ion-button (click)="cancelarCalendario()" color="danger">
+                          Cancelar
+                        </ion-button>
+          </ion-datetime>
+
       <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citasFuturas$ | async">
         <ion-label> Nombre: {{item.nombre}} Dia: {{item.dia | date: 'dd/MM/yyyy'}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}}  Servicio:{{item.servicio}}</ion-label><br>
         <ion-button style="padding-top: 1em;" (click)="aceptar(item)"> Aceptar </ion-button>

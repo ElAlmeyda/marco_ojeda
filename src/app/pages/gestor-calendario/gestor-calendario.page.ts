@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 import { Observable, map } from 'rxjs';
 import { CitaService } from 'src/app/backend/cita.service';
 import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
@@ -23,6 +24,9 @@ export class GestorCalendarioPage implements OnInit {
   filtroDentista: string[] = [];
   filtroServicio: string[] = [];
   filtroDia="";
+  selectmode= 'date';
+  showCalendar=false;
+  today:any;
 
 
   public empleado: Empleado[] = [];
@@ -65,14 +69,22 @@ export class GestorCalendarioPage implements OnInit {
         let citasFiltradas = citas;
 
       // Filtrar por dentista si se especifica
-      if (this.filtroDentista.length !== 0) {
-        citasFiltradas = citasFiltradas.filter(cita => this.filtroDentista.includes(cita.dentista));
-      }
+        if (this.filtroDentista.length !== 0) {
+          citasFiltradas = citasFiltradas.filter(cita => this.filtroDentista.includes(cita.dentista));
+        }
 
       // Filtrar por servicio si se especifica
-      if (this.filtroServicio.length !== 0) {
-        citasFiltradas = citasFiltradas.filter(cita => this.filtroServicio.some(servicio => cita.servicio.includes(servicio)));
-      }
+        if (this.filtroServicio.length !== 0) {
+          citasFiltradas = citasFiltradas.filter(cita => this.filtroServicio.some(servicio => cita.servicio.includes(servicio)));
+        }
+
+        if (this.filtroDia.length !== 0) {
+          const filtroDiaParteFecha = this.filtroDia.substring(0, 10); 
+          citasFiltradas = citasFiltradas.filter(cita => {
+            const citaParteFecha = cita.dia.substring(0, 10); 
+            return citaParteFecha === filtroDiaParteFecha;
+          });
+        }
         return citasFiltradas; 
       })
     );
@@ -114,4 +126,20 @@ export class GestorCalendarioPage implements OnInit {
   eliminarUrgencia(item: Urgencia){
     this.citas.eliminarUrgencia(item);
   }
+
+  seleccionaDia(event:any){
+    const fechaSeleccionada = event.detail.value;
+    this.filtroDia = fechaSeleccionada;
+    this.showCalendar = false;
+  }
+
+  getDate() { const date = new Date(); this.today = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2); }
+  
+  abrirCalendario(){
+    this.showCalendar = !this.showCalendar;
+  }
+  cancelarCalendario(){
+    this.showCalendar = false;
+  }
+
 }

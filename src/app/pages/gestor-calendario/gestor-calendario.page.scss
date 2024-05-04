@@ -3,3 +3,8 @@
     flex-direction: row;
     justify-content: space-between;
   }
+
+  .datetime-container {
+    position: relative;
+    top: -10px; /* Puedes ajustar este valor según sea necesario */
+  }
