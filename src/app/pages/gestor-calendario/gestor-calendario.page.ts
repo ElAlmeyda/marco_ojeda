@@ -84,6 +84,9 @@ export class GestorCalendarioPage implements OnInit {
             const citaParteFecha = cita.dia.substring(0, 10); 
             return citaParteFecha === filtroDiaParteFecha;
           });
+        } 
+        if(this.filtroDia == '') {
+          citasFiltradas = citas;
         }
         return citasFiltradas; 
       })
@@ -138,8 +141,12 @@ export class GestorCalendarioPage implements OnInit {
   abrirCalendario(){
     this.showCalendar = !this.showCalendar;
   }
+
   cancelarCalendario(){
     this.showCalendar = false;
+    this.filtroDia = '';
+
+    this.aplicarFiltro();
   }
 
 }

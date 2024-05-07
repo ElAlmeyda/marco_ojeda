@@ -54,10 +54,8 @@
                         (ionChange)="seleccionaDia($event)" 
                         style="margin-top: 2em; width: 100%; margin: 0 auto;"
                         (ionChange)="aplicarFiltro()">
-                        <ion-button (click)="cancelarCalendario()" color="danger">
-                          Cancelar
-                        </ion-button>
           </ion-datetime>
+          <ion-button *ngIf="showCalendar" (click)="cancelarCalendario()" style="margin-top: 2em; width: 100%; margin: 0 auto;">Cancelar</ion-button>
 
       <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citasFuturas$ | async">
         <ion-label> Nombre: {{item.nombre}} Dia: {{item.dia | date: 'dd/MM/yyyy'}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}}  Servicio:{{item.servicio}}</ion-label><br>
