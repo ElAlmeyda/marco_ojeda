@@ -50,6 +50,9 @@ export class EditarCalendarioPage implements OnInit {
     uid:'',
   };
 
+  selectmode= 'date';
+  showCalendar=false;
+  
   actualizarCita!:Cita;
 
   public empleado: Empleado[] = [];
@@ -139,5 +142,21 @@ export class EditarCalendarioPage implements OnInit {
   cancel(isOpen: boolean) {
     this.modalAbierto = isOpen;
     this.modal.dismiss(null, 'cancel');
+  }
+
+  seleccionaDia(event:any){
+    const fechaSeleccionada = event.detail.value;
+    this.fechaModificada = fechaSeleccionada;
+    this.showCalendar = false;
+  }
+
+  
+  abrirCalendario(){
+    this.showCalendar = !this.showCalendar;
+  }
+
+  cancelarCalendario(){
+    this.showCalendar = false;
+    this.fechaModificada = this.editarCita.dia;
   }
 }

@@ -84,9 +84,6 @@ export class GestorCalendarioPage implements OnInit {
             const citaParteFecha = cita.dia.substring(0, 10); 
             return citaParteFecha === filtroDiaParteFecha;
           });
-        } 
-        if(this.filtroDia == '') {
-          citasFiltradas = citas;
         }
         return citasFiltradas; 
       })

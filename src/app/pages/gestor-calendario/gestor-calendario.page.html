@@ -45,7 +45,7 @@
         </ion-item>
         <ion-item lines="none" style="display: flex; flex-direction: column;">
           <ion-label (click)="abrirCalendario()" *ngIf="filtroDia.length == 0"> Dia </ion-label>
-          <ion-text (click)="abrirCalendario()" >{{filtroDia | date: 'dd/MM/yyyy'}}</ion-text>
+          <ion-text (click)="abrirCalendario()" >{{ filtroDia | date: 'dd/MM/yyyy'}}</ion-text>
         </ion-item>
       </ion-card>
       <ion-datetime *ngIf="showCalendar" 

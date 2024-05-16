@@ -147,6 +147,17 @@ export class CitaService {
     );
   }
 
+  getCitasAceptadas(){
+    return this.getCitas().pipe(
+      map(citas => {
+        const citasAceptadas = citas.filter(cita => {
+          return cita.estado=='aceptado';
+        });
+        return citasAceptadas;
+      })
+      );
+    }
+
   async atrasarCitasDentista(nombreDentista: string, retraso: number) {
     try {
       this.getCitasHoy().pipe(

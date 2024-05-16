@@ -112,7 +112,8 @@
         </ion-item>
         
         <br>
-        <ion-button color="primary" (click)="enviar()" [disabled]="miForm.invalid" > Aceptar </ion-button>
+        <ion-button color="primary" *ngIf="usuarioAutenticado" (click)="enviar()" [disabled]="miForm.invalid" > Aceptar </ion-button>
+        <ion-button color="primary" *ngIf="!usuarioAutenticado" routerLink="/inicio-sesion" > Inicie Sesion </ion-button>
         
       </form>
     

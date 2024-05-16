@@ -37,7 +37,11 @@ export class FirestoreAuthService {
 
   estaAutenticado(): Observable<boolean> {
     return this.auth.authState.pipe(
-      map(user => user !== null) // Verifica si el usuario no es nulo (es decir, está autenticado)
+      map(user => user !== null) 
     );
+  }
+
+  getStateAuth(): Observable<any> {
+    return this.auth.authState;
   }
 }

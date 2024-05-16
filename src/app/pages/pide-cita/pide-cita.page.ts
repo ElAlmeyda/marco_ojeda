@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
@@ -22,6 +23,8 @@ export class PideCitaPage implements OnInit {
   modal!: IonModal;
   modalAbierto = false;
   uid='';
+
+  usuarioAutenticado: boolean = false;
 
   dia!: Date;
   especialista='';
@@ -48,14 +51,16 @@ export class PideCitaPage implements OnInit {
               public cita: CitaService, public alertController: AlertController, public router: Router) {
 
     this.auth.stateAuth().subscribe(async res => {
-      if (res != null) {
+      if (res != null){
         this.uid = res.uid;
+        this.usuarioAutenticado = true;
         const usuario = this.user.getUsuario();
         this.obtenerUsuario();
       } else {
+        this.usuarioAutenticado = false;
         const alert = await this.alertController.create({
           header: 'No esta logueado',
-          message: 'Si quiere acceder a la tienda tiene que loguearse',
+          message: 'Si quiere pedir una cita tiene que loguearse',
           buttons: [
             {
               text: 'Cancelar',
@@ -101,8 +106,6 @@ export class PideCitaPage implements OnInit {
       const usuario = this.user.getUsuarioConcreto(this.uid);
       if (usuario) {
         this.usuario = usuario;
-      } else {
-        console.log('Usuario no encontrado');
       }
     });
   }

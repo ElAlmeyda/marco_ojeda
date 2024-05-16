@@ -21,7 +21,10 @@ export class DiaPage implements OnInit {
   citasFuturas$!: Observable<any[]>;
   filtroDentista: string[] = [];
   filtroServicio: string[] = [];
-  filtroDia: string[] = [];
+  filtroDia= '';
+  selectmode= 'date';
+  showCalendar=false;
+  today:any;
   public empleado: Empleado[] = [];
   retraso=0;
 
@@ -32,10 +35,9 @@ export class DiaPage implements OnInit {
   ngOnInit() {
     this.obtenerCitasHoy();
     this.getEquipo();
-    this.getCitasVencida();
     setInterval(() => {
       this.getCitasVencida();
-    }, 15 * 60 * 1000); // 15 minutos en milisegundos
+    }, 15 * 60 * 1000); 
   }
 
   getEquipo(){
@@ -49,12 +51,12 @@ export class DiaPage implements OnInit {
       console.log(citas);
         const ahora = new Date();
         this.citaVencidas = citas.filter(cita => {
-          const horaCita = cita.hora.split(':'); // Divide la hora de la cita en horas y minutos
-          const horaCitaDate = new Date(); // Crea un nuevo objeto Date para la hora de la cita
+          const horaCita = cita.hora.split(':'); 
+          const horaCitaDate = new Date(); 
           horaCitaDate.setHours(Number(horaCita[0]), Number(horaCita[1]), 0, 0);
           const vencida = horaCitaDate < ahora;
           if (vencida) {
-            this.citas.eliminarCita(cita); // Verifica si se detectan las citas vencidas correctamente
+            this.citas.eliminarCita(cita); 
           }
           return vencida;
         })
@@ -143,8 +145,8 @@ export class DiaPage implements OnInit {
       map(citas => {
         const ahora = new Date();
         return citas.filter(cita => {
-          const horaCita = cita.hora.split(':'); // Divide la hora de la cita en horas y minutos
-          const horaCitaDate = new Date(); // Crea un nuevo objeto Date para la hora de la cita
+          const horaCita = cita.hora.split(':'); 
+          const horaCitaDate = new Date(); 
           horaCitaDate.setHours(Number(horaCita[0]), Number(horaCita[1]), 0, 0);
           return horaCitaDate > ahora;
         })
@@ -153,7 +155,7 @@ export class DiaPage implements OnInit {
   }
 
   aplicarFiltro() {
-    this.citasFuturas$ = this.citas.getCitasHoy().pipe(
+    this.citasFuturas$ = this.citas.getCitasAceptadas().pipe(
       map(citas => {
         let citasFiltradas = citas;
 
@@ -166,8 +168,37 @@ export class DiaPage implements OnInit {
       if (this.filtroServicio.length !== 0) {
         citasFiltradas = citasFiltradas.filter(cita => this.filtroServicio.some(servicio => cita.servicio.includes(servicio)));
       }
+
+      if (this.filtroDia.length !== 0) {
+        const filtroDiaParteFecha = this.filtroDia.substring(0, 10); 
+        citasFiltradas = citasFiltradas.filter(cita => {
+          const citaParteFecha = cita.dia.substring(0, 10); 
+          return citaParteFecha === filtroDiaParteFecha;
+        });
+      }
         return citasFiltradas; 
       })
     );
   }
+
+
+  seleccionaDia(event:any){
+    const fechaSeleccionada = event.detail.value;
+    this.filtroDia = fechaSeleccionada;
+    this.showCalendar = false;
+  }
+
+  getDate() { const date = new Date(); this.today = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2); }
+  
+  abrirCalendario(){
+    this.showCalendar = !this.showCalendar;
+  }
+
+  cancelarCalendario(){
+    this.showCalendar = false;
+    this.filtroDia = '';
+
+    this.aplicarFiltro();
+  }
+
 }

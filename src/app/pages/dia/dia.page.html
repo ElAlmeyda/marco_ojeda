@@ -29,8 +29,20 @@
         <ion-select-option value="Implantar"> Implantar</ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-item lines="none" style="display: flex; flex-direction: column;">
+      <ion-label (click)="abrirCalendario()" *ngIf="filtroDia.length == 0"> Dia </ion-label>
+      <ion-text (click)="abrirCalendario()" >{{filtroDia | date: 'dd/MM/yyyy'}}</ion-text>
+    </ion-item>
   </ion-card>
-    <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citasFuturas$ | async">
+  <ion-datetime *ngIf="showCalendar" 
+                    [presentation]="selectmode" 
+                    [min]="today"
+                    (ionChange)="seleccionaDia($event)" 
+                    style="margin-top: 2em; width: 100%; margin: 0 auto;"
+                    (ionChange)="aplicarFiltro()">
+      </ion-datetime>
+      <ion-button *ngIf="showCalendar" (click)="cancelarCalendario()" style="margin-top: 2em; width: 100%; margin: 0 auto;">Cancelar</ion-button>
+      <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citasFuturas$ | async">
       <ion-label> Nombre: {{item.nombre}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}} Servicio:{{item.servicio}}</ion-label><br>
       <div style="display: flex; justify-content: center;align-items: center;">
         <ion-icon name="remove-outline" (click)="adelantar(item)" style="font-size: 20px;"></ion-icon>
