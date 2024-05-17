@@ -88,13 +88,13 @@ export class UsuariosService {
   async actualizarInfo(nombre: string, correo: string, movil: string, password:string, uid:string){
     const data = {nombre, correo, movil, password, uid};
     try {
-      // Llama a la función updateDoc() para actualizar los datos en Firestore
       await this.firestoreService.updateDoc(data, this.path, uid);
-      return true; // Devuelve true si la actualización se realizó con éxito
-  } catch (error) {
+      await this.firestroreAuth.updatePassword(password);
+      return true; 
+    } catch (error) {
       console.error("Error al actualizar en Firestore:", error);
-      return false; // Devuelve false si la actualización falla
-  }
+      return false; 
+    }
   }
   
 }

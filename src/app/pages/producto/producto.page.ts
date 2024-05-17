@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CarritoService } from 'src/app/backend/carrito.service';
-import { ProductoModule } from 'src/app/module/producto/producto.module';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductoService } from 'src/app/backend/producto.service';
 import { Producto } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-producto',
@@ -21,7 +20,7 @@ export class ProductoPage implements OnInit {
   
 
   constructor(public router: ActivatedRoute, private carrito: CarritoService, public producto: ProductoService, public fireAuth: FirestoreAuthService, 
-              public alertController: AlertController, public route: Router) {
+              public alertController: AlertController, public route: Router, public toastController: ToastController) {
   }
 
   ngOnInit() {

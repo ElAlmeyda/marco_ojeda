@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductoService } from 'src/app/backend/producto.service';
-import { ProductoModule } from 'src/app/module/producto/producto.module';
+import { Producto } from 'src/app/model';
 
 @Component({
   selector: 'app-tienda-dental',
   templateUrl: './tienda-dental.page.html',
   styleUrls: ['./tienda-dental.page.scss'],
-  providers:[ProductoModule]
+  providers:[]
 })
 export class TiendaDentalPage implements OnInit {
 
   public store: any = [];
+  public searchTerm: string = '';
 
   constructor(public productos: ProductoService) {
    }
@@ -37,6 +38,20 @@ export class TiendaDentalPage implements OnInit {
           console.error('Error al obtener URL de descarga:', error);
         }
       }
+    }
+  }
+
+  buscarProductos() {
+    if (this.searchTerm.trim() !== '') {
+      this.store = this.store.filter((item: Producto) => {
+        return item.nombre.toLowerCase().includes(this.searchTerm.toLowerCase());
+      });
+    } else {
+      // Si el campo de búsqueda está vacío, restaurar la lista completa
+      this.productos.getProdCollection().subscribe(() => {
+        this.store = this.productos.getProductos();
+        this.actualizarImagenes(this.store);
+      });
     }
   }
 

@@ -40,16 +40,14 @@ export class EditarNoticiaPage implements OnInit {
   }
 
   async editar(){
-    try {
-      await this.noticias.editarNoticia(this.actualizarNoticia.titulo, this.actualizarNoticia.descripcion, this.file.name, this.id);
-      await this.noticias.subirImagen(this.file);
-      // Si no se ha lanzado ninguna excepción, significa que se ha creado el empleado correctamente
-      this.mostrarToast("Empleado actualizado correctamente");
-    } catch (error) {
-      console.error("Error al actualizado el empleado:", error);
-      this.mostrarToast("Error al actualizado el empleado");
-    }
 
+    const check = await this.noticias.editarNoticia(this.actualizarNoticia.titulo, this.actualizarNoticia.descripcion, this.file.name, this.id);
+    await this.noticias.subirImagen(this.file);
+    if (check) {
+      this.mostrarToast("Noticia actualizado correctamente");
+    } else {          
+      this.mostrarToast("Error al actualizado el noticia");
+    } 
   }
 
   async mostrarToast(mensaje: string) {

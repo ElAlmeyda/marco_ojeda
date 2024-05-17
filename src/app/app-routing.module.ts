@@ -10,10 +10,6 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'contacto',
-    loadChildren: () => import('./pages/contacto/contacto.module').then( m => m.ContactoPageModule)
-  },
-  {
     path: 'editar-perfil',
     loadChildren: () => import('./pages/editar-perfil/editar-perfil.module').then( m => m.EditarPerfilPageModule)
   },

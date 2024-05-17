@@ -70,4 +70,10 @@ export class RegistrarsePage implements OnInit {
     this.passwordInvalido = !passwordRegex.test(this.crearUser.password);
     this.movilInvalido = this.crearUser.movil.length !== 9;
   }
+
+  mostrarErrorContrasena(){
+    if (this.passwordInvalido) {
+      this.presentToast("La contraseña debe tener al menos un número, una letra, un carácter especial y ser de al menos 6 caracteres de longitud.", 'danger');
+    }
+  }
 }

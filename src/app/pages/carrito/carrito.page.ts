@@ -5,6 +5,7 @@ import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { async } from 'rxjs';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { ProductoService } from 'src/app/backend/producto.service';
 
 @Component({
   selector: 'app-carrito',
@@ -34,7 +35,7 @@ export class CarritoPage implements OnInit {
   }
 
   constructor(private carritoService: CarritoService, public fireAuth: FirestoreAuthService, public toastController: ToastController, public router: Router,
-              public alertController: AlertController
+              public alertController: AlertController, public productos: ProductoService
   ) { 
     
   }
@@ -48,9 +49,24 @@ export class CarritoPage implements OnInit {
     });
   }
 
+  async actualizarImagenes() {
+    for (const prodPedido of this.carrito.productos) {
+      if (prodPedido.producto.foto) {
+        try {
+          const url = await this.productos.getDownloadUrl(prodPedido.producto.foto).toPromise();
+          prodPedido.producto.foto = url;
+        } catch (error) {
+          console.error('Error al obtener URL de descarga:', error);
+        }
+      }
+    }
+  }
+
+
   cargarPedido(){
     this.carritoService.getCarrito().subscribe(res =>{
       this.carrito = res;
+      this.actualizarImagenes();
       console.log(this.carrito);
     });
   }

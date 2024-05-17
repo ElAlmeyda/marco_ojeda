@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Empleado } from 'src/app/model';
-import { EquipoModule } from 'src/app/module/equipo/equipo.module';
 import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
 

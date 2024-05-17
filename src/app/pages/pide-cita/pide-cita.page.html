@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title></ion-title>
     <ion-item>
-      <ion-avatar style="height: 100px; width: 100px; margin-left: 30%;">
+      <ion-avatar class="raton-menu">
         <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
         </ion-img>
       </ion-avatar>
@@ -33,10 +33,15 @@
           <ion-icon name="clipboard-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
           
           <ion-select name="servicio" label="Que servicio necesita" label-placement="stacked" [(ngModel)]="servicio" required>
-            <ion-select-option> 1º Visita </ion-select-option>
-            <ion-select-option> Brackets </ion-select-option>
-            <ion-select-option> Limpieza </ion-select-option>
-            <ion-select-option> Implantar </ion-select-option>
+            <ion-select-option>1º Visita</ion-select-option>
+            <ion-select-option>Endodoncia</ion-select-option>
+            <ion-select-option>Limpieza</ion-select-option>
+            <ion-select-option>Implantologia</ion-select-option>
+            <ion-select-option>Estetica Dental</ion-select-option>
+            <ion-select-option>Periodoncia</ion-select-option>
+            <ion-select-option>Odontopediatría</ion-select-option>
+            <ion-select-option>Exámenes de rutina</ion-select-option>
+            <ion-select-option>Carillas dentales</ion-select-option>
           </ion-select>
         </ion-item>
 
@@ -61,7 +66,7 @@
 
         <ion-item lines="none" id="dia-modal">
           <ion-icon name="calendar-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-label> Dia <br> {{fechaModificada | date: 'dd/MM/yyyy'}}</ion-label>
+          <ion-label> Dia <br> {{dia ? (dia | date: 'dd/MM/yyyy'): ''}}</ion-label>
 
           <ion-modal trigger="dia-modal" [isOpen]="modalAbierto">
             <ng-template>
@@ -97,17 +102,17 @@
         <ion-item>
           <ion-icon name="calendar-number-outline" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
           <ion-select name="hora" label="Horario" label-placement="stacked" [(ngModel)]="hora" required>
-            <ion-select-option> 09:00 </ion-select-option>
-            <ion-select-option> 10:00 </ion-select-option>
-            <ion-select-option> 11:00 </ion-select-option>
-            <ion-select-option> 12:00 </ion-select-option>
-            <ion-select-option> 13:00 </ion-select-option>
-            <ion-select-option> 16:00 </ion-select-option>
-            <ion-select-option> 17:00 </ion-select-option>
-            <ion-select-option> 19:00 </ion-select-option>
-            <ion-select-option> 20:00 </ion-select-option>
-            <ion-select-option> 21:00 </ion-select-option>
-            <ion-select-option> 22:00 </ion-select-option>
+            <ion-select-option>09:00</ion-select-option>
+            <ion-select-option>10:00</ion-select-option>
+            <ion-select-option>11:00</ion-select-option>
+            <ion-select-option>12:00</ion-select-option>
+            <ion-select-option>13:00</ion-select-option>
+            <ion-select-option>16:00</ion-select-option>
+            <ion-select-option>17:00</ion-select-option>
+            <ion-select-option>19:00</ion-select-option>
+            <ion-select-option>20:00</ion-select-option>
+            <ion-select-option>21:00</ion-select-option>
+            <ion-select-option>22:00</ion-select-option>
           </ion-select>
         </ion-item>
         

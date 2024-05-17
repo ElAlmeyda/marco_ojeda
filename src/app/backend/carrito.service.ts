@@ -40,6 +40,7 @@ export class CarritoService {
 
   agregarAlCarrito(prod: Producto) {
     const idProd = prod.id;
+    const path = '/Usuarios/' + this.uid + '/' + this.path;
     if(this.uid.length){
       const foundIndex = this.pedido.productos.findIndex(item => item.producto.id === prod.id);
       console.log(this.pedido.productos);
@@ -52,10 +53,10 @@ export class CarritoService {
           cantidad: 1
         };
         this.pedido.productos.push(add);
+        this.firestore.creatDoc(this.pedido,path, this.uid)
       }
       this.pedido.estado= 'pendiente';
       this.calcularTotal();
-      this.guardarCarritoEnBD();
     }
   }
   

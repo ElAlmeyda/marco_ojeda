@@ -130,23 +130,10 @@ export class EditarCalendarioPage implements OnInit {
     return utcDay !== 0 && utcDay !== 6;
   }; 
 
-  
-  
-  confirm() {
-    this.fechaModificada = this.dia ? this.datePipe.transform(this.dia, 'dd-MM-yyyy') ?? '' : '';
-    this.modalAbierto = false;
-    this.modal.present();
-    this.modal.dismiss(null, 'confirm');
-  }
-
-  cancel(isOpen: boolean) {
-    this.modalAbierto = isOpen;
-    this.modal.dismiss(null, 'cancel');
-  }
-
   seleccionaDia(event:any){
     const fechaSeleccionada = event.detail.value;
     this.fechaModificada = fechaSeleccionada;
+    this.editarCita.dia = this.fechaModificada;
     this.showCalendar = false;
   }
 

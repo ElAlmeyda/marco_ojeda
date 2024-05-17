@@ -4,7 +4,7 @@
       <ion-back-button defaultHref="/perfil"></ion-back-button>
   </ion-buttons>
   <ion-item>
-    <ion-avatar style="height: 100px; width: 100px; margin-left: 30%;">
+    <ion-avatar class="raton-menu">
       <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
       </ion-img>
     </ion-avatar>
@@ -31,30 +31,30 @@
     </ion-card-header>
     <ion-card-content>
 
-      <form style="text-align: center;">
+      <form style="text-align: center;" #miForm="ngForm">
         <ion-item>
           <ion-icon name="person" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input name="nombre" value="{{actualizarUser.nombre}}" [(ngModel)]="actualizarUser.nombre"></ion-input>
+          <ion-input name="nombre" value="{{actualizarUser.nombre}}" [(ngModel)]="actualizarUser.nombre" minlength="4" (ngModelChange)="validacionFormulario()"></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-icon name="call" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input id="movil" name="movil" value="{{actualizarUser.movil}}" [(ngModel)]="actualizarUser.movil"></ion-input>
+          <ion-input id="movil" name="movil" value="{{actualizarUser.movil}}" [(ngModel)]="actualizarUser.movil" pattern="[0-9]{9}" (ngModelChange)="validacionFormulario()"></ion-input>
         </ion-item>
         
         <ion-item>
           <ion-icon name="at-circle" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input name="correo" value="{{actualizarUser.correo}}" [(ngModel)]="actualizarUser.correo"></ion-input>
+          <ion-input name="correo" value="{{actualizarUser.correo}}" [(ngModel)]="actualizarUser.correo" pattern='[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'(ngModelChange)="validacionFormulario()"></ion-input>
         </ion-item>
         
         <ion-item>
           <ion-icon name="key" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input type="password" name="password" value="{{actualizarUser.password}}" [(ngModel)]="actualizarUser.password"></ion-input>
+          <ion-input type="password" name="password" value="{{actualizarUser.password}}" [(ngModel)]="actualizarUser.password" pattern="(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_]).{6,}" (ionBlur)="mostrarErrorContrasena()" (ngModelChange)="validacionFormulario()"></ion-input>
         </ion-item>
         
         
         <br>
-        <ion-button (click)="editar()"> Editar </ion-button>
+        <ion-button (click)="editar()" [disabled]="miForm.invalid"> Editar </ion-button>
       </form>
     
     </ion-card-content>

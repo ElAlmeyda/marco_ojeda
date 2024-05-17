@@ -33,6 +33,7 @@ export class PrediagnosticoVirtualPage implements OnInit {
     try {
       await this.cita.guardarUrgencia(this.urgencia);
       this.mostrarToast("Su urgencia ha sido enviada correctamente");
+      this.init();
     } catch (error) {
       this.mostrarToast("Error al enviar el urgencia");
     }
@@ -46,5 +47,20 @@ export class PrediagnosticoVirtualPage implements OnInit {
       position: 'bottom' // Posición del toast en la pantalla
     });
     toast.present();
+  }
+
+  init(){
+    this.urgencia  = {
+      nombre: '',
+      movil: '',
+      fecha: '',
+      enfermedad: '',
+      medicamento: '',
+      embarazo: false,
+      alergias: '',
+      sintomas:'',
+      foto: '',
+      id: '',
+    }
   }
 }

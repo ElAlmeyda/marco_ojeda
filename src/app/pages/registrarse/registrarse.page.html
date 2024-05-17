@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-item>
-      <ion-avatar style="height: 100px; width: 100px; margin-left: 30%;">
+      <ion-avatar class="raton-menu">
         <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
         </ion-img>
       </ion-avatar>
@@ -43,12 +43,12 @@
         
         <ion-item [class.invalid-input]="passwordInvalido">
           <ion-icon name="key" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input type="password" [(ngModel)]="crearUser.password" name="password" placeholder="Contraseña" required pattern="(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_]).{6,}" (ngModelChange)="validacionFormulario()"></ion-input>
+          <ion-input type="password" [(ngModel)]="crearUser.password" name="password" placeholder="Contraseña" required pattern="(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_]).{6,}" (ionBlur)="mostrarErrorContrasena()" (ngModelChange)="validacionFormulario()"></ion-input>
         </ion-item>
         
         <br>
         <ion-button color="primary" (click)="guardar()" [disabled]="miForm.invalid"> Aceptar </ion-button>
-        <ion-button routerLink="/inicio-sesion" color="primary"> Loguearse </ion-button>
+        <ion-button routerLink="/inicio-sesion" color="primary">Iniciar Sesion</ion-button>
         
       </form>
     

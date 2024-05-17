@@ -6,15 +6,15 @@
   <ion-menu color="primary" contentId="main-content" type="overlay">
     <ion-content class="custom-dropdown-menu">
       <ion-list id="inbox-list" lines="none" >
-        <ion-item *ngIf="change == false">
+        <ion-item *ngIf="change == false" routerLink="/inicio-sesion">
           <ion-avatar>
-            <ion-icon name="person-outline" style="font-size: 30px;" routerLink="/inicio-sesion"></ion-icon>
+            <ion-icon name="person-outline" style="font-size: 30px;" ></ion-icon>
           </ion-avatar>
           <ion-list-header style="font-size: 16px;"> Iniciar sesion </ion-list-header>  
         </ion-item>
-        <ion-item *ngIf="change == true">
+        <ion-item *ngIf="change == true" routerLink="/perfil">
           <ion-avatar>
-            <ion-icon name="person-outline" style="font-size: 30px;" routerLink="/perfil"></ion-icon>
+            <ion-icon name="person-outline" style="font-size: 30px;" ></ion-icon>
           </ion-avatar>
           <ion-list-header style="font-size: 16px;">{{userName}}</ion-list-header>
           <ion-icon name="log-out" style="font-size: 30px;" (click)="logout()"></ion-icon>

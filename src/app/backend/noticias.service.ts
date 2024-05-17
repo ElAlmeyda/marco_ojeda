@@ -38,11 +38,17 @@ export class NoticiasService {
     return this.database.creatDoc(data, this.path, data['id']);
   }
 
-  editarNoticia(nombre: string, descripcion: string, foto: string, id: string){
-    const path ="gs://servicio-4f831.appspot.com/Noticias/" + foto;
-    foto = path;
-    const data = {nombre, descripcion, foto, id}
-    return this.database.updateDoc(data, this.path, id);
+  async editarNoticia(nombre: string, descripcion: string, foto: string, id: string){
+    try {
+      const path ="gs://servicio-4f831.appspot.com/Noticias/" + foto;
+      foto = path;
+      const data = {nombre, descripcion, foto, id}
+      await this.database.updateDoc(data, this.path, id);
+      return true;
+    } catch (error) {
+      console.error("Error al actualizar en Firestore:", error);
+      return false; 
+    }
   }
 
   deleteNoticia(id:string){

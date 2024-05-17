@@ -44,4 +44,17 @@ export class FirestoreAuthService {
   getStateAuth(): Observable<any> {
     return this.auth.authState;
   }
+
+  async updatePassword(password: string): Promise<void> {
+    try {
+      const user = await this.auth.currentUser;
+      if(user){
+        await user.updatePassword(password);
+        console.log('Contraseña actualizada correctamente');
+      }
+    } catch (error) {
+      console.error('Error al actualizar la contraseña:', error);
+      throw error; // Puedes manejar el error en el componente que llama a este método
+    }
+  }
 }

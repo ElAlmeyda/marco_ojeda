@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, IonModal } from '@ionic/angular';
+import { AlertController, IonModal, ToastController } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { CitaService } from 'src/app/backend/cita.service';
 import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
@@ -25,8 +25,10 @@ export class PideCitaPage implements OnInit {
   uid='';
 
   usuarioAutenticado: boolean = false;
+  selectmode= 'date';
+  showCalendar=false;
 
-  dia!: Date;
+  dia!: Date | null;
   especialista='';
   hora='';
   servicio='';
@@ -48,7 +50,7 @@ export class PideCitaPage implements OnInit {
   userLogin= false;
   
   constructor(private user: UsuariosService, private datePipe: DatePipe, public auth: FirestoreAuthService, public firestore: FirestoreService, public equipo: EquipoServiceService,
-              public cita: CitaService, public alertController: AlertController, public router: Router) {
+              public cita: CitaService, public alertController: AlertController, public router: Router, public toast: ToastController) {
 
     this.auth.stateAuth().subscribe(async res => {
       if (res != null){
@@ -118,7 +120,19 @@ export class PideCitaPage implements OnInit {
   }
 
   enviar(){
-    this.cita.guardarCita(this.usuario.nombre, this.servicio, this.usuario.movil, this.especialista, this.dia, this.hora, this.uid);
+    if(this.dia != null){
+      this.cita.guardarCita(this.usuario.nombre, this.servicio, this.usuario.movil, this.especialista, this.dia, this.hora, this.uid);
+      this.presentToast("Cita enviada con exito", 'success');
+      this.init();
+    }
+  } 
+
+  init(){
+    this.servicio='';
+    this.especialista='';
+    this.dia= null;
+    this.fechaModificada='';
+    this.hora='';
   }
 
   getDate() { const date = new Date(); this.today = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2); }
@@ -132,7 +146,19 @@ export class PideCitaPage implements OnInit {
   
   cancel() {
     this.modalAbierto = false;
+    this.dia= null;
     return this.modal.dismiss(null, 'cancel');
+  }
+
+  async presentToast(msg: string, color: string) {
+    const toast = await this.toast.create({
+      message: msg,
+      duration: 3000,
+      position: 'bottom',
+      color: color
+    });
+
+    await toast.present();
   }
 }
 
