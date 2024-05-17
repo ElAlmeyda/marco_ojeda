@@ -6,6 +6,7 @@ import { Cita, Usuario } from './model';
 import { CarritoService } from './backend/carrito.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { CitaService } from './backend/cita.service';
+import { NotificacionService } from './service/notificacion.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -34,7 +35,7 @@ export class AppComponent {
   }
 
   constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, 
-              public carritoService: CarritoService, public router: Router, public citas: CitaService) {
+              public carritoService: CarritoService, public router: Router, public citas: CitaService, public notificacion: NotificacionService) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;

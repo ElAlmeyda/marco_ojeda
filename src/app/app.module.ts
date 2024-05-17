@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -27,6 +27,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { environment } from 'src/environments/environment';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [AppComponent],
@@ -37,7 +38,12 @@ import { environment } from 'src/environments/environment';
       //return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
     //}), 
   provideFirestore(() => getFirestore()), provideDatabase(() => getDatabase()), 
-  provideFunctions(() => getFunctions()), provideMessaging(() => getMessaging()), providePerformance(() => getPerformance()), provideStorage(() => getStorage()), provideRemoteConfig(() => getRemoteConfig())],
+  provideFunctions(() => getFunctions()), provideMessaging(() => getMessaging()), providePerformance(() => getPerformance()), provideStorage(() => getStorage()), provideRemoteConfig(() => getRemoteConfig()), ServiceWorkerModule.register('ngsw-worker.js', {
+  enabled: !isDevMode(),
+  // Register the ServiceWorker as soon as the application is stable
+  // or after 30 seconds (whichever comes first).
+  registrationStrategy: 'registerWhenStable:30000'
+})],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, EquipoServiceService, DatePipe, ScreenTrackingService, UserTrackingService],
   bootstrap: [AppComponent],
 })
