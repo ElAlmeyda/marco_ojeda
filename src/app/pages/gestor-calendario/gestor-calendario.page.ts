@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { Observable, map } from 'rxjs';
+import { Observable, lastValueFrom, map } from 'rxjs';
 import { CitaService } from 'src/app/backend/cita.service';
 import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
 import { Cita, Empleado, Urgencia } from 'src/app/model';
@@ -27,6 +27,8 @@ export class GestorCalendarioPage implements OnInit {
   selectmode= 'date';
   showCalendar=false;
   today:any;
+
+  mostrarImagen: boolean = false;
 
 
   public empleado: Empleado[] = [];
@@ -55,7 +57,7 @@ export class GestorCalendarioPage implements OnInit {
     this.citas.getUrgencias().subscribe(res => {
       this.urgencia = res;
       this.embarazada();
-      console.log(this.urgencia);
+      this.actualizarImagenes();
     });
   }
 
@@ -146,4 +148,28 @@ export class GestorCalendarioPage implements OnInit {
     this.aplicarFiltro();
   }
 
+  async actualizarImagenes() {
+    for (const urgen of this.urgencia) {
+      if (urgen.foto) {
+        try {
+          const url = this.citas.getDownloadUrl(urgen.foto).subscribe(
+            (url: string) => {
+              urgen.imagenUrl = url;
+            },
+            (error) => {
+              console.error('Error al obtener URL de descarga:', error);
+            }
+          );
+        } catch (error) {
+          console.error('Error al obtener URL de descarga:', error);
+        }
+      }
+    }
+    console.log(this.urgencia);
+  }
+
+  verImagen(){
+    this.mostrarImagen = !this.mostrarImagen;
+  }
+  
 }

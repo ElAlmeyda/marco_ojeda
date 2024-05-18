@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { map } from 'rxjs';
 
 
-
+const isAdmin = (next: any) => map ((user: any) => !user && 'i31dO5XiE0OqKyTdoqtYAceLrnf1' === user.uid)
 const routes: Routes = [
   {
     path: '',
@@ -55,7 +56,8 @@ const routes: Routes = [
   },
   {
     path: 'administrador',
-    loadChildren: () => import('./pages/administrador/administrador.module').then( m => m.AdministradorPageModule)
+    loadChildren: () => import('./pages/administrador/administrador.module').then( m => m.AdministradorPageModule),
+    canActivate: [isAdmin]
   },
   {
     path: 'la-clinica',

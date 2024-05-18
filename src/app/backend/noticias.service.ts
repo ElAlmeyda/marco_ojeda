@@ -38,11 +38,11 @@ export class NoticiasService {
     return this.database.creatDoc(data, this.path, data['id']);
   }
 
-  async editarNoticia(nombre: string, descripcion: string, foto: string, id: string){
+  async editarNoticia(titulo: string, descripcion: string, foto: string, id: string){
     try {
       const path ="gs://servicio-4f831.appspot.com/Noticias/" + foto;
       foto = path;
-      const data = {nombre, descripcion, foto, id}
+      const data = {titulo, descripcion, foto, id}
       await this.database.updateDoc(data, this.path, id);
       return true;
     } catch (error) {

@@ -24,9 +24,15 @@
     </ion-item>
     <ion-item lines="none" class="ion-inline">
       <ion-select [(ngModel)]="filtroServicio" multiple="true" cancelText="Cancelar" okText="Aceptar" placeholder="Servicio" (ionChange)="aplicarFiltro()">
-        <ion-select-option value="Brackets"> Brackets</ion-select-option>
-        <ion-select-option value="1Visita"> 1ºVisita</ion-select-option>
-        <ion-select-option value="Implantar"> Implantar</ion-select-option>
+        <ion-select-option>1º Visita</ion-select-option>
+            <ion-select-option>Endodoncia</ion-select-option>
+            <ion-select-option>Limpieza</ion-select-option>
+            <ion-select-option>Implantologia</ion-select-option>
+            <ion-select-option>Estetica Dental</ion-select-option>
+            <ion-select-option>Periodoncia</ion-select-option>
+            <ion-select-option>Odontopediatría</ion-select-option>
+            <ion-select-option>Exámenes de rutina</ion-select-option>
+            <ion-select-option>Carillas dentales</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item lines="none" style="display: flex; flex-direction: column;">

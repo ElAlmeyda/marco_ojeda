@@ -69,5 +69,6 @@ export interface Urgencia {
     alergias: string;
     sintomas:string;
     foto: string;
+    imagenUrl: string;
     id: string;
 }

@@ -4,6 +4,7 @@ import { FirestoreAuthService } from '../service/firestore-auth.service';
 import { Cita, Urgencia } from '../model';
 import { Observable, concatMap, forkJoin, from, map, mergeMap, take, tap } from 'rxjs';
 import { idToken } from '@angular/fire/auth';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class CitaService {
     id:'',
     uid:''
 }
-  constructor(public firestrore: FirestoreService, public fireAuth: FirestoreAuthService) { 
+  constructor(public firestrore: FirestoreService, public fireAuth: FirestoreAuthService, public storage: AngularFireStorage) { 
     this.fireAuth.stateAuth().subscribe(res => {
       if(res != null){
         this.uid = res.uid;
@@ -79,8 +80,21 @@ export class CitaService {
 
   guardarUrgencia(urgencia: Urgencia){
     const path = '/Urgencias';
+    const pathFoto ="gs://servicio-4f831.appspot.com/Urgencias/" + urgencia.foto;
+    urgencia.foto = pathFoto;
     urgencia.id= this.firestrore.getId();
     this.firestrore.creatDoc(urgencia, path, urgencia.id);
+  }
+
+  public subirImagen(file: any){
+    const nombre = file.name;
+    const path = "gs://servicio-4f831.appspot.com/Urgencias/" + nombre;
+    return this.firestrore.subirImagenes(file, path, nombre);
+  }
+
+  public getDownloadUrl(imagenRef: string) {
+    const ref = this.storage.refFromURL(imagenRef);
+    return ref.getDownloadURL();
   }
 
   eliminarUrgencia(urgencia: Urgencia){
