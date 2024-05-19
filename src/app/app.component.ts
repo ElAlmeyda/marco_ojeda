@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { UsuariosService } from './backend/usuarios.service';
 import { FirestoreAuthService } from './service/firestore-auth.service';
 import { FirestoreService } from './service/firestore.service';
@@ -13,6 +13,9 @@ import { NotificacionService } from './service/notificacion.service';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
+  @ViewChild('mapElement', { static: true }) mapElement!: ElementRef ;
+
+  map!: google.maps.Map;
   
   showList = false;
   change = false;
@@ -35,7 +38,8 @@ export class AppComponent {
   }
 
   constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, 
-              public carritoService: CarritoService, public router: Router, public citas: CitaService, public notificacion: NotificacionService) {
+              public carritoService: CarritoService, public router: Router, public citas: CitaService, public notificacion: NotificacionService,
+              ) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -47,8 +51,13 @@ export class AppComponent {
         this.change = this.user.usuarioLogin;
         this.usuario.rol='';
         this.router.navigate(['/folder']);
+
       }
     });
+  }
+
+  ngOnInit() {
+    this.initMap();
   }
 
   obtenerUsuario() {
@@ -80,5 +89,26 @@ export class AppComponent {
     this.change = this.user.usuarioLogin;
     this.usuario.rol='';
     this.carritoService.clearCarrito();
+  }
+
+  initMap() {
+    const clinicaLocation = { lat: 28.101109878824143, lng: -15.470295511575157 };
+
+    const mapOptions: google.maps.MapOptions = {
+     center: clinicaLocation, 
+      zoom: 15,
+    };
+
+    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+
+    const marker = new google.maps.Marker({
+      position: clinicaLocation, 
+      map: this.map, 
+      title: 'Clínica', 
+    });
+
+    marker.addListener('click', () => {
+      window.open(`https://www.google.com/maps/search/?api=1&query=${clinicaLocation.lat},${clinicaLocation.lng}`);
+    });
   }
 }

@@ -118,7 +118,6 @@ export class EditarCalendarioPage implements OnInit {
     };
   }
     this.cita.actualizarCita(this.actualizarCita);
-    this.editarCita = this.initCita();
   }
 
   getDate() { const date = new Date(); this.today = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2); }

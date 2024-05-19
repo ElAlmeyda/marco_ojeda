@@ -35,7 +35,7 @@
           </ion-toolbar>
         </ion-header>
         <ion-content>
-          <ion-item style="font-family: 'Montserrat', sans-serif;" lines="none"> Las 10 novedades que nos hacen diferente </ion-item>
+          <ion-item style="font-family: 'Montserrat', sans-serif; padding: 10px; margin-top: 15px;" lines="none"> Las 10 novedades que nos hacen diferente </ion-item>
           <ion-list style="padding-left: 20px;" lines="none"> 
             <ion-item class="toggle"> 1. No parecemos una clinica</ion-item>
             <ion-item class="toggle"> 2. Roof Terrace</ion-item>
@@ -56,8 +56,8 @@
       Imagenes de la clinica
     </h1>
 
-    <p>
-      Mapa de la clinica con google maps
-    </p>
+    
+    <div #mapElement style="width: 100%; height: 150px; margin: auto; margin-top: 30px;  width: 300px; height: 300px; border: 1px solid #ccc;"></div>
+    
   </ion-label>
 </ion-content>

@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { map } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { PreloadAllModules, Router, RouterModule, Routes } from '@angular/router';
+import { ToastController } from '@ionic/angular';
+import { map, take, tap } from 'rxjs';
+import { RoleguardService } from './service/roleguard.service';
 
-
-const isAdmin = (next: any) => map ((user: any) => !user && 'i31dO5XiE0OqKyTdoqtYAceLrnf1' === user.uid)
 const routes: Routes = [
   {
     path: '',
@@ -57,7 +58,8 @@ const routes: Routes = [
   {
     path: 'administrador',
     loadChildren: () => import('./pages/administrador/administrador.module').then( m => m.AdministradorPageModule),
-    canActivate: [isAdmin]
+    canActivate: [RoleguardService],
+    data: { expectedRole: 'administrador' }
   },
   {
     path: 'la-clinica',
@@ -85,19 +87,27 @@ const routes: Routes = [
   },
   {
     path: 'admin-equipo',
-    loadChildren: () => import('./pages/admin-equipo/admin-equipo.module').then( m => m.AdminEquipoPageModule)
+    loadChildren: () => import('./pages/admin-equipo/admin-equipo.module').then( m => m.AdminEquipoPageModule),
+    canActivate: [RoleguardService],
+    data: { expectedRole: 'administrador' }
   },
   {
     path: 'admin-noticia',
-    loadChildren: () => import('./pages/admin-noticia/admin-noticia.module').then( m => m.AdminNoticiaPageModule)
+    loadChildren: () => import('./pages/admin-noticia/admin-noticia.module').then( m => m.AdminNoticiaPageModule),
+    canActivate: [RoleguardService],
+    data: { expectedRole: 'administrador' }
   },
   {
     path: 'admin-producto',
-    loadChildren: () => import('./pages/admin-producto/admin-producto.module').then( m => m.AdminProductoPageModule)
+    loadChildren: () => import('./pages/admin-producto/admin-producto.module').then( m => m.AdminProductoPageModule),
+    canActivate: [RoleguardService],
+    data: { expectedRole: 'administrador' }
   },
   {
     path: 'gestor-calendario',
-    loadChildren: () => import('./pages/gestor-calendario/gestor-calendario.module').then( m => m.GestorCalendarioPageModule)
+    loadChildren: () => import('./pages/gestor-calendario/gestor-calendario.module').then( m => m.GestorCalendarioPageModule),
+    canActivate: [RoleguardService], 
+    data: { expectedRole: ['gestor'] }
   },
   {
     path: 'perfil',
@@ -105,27 +115,39 @@ const routes: Routes = [
   },
   {
     path: 'agregar-user',
-    loadChildren: () => import('./pages/agregar-user/agregar-user.module').then( m => m.AgregarUserPageModule)
+    loadChildren: () => import('./pages/agregar-user/agregar-user.module').then( m => m.AgregarUserPageModule),
+    canActivate: [RoleguardService],
+    data: { expectedRole: 'administrador' }
   },
   {
     path: 'editar-user/:id',
-    loadChildren: () => import('./pages/editar-user/editar-user.module').then( m => m.EditarUserPageModule)
+    loadChildren: () => import('./pages/editar-user/editar-user.module').then( m => m.EditarUserPageModule),
+    canActivate: [RoleguardService],
+    data: { expectedRole: 'administrador' }
   },
   {
     path: 'agregar-producto',
-    loadChildren: () => import('./pages/agregar-producto/agregar-producto.module').then( m => m.AgregarProductoPageModule)
+    loadChildren: () => import('./pages/agregar-producto/agregar-producto.module').then( m => m.AgregarProductoPageModule),
+    canActivate: [RoleguardService],
+    data: { expectedRole: 'administrador' }
   },
   {
     path: 'editar-producto/:id',
-    loadChildren: () => import('./pages/editar-producto/editar-producto.module').then( m => m.EditarProductoPageModule)
+    loadChildren: () => import('./pages/editar-producto/editar-producto.module').then( m => m.EditarProductoPageModule),
+    canActivate: [RoleguardService],
+    data: { expectedRole: 'administrador' }
   },
   {
     path: 'agregar-noticia',
-    loadChildren: () => import('./pages/agregar-noticia/agregar-noticia.module').then( m => m.AgregarNoticiaPageModule)
+    loadChildren: () => import('./pages/agregar-noticia/agregar-noticia.module').then( m => m.AgregarNoticiaPageModule),
+    canActivate: [RoleguardService],
+    data: { expectedRole: 'administrador' }
   },
   {
     path: 'editar-noticia/:id',
-    loadChildren: () => import('./pages/editar-noticia/editar-noticia.module').then( m => m.EditarNoticiaPageModule)
+    loadChildren: () => import('./pages/editar-noticia/editar-noticia.module').then( m => m.EditarNoticiaPageModule),
+    canActivate: [RoleguardService],
+    data: { expectedRole: 'administrador' }
   },
   {
     path: 'editar-calendario/:id',
@@ -133,11 +155,15 @@ const routes: Routes = [
   },
   {
     path: 'gestor',
-    loadChildren: () => import('./pages/gestor/gestor.module').then( m => m.GestorPageModule)
+    loadChildren: () => import('./pages/gestor/gestor.module').then( m => m.GestorPageModule),
+    canActivate: [RoleguardService], 
+    data: { expectedRole: ['gestor'] } 
   },
   {
     path: 'dia',
-    loadChildren: () => import('./pages/dia/dia.module').then( m => m.DiaPageModule)
+    loadChildren: () => import('./pages/dia/dia.module').then( m => m.DiaPageModule),
+    canActivate: [RoleguardService], 
+    data: { expectedRole: ['gestor'] } 
   }
 
 
@@ -152,6 +178,7 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: []
 })
 export class AppRoutingModule {}
