@@ -6,6 +6,8 @@ import { async } from 'rxjs';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ProductoService } from 'src/app/backend/producto.service';
+import { NgxPayPalModule } from 'ngx-paypal';
+import { IPayPalConfig } from 'ngx-paypal';
 
 @Component({
   selector: 'app-carrito',
@@ -14,6 +16,10 @@ import { ProductoService } from 'src/app/backend/producto.service';
 })
 export class CarritoPage implements OnInit {
   
+  paypalConfig: IPayPalConfig = {
+    clientId: 'ATGqZVkzWtnaIj-9WsFB3t2Yi3UuZFs82d14BaFccCeqg_zED4mt9Yp9y6TaUZJQFc4huYbVVeb2adCz',
+    currency: 'USD',
+  };
   uid='';
   cliente !: Usuario;
   public carrito: Pedido = {
@@ -134,5 +140,12 @@ export class CarritoPage implements OnInit {
       position: 'bottom' // Posición del toast en la pantalla
     });
     toast.present();
+  }
+
+  onPaymentSuccess(event:any) {
+    console.log('Pago completado:', event);
+    // Aquí puedes realizar acciones adicionales después de que se complete el pago
+    this.carrito.estado = "aceptado";
+    this.carritoService.comprado(this.carrito);
   }
 }

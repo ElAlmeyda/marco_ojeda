@@ -127,4 +127,9 @@ export class CarritoService {
     const path = '/Usuarios/' + this.uid + '/' + this.path;
     this.firestore.updateDoc(this.pedido, path, this.uid);
   }
+
+  public comprado(pedido: Pedido){
+    const path = '/Usuarios/' + this.uid + '/' + this.path;
+    this.firestore.updateDoc(pedido, path, this.uid)
+  }
 }

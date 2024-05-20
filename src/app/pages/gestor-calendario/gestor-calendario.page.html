@@ -64,7 +64,7 @@
           <ion-button *ngIf="showCalendar" (click)="cancelarCalendario()" style="margin-top: 2em; width: 100%; margin: 0 auto;">Cancelar</ion-button>
 
       <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citasFuturas$ | async">
-        <ion-label> Nombre: {{item.nombre}} Dia: {{item.dia | date: 'dd/MM/yyyy'}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}}  Servicio:{{item.servicio}}</ion-label><br>
+        <ion-label> Nombre: {{item.nombre}}<br> Dia: {{item.dia | date: 'dd/MM/yyyy'}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}}  Servicio:{{item.servicio}}</ion-label><br>
         <ion-button style="padding-top: 1em;" (click)="aceptar(item)"> Aceptar </ion-button>
         <ion-button style="padding-top: 1em;" routerLink="/editar-calendario/{{item.id}}"> Editar </ion-button>
         <ion-button style="padding-top: 1em;" (click)="eliminar(item)" color="danger"> Eliminar </ion-button>

@@ -41,7 +41,7 @@
           <ion-icon slot="end" name="arrow-up-outline" *ngIf="showList" (click)="toggleList()"></ion-icon>
         </ion-item>
         <div style="margin-left: 1em;" *ngIf="showList" >
-          <ion-item *ngFor="let item of cita"> {{item.dia}} {{item.hora}}</ion-item> 
+          <ion-item *ngFor="let item of cita"> {{item.dia | date: 'dd/MM/yyyy'}} {{item.hora}}</ion-item> 
         </div>
         <ion-item *ngIf="usuario.rol == 'administrador'">
           Gestion de datos: 

@@ -10,6 +10,8 @@ import {
 import { Platform } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
 import { Route, Router } from '@angular/router';
+import { FirestoreAuthService } from './firestore-auth.service';
+import { FirestoreService } from './firestore.service';
 
 const { LocalNotifications } = Plugins;
 
@@ -18,7 +20,9 @@ const { LocalNotifications } = Plugins;
 })
 export class NotificacionService {
 
-  constructor(public platform: Platform, public router: Router) { }
+  constructor(public platform: Platform, public router: Router,public firestroreAuth: FirestoreAuthService, public firestoreService: FirestoreService) { 
+    this.stateAuth();
+  }
 
   inicializar(){
     if(this.platform.is('capacitor')){
@@ -37,6 +41,7 @@ export class NotificacionService {
 
     PushNotifications.addListener('registration',
       (token: Token) => {
+        this.guardarToken(token.value);
         alert('Push registration success, token: ' + token.value);
       }
     );
@@ -72,6 +77,25 @@ export class NotificacionService {
         this.router.navigate(['/perfil'])
       }
     );
+  }
+
+  async guardarToken(token: any){
+    const uid = await this.firestroreAuth.getUid();
+    if(uid){
+      const path = 'Usuarios/';
+      const userUpdate = {
+        token: token,
+      }
+      this.firestoreService.updateDoc(userUpdate, path, uid);
+    }
+  }
+
+  stateAuth(){
+    this.firestroreAuth.stateAuth().subscribe( res => {
+      if(res !== null){
+        this.inicializar();
+      }
+    });
   }
 }
 

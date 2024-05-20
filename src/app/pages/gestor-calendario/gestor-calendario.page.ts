@@ -96,6 +96,7 @@ export class GestorCalendarioPage implements OnInit {
   async obtenerCitas(){
     this.citas.getUsuariosCitas().subscribe((res: Cita[]) =>{
       this.cita = res.filter(cita => cita.estado === 'pendiente');
+      console.log(this.cita);
     });
   }
 

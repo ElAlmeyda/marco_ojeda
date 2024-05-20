@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
 import {  Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { NotificacionService } from 'src/app/service/notificacion.service';
 
 @Component({
   selector: 'app-registrarse',
@@ -28,9 +30,30 @@ export class RegistrarsePage implements OnInit {
   guardarEjecutado = false;
 
 
-  constructor(private user: UsuariosService, public router: Router, public toast: ToastController) { }
+  constructor(private user: UsuariosService, public router: Router, public toast: ToastController, public notificacion: NotificacionService) { }
 
   ngOnInit() {
+    
+  }
+
+  solicitarPermisos() {
+    PushNotifications.requestPermissions().then(result => {
+      if (result.receive === 'granted') {
+        // Permiso concedido, registrar el token de registro
+        this.registrarToken();
+      } else {
+        // Permiso denegado, mostrar un mensaje al usuario
+        console.log('Los permisos para recibir notificaciones han sido denegados.');
+      }
+    });
+  }
+
+  registrarToken() {
+    PushNotifications.addListener('registration', (token: any) => {
+      console.log('Token de registro:', token.value);
+      // Envía el token de registro al servidor para su almacenamiento
+      this.notificacion.guardarToken(token.value);
+    });
   }
  
 
@@ -44,6 +67,7 @@ export class RegistrarsePage implements OnInit {
       if (check) {
         this.router.navigate(['/folder']);
         this.presentToast("Registrado con éxito", 'success');
+        this.solicitarPermisos();
       } else {          
       this.presentToast("Registrado fallido, ocurrió un error al crear el usuario", 'danger');
       }
