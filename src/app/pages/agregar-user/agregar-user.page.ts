@@ -34,6 +34,7 @@ export class AgregarUserPage implements OnInit {
       await this.empleados.subirImagen(this.file);
       // Si no se ha lanzado ninguna excepción, significa que se ha creado el empleado correctamente
       this.mostrarToast("Empleado creado correctamente");
+      this.initEmpleado();
     } catch (error) {
       console.error("Error al crear el empleado:", error);
       this.mostrarToast("Error al crear el empleado");
@@ -68,6 +69,17 @@ export class AgregarUserPage implements OnInit {
 
   mostrarTextoSeleccionarFoto(): string {
     return this.empleado.foto ? this.empleado.foto : 'Seleccionar foto';
+  }
+
+  initEmpleado(){
+    this.empleado = {
+      nombre: '',
+      descripcion: '',
+      foto: '',
+      tipo: '',
+      id: ''
+    };
+  
   }
 
 }

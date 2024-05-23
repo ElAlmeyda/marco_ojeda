@@ -32,6 +32,7 @@ export class AgregarNoticiaPage implements OnInit {
       await this.noticias.subirImagen(this.file);
       // Si no se ha lanzado ninguna excepción, significa que se ha creado el empleado correctamente
       this.mostrarToast("Noticia creado correctamente");
+      this.initNoticia();
     } catch (error) {
       console.error("Error al crear el Noticia:", error);
       this.mostrarToast("Error al crear el Noticia");
@@ -67,6 +68,17 @@ export class AgregarNoticiaPage implements OnInit {
 
   mostrarTextoSeleccionarFoto(): string {
     return this.noticia.foto ? this.noticia.foto : 'Seleccionar foto';
+  }
+
+  initNoticia(){
+    this.noticia = {
+      titulo: '',
+      descripcion: '',
+      foto: '',
+      id: '',
+      fecha: new Date()
+    };
+  
   }
 
 }

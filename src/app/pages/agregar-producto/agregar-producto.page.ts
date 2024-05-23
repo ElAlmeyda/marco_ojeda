@@ -33,6 +33,7 @@ export class AgregarProductoPage implements OnInit {
       await this.productos.subirImagen(this.file);
       // Si no se ha lanzado ninguna excepción, significa que se ha creado el empleado correctamente
       this.mostrarToast("Producto creado correctamente");
+      this.initProducto();
     } catch (error) {
       console.error("Error al crear el Producto:", error);
       this.mostrarToast("Error al crear el Producto");
@@ -68,5 +69,15 @@ export class AgregarProductoPage implements OnInit {
       position: 'bottom' // Posición del toast en la pantalla
     });
     toast.present();
+  }
+
+  initProducto(){
+    this.producto = {
+      nombre: '',
+      descripcion: '',
+      foto: '',
+      precio: 0,
+      id: '',
+    }
   }
 }
