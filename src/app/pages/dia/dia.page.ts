@@ -141,21 +141,19 @@ export class DiaPage implements OnInit {
 
 
   obtenerCitasHoy(){
-    this.citasFuturas$ = this.citas.getCitasHoy().pipe(
-      map(citas => {
-        const ahora = new Date();
-        return citas.filter(cita => {
-          const horaCita = cita.hora.split(':'); 
-          const horaCitaDate = new Date(); 
-          horaCitaDate.setHours(Number(horaCita[0]), Number(horaCita[1]), 0, 0);
-          return horaCitaDate > ahora;
-        })
-      })
+    this.citasFuturas$ = this.citas.getCitasHoy();
+    this.citasFuturas$.subscribe(
+      citas => {
+        console.log(citas);
+      },
+      error => {
+        console.error('Error al obtener citas:', error);
+      }
     );
   }
 
   aplicarFiltro() {
-    this.citasFuturas$ = this.citas.getCitasAceptadas().pipe(
+    this.citasFuturas$ = this.citas.getCitasHoy().pipe(
       map(citas => {
         let citasFiltradas = citas;
 

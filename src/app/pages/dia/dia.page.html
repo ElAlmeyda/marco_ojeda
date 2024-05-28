@@ -49,7 +49,7 @@
       </ion-datetime>
       <ion-button *ngIf="showCalendar" (click)="cancelarCalendario()" style="margin-top: 2em; width: 100%; margin: 0 auto;">Cancelar</ion-button>
       <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citasFuturas$ | async">
-      <ion-label> Nombre: {{item.nombre}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}} Servicio:{{item.servicio}}</ion-label><br>
+      <ion-label> Nombre: {{item.nombre}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}} Servicio:{{item.servicio}} <br> Día: {{item.dia | date: 'dd/MM/yyyy'}}</ion-label><br>
       <div style="display: flex; justify-content: center;align-items: center;">
         <ion-icon name="remove-outline" (click)="adelantar(item)" style="font-size: 20px;"></ion-icon>
         <ion-input style="width: 50px;" pattern="[0-9]*" type="number" placeholder="minutos" [(ngModel)]="retraso" inputmode="numeric"></ion-input>

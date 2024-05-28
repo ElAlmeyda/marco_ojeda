@@ -144,7 +144,6 @@ export class CarritoPage implements OnInit {
 
   onPaymentSuccess(event:any) {
     console.log('Pago completado:', event);
-    // Aquí puedes realizar acciones adicionales después de que se complete el pago
     this.carrito.estado = "aceptado";
     this.carritoService.comprado(this.carrito);
   }

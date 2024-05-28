@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import * as functions from 'firebase-functions'
+import * as functions from 'firebase-functions';
 
 admin.initializeApp();
 const firestore = admin.firestore();
@@ -15,7 +15,7 @@ exports.nuevaCita = functions.firestore
             enlace: '/perfil'
         }
 
-        const path = '/Usuarios' + userId;
+        const path = `/Usuarios/${userId}`;
         const docInfo = await firestore.doc(path).get();
         const dataUser = docInfo.data() as any;
         const token = dataUser.token;
@@ -26,58 +26,122 @@ exports.nuevaCita = functions.firestore
             tokens: registroToken,
             notification: {
                 title: 'Consulta el estado de tu cita ahora',
-                body: 'Su cita del dia ' + cita.dia + ' ha sido ' + cita.estado
+                body: `Su cita del dia ${cita.dia} ha sido ${cita.estado}`
             },
         }
         return sendNotification(notification);
     });
 
-    const sendNotification = (notification: INotification) => {
-        return new Promise((resolve, reject) => {
-            const message: admin.messaging.MulticastMessage = {
-                data: notification.data,
-                tokens: notification.tokens,
-                notification: notification.notification,
-                android: {
-                    notification: {
-                        icon: 'ic_stat_name',
-                        color: '#EB9234'
-                    }
+
+    exports.retrasoAdelanto = functions.firestore
+    .document('/Usuarios/{userId}/Cita/{citaId}')
+    .onUpdate(async (change, context) => {
+        const userId = context.params.userId;
+        const citaBefore = change.before.data();
+        const citaAfter = change.after.data();
+
+        // Verificar si la hora de la cita ha sido modificada
+        if (citaBefore.hora !== citaAfter.hora) {
+            const dataFcm = {
+                enlace: '/perfil'
+            }
+
+            const path = `/Usuarios/${userId}`;
+            const docInfo = await firestore.doc(path).get();
+            const dataUser = docInfo.data() as any;
+            const token = dataUser.token;
+            const registroToken = [token];
+
+            const notification: INotification = {
+                data: dataFcm,
+                tokens: registroToken,
+                notification: {
+                    title: '¡Importante!',
+                    body: `Su cita para el día ${citaAfter.dia} ha sido modificada. La nueva hora es ${citaAfter.hora}.`
                 },
-                apns: {
-                    payload: {
-                        aps: {
-                            sound: {
-                                critical: true,
-                                name: 'default',
-                                volume: 1,
-                            }
+            }
+            return sendNotification(notification);
+        } else {
+            // La hora de la cita no ha sido modificada
+            return null;
+        }
+    });
+
+
+    exports.entregProducto = functions.firestore
+    .document('/Usuarios/{userId}/Carrito/{carritoId}')
+    .onUpdate(async (change, context) => {
+        
+        const userId = context.params.userId;
+        const pedido = change.after.data();
+
+        const dataFcm = {
+            enlace: '/folder'
+        }
+
+        const path = `/Usuarios/${userId}`;
+        const docInfo = await firestore.doc(path).get();
+        const dataUser = docInfo.data() as any;
+        const token = dataUser.token;
+        const registroToken = [token];
+
+        const notification: INotification = {
+            data: dataFcm,
+            tokens: registroToken,
+            notification: {
+                title: 'Su pedido ha llegado a la tienda',
+                body: `Su pedido lo puede recoger en la clinica` + pedido,
+            },
+        }
+        return sendNotification(notification);
+    });
+
+const sendNotification = (notification: INotification) => {
+    return new Promise((resolve, reject) => {
+        const message: admin.messaging.MulticastMessage = {
+            data: notification.data,
+            tokens: notification.tokens,
+            notification: notification.notification,
+            android: {
+                notification: {
+                    icon: 'ic_stat_name',
+                    color: '#EB9234'
+                }
+            },
+            apns: {
+                payload: {
+                    aps: {
+                        sound: {
+                            critical: true,
+                            name: 'default',
+                            volume: 1,
                         }
                     }
                 }
-            };
-    
-            admin.messaging().sendMulticast(message).then((response) => {
-                if (response.failureCount > 0) {
-                    const failedTokens: any[] = [];
-                    response.responses.forEach((resp, idx) => {
-                        if (!resp.success) {
-                            failedTokens.push(notification.tokens[idx]);
-                        }
-                    });
-    
-                    console.error('Failed tokens:', failedTokens);
-                }
-                resolve(true);
-            }).catch(error => {
-                console.error('Error sending notification:', error);
-                reject(error);
-            });
+            }
+        };
+
+        admin.messaging().sendMulticast(message).then((response) => {
+            if (response.failureCount > 0) {
+                const failedTokens: any[] = [];
+                response.responses.forEach((resp, idx) => {
+                    if (!resp.success) {
+                        failedTokens.push(notification.tokens[idx]);
+                    }
+                });
+
+                console.error('Failed tokens:', failedTokens);
+            }
+            resolve(true);
+        }).catch(error => {
+            console.error('Error sending notification:', error);
+            reject(error);
         });
-    };
-    
-    interface INotification {
-        data: any;
-        tokens: string[];
-        notification: admin.messaging.Notification;
-    }
+    });
+};
+
+interface INotification {
+    data: any;
+    tokens: string[];
+    notification: admin.messaging.Notification;
+}
