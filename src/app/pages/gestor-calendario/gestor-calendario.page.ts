@@ -57,7 +57,7 @@ export class GestorCalendarioPage implements OnInit {
     this.citas.getUrgencias().subscribe(res => {
       this.urgencia = res;
       this.embarazada();
-      this.actualizarImagenes();
+      this.actualizarImagenes(this.urgencia);
     });
   }
 
@@ -141,24 +141,21 @@ export class GestorCalendarioPage implements OnInit {
     this.aplicarFiltro();
   }
 
-  async actualizarImagenes() {
-    for (const urgen of this.urgencia) {
+  async actualizarImagenes(urgencia: any[]) {
+    for (const urgen of urgencia) {
       if (urgen.foto) {
-        try {
-          const url = this.citas.getDownloadUrl(urgen.foto).subscribe(
-            (url: string) => {
-              urgen.imagenUrl = url;
-            },
-            (error) => {
-              console.error('Error al obtener URL de descarga:', error);
-            }
-          );
-        } catch (error) {
-          console.error('Error al obtener URL de descarga:', error);
-        }
+        const url = await this.citas.getDownloadUrl(urgen.foto).subscribe(
+          (url: string) => {
+            console.log('URL de la imagen:', url);
+            urgen.imagenUrl = url;
+          },
+          (error) => {
+            console.error('Error al obtener URL de descarga:', error);
+          }
+        );
+        urgen.imagenUrl = url;
       }
     }
-    console.log(this.urgencia);
   }
 
   verImagen(){

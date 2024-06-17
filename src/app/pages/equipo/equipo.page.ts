@@ -44,7 +44,7 @@ export class EquipoPage implements OnInit {
     });
   }
 
-  async actualizarImagenes(equipo: any[]) {
+  actualizarImagenes(equipo: any[]) {
     for (const odontologo of equipo) {
       if (odontologo.foto) {
         try {

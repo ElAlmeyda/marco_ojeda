@@ -142,9 +142,10 @@ export class DiaPage implements OnInit {
 
   obtenerCitasHoy(){
     this.citasFuturas$ = this.citas.getCitasHoy();
+    console.log("Citas: ", this.citasFuturas$);
     this.citasFuturas$.subscribe(
       citas => {
-        console.log(citas);
+        console.log("Dentro: ", citas);
       },
       error => {
         console.error('Error al obtener citas:', error);

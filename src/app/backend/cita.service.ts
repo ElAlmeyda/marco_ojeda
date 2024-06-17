@@ -131,50 +131,23 @@ export class CitaService {
   }
 
   getCitasHoy(): Observable<any[]> {
-    return this.getCitas().pipe(
-      map(citas => {
-        const ahora = new Date();
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
 
-        // Filtra las citas desde hoy en adelante que están aceptadas y que no han pasado
+    return this.getUsuariosCitas().pipe(
+      map(citas => {
         const citasFuturas = citas.filter(cita => {
           const fechaCita = new Date(cita.dia);
-          const [horaCita, minutoCita] = cita.hora.split(':').map(Number);
-          fechaCita.setHours(horaCita, minutoCita, 0, 0);
-          return fechaCita >= ahora && cita.estado === 'aceptado';
+          fechaCita.setHours(0, 0, 0, 0);
+          return fechaCita.getTime() >= hoy.getTime();
         });
-
-        // Ordena las citas: primero las de hoy a partir de la hora actual, luego las futuras
-        citasFuturas.sort((a, b) => {
-          const fechaHoraA = new Date(a.dia);
-          const fechaHoraB = new Date(b.dia);
-
-          // Si ambas citas son de hoy, comparar por hora
-          if (fechaHoraA.toDateString() === ahora.toDateString() && fechaHoraB.toDateString() === ahora.toDateString()) {
-            const [horaA, minutoA] = a.hora.split(':').map(Number);
-            const [horaB, minutoB] = b.hora.split(':').map(Number);
-
-            const horaDateA = new Date();
-            horaDateA.setHours(horaA, minutoA, 0, 0);
-
-            const horaDateB = new Date();
-            horaDateB.setHours(horaB, minutoB, 0, 0);
-
-            return horaDateA.getTime() - horaDateB.getTime();
-          }
-
-          // Si una cita es de hoy y la otra no, la cita de hoy tiene prioridad
-          if (fechaHoraA.toDateString() === ahora.toDateString()) {
-            return -1;
-          } else if (fechaHoraB.toDateString() === ahora.toDateString()) {
-            return 1;
-          }
-
-          // Para citas futuras, comparar por fecha y hora
-          return fechaHoraA.getTime() - fechaHoraB.getTime();
+        return citasFuturas.sort((a, b) => {
+          const fechaA = new Date(a.dia);
+          const fechaB = new Date(b.dia);
+          return fechaA.getTime() - fechaB.getTime();
         });
-
-        return citasFuturas;
-      })
+      }),
+      map(citas => citas.filter(cita => cita.estado === 'aceptado')) // Filtrar citas pendientes
     );
   }
 

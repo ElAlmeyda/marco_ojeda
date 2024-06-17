@@ -77,8 +77,8 @@
         <ion-label> Enfermedad: {{item.enfermedad}} Medicamento: {{item.medicamento}}</ion-label><br>
         <ion-label> Embarazo: {{embarazo}} Alergias: {{item.alergias}}</ion-label><br>
         <ion-label> Sintomas: {{item.sintomas}} </ion-label><br>
-        <ion-label (click)="verImagen()"> Foto: Ver Imagen </ion-label><br>
-        <ion-img *ngIf="mostrarImagen" src="{{item.imagenUrl}}" alt="Imagen del producto"></ion-img><br>
+        <ion-label (click)="verImagen()" *ngIf="item.imagenUrl"> Foto: Ver Imagen </ion-label><br>
+        <ion-img *ngIf="mostrarImagen" [src]="item.imagenUrl" alt="Imagen del producto" style="width: 100%; height: auto; max-width: 250px; object-fit: cover;"></ion-img><br>
         <ion-button style="padding-top: 1em;" (click)="eliminarUrgencia(item)"> LLamar al {{item.movil}} </ion-button>
       </ion-card>
     </div>
