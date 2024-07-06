@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { ActivatedRoute } from '@angular/router';
-import { interval } from 'rxjs';
+import { forkJoin, interval, tap } from 'rxjs';
+import { Fotos } from '../../model';
+import { FirestoreService } from 'src/app/service/firestore.service';
 
 
 @Component({
@@ -10,31 +13,67 @@ import { interval } from 'rxjs';
 })
 export class FotosPage implements OnInit {
 
-  id = -1;
+  id: string="";
 
-  images = [
-    'assets/icon/A03018B1-3DBF-4955-AE58-F2CC6C509380.PNG',
-    'assets/icon/o_1cj31qpibjo51a4vtqf4m65ia.png',
-    'assets/icon/o_1glaaenhd4m37rh1dppap8166la.jpg',
-  ];
+  images: string[] = [];
   currentIndex = 0;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, public storage: AngularFireStorage, public firestore: FirestoreService) { }
+
+  private path = 'Foto/';
+  foto: Fotos[] = [];
+
 
   ngOnInit() {
+
+
     this.route.paramMap.subscribe(params => {
       // Obtener el valor del parámetro 'id' y convertirlo a un número
-      const idFromUrl = params.get('id');
 
-      // Verificar la nulidad antes de intentar la conversión
-      this.id = idFromUrl !== null ? parseInt(idFromUrl, 10) : 0;
+      const idFormurl = params.get('id');
+      if (idFormurl !== null) {
+        this.id = idFormurl.toString();
+      }
+
     });
+    this.actualizarImagenes();
 
     // Cambia la imagen cada 5 segundos (ajusta según sea necesario)
     interval(5000).subscribe(() => this.showNext());
 
     // Suscribirse a los cambios en los parámetros de la URL
     
+  }
+
+  public getDownloadUrl(imgenUrl: string): Promise<string> {
+    const ref = this.storage.refFromURL(imgenUrl);
+    return ref.getDownloadURL().toPromise();
+  }
+
+  async listaFotos() {
+    try {
+      const photoRequests = this.foto.map(foto => this.getDownloadUrl(foto.imagen));
+      const urls = await Promise.all(photoRequests);
+      this.images = urls;
+
+    } catch (error) {
+      console.error('Error al obtener URLs de descarga:', error);
+    }
+  }
+
+
+  async actualizarImagenes() {
+    console.log("Realizando el actualizar");
+    this.firestore.getCollection<Fotos>(this.path).subscribe(res => {
+      this.foto = res;
+      this.planta();
+      this.listaFotos();
+    });
+  }
+
+  planta(){
+    console.log(this.foto);
+    return this.foto = this.foto.filter(foto => foto.planta.trim() === this.id.trim());
   }
 
   showNext() {

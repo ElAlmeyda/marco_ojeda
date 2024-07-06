@@ -72,3 +72,8 @@ export interface Urgencia {
     imagenUrl: string;
     id: string;
 }
+
+export interface Fotos {
+    planta: string;
+    imagen: string;
+}

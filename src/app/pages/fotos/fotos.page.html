@@ -23,15 +23,15 @@
       <div class="carrusel-item" >
         <ion-icon class="arrow-button arrow-button-left" name="arrow-back-outline" (click)="showPrevious()"></ion-icon>
         <img alt="Slide {{currentIndex + 1}}" [src]="images[currentIndex]">
-        <ion-icon class="arrow-button" name="arrow-forward-outline"  (click)="showNext()"></ion-icon>
+        <ion-icon class="arrow-button" name="arrow-forward-outline" (click)="showNext()"></ion-icon>
       </div>
     </div>
   </ion-item>
-  <h1 *ngIf="id == 0" style="margin:2em; text-align: center; font-family: 'Montserrat', sans-serif;"> Esta planta es tan linda como la segunda </h1>
-  <h1 *ngIf="id == 1" style="margin:2em; text-align: center; font-family: 'Montserrat', sans-serif;"> Esta planta es tan linda como la primera </h1>
-  <h1 *ngIf="id == 2" style="margin:2em; text-align: center; font-family: 'Montserrat', sans-serif;"> Esta planta es tan grande como la quinta </h1>
-  <h1 *ngIf="id == 3" style="margin:2em; text-align: center; font-family: 'Montserrat', sans-serif;"> Esta planta es tan linda </h1>
-  <h1 *ngIf="id == 4" style="margin:2em; text-align: center; font-family: 'Montserrat', sans-serif;"> Esta planta es la terraza </h1>
+  <h1 *ngIf="id == '0'" style="margin:2em; text-align: center; font-family: 'Montserrat', sans-serif;"> Esta planta es tan linda como la segunda </h1>
+  <h1 *ngIf="id == '1'" style="margin:2em; text-align: center; font-family: 'Montserrat', sans-serif;"> Esta planta es tan linda como la primera </h1>
+  <h1 *ngIf="id == '2'" style="margin:2em; text-align: center; font-family: 'Montserrat', sans-serif;"> Esta planta es tan grande como la quinta </h1>
+  <h1 *ngIf="id == '3'" style="margin:2em; text-align: center; font-family: 'Montserrat', sans-serif;"> Esta planta es tan linda </h1>
+  <h1 *ngIf="id == '4'" style="margin:2em; text-align: center; font-family: 'Montserrat', sans-serif;"> Esta planta es la terraza </h1>
 
 
 </ion-content>
