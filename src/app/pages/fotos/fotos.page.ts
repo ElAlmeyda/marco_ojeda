@@ -60,6 +60,7 @@ export class FotosPage implements OnInit {
       console.error('Error al obtener URLs de descarga:', error);
     }
   }
+  
 
 
   async actualizarImagenes() {
