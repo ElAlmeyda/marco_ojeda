@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-item>
       <ion-avatar class="raton-menu">
-        <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
+        <ion-img alt="avatar" src="../../../assets/icon/favicon.png" routerLink="/folder">
         </ion-img>
       </ion-avatar>
       
@@ -35,6 +35,11 @@
           <ion-icon name="key" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
           <ion-input type="password" [(ngModel)]="credenciales.password" name="password" placeholder="Contraseña" required></ion-input>
         </ion-item>
+        <div class="forgot-password-container">
+          <ion-label class="forgot-password"> 
+            <a routerLink="/forgot-password"> Olvidastes la contraseña </a>
+          </ion-label>
+        </div>
         
         
         <br>

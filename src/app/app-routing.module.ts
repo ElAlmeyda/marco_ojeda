@@ -164,7 +164,15 @@ const routes: Routes = [
     loadChildren: () => import('./pages/dia/dia.module').then( m => m.DiaPageModule),
     canActivate: [RoleguardService], 
     data: { expectedRole: ['gestor'] } 
+  },  {
+    path: 'forgot-password',
+    loadChildren: () => import('./pages/forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
+  },
+  {
+    path: 'reset-password',
+    loadChildren: () => import('./pages/reset-password/reset-password.module').then( m => m.ResetPasswordPageModule)
   }
+
 
 
 

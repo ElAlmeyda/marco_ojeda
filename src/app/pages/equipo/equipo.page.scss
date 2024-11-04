@@ -2,3 +2,24 @@
 ion-item, ion-card-title {
     font-family: 'Montserrat', sans-serif;
 }
+
+
+ion-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  .especialista-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%; /* Asegura que cada tarjeta ocupe el mismo tamaño en la columna */
+  }
+  
+  ion-card-title {
+    font-size: 1rem;
+    font-weight: bold;
+  }

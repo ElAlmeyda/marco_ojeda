@@ -51,11 +51,14 @@
           Gestion de citas: 
           <ion-icon slot="end" name="arrow-forward-outline" routerLink="/gestor"></ion-icon>
         </ion-item>
-        <ion-item>
-          <div #mapElement style="width: 100%; height: 150px; border: 1px solid #ccc;"></div>
-        </ion-item>
       </ion-list>
     </ion-content>
+
+    <ion-footer>
+      <ion-item >
+        <div #mapElement style="width: 100%; height: 150px; border: 1px solid #ccc; margin-bottom: 15px;" ></div>
+      </ion-item>
+    </ion-footer>
     
   </ion-menu>
   <ion-router-outlet id="main-content" main></ion-router-outlet>

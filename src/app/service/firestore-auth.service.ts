@@ -57,4 +57,8 @@ export class FirestoreAuthService {
       throw error; // Puedes manejar el error en el componente que llama a este método
     }
   }
+
+  async resetPassword(email: string): Promise<void> {
+    return this.auth.sendPasswordResetEmail(email);
+  }
 }

@@ -5,7 +5,7 @@
       </ion-buttons>
       <ion-item>
         <ion-avatar class="raton-menu">
-          <ion-img alt="avatar" src="../../../assets/icon/Sin1.jpg" routerLink="/folder">
+          <ion-img alt="avatar" src="../../../assets/icon/favicon.png" routerLink="/folder">
           </ion-img>
         </ion-avatar>
         
@@ -17,10 +17,10 @@
   <ion-card *ngFor="let item of noticia">
     <ion-grid>
       <ion-row>
-        <ion-col size="6">
+        <ion-col size="12">
           <ion-img alt="noticia" [src]="item.imagenUrl"></ion-img>
         </ion-col>
-        <ion-col size="5">
+        <ion-col size="12">
           <ion-card-header>
             <ion-card-title>{{item.titulo}}</ion-card-title>
           </ion-card-header>
