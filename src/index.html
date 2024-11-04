@@ -1,33 +1,58 @@
 <!DOCTYPE html>
 <html lang="es">
-
-
-
 <head>
   <meta charset="utf-8"/>
   <title>Marco Ojeda</title>
-
   <base href="/"/>
-
   <meta name="color-scheme" content="light dark"/>
   <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <meta name="format-detection" content="telephone=no"/>
   <meta name="msapplication-tap-highlight" content="no"/>
-
-  <link rel="icon" type="image/png" href="assets/icon/favicon.png"/>
-
-  <!-- add to homescreen for ios -->
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCa5nLa_7G_IE14e-KnW_MmBPsEXNwdp4M&libraries=places&loading=async"></script>
   <script src="https://www.paypal.com/sdk/js?client-id=ATGqZVkzWtnaIj-9WsFB3t2Yi3UuZFs82d14BaFccCeqg_zED4mt9Yp9y6TaUZJQFc4huYbVVeb2adCz"></script>
+  <link rel="icon" type="image/png" href="assets/icon/gi_vuelta.mp4"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#1976d2">
+  <style>
+    #splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #000000; /* Color de fondo */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999; /* Asegúrate de que esté encima de todo */
+    }
+
+    #splash-screen img {
+      width: 80%; /* Ajusta el tamaño según sea necesario */
+      max-width: 300px; /* Asegura que no sea demasiado grande */
+    }
+  </style>
 </head>
 
 <body>
+  <div id="splash-screen">
+    <video autoplay muted playsinline>
+      <source src="assets/icon/gi_vuelta.mp4" type="video/mp4">
+    </video>
+  </div>
+  
   <app-root></app-root>
   <noscript>Please enable JavaScript to continue using this application.</noscript>
-</body>
 
+  <script>
+    window.onload = function() {
+      const splashScreen = document.getElementById('splash-screen');
+      if (splashScreen) {
+        splashScreen.style.display = 'none'; // Oculta el splash screen
+      }
+    };
+  </script>
+</body>
 </html>

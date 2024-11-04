@@ -88,5 +88,4 @@ export class EquipoServiceService {
     const path = "gs://servicio-4f831.appspot.com/Empleados/" + nombre;
     return this.database.subirImagenes(file, path, nombre);
   }
-
 }

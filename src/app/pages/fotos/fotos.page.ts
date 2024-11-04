@@ -64,7 +64,6 @@ export class FotosPage implements OnInit {
 
 
   async actualizarImagenes() {
-    console.log("Realizando el actualizar");
     this.firestore.getCollection<Fotos>(this.path).subscribe(res => {
       this.foto = res;
       this.planta();
@@ -72,10 +71,12 @@ export class FotosPage implements OnInit {
     });
   }
 
-  planta(){
-    console.log(this.foto);
-    return this.foto = this.foto.filter(foto => foto.planta.trim() === this.id.trim());
-  }
+  planta() {
+    return this.foto = this.foto.filter(foto => {
+        const plantaValue = typeof foto.planta === 'string' ? foto.planta : String(foto.planta);
+        return plantaValue.trim() === this.id.trim();
+    });
+}
 
   showNext() {
     this.currentIndex = (this.currentIndex + 1) % this.images.length;
