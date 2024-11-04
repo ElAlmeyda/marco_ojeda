@@ -235,3 +235,25 @@
     --ion-card-background: #1e1e1e;
   }
 }
+
+
+/* Clase para contenedor del avatar */
+.center-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-title ion-avatar {
+  width: 110px; /* Ajusta el tamaño del avatar según lo necesario */
+  height: 110px;
+}
+
+ion-toolbar {
+  --padding-start: 0px;
+  --padding-end: 0px;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}

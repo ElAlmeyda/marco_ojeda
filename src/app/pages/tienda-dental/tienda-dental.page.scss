@@ -1,0 +1,29 @@
+
+.toolbar-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.center-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.raton-menu {
+  width: 110px; /* Ajusta según el tamaño necesario */
+  height: 110px;
+}
+
+.cart-icon {
+  font-size: 24px; /* Ajusta el tamaño del icono */
+}
+
+ion-toolbar {
+  --min-height: 56px; /* Altura mínima estándar, ajusta si es necesario */
+  --padding-top: 8px; /* Ajusta el padding para asegurar espacio suficiente */
+  --padding-bottom: 8px;
+}
