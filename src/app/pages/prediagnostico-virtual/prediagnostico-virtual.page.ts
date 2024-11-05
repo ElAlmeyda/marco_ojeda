@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { IonModal, ToastController } from '@ionic/angular';
 import { CitaService } from 'src/app/backend/cita.service';
 import { Cita, Urgencia } from 'src/app/model';
 
@@ -10,6 +10,7 @@ import { Cita, Urgencia } from 'src/app/model';
 })
 export class PrediagnosticoVirtualPage implements OnInit {
   @ViewChild('fileInput') fileInput: any;
+  @ViewChild(IonModal) modalRef!: IonModal;
 
  
   urgencia  = {
@@ -27,7 +28,7 @@ export class PrediagnosticoVirtualPage implements OnInit {
   }
   file: any;
   imagenSubidaUrl ='';
-
+  terminosAceptados: boolean = false;
 
 
   constructor(public cita: CitaService, public toastController: ToastController) { }
@@ -91,6 +92,15 @@ export class PrediagnosticoVirtualPage implements OnInit {
       foto: '',
       imagenUrl: '',
       id: '',
-    }
+    } 
+    this.terminosAceptados = false;
+  }
+
+  abrirModal() {
+    this.modalRef.present();
+  }
+
+  cancelarModal() {
+    this.modalRef.dismiss();
   }
 }

@@ -17,38 +17,89 @@
 <ion-content [fullscreen]="true">
   <ion-card>
     <ion-card-header>
-
-      <ion-item> 
-        <ion-card-title style="margin: auto;"> Perfil de {{usuario.nombre}} </ion-card-title>
-        <ion-icon slot="end" name="pencil-outline" routerLink="/editar-perfil"></ion-icon>
+      <ion-item>
+        <ion-card-title style="flex: 1; text-align: center; width: calc(100% - 40px);">{{usuario.nombre}}</ion-card-title>
+        <ion-icon name="pencil-outline" routerLink="/editar-perfil"></ion-icon>
       </ion-item>
 
+      <div style="text-align: center; margin-top: 20px; " (swipeleft)="cambiarSegmento('derecha')" (swiperight)="cambiarSegmento('izquierda')">
+        <ion-segment [ngModel]="tipoPerfil" value="defecto" (ionChange)="citaOurgencia($event)" style="width: 100%;">
+          <ion-segment-button value="Datos"  style="flex: 1;">
+            <ion-label style="font-size: 0.8em;">Datos</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="Pendientes"  style="flex: 1;">
+            <ion-label style="font-size: 0.8em; display: flex; align-items: center;">Pendientes
+            </ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="Aceptadas"  style="flex: 1;">
+            <ion-label style="font-size: 0.8em; display: flex; align-items: center;">Aceptadas
+            </ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </div>
 
     </ion-card-header>
     <ion-card-content>
-      <ion-item> Su movil: {{usuario.movil}}</ion-item>
-      <ion-item> Su correo: {{usuario.correo}}</ion-item>
-
-      <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngIf="citaPendiente.length != 0">
-        <ion-label style ="font-weight: bold;"> Sus citas pendiente </ion-label><br>
-        <ion-card-content *ngFor="let item of citaPendiente">
-          <ion-label> Dia: {{item.dia | date: 'dd/MM/yyyy'}} Hora:{{item.hora}}</ion-label><br>
-          <ion-label> Dentista:{{item.dentista}}<br> Servicio:{{item.servicio}} </ion-label><br>
-        </ion-card-content>
-      </ion-card>
-      <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngIf="citaConfirmada.length != 0">
-        <ion-label style ="font-weight: bold;"> Sus citas confirmadas </ion-label><br>
-        <ion-card-content *ngFor="let item of citaConfirmada">
-          <ion-label> Dia: {{item.dia | date: 'dd/MM/yyyy'}} Hora:{{item.hora}}</ion-label><br>
-          <ion-label> Dentista:{{item.dentista}}<br> Servicio:{{item.servicio}} </ion-label><br>
-        </ion-card-content>
-      </ion-card>
+    <div *ngIf="tipoPerfil == 'Datos'">
+      <ion-item>
+        <ion-label position="stacked" class="custom-label">Su móvil:</ion-label>
+        <ion-input type="text" value="{{usuario.movil}}" [readonly]="true"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked" class="custom-label">Su correo:</ion-label>
+        <ion-input type="email" value="{{usuario.correo}}" [readonly]="true"></ion-input>
+      </ion-item>
       <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citaEditada">
         <ion-label> Acepta la siguiente cita </ion-label><br>
         <ion-label> Nombre: {{item.nombre}} Dia: {{item.dia | date: 'dd/MM/yyyy'}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}}  Servicio:{{item.servicio}}</ion-label><br>
         <ion-button style="padding-top: 1em;" (click)="aceptar(item)"> Aceptar </ion-button>
         <ion-button style="padding-top: 1em;" (click)="eliminar(item)" color="danger"> Eliminar </ion-button>
       </ion-card>
+
+      <ion-card>
+        <ion-item lines="none" style="text-align: center;">
+          <ion-label style="font-size: 20px; color: rgb(255, 255, 255);">Historial</ion-label>
+          <ion-icon slot="end" name="chevron-down-outline" *ngIf="!showList" (click)="toggleList()"></ion-icon>
+          <ion-icon slot="end" name="chevron-up-outline" *ngIf="showList" (click)="toggleList()"></ion-icon>
+          <div style="margin-left: 1em;" *ngIf="showList" >
+            <ion-item *ngFor="let item of historial"></ion-item> 
+          </div>
+
+        </ion-item>
+        <div ></div>
+      </ion-card>
+    </div>
+
+    <div *ngIf="tipoPerfil == 'Pendientes'">
+      <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngIf="citaPendiente.length != 0">
+        <ion-card-content *ngFor="let item of citaPendiente; let i = index" [ngStyle]="{'border': '1px solid #ccc', 'border-radius': '8px', 'margin-bottom': '10px', 'background-color': '#f9f9f9'}">
+          <ion-label style="font-weight: bold;">Cita {{ i + 1 }} </ion-label> <br>
+          <ion-label>Día: {{ item.dia | date: 'dd/MM/yyyy' }} Hora: {{ item.hora }}</ion-label><br>
+          <ion-label> Dentista: {{ item.dentista }}<br> Servicio: {{ item.servicio }} </ion-label><br>
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngIf="citaPendiente.length == 0" style="margin: 2em; text-align: center; padding: 1em;">
+        <ion-label>No hay citas pendientes.</ion-label>
+      </ion-card>
+    </div>
+
+    <div *ngIf="tipoPerfil == 'Aceptadas'">
+      <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngIf="citaConfirmada.length != 0">
+        <ion-card-content *ngFor="let item of citaConfirmada; let i = index" [ngStyle]="{'border': '1px solid #ccc', 'border-radius': '8px', 'margin-bottom': '10px', 'background-color': '#f9f9f9'}">
+          <ion-label style="font-weight: bold;">Cita {{ i + 1 }}</ion-label><br>
+          <ion-label>Día: {{ item.dia | date: 'dd/MM/yyyy' }} Hora: {{ item.hora }}</ion-label><br>
+          <ion-label>Dentista: {{ item.dentista }}<br> Servicio: {{ item.servicio }}</ion-label><br>
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngIf="citaConfirmada.length == 0" style="margin: 2em; text-align: center; padding: 1em;">
+        <ion-label>No tiene citas confirmadas.</ion-label>
+      </ion-card>
+    </div>
+      
+
+      
+     
+      
     </ion-card-content>
   </ion-card>
   

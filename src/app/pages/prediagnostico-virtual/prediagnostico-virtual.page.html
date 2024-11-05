@@ -81,12 +81,19 @@
       </ion-item>
 
       <ion-item lines="none">
-        <ion-checkbox legacy="true"> </ion-checkbox>
-        <ion-label style="padding: 10px;"> Acepto los terminos de la empresa</ion-label>
-      </ion-item>
+        <ion-checkbox 
+          class="small-label" 
+          [(ngModel)]="terminosAceptados" 
+          [ngModelOptions]="{ standalone: true }" >
+        </ion-checkbox>
+        <ion-label style="font-family: 'Montserrat', sans-serif; padding: 10px; margin-left: 10px;" >
+          Acepto los <a routerLink="/terminos"> términos y condiciones </a>
+        </ion-label>
+        </ion-item>
+        
 
       <ion-item lines="none">
-        <ion-button slot="end" color="primary" [disabled]="miForm.invalid" (click)=" aceptar()"> Confirmar </ion-button>
+        <ion-button slot="end" color="primary" [disabled]="miForm.invalid || !terminosAceptados" (click)=" aceptar()"> Confirmar </ion-button>
       </ion-item>
     </form>
   

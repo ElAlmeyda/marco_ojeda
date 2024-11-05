@@ -25,6 +25,7 @@ export class RegistrarsePage implements OnInit {
   }
   rol="cliente";
 
+  terminosAceptados: boolean = false;
 
   correcto = false;
   guardarEjecutado = false;

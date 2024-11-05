@@ -16,14 +16,14 @@
 
 
 <ion-content [fullscreen]="true">
-  <div style="text-align: center; margin-top: 20px; ">
+  <div style="text-align: center; margin-top: 20px; " (swipeleft)="cambiarSegmento('derecha')" (swiperight)="cambiarSegmento('izquierda')">
     <ion-segment [ngModel]="tipoCita" value="defecto" (ionChange)="citaOurgencia($event)">
       <ion-segment-button value="Citas">
         <ion-label>Citas</ion-label>
       </ion-segment-button>
       <ion-segment-button value="Urgencias" >
         <ion-label style="display: flex; align-items: center;">Urgencias
-          <ion-label *ngIf="urgencia.length != 0" style="color: gray; padding: 5px; font-size: 25px;"> ! </ion-label>
+          <ion-badge style="margin-left: 5px;" *ngIf="urgencia.length != 0" color="danger" class="cart-badge">{{ urgencia.length }}</ion-badge>
         </ion-label>
         
       </ion-segment-button>

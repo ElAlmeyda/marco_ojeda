@@ -4,6 +4,8 @@ import { CitaService } from 'src/app/backend/cita.service';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { Cita, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
+import 'hammerjs';
+
 
 @Component({
   selector: 'app-perfil',
@@ -25,6 +27,14 @@ export class PerfilPage implements OnInit {
   citaPendiente: Cita [] = [];
   citaConfirmada: Cita [] = [];
   citaEditada: Cita [] = [];
+
+  historial: [] = [];
+
+  showList = false;
+
+
+  tipoPerfil='Datos';
+
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, public citas: CitaService, private alertController: AlertController) { 
     this.auth.stateAuth().subscribe(async res => {
@@ -91,6 +101,25 @@ export class PerfilPage implements OnInit {
     });
   
     await alert.present();
+  }
+
+  citaOurgencia(event: any){
+    this.tipoPerfil = event.detail.value;
+  }
+
+  cambiarSegmento(direccion: string) {
+    const segmentos = ['Datos', 'Pendientes', 'Aceptadas'];
+    const indiceActual = segmentos.indexOf(this.tipoPerfil);
+    
+    if (direccion === 'derecha' && indiceActual < segmentos.length - 1) {
+      this.tipoPerfil = segmentos[indiceActual + 1];
+    } else if (direccion === 'izquierda' && indiceActual > 0) {
+      this.tipoPerfil = segmentos[indiceActual - 1];
+    }
+  }
+
+  toggleList() {
+    this.showList = !this.showList;
   }
 
 }

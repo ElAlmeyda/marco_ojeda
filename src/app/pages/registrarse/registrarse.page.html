@@ -45,6 +45,17 @@
           <ion-icon name="key" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
           <ion-input type="password" [(ngModel)]="crearUser.password" name="password" placeholder="Contraseña" required pattern="(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_]).{6,}" (ionBlur)="mostrarErrorContrasena()" (ngModelChange)="validacionFormulario()"></ion-input>
         </ion-item>
+
+        <ion-item lines="none">
+          <ion-checkbox 
+            class="small-label" 
+            [(ngModel)]="terminosAceptados" 
+            [ngModelOptions]="{ standalone: true }" >
+          </ion-checkbox>
+          <ion-label style="font-family: 'Montserrat', sans-serif; padding: 10px; margin-left: 10px;" >
+            Acepto los <a routerLink="/terminos"> términos y condiciones </a>
+          </ion-label>
+          </ion-item>
         
         <br>
         <ion-button color="primary" (click)="guardar()" [disabled]="miForm.invalid"> Aceptar </ion-button>

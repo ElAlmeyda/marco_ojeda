@@ -14,3 +14,12 @@
     --padding-start: 0px;
     --padding-end: 0px;
   }
+
+  .custom-label {
+    color: #FFFF00; /* Cambia a cualquier color que desees */
+  }
+
+  ion-input[disabled] {
+    color: #b0b0b0; /* Cambia el color del input cuando está deshabilitado */
+  }
+  

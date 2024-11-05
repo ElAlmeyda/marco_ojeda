@@ -1,22 +1,19 @@
 <ion-header [translucent]="true">
-  <ion-toolbar class="toolbar-flex">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-
-    <!-- Contenedor para el logo centrado -->
-    <div class="center-container">
-      <ion-avatar class="raton-menu" routerLink="/folder">
-        <ion-img alt="avatar" src="../../../assets/icon/favicon.png"></ion-img>
+    <ion-item>
+      <ion-avatar class="raton-menu">
+        <ion-img alt="avatar" src="../../../assets/icon/favicon.png" routerLink="/folder" style="margin-left: 2px;">
+        </ion-img>
       </ion-avatar>
-    </div>
-
-    <!-- Contenedor para el icono del carrito en el lado derecho -->
-    <ion-buttons slot="end">
-      <ion-icon class="cart-icon" name="basket" routerLink="/carrito"></ion-icon>
-    </ion-buttons>
+      <ion-icon slot="end" name="cart-outline" routerLink="/carrito"></ion-icon>
+    </ion-item>
   </ion-toolbar>
 </ion-header>
+
+
 
 <ion-content>
 

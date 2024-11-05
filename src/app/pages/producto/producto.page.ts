@@ -17,7 +17,7 @@ export class ProductoPage implements OnInit {
   public product: any = [];
   uid='';
   public id:any;
-  
+  public carritoDentro: any = [];
 
   constructor(public router: ActivatedRoute, private carrito: CarritoService, public producto: ProductoService, public fireAuth: FirestoreAuthService, 
               public alertController: AlertController, public route: Router, public toastController: ToastController) {

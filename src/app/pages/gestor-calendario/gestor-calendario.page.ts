@@ -7,6 +7,8 @@ import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
 import { Cita, Empleado, Urgencia } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
+import 'hammerjs';
+
 
 @Component({
   selector: 'app-gestor-calendario',
@@ -162,4 +164,11 @@ export class GestorCalendarioPage implements OnInit {
     this.mostrarImagen = !this.mostrarImagen;
   }
   
+  cambiarSegmento(direccion: string) {
+    if (direccion === 'derecha' && this.tipoCita === 'Urgencias') {
+      this.tipoCita = 'Citas';
+    } else if (direccion === 'izquierda' && this.tipoCita === 'Citas') {
+      this.tipoCita = 'Urgencias';
+    }
+  }
 }
