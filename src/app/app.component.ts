@@ -7,6 +7,9 @@ import { CarritoService } from './backend/carrito.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { CitaService } from './backend/cita.service';
 import { NotificacionService } from './service/notificacion.service';
+import { Calendar } from '@ionic-native/calendar/ngx';
+import { MenuController, Platform  } from '@ionic/angular';
+import { StatusBar } from '@capacitor/status-bar';
 
 
 @Component({
@@ -41,7 +44,7 @@ export class AppComponent {
 
   constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, 
               public carritoService: CarritoService, public router: Router, public citas: CitaService, public notificacion: NotificacionService,
-              ) {
+              private calendar: Calendar, private menuController: MenuController, private platform: Platform ) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -60,6 +63,11 @@ export class AppComponent {
 
   ngOnInit() {
     this.initMap();
+    
+  }
+
+  closeMenu() {
+    this.menuController.close();
   }
 
   obtenerUsuario() {
@@ -112,5 +120,62 @@ export class AppComponent {
     marker.addListener('click', () => {
       window.open(`https://www.google.com/maps/search/?api=1&query=${clinicaLocation.lat},${clinicaLocation.lng}`);
     });
+  }
+
+  addToCalendar(cita: any) {
+    if (this.platform.is('cordova')) {
+      const diaCita = new Date(cita.dia);
+      const horaCita = cita.hora.split(':');
+      diaCita.setHours(Number(horaCita[0]), Number(horaCita[1]), 0, 0);
+  
+      // Datos del evento
+      const eventDetails = {
+        title: `Cita: ${cita.detalle}`,
+        location: 'Consultorio de especialista',  // Ubicación
+        notes: 'Detalles adicionales de la cita',  // Notas
+        startDate: diaCita,  // Fecha de inicio
+        endDate: new Date(diaCita.getTime() + 60 * 60 * 1000),  // Duración de una hora
+        alarms: [{ method: 1, time: -30 }]  // Alarma 30 minutos antes
+      };
+  
+      // Verifica si el calendario está accesible
+      this.calendar.hasReadWritePermission().then((hasPermission) => {
+        if (hasPermission) {
+          // Si tiene permisos, crea el evento
+          this.calendar.createEvent(
+            eventDetails.title, 
+            eventDetails.location, 
+            eventDetails.notes, 
+            eventDetails.startDate, 
+            eventDetails.endDate
+          ).then(() => {
+            console.log('Evento agregado al calendario');
+          }).catch((error) => {
+            console.error('Error al agregar evento al calendario:', error);
+          });
+        } else {
+          // Si no tiene permisos, pide permisos
+          this.calendar.requestReadWritePermission().then(() => {
+            this.calendar.createEvent(
+              eventDetails.title, 
+              eventDetails.location, 
+              eventDetails.notes, 
+              eventDetails.startDate, 
+              eventDetails.endDate
+            ).then(() => {
+              console.log('Evento agregado al calendario');
+            }).catch((error) => {
+              console.error('Error al agregar evento al calendario:', error);
+            });
+          }).catch((error) => {
+            console.error('Permiso denegado para acceder al calendario', error);
+          });
+        }
+      }).catch((error) => {
+        console.error('Error al verificar los permisos del calendario', error);
+      });
+    } else {
+      console.log('Esta función solo está disponible en dispositivos móviles');
+    }
   }
 }

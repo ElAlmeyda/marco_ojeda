@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { IonModal, ToastController } from '@ionic/angular';
 import { CitaService } from 'src/app/backend/cita.service';
 import { Cita, Urgencia } from 'src/app/model';
@@ -31,9 +31,29 @@ export class PrediagnosticoVirtualPage implements OnInit {
   terminosAceptados: boolean = false;
 
 
-  constructor(public cita: CitaService, public toastController: ToastController) { }
+  constructor(public cita: CitaService, public toastController: ToastController, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
+  }
+
+  formatFecha(event: any) {
+    let valor = event.target.value;
+
+    // Eliminar cualquier carácter que no sea un número
+    valor = valor.replace(/\D/g, '');
+
+    // Agregar las barras (/) en las posiciones correctas
+    if (valor.length >= 2 && valor.length < 4) { 
+      valor = valor.replace(/(\d{2})(\d+)/, '$1/$2');
+    } else if (valor.length > 4) {
+      valor = valor.replace(/(\d{2})(\d{2})(\d+)/, '$1/$2/$3');
+    }
+
+    // Actualiza el valor de 'urgencia.fecha' para que el campo muestre la fecha formateada
+    this.urgencia.fecha = valor;
+
+    // Asegura que Angular detecte el cambio inmediatamente
+    event.target.value = valor;
   }
 
   async aceptar(){

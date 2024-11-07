@@ -63,5 +63,11 @@ export class EquipoPage implements OnInit {
       }
     }
   }
+
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      event.target.complete();
+    }, 2000);  // Aquí puedes simular una carga de datos
+  }
   
 }

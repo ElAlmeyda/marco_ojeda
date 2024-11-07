@@ -21,6 +21,7 @@ import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import { getPerformance, providePerformance } from '@angular/fire/performance';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import {  } from '@angular/fire';
 import { AngularFireModule } from '@angular/fire/compat';
@@ -29,6 +30,8 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgxPayPalModule } from 'ngx-paypal';
+import { Calendar } from '@ionic-native/calendar/ngx';
+import { StatusBar } from '@ionic-native/status-bar';
 
 @NgModule({
   declarations: [AppComponent],
@@ -45,7 +48,8 @@ import { NgxPayPalModule } from 'ngx-paypal';
   // or after 30 seconds (whichever comes first).
   registrationStrategy: 'registerWhenStable:30000'
 })],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, EquipoServiceService, DatePipe, ScreenTrackingService, UserTrackingService],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, EquipoServiceService, DatePipe, ScreenTrackingService, UserTrackingService, Calendar, (isDevMode() ? [] : [StatusBar])],
   bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {}

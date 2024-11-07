@@ -25,7 +25,7 @@
           <ion-img [src]="item.imagenUrl"></ion-img>
         </ion-avatar>
         <ion-label> {{item.nombre}} </ion-label>
-        <ion-label>{{item.precio}}€</ion-label>
+        <ion-label slot="end">{{item.precio}}€</ion-label>
       </ion-item>
     </ion-list>
     <ion-infinite-scroll>

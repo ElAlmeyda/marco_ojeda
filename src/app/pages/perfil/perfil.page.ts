@@ -28,7 +28,7 @@ export class PerfilPage implements OnInit {
   citaConfirmada: Cita [] = [];
   citaEditada: Cita [] = [];
 
-  historial: [] = [];
+  historial: Cita[] = [];
 
   showList = false;
 
@@ -41,6 +41,7 @@ export class PerfilPage implements OnInit {
       if (res != null) {
         this.uid = res.uid;
         this.obtenerUsuario();
+        this.getHistorial();
       } else {
         this.uid= '';
       }
@@ -68,10 +69,66 @@ export class PerfilPage implements OnInit {
   obtenerCita() {
     this.citas.getCitas().subscribe(res => {
       if (res != undefined) {
-        this.citaPendiente = res.filter(cita => cita.estado === 'pendiente');;
-        this.citaConfirmada = res.filter(cita => cita.estado === 'aceptado');;
-        this.citaEditada = res.filter(cita => cita.estado === 'editada');;
+        this.citaPendiente = res.filter(cita => cita.estado === 'pendiente').filter(cita => {
+          const fechaCita = new Date(cita.dia);
+          const ahora = new Date();
+          
+          // Comparamos si la cita está vencida
+          if (fechaCita < ahora) {
+            // Si la cita está vencida, no la incluimos en la lista de citas pendientes
+            this.citas.eliminarCita(cita); // Eliminamos la cita directamente
+            return false; // Filtramos la cita
+          }
+          return true; // Si la cita no está vencida, la mantenemos
+        }).sort((a, b) => {
+          // Ordenar por fecha y hora
+          const fechaA = new Date(a.dia).getTime();
+          const fechaB = new Date(b.dia).getTime();
+  
+          if (fechaA === fechaB) {
+            // Si las fechas son iguales, comparar por hora
+            return new Date(a.hora).getHours() - new Date(b.hora).getHours() ||
+                   new Date(a.hora).getMinutes() - new Date(b.hora).getMinutes();
+          }
+          return fechaA - fechaB; // Si no son del mismo día, ordenar por fecha
+        });
+        this.citaConfirmada = res.filter(cita => cita.estado === 'aceptado').sort((a, b) => {
+          // Comparar primero por fecha
+          const fechaA = new Date(a.dia).getTime();
+          const fechaB = new Date(b.dia).getTime();
+
+          if (fechaA === fechaB) {
+            // Si las fechas son iguales, comparar por hora
+            return new Date(a.hora).getHours() - new Date(b.hora).getHours() ||
+                   new Date(a.hora).getMinutes() - new Date(b.hora).getMinutes();
+          }
+          return fechaA - fechaB; // Si no son del mismo día, ordenar por fecha
+        });
+        this.citaEditada = res.filter(cita => cita.estado === 'editada').filter(cita => {
+          const fechaCita = new Date(cita.dia);
+          const ahora = new Date();
+          
+          // Comparamos si la cita está vencida
+          if (fechaCita < ahora) {
+            // Si la cita está vencida, no la incluimos en la lista de citas pendientes
+            this.citas.eliminarCita(cita); // Eliminamos la cita directamente
+            return false; // Filtramos la cita
+          }
+          return true; // Si la cita no está vencida, la mantenemos
+        }).sort((a, b) => {
+          // Ordenar por fecha y hora
+          const fechaA = new Date(a.dia).getTime();
+          const fechaB = new Date(b.dia).getTime();
+  
+          if (fechaA === fechaB) {
+            // Si las fechas son iguales, comparar por hora
+            return new Date(a.hora).getHours() - new Date(b.hora).getHours() ||
+                   new Date(a.hora).getMinutes() - new Date(b.hora).getMinutes();
+          }
+          return fechaA - fechaB; // Si no son del mismo día, ordenar por fecha
+        });
       }
+    this.revisarCitasVencidas();
     });
   }
 
@@ -120,6 +177,35 @@ export class PerfilPage implements OnInit {
 
   toggleList() {
     this.showList = !this.showList;
+  }
+
+  revisarCitasVencidas() {
+    const ahora = new Date();  // Hora actual
+    
+    // Iteramos sobre las citas confirmadas (aceptadas)
+    this.citaConfirmada.forEach(cita => {
+      const fechaCita = new Date(cita.dia);  // Fecha de la cita (día)
+      const [hora, minutos] = cita.hora.split(':').map(Number);  // Hora y minutos de la cita
+  
+      // Establecer la hora y minutos en la fecha de la cita
+      fechaCita.setHours(hora, minutos, 0, 0);  // Añadir hora y minutos a la fecha
+      
+      // Si la cita está vencida (ya ha pasado completamente), la movemos al historial
+      if (fechaCita < ahora && cita.estado === 'aceptado') {
+        this.moverAlHistorial(cita);  // Mover al historial
+      }
+    });
+  }
+
+  moverAlHistorial(cita: Cita) {
+    this.citas.guardarHistorial(cita);
+    this.citas.eliminarCita(cita);
+  }
+
+  getHistorial(){
+    this.citas.getHistorial(this.uid).subscribe(res=> {
+      this.historial = res;
+    });
   }
 
 }
