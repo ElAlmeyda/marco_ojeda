@@ -211,4 +211,13 @@ export class CitaService {
         console.error('Error al atrasar las citas del dentista:', error);
     }
   }
+
+  guardarHistorial(cita: Cita){
+    const path = '/Usuarios/' + this.uid + '/Historial/';
+    this.firestrore.creatDoc(cita, path, cita.id);
+  }
+  getHistorial(uid: string) {    
+    const path = '/Usuarios/' + this.uid + '/Historial/';
+    return this.firestrore.getCollection<Cita>(path);
+  }
 }

@@ -196,7 +196,6 @@ export class DiaPage implements OnInit {
   cancelarCalendario(){
     this.showCalendar = false;
     this.filtroDia = '';
-
     this.aplicarFiltro();
   }
 
