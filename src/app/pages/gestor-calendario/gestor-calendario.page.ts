@@ -171,4 +171,10 @@ export class GestorCalendarioPage implements OnInit {
       this.tipoCita = 'Urgencias';
     }
   }
+
+  limpiarFiltro(){
+    this.filtroDentista = [];
+    this.filtroServicio = [];
+    this.aplicarFiltro();
+  }
 }

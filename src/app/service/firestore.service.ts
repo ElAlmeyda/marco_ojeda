@@ -24,7 +24,6 @@ export class FirestoreService {
 
   deleteDoc(path: string, id: string){
     const collection = this.database.collection<any>(path);
-    console.log(path, id)
     return collection.doc(id).delete();
   }
 

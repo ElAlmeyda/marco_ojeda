@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { IonModal, ToastController } from '@ionic/angular';
 import { CitaService } from 'src/app/backend/cita.service';
 import { Cita, Urgencia } from 'src/app/model';
@@ -31,7 +31,7 @@ export class PrediagnosticoVirtualPage implements OnInit {
   terminosAceptados: boolean = false;
 
 
-  constructor(public cita: CitaService, public toastController: ToastController) { }
+  constructor(public cita: CitaService, public toastController: ToastController, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
   }
@@ -102,5 +102,17 @@ export class PrediagnosticoVirtualPage implements OnInit {
 
   cancelarModal() {
     this.modalRef.dismiss();
+  }
+
+  formatFecha(event: any) {
+    let valor = event.target.value;
+    valor = valor.replace(/\D/g, '');
+    if (valor.length >= 2 && valor.length < 4) { 
+      valor = valor.replace(/(\d{2})(\d+)/, '$1/$2');
+    } else if (valor.length > 4) {
+      valor = valor.replace(/(\d{2})(\d{2})(\d+)/, '$1/$2/$3');
+    }
+    this.urgencia.fecha = valor;
+    event.target.value = valor;
   }
 }

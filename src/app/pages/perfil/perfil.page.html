@@ -14,7 +14,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" (swipeleft)="cambiarSegmento('derecha')" (swiperight)="cambiarSegmento('izquierda')">
   <ion-card>
     <ion-card-header>
       <ion-item>
@@ -25,14 +25,14 @@
       <div style="text-align: center; margin-top: 20px; " (swipeleft)="cambiarSegmento('derecha')" (swiperight)="cambiarSegmento('izquierda')">
         <ion-segment [ngModel]="tipoPerfil" value="defecto" (ionChange)="citaOurgencia($event)" style="width: 100%;">
           <ion-segment-button value="Datos"  style="flex: 1;">
-            <ion-label style="font-size: 0.8em;">Datos</ion-label>
+            <ion-label style="font-size: 0.6em;">Datos</ion-label>
           </ion-segment-button>
           <ion-segment-button value="Pendientes"  style="flex: 1;">
-            <ion-label style="font-size: 0.8em; display: flex; align-items: center;">Pendientes
+            <ion-label style="font-size: 0.6em; display: flex; align-items: center;">Pendientes
             </ion-label>
           </ion-segment-button>
           <ion-segment-button value="Aceptadas"  style="flex: 1;">
-            <ion-label style="font-size: 0.8em; display: flex; align-items: center;">Aceptadas
+            <ion-label style="font-size: 0.6em; display: flex; align-items: center;">Aceptadas
             </ion-label>
           </ion-segment-button>
         </ion-segment>
@@ -42,31 +42,41 @@
     <ion-card-content>
     <div *ngIf="tipoPerfil == 'Datos'">
       <ion-item>
-        <ion-label position="stacked" class="custom-label">Su móvil:</ion-label>
+        <ion-label position="stacked" class="custom-label">Su numero de telefono:</ion-label>
         <ion-input type="text" value="{{usuario.movil}}" [readonly]="true"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="stacked" class="custom-label">Su correo:</ion-label>
         <ion-input type="email" value="{{usuario.correo}}" [readonly]="true"></ion-input>
       </ion-item>
-      <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngFor="let item of citaEditada">
-        <ion-label> Acepta la siguiente cita </ion-label><br>
-        <ion-label> Nombre: {{item.nombre}} Dia: {{item.dia | date: 'dd/MM/yyyy'}} Hora: {{item.hora}} <br> Dentista:{{item.dentista}}  Servicio:{{item.servicio}}</ion-label><br>
-        <ion-button style="padding-top: 1em;" (click)="aceptar(item)"> Aceptar </ion-button>
-        <ion-button style="padding-top: 1em;" (click)="eliminar(item)" color="danger"> Eliminar </ion-button>
+      <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngIf="citaEditada.length != 0">
+        <ion-card-content *ngFor="let item of citaEditada; let i = index" [ngStyle]="{'border': '1px solid #ccc', 'border-radius': '8px', 'margin-bottom': '10px', 'background-color': '#f9f9f9'}">
+          <ion-label style="font-weight: bold;"> Acepta la siguiente cita </ion-label><br>
+          <ion-label>Nombre: {{ item.nombre }} <br> Día: {{ item.dia | date: 'dd/MM/yyyy' }} Hora: {{ item.hora }}</ion-label><br>
+          <ion-label>Dentista: {{ item.dentista }}<br> Servicio: {{ item.servicio }}</ion-label><br>
+          <ion-button style="padding-top: 1em;" (click)="aceptar(item)">Aceptar</ion-button>
+          <ion-button style="padding-top: 1em;" (click)="eliminar(item)" color="danger">Eliminar</ion-button>
+        </ion-card-content>
       </ion-card>
 
       <ion-card>
         <ion-item lines="none" style="text-align: center;">
-          <ion-label style="font-size: 20px; color: rgb(255, 255, 255);">Historial</ion-label>
+          <ion-label style="font-size: 20px; color: rgb(255, 255, 255);">Historial de citas</ion-label>
+          <!-- Icono para desplegar/colapsar el historial -->
           <ion-icon slot="end" name="chevron-down-outline" *ngIf="!showList" (click)="toggleList()"></ion-icon>
           <ion-icon slot="end" name="chevron-up-outline" *ngIf="showList" (click)="toggleList()"></ion-icon>
-          <div style="margin-left: 1em;" *ngIf="showList" >
-            <ion-item *ngFor="let item of historial"></ion-item> 
-          </div>
-
         </ion-item>
-        <div ></div>
+        <ion-item lines="none" style="text-align: center;">
+          <div style="margin-left: 1em;" *ngIf="showList" >
+            <ion-item *ngFor="let item of historial">
+              <ion-label>
+                <h2>{{ item.dia | date: 'dd/MM/yyyy'}} - {{ item.hora }}</h2>
+                <p><strong>Especialista:</strong> {{ item.dentista }}</p>
+                <p><strong>Servicio:</strong> {{ item.servicio }}</p>
+              </ion-label>
+            </ion-item> 
+          </div>
+        </ion-item>
       </ion-card>
     </div>
 

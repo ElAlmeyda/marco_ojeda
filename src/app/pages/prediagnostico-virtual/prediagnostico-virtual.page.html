@@ -25,30 +25,30 @@
     <form style="text-align: center;" #miForm="ngForm">
       <ion-item lines="none">
         <ion-icon name="person-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-input name="nombre" [(ngModel)]="urgencia.nombre" placeholder="Nombre" required></ion-input>
+        <ion-input name="nombre" [(ngModel)]="urgencia.nombre" placeholder="Nombre" required autocapitalize="on"></ion-input>
       </ion-item>
       <ion-item lines="none">
-        <ion-icon name="person-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-input name="movil" [(ngModel)]="urgencia.movil" placeholder="Telefono" required></ion-input>
+        <ion-icon name="call" style="font-size: 25px; padding-right: 10px;"></ion-icon>
+        <ion-input name="movil" [(ngModel)]="urgencia.movil" placeholder="Telefono" required type="tel"></ion-input>
       </ion-item>
       
       <ion-item lines="none">
         <ion-icon name="calendar-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-input name="fecha" [(ngModel)]="urgencia.fecha" placeholder="Fecha de nacimiento" required></ion-input>
+        <ion-input name="fecha" [(ngModel)]="urgencia.fecha" placeholder="Fecha de nacimiento" required (ionInput)="formatFecha($event)"></ion-input>
       </ion-item>
       
       <ion-item lines="none">
         <ion-icon name="clipboard-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-input name="enfermedad" [(ngModel)]="urgencia.enfermedad" placeholder="Padece alguna enfermedad" required></ion-input>
+        <ion-input name="enfermedad" [(ngModel)]="urgencia.enfermedad" placeholder="Padece alguna enfermedad" required autocapitalize="on"></ion-input>
       </ion-item>
 
       <ion-item lines="none">
         <ion-icon name="bag-add-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-input name="medicamento" [(ngModel)]="urgencia.medicamento" placeholder="Medicamento" required></ion-input>
+        <ion-input name="medicamento" [(ngModel)]="urgencia.medicamento" placeholder="Medicamento" required autocapitalize="on"></ion-input>
       </ion-item>
 
       <ion-item lines="none">
-        <ion-icon name="send" style="font-size: 25px; padding-right: 10px;"></ion-icon>
+        <ion-icon name="woman-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
         <ion-label>Embarazada</ion-label>
         <ion-radio-group name="embarazo" [(ngModel)]="urgencia.embarazo" required>
           <ion-grid>
@@ -66,12 +66,12 @@
       </ion-item>
 
       <ion-item lines="none">
-        <ion-icon name="bandage-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-input name="alergias" [(ngModel)]="urgencia.alergias" placeholder="Alergias" required ></ion-input>
+        <ion-icon name="id-card-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
+        <ion-input name="alergias" [(ngModel)]="urgencia.alergias" placeholder="Alergias" required autocapitalize="on"></ion-input>
       </ion-item>
       <ion-item lines="none">
-        <ion-icon name="send" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-textarea name="sintomas" [(ngModel)]="urgencia.sintomas" placeholder="Sintomas que tiene" required ></ion-textarea>
+        <ion-icon name="bandage-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
+        <ion-textarea name="sintomas" [(ngModel)]="urgencia.sintomas" placeholder="Sintomas que tiene" required autocapitalize="on"></ion-textarea>
       </ion-item>
 
       <ion-item lines="none">
@@ -86,7 +86,7 @@
           [(ngModel)]="terminosAceptados" 
           [ngModelOptions]="{ standalone: true }" >
         </ion-checkbox>
-        <ion-label style="font-family: 'Montserrat', sans-serif; padding: 10px; margin-left: 10px;" >
+        <ion-label style="font-family: 'Montserrat', sans-serif; padding: 5px; margin-left: 5px; font-size: 13px;" >
           Acepto los <a routerLink="/terminos"> términos y condiciones </a>
         </ion-label>
         </ion-item>

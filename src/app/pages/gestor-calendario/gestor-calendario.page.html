@@ -32,12 +32,12 @@
     <div *ngIf="tipoCita == 'Citas'">
       <ion-card class="inline-selectors">
         <ion-item lines="none" class="ion-inline">
-          <ion-select [(ngModel)]="filtroDentista" multiple="true" cancelText="Cancelar" okText="Aceptar" placeholder="Dentista" (ionChange)="aplicarFiltro()">
+          <ion-select [(ngModel)]="filtroDentista" multiple="true" cancelText="Cancelar" okText="Aceptar" placeholder="Dentista" (ionChange)="aplicarFiltro()" (ionCancel)="limpiarFiltro()">
             <ion-select-option *ngFor="let dentista of empleado" [value]="dentista.nombre">{{ dentista.nombre }}</ion-select-option>
           </ion-select>
         </ion-item>
         <ion-item lines="none" class="ion-inline">
-          <ion-select [(ngModel)]="filtroServicio" multiple="true" cancelText="Cancelar" okText="Aceptar" placeholder="Servicio" (ionChange)="aplicarFiltro()">
+          <ion-select [(ngModel)]="filtroServicio" multiple="true" cancelText="Cancelar" okText="Aceptar" placeholder="Servicio" (ionChange)="aplicarFiltro()" (ionCancel)="limpiarFiltro()">
             <ion-select-option>1º Visita</ion-select-option>
             <ion-select-option>Endodoncia</ion-select-option>
             <ion-select-option>Limpieza</ion-select-option>

@@ -64,77 +64,106 @@ export class DiaPage implements OnInit {
       });
   }
 
-  async retrasar(item: Cita){
+  async retrasar(item: Cita) {
     const alert = await this.alertController.create({
-      header: 'Alerta Cita Aceptada',
-      message: 'Cuantas citas quieres adelantar',
-      buttons: [
-        {
-          text: 'Una Cita',
-          handler: () => {
-            let hora = parseInt(item.hora.substr(0, 2)); 
-            let minutos = parseInt(item.hora.substr(3, 2)); 
-            minutos += this.retraso;
-            if (minutos >= 60) {
-            const horasExtra = Math.floor(minutos / 60);
-            hora += horasExtra;
-            minutos = minutos % 60;
+        header: 'Alerta Cita Aceptada',
+        message: 'Cuántas citas quieres retrasar',
+        buttons: [
+            {
+                text: 'Una Cita',
+                handler: () => {
+                    // Verifica si this.retraso es un número válido
+                    const retraso = isNaN(this.retraso) ? 0 : this.retraso;
+                    // Validar el formato de item.hora
+                    if (!item.hora || item.hora.length !== 5 || item.hora.indexOf(':') !== 2) {
+                        console.error("Formato de hora inválido en item.hora");
+                        return;
+                    }
+                    let hora = parseInt(item.hora.substr(0, 2));
+                    let minutos = parseInt(item.hora.substr(3, 2));
+                    // Validar si hora y minutos son números
+                    if (isNaN(hora) || isNaN(minutos)) {
+                        console.error("Hora o minutos inválidos en item.hora");
+                        return;
+                    }
+                    // Retrasar los minutos
+                    minutos += retraso;
+                    const horasExtra = Math.floor(minutos / 60);
+                    minutos = minutos % 60;
+                    hora = (hora + horasExtra) % 24;
+                    let nuevaHora = `${hora.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+                    item.hora = nuevaHora;
+                    // Actualizar la cita
+                    this.citas.actualizarCita(item);
+                }
+            },
+            {
+                text: 'Todas las citas',
+                handler: async () => {
+                    try {
+                        await this.citas.atrasarCitasDentista(item.dentista, this.retraso);
+                    } catch (error) {
+                        console.error("Error al retrasar las citas:", error);
+                    } finally {
+                        await alert.dismiss();
+                    }
+                }
             }
-            let nuevaHora = `${hora}:${minutos.toString().padStart(2, '0')}`;
-            item.hora = nuevaHora;
-            this.citas.actualizarCita(item);
-          }
-        }, {
-          text: 'Todas las citas',
-          handler: async () => {
-            try {
-              await this.citas.atrasarCitasDentista(item.dentista, this.retraso);
-            } catch (error) {
-              console.error("Error al crear el empleado:", error);
-            }finally {
-              await alert.dismiss();
-            }
-          }
-        }
-      ]
+        ]
     });
     await alert.present();
   }
   
-  async adelantar(item: Cita){
+  async adelantar(item: Cita) {
     const alert = await this.alertController.create({
-      header: 'Alerta Cita Aceptada',
-      message: 'Cuantas citas quieres adelantar',
-      buttons: [
-        {
-          text: 'Una Cita',
-          handler: () => {
-            let hora = parseInt(item.hora.substr(0, 2)); 
-            let minutos = parseInt(item.hora.substr(3, 2)); 
-            if (minutos >= this.retraso) {
-              minutos -= this.retraso;
-            } else {
-              minutos = 60 - (this.retraso - minutos);
-              hora--;
+        header: 'Alerta Cita Aceptada',
+        message: '¿Cuántas citas quieres adelantar?',
+        buttons: [
+            {
+                text: 'Una Cita',
+                handler: () => {
+                    // Verifica si this.retraso es un número válido
+                    const retraso = isNaN(this.retraso) ? 0 : this.retraso;
+                    // Validar el formato de item.hora
+                    if (!item.hora || item.hora.length !== 5 || item.hora.indexOf(':') !== 2) {
+                        console.error("Formato de hora inválido en item.hora");
+                        return;
+                    }
+                    let hora = parseInt(item.hora.substr(0, 2));
+                    let minutos = parseInt(item.hora.substr(3, 2));
+                    // Validar si hora y minutos son números
+                    if (isNaN(hora) || isNaN(minutos)) {
+                        console.error("Hora o minutos inválidos en item.hora");
+                        return;
+                    }
+                    // Adelantar los minutos
+                    minutos -= retraso;
+                    while (minutos < 0) {
+                        minutos += 60;
+                        hora--;
+                    }
+                    if (hora < 0) {
+                        hora = (hora + 24) % 24;
+                    }
+                    let nuevaHora = `${hora.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+                    item.hora = nuevaHora;
+                    // Actualizar la cita
+                    this.citas.actualizarCita(item);
+                }
+            },
+            {
+                text: 'Todas las citas',
+                handler: async () => {
+                    try {
+                        await this.citas.adelantarCitasDentista(item.dentista, this.retraso);
+                    } catch (error) {
+                        console.error("Error al adelantar las citas:", error);
+                    } finally {
+                        await alert.dismiss();
+                    }
+                }
             }
-            let nuevaHora = `${hora}:${minutos.toString().padStart(2, '0')}`;
-            item.hora = nuevaHora;
-
-            this.citas.actualizarCita(item);
-          }
-        }, {
-          text: 'Todas las citas',
-          handler: async () => {
-            try {
-              await this.citas.adelantarCitasDentista(item.dentista, this.retraso);
-            } catch (error) {
-              console.error("Error al crear el empleado:", error);
-            }finally {
-              await alert.dismiss();
-            }
-          }
-        }
-      ]
+        ]
     });
     await alert.present();
   }
@@ -199,6 +228,12 @@ export class DiaPage implements OnInit {
     this.aplicarFiltro();
   }
 
-  
 
+  limpiarFiltro(){
+    this.filtroDentista = [];
+    this.filtroServicio = [];
+    this.aplicarFiltro();
+  }
+
+  
 }
