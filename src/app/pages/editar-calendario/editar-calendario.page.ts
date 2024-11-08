@@ -61,6 +61,7 @@ export class EditarCalendarioPage implements OnInit {
   userLogin= false;
   
 
+  
   constructor(private user: UsuariosService, private datePipe: DatePipe, public auth: FirestoreAuthService, public firestore: FirestoreService, public equipo: EquipoServiceService,
     public cita: CitaService, private route: ActivatedRoute, public toastController: ToastController, private navController: NavController) {
      }
