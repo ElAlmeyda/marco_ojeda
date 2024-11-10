@@ -4,7 +4,7 @@ import * as functions from 'firebase-functions';
 admin.initializeApp();
 const firestore = admin.firestore();
 
-exports.nuevaCita = functions.firestore
+exports const nuevaCita = firestore.document
     .document('/Usuarios/{userId}/Cita/{citaId}')
     .onUpdate(async (change, context) => {
         

@@ -7,6 +7,7 @@ import { CarritoService } from './backend/carrito.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { CitaService } from './backend/cita.service';
 import { NotificacionService } from './service/notificacion.service';
+import { MenuController } from '@ionic/angular';
 
 
 @Component({
@@ -41,7 +42,7 @@ export class AppComponent {
 
   constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, 
               public carritoService: CarritoService, public router: Router, public citas: CitaService, public notificacion: NotificacionService,
-              ) {
+              private menu: MenuController) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -112,5 +113,9 @@ export class AppComponent {
     marker.addListener('click', () => {
       window.open(`https://www.google.com/maps/search/?api=1&query=${clinicaLocation.lat},${clinicaLocation.lng}`);
     });
+  }
+
+  closeMenu(){
+    this.menu.close();
   }
 }

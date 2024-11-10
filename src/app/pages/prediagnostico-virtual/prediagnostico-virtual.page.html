@@ -34,7 +34,7 @@
       
       <ion-item lines="none">
         <ion-icon name="calendar-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-input name="fecha" [(ngModel)]="urgencia.fecha" placeholder="Fecha de nacimiento" required (ionInput)="formatFecha($event)"></ion-input>
+        <ion-input name="fecha" [(ngModel)]="urgencia.fecha" placeholder="Fecha de nacimiento" required (ionInput)="formatFecha($event)" type="tel"></ion-input>
       </ion-item>
       
       <ion-item lines="none">
