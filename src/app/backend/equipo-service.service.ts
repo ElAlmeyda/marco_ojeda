@@ -69,8 +69,6 @@ export class EquipoServiceService {
 
   async actualizarEmpleado(nombre: string, descripcion: string, foto: string, tipo: string, id: string){
     try {
-      const path ="gs://servicio-4f831.appspot.com/Empleados/" + foto;
-      foto = path;
       const data = {nombre, descripcion, foto, tipo, id}
       await this.database.updateDoc(data, this.path, id);
       return true;

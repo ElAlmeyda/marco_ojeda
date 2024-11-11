@@ -42,7 +42,7 @@ export class EditarNoticiaPage implements OnInit {
   }
 
   async editar() {
-    let fotoSubida = this.noticia.foto; 
+    let fotoSubida = this.actualizarNoticia.foto; 
   
     if (this.file) {
       await this.noticias.subirImagen(this.file);

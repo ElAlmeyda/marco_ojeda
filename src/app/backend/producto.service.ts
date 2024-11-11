@@ -40,10 +40,7 @@ export class ProductoService {
   }
 
   async editarProducto(nombre: string, descripcion: string, foto: string, precio: number, id:string){
-
     try {
-      const path ="gs://servicio-4f831.appspot.com/Productos/" + foto;
-      foto = path;
       const data = {nombre, descripcion, foto, precio, id};
       await this.firestore.updateDoc(data, this.path, id);
       return true;

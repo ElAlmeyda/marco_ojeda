@@ -40,8 +40,6 @@ export class NoticiasService {
 
   async editarNoticia(titulo: string, descripcion: string, foto: string, id: string){
     try {
-      const path ="gs://servicio-4f831.appspot.com/Noticias/" + foto;
-      foto = path;
       const data = {titulo, descripcion, foto, id}
       await this.database.updateDoc(data, this.path, id);
       return true;

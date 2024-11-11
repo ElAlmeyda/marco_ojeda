@@ -40,7 +40,8 @@ export class EditarUserPage implements OnInit {
   }
 
   async editar(){
-    let fotoSubida = this.empleado.foto; 
+    let fotoSubida = this.editarEmpleado.foto; 
+    console.log("Fotosubida despues del let ",fotoSubida);
   
     if (this.file) {
       await this.equipo.subirImagen(this.file);

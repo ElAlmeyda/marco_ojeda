@@ -39,7 +39,7 @@ export class EditarProductoPage implements OnInit {
   }
 
   async editar(){
-    let fotoSubida = this.producto.foto; 
+    let fotoSubida = this.editarProducto.foto; 
   
     if (this.file) {
       await this.productos.subirImagen(this.file);
