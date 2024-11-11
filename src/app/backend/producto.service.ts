@@ -39,11 +39,18 @@ export class ProductoService {
     return this.firestore.creatDoc(data, this.path, data['id']);
   }
 
-  editarProducto(nombre: string, descripcion: string, foto: string, precio: number, id:string){
-    const path ="gs://servicio-4f831.appspot.com/Productos/" + foto;
-    foto = path;
-    const data = {nombre, descripcion, foto, precio, id};
-    return this.firestore.updateDoc(data, this.path, id);
+  async editarProducto(nombre: string, descripcion: string, foto: string, precio: number, id:string){
+
+    try {
+      const path ="gs://servicio-4f831.appspot.com/Productos/" + foto;
+      foto = path;
+      const data = {nombre, descripcion, foto, precio, id};
+      await this.firestore.updateDoc(data, this.path, id);
+      return true;
+    } catch (error) {
+      console.error("Error al actualizar en Firestore:", error);
+      return false; 
+    }
   }
 
   deleteProducto(id: string){

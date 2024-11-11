@@ -25,24 +25,14 @@ export class FotosPage implements OnInit {
 
 
   ngOnInit() {
-
-
     this.route.paramMap.subscribe(params => {
-      // Obtener el valor del parámetro 'id' y convertirlo a un número
-
       const idFormurl = params.get('id');
       if (idFormurl !== null) {
         this.id = idFormurl.toString();
       }
-
     });
     this.actualizarImagenes();
-
-    // Cambia la imagen cada 5 segundos (ajusta según sea necesario)
     interval(5000).subscribe(() => this.showNext());
-
-    // Suscribirse a los cambios en los parámetros de la URL
-    
   }
 
   public getDownloadUrl(imgenUrl: string): Promise<string> {

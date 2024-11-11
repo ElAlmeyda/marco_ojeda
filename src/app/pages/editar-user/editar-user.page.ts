@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import { finalize } from 'rxjs';
 import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
 import { Empleado } from 'src/app/model';
@@ -28,7 +28,7 @@ export class EditarUserPage implements OnInit {
   }
 
   constructor(public equipo: EquipoServiceService, public storage: FirestoreService,
-    private activatedRoute: ActivatedRoute, public toastController: ToastController) { }
+    private activatedRoute: ActivatedRoute, public toastController: ToastController, public navController: NavController) { }
 
   async ngOnInit() {
     this.id= this.activatedRoute.snapshot.paramMap.get('id')
@@ -40,16 +40,28 @@ export class EditarUserPage implements OnInit {
   }
 
   async editar(){
-    try {
-      await this.equipo.actualizarEmpleado(this.editarEmpleado.nombre, this.editarEmpleado.descripcion, this.file.name, this.editarEmpleado.tipo, this.id);
+    let fotoSubida = this.empleado.foto; 
+  
+    if (this.file) {
       await this.equipo.subirImagen(this.file);
-      // Si no se ha lanzado ninguna excepción, significa que se ha creado el empleado correctamente
+      fotoSubida = this.file.name; 
+    }
+  
+    const check = await this.equipo.actualizarEmpleado(
+      this.editarEmpleado.nombre,
+      this.editarEmpleado.descripcion,
+      fotoSubida, 
+      this.editarEmpleado.tipo,
+      this.id
+    );
+  
+    if (check) {
       this.mostrarToast("Empleado actualizado correctamente");
-    } catch (error) {
-      console.error("Error al actualizado el empleado:", error);
-      this.mostrarToast("Error al actualizado el empleado");
+    } else {
+      this.mostrarToast("Error al actualizar el empleado");
     }
 
+    this.navController.back();
   }
 
   openFileInput() {

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import { ProductoService } from 'src/app/backend/producto.service';
 import { Producto } from 'src/app/model';
 
@@ -26,7 +26,7 @@ export class EditarProductoPage implements OnInit {
   }
   
 
-  constructor(public productos: ProductoService, public toastController: ToastController, public activatedRoute: ActivatedRoute) { 
+  constructor(public productos: ProductoService, public toastController: ToastController, public activatedRoute: ActivatedRoute, public navController: NavController) { 
   }
 
   async ngOnInit() {
@@ -39,16 +39,28 @@ export class EditarProductoPage implements OnInit {
   }
 
   async editar(){
-    try {
-      await this.productos.editarProducto(this.editarProducto.nombre, this.editarProducto.descripcion, this.file.name, this.editarProducto.precio, this.id);
+    let fotoSubida = this.producto.foto; 
+  
+    if (this.file) {
       await this.productos.subirImagen(this.file);
-      // Si no se ha lanzado ninguna excepción, significa que se ha creado el empleado correctamente
+      fotoSubida = this.file.name; 
+    }
+  
+    const check = await this.productos.editarProducto(
+      this.editarProducto.nombre,
+      this.editarProducto.descripcion,
+      fotoSubida, 
+      this.editarProducto.precio,
+      this.id
+    );
+  
+    if (check) {
       this.mostrarToast("Producto actualizado correctamente");
-    } catch (error) {
-      console.error("Error al actualizado el producto:", error);
-      this.mostrarToast("Error al actualizado el producto");
+    } else {
+      this.mostrarToast("Error al actualizar el procudto");
     }
 
+    this.navController.back();
   }
 
   openFileInput() {

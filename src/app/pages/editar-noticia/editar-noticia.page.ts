@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import { NoticiasService } from 'src/app/backend/noticias.service';
 import { Blog } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
@@ -27,7 +27,9 @@ export class EditarNoticiaPage implements OnInit {
   }
   
 
-  constructor(public auth: FirestoreAuthService, public noticias: NoticiasService, public toastController: ToastController, public activatedRoute: ActivatedRoute) { 
+  constructor(public auth: FirestoreAuthService, public noticias: NoticiasService, public toastController: ToastController, public activatedRoute: ActivatedRoute,
+              public navController: NavController
+  ) { 
   }
 
   async ngOnInit() {
@@ -39,15 +41,28 @@ export class EditarNoticiaPage implements OnInit {
     });
   }
 
-  async editar(){
-
-    const check = await this.noticias.editarNoticia(this.actualizarNoticia.titulo, this.actualizarNoticia.descripcion, this.file.name, this.id);
-    await this.noticias.subirImagen(this.file);
+  async editar() {
+    let fotoSubida = this.noticia.foto; 
+  
+    if (this.file) {
+      await this.noticias.subirImagen(this.file);
+      fotoSubida = this.file.name; 
+    }
+  
+    const check = await this.noticias.editarNoticia(
+      this.actualizarNoticia.titulo,
+      this.actualizarNoticia.descripcion,
+      fotoSubida, 
+      this.id
+    );
+  
     if (check) {
-      this.mostrarToast("Noticia actualizado correctamente");
-    } else {          
-      this.mostrarToast("Error al actualizado el noticia");
-    } 
+      this.mostrarToast("Noticia actualizada correctamente");
+    } else {
+      this.mostrarToast("Error al actualizar la noticia");
+    }
+
+    this.navController.back();
   }
 
   async mostrarToast(mensaje: string) {

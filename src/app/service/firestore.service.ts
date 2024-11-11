@@ -3,6 +3,7 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable, map, switchMap } from 'rxjs';
+import { Pedido } from '../model';
 
 @Injectable({
   providedIn: 'root'
@@ -62,5 +63,9 @@ export class FirestoreService {
       const tak = ref.put(file);
       resolve('este es el enlace');
     });
+  }
+
+  getUserPedidos(): Observable<any[]> {
+    return this.database.collectionGroup('Carrito').valueChanges();
   }
 }

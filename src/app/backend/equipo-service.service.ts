@@ -67,11 +67,17 @@ export class EquipoServiceService {
     return this.database.creatDoc(data, this.path, data['id']);
   }
 
-  actualizarEmpleado(nombre: string, descripcion: string, foto: string, tipo: string, id: string){
-    const path ="gs://servicio-4f831.appspot.com/Empleados/" + foto;
-    foto = path;
-    const data = {nombre, descripcion, foto, tipo, id}
-    return this.database.updateDoc(data, this.path, id);
+  async actualizarEmpleado(nombre: string, descripcion: string, foto: string, tipo: string, id: string){
+    try {
+      const path ="gs://servicio-4f831.appspot.com/Empleados/" + foto;
+      foto = path;
+      const data = {nombre, descripcion, foto, tipo, id}
+      await this.database.updateDoc(data, this.path, id);
+      return true;
+    } catch (error) {
+      console.error("Error al actualizar en Firestore:", error);
+      return false; 
+    }
   }
 
   deleteEmpleado(id: string){

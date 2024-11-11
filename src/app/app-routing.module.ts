@@ -164,7 +164,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/dia/dia.module').then( m => m.DiaPageModule),
     canActivate: [RoleguardService], 
     data: { expectedRole: ['gestor'] } 
-  },  {
+  },
+  {
     path: 'forgot-password',
     loadChildren: () => import('./pages/forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
   },
@@ -175,7 +176,11 @@ const routes: Routes = [
   {
     path: 'terminos',
     loadChildren: () => import('./pages/terminos/terminos.module').then( m => m.TerminosPageModule)
-  }
+  },
+  {
+    path: 'admin-pedidos',
+    loadChildren: () => import('./pages/admin-pedidos/admin-pedidos.module').then( m => m.AdminPedidosPageModule)
+  },
 
 
 

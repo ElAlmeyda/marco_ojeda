@@ -1,0 +1,33 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/administrador"></ion-back-button>
+    </ion-buttons>
+    <ion-item class="center-title">
+      <ion-avatar class="raton-menu">
+        <ion-img alt="avatar" src="../../../assets/icon/favicon.png" routerLink="/folder">
+        </ion-img>
+      </ion-avatar>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <div style="display: flex; justify-content: center; margin-top: 20px;">
+    <ion-label> Numero de pedidos: {{pedidos.length}}</ion-label>
+  </div>
+
+  <ion-card *ngFor="let item of pedidos" style="font-family: 'Montserrat', sans-serif;">
+    <ion-card-header [routerLink]="['/editar-user', item.id]">
+      <ion-card-title > {{item.cliente.nombre}} </ion-card-title>
+    </ion-card-header>
+    <ion-card-content> {{item.precioTotal}} €
+    </ion-card-content>
+    <ion-label style="margin-left: 15px;" *ngFor="let producto of item.productos"> {{producto.producto.nombre}} <br></ion-label>
+    <ion-card-content style="text-align: right;"> 
+      <ion-icon name="checkmark-done-outline" style="font-size: 24px;"></ion-icon>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
