@@ -36,7 +36,7 @@
         </ion-item> 
       </ion-list>
       <ion-list lines="none">
-        <ion-item *ngIf="usuario.rol == 'uid'">
+        <ion-item *ngIf="uid">
           Su cita:
           <ion-icon slot="end" name="chevron-down-outline" *ngIf="!showList" (click)="toggleList()"></ion-icon>
           <ion-icon slot="end" name="chevron-up-outline" *ngIf="showList" (click)="toggleList()"></ion-icon>

@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Clinica Dental" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
     <option name="DEPLOY" value="true" />
-    <option name="DEPLOY_APK_FROM_BUNDLE" value="true" />
+    <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
     <option name="DEPLOY_AS_INSTANT" value="false" />
     <option name="ARTIFACT_NAME" value="" />
     <option name="PM_INSTALL_OPTIONS" value="" />

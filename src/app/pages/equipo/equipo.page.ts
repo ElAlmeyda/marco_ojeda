@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Empleado } from 'src/app/model';
 import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
+import { LoadingService } from 'src/app/backend/loading.service';
 
 @Component({
   selector: 'app-equipo',
@@ -21,7 +22,7 @@ export class EquipoPage implements OnInit {
 
   public tiposEspecialistas: any = [];
 
-  constructor(private empleado: EquipoServiceService, public database: FirestoreService) { 
+  constructor(private empleado: EquipoServiceService, public database: FirestoreService, private loadingService: LoadingService) { 
 
   }
 

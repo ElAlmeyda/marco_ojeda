@@ -48,3 +48,26 @@ body {
     }
   }
 
+
+  /* Estilos generales para el splash screen */
+#splash-screen {
+  position: fixed;            /* Hace que el splash screen cubra toda la pantalla */
+  top: 0;
+  left: 0;
+  width: 100vw;               /* Asegura que el ancho sea del 100% del viewport */
+  height: 100vh;              /* Asegura que la altura sea del 100% del viewport */
+  background-color: black;    /* Fondo negro para cuando el video no se carga o es pequeño */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;              /* Mantiene el splash screen por encima de otros elementos */
+}
+
+/* Estilos para el video */
+#splash-screen video {
+  width: 100%;                /* Asegura que el video ocupe el ancho completo */
+  height: 100%;               /* Asegura que el video ocupe la altura completa */
+  object-fit: cover;          /* Corta el video para llenar toda la pantalla sin distorsión */
+  object-position: center;    /* Centra el video */
+}
+

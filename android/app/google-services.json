@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "867441361379",
+    "firebase_url": "https://servicio-4f831-default-rtdb.firebaseio.com",
+    "project_id": "servicio-4f831",
+    "storage_bucket": "servicio-4f831.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867441361379:android:b1ff3a3e7f4316d09ee0d6",
+        "android_client_info": {
+          "package_name": "com.MarcoOjeda.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "867441361379-dsdgu9sf23g3pfi65c35bqa3hu53b4kn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB8uBtCWRkMeL8NkYhcZr8mi2xoa3RdaY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867441361379-dsdgu9sf23g3pfi65c35bqa3hu53b4kn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

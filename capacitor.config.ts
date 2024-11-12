@@ -1,13 +1,12 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.MarcoOjeda.app',
+  appId: 'com.marcoojeda.app',
   appName: 'marco_ojeda',
   webDir: 'www',
-  bundledWebRuntime: false,
-  server:{
-    androidScheme: 'https',
-    cleartext: true
+  server: {
+    androidScheme: 'https',  // Para habilitar HTTPS en Android
+    cleartext: true          // Solo para desarrollo
   },
   plugins: {
     PushNotifications: {
