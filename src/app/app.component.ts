@@ -8,6 +8,7 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
 import { CitaService } from './backend/cita.service';
 import { NotificacionService } from './service/notificacion.service';
 import { MenuController } from '@ionic/angular';
+import { Capacitor } from '@capacitor/core';
 
 
 @Component({
@@ -61,6 +62,9 @@ export class AppComponent {
 
   ngOnInit() {
     this.initMap();
+    if(Capacitor.isNativePlatform()){
+      this.notificacion.inicializar();
+    }
   }
 
   obtenerUsuario() {

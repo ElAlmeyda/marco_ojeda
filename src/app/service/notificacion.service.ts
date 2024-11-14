@@ -9,6 +9,7 @@ import { Platform, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { FirestoreAuthService } from './firestore-auth.service';
 import { FirestoreService } from './firestore.service';
+import { alertController } from '@ionic/vue';
 
 @Injectable({
   providedIn: 'root'
@@ -27,19 +28,17 @@ export class NotificacionService {
 
   // Inicialización de las notificaciones push
   inicializar() {
-    if (this.platform.is('capacitor')) {
-      PushNotifications.requestPermissions().then(result => {
-        console.log('Request permissions result: ', result);
-        if (result.receive === 'granted') {
-          PushNotifications.register();
-          this.addListeners();
-        } else {
-          console.log('Push notifications permission not granted');
-        }
-      });
-    } else {
-      console.log('PushNotifications.requestPermissions() -> no es un movil');
-    }
+    console.log('Initializing Notificacion');
+
+    PushNotifications.requestPermissions().then((result) => {
+      if (result.receive === 'granted') {
+        // Register with Apple / Google to receive push via APNS/FCM
+        PushNotifications.register();
+      } else {
+        // Show some error
+      }
+    });
+    this.addListeners();
   }
 
   // Añadir los listeners para los eventos de Push Notifications
@@ -47,7 +46,7 @@ export class NotificacionService {
     // Listener de éxito en el registro de notificación (token)
     PushNotifications.addListener('registration',
       (token: Token) => {
-        console.log('Push registration success, token: ' + token.value);
+        alert('Push registration success, token: ' + token.value);
         this.guardarToken(token.value);
       }
     );
@@ -85,7 +84,7 @@ export class NotificacionService {
       const path = `Usuarios/${uid}/tokens`;
       const userUpdate = { token: token };
       try {
-        await this.firestoreService.updateDoc(userUpdate, path, uid);
+        await this.firestoreService.creatDoc(userUpdate, path, uid);
         console.log('Token guardado correctamente en Firestore');
       } catch (error) {
         console.error('Error al guardar el token en Firestore:', error);

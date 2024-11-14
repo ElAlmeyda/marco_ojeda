@@ -189,26 +189,37 @@ export class CitaService {
 
   adelantarCitasDentista(nombreDentista: string, retraso: number) {
     try {
+      const hoy = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
       this.getCitasHoy().pipe(
           take(1) // Completa la suscripción después de recibir una emisión
       ).subscribe(res => {
-          const citasFiltradas = res.filter(cita => cita.dentista === nombreDentista);
+          // Filtrar por dentista y por fecha del día de hoy
+          const citasFiltradas = res.filter(cita => 
+              cita.dentista === nombreDentista && cita.fecha === hoy
+          );
+
           citasFiltradas.forEach(cita => {
-            let hora = parseInt(cita.hora.substr(0, 2)); 
-            let minutos = parseInt(cita.hora.substr(3, 2)); 
-            if (minutos >= retraso) {
-              minutos -= retraso;
-            } else {
-              minutos = 60 - (retraso - minutos);
-              hora--;
-            }
-            let nuevaHora = `${hora}:${minutos.toString().padStart(2, '0')}`;
-            cita.hora = nuevaHora;
-            this.actualizarCita(cita);
+              let hora = parseInt(cita.hora.substr(0, 2)); 
+              let minutos = parseInt(cita.hora.substr(3, 2)); 
+              
+              // Adelantar los minutos
+              if (minutos >= retraso) {
+                  minutos -= retraso;
+              } else {
+                  minutos = 60 - (retraso - minutos);
+                  hora--;
+              }
+              
+              // Ajustar la nueva hora en formato HH:MM
+              let nuevaHora = `${hora.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+              cita.hora = nuevaHora;
+
+              // Actualizar la cita con la nueva hora
+              this.actualizarCita(cita);
           });
       });
-      } catch (error) {
-        console.error('Error al atrasar las citas del dentista:', error);
+    } catch (error) {
+      console.error('Error al adelantar las citas del dentista:', error);
     }
   }
 
