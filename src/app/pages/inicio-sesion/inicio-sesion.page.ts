@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import {  Router } from '@angular/router';
 import { PushNotifications } from '@capacitor/push-notifications';
@@ -6,8 +7,6 @@ import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { Usuario } from 'src/app/model';
 import { FirestoreService } from 'src/app/service/firestore.service';
 import { NotificacionService } from 'src/app/service/notificacion.service';
-import { Capacitor } from '@capacitor/core';
-
 
 @Component({
   selector: 'app-inicio-sesion',
@@ -36,14 +35,32 @@ export class InicioSesionPage implements OnInit {
         // Inicio de sesión exitoso
         this.router.navigate(['/folder']);
         this.presentToast("Inicio de sesion con éxito", 'success');
-        if(Capacitor.isNativePlatform()){
-          this.notificacion.inicializar();
-        }
+        this.solicitarPermisos();
       })
       .catch(() => {
         // Error durante el inicio de sesión
         this.presentToast("Contraseña o email son incorrectos", 'danger');
       });
+  }
+
+  solicitarPermisos() {
+    PushNotifications.requestPermissions().then(result => {
+      if (result.receive === 'granted') {
+        // Permiso concedido, registrar el token de registro
+        this.registrarToken();
+      } else {
+        // Permiso denegado, mostrar un mensaje al usuario
+        console.log('Los permisos para recibir notificaciones han sido denegados.');
+      }
+    });
+  }
+
+  registrarToken() {
+    PushNotifications.addListener('registration', (token: any) => {
+      console.log('Token de registro:', token.value);
+      // Envía el token de registro al servidor para su almacenamiento
+      this.notificacion.guardarToken(token.value);
+    });
   }
 
   async presentToast(msg: string, color: string) {
