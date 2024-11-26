@@ -30,6 +30,7 @@ export class RegistrarsePage implements OnInit {
 
   correcto = false;
   guardarEjecutado = false;
+  showPassword: boolean = false;
 
 
   constructor(private user: UsuariosService, public router: Router, public toast: ToastController, public notificacion: NotificacionService) { }
@@ -38,26 +39,6 @@ export class RegistrarsePage implements OnInit {
     
   }
 
-  solicitarPermisos() {
-    PushNotifications.requestPermissions().then(result => {
-      if (result.receive === 'granted') {
-        // Permiso concedido, registrar el token de registro
-        this.registrarToken();
-      } else {
-        // Permiso denegado, mostrar un mensaje al usuario
-        console.log('Los permisos para recibir notificaciones han sido denegados.');
-      }
-    });
-  }
-
-  registrarToken() {
-    PushNotifications.addListener('registration', (token: any) => {
-      console.log('Token de registro:', token.value);
-      // Envía el token de registro al servidor para su almacenamiento
-      this.notificacion.guardarToken(token.value);
-    });
-  }
- 
 
 
   async guardar(){
@@ -69,7 +50,7 @@ export class RegistrarsePage implements OnInit {
       if (check) {
         this.router.navigate(['/folder']);
         this.presentToast("Registrado con éxito", 'success');
-        this.solicitarPermisos();
+        console.log(this.crearUser);
       } else {          
       this.presentToast("Registrado fallido, ocurrió un error al crear el usuario", 'danger');
       }
@@ -86,6 +67,10 @@ export class RegistrarsePage implements OnInit {
     });
 
     await toast.present();
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   validacionFormulario() {

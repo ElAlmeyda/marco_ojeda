@@ -177,4 +177,8 @@ export class GestorCalendarioPage implements OnInit {
     this.filtroServicio = [];
     this.aplicarFiltro();
   }
+
+  llamar(numero: string) {
+    window.location.href = `tel:${numero}`;
+  }
 }

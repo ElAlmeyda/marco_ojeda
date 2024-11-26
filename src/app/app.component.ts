@@ -62,9 +62,6 @@ export class AppComponent {
 
   ngOnInit() {
     this.initMap();
-    if(Capacitor.isNativePlatform()){
-      this.notificacion.inicializar();
-    }
   }
 
   obtenerUsuario() {

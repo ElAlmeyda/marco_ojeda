@@ -1,160 +1,158 @@
 import * as admin from 'firebase-admin';
-import * as functions from 'firebase-functions';
-import { FirestoreEvent } from 'firebase-functions/v2/firestore';
+import { onDocumentWritten } from 'firebase-functions/v2/firestore';
 
 admin.initializeApp();
+
 const firestore = admin.firestore();
 
-export const nuevaCita = functions.firestore.onDocumentUpdated(
-    '/Usuarios/{userId}/Cita/{citaId}',
-    async (event: FirestoreEvent) => {
-      const userId = event.params.userId;
-      const cita = event.data?.after.data(); // Datos después de la actualización
-  
-      const dataFcm = {
-        enlace: '/perfil'
-      };
-  
-      const path = `/Usuarios/${userId}`;
-      const docInfo = await firestore.doc(path).get();
-      const dataUser = docInfo.data() as any;
-      const token = dataUser?.token;
-  
-      if (!token) {
-        console.error("Token no encontrado para el usuario:", userId);
-        return null;
-      }
-  
-      const notification: INotification = {
-        data: dataFcm,
-        tokens: [token],
-        notification: {
-          title: 'Consulta el estado de tu cita ahora',
-          body: `Su cita del día ${cita.dia} ha sido ${cita.estado}`
-        },
-      };
-      return sendNotification(notification);
-    }
-  );
 
-// Notificación para cambio de hora de la cita
-export const retrasoAdelanto = functions.firestore.onDocumentUpdated(
-    '/Usuarios/{userId}/Cita/{citaId}',
-    async (event: FirestoreEvent) => {
-      const userId = event.params.userId;
-      const citaBefore = event.data?.before.data(); // Datos antes de la actualización
-      const citaAfter = event.data?.after.data();  // Datos después de la actualización
-  
-      if (citaBefore.hora !== citaAfter.hora) {
-        const dataFcm = {
-          enlace: '/perfil'
-        };
-  
-        const path = `/Usuarios/${userId}`;
-        const docInfo = await firestore.doc(path).get();
-        const dataUser = docInfo.data() as any;
-        const token = dataUser?.token;
-  
-        if (!token) {
-          console.error("Token no encontrado para el usuario:", userId);
-          return null;
+// Función para enviar notificaciones push
+const sendNotificacionPush = async (
+  tokens: string[],
+  message: { title: string; content: string },
+  data: any = {},
+  tag: string = ''
+) => {
+  const messaging = admin.messaging();
+  const multicast = {
+    tokens,
+    data,
+    notification: {
+      title: message.title,
+      body: message.content,
+    },
+    android: {},
+    apns: {},
+  };
+
+  try {
+    await messaging.sendEachForMulticast(multicast);
+    console.log('Notificación enviada exitosamente');
+  } catch (error) {
+    console.error('Error al enviar la notificación:', error);
+  }
+};
+
+let message = {
+  title: '',
+  content: '',
+};
+
+// Función para detectar cambios en las citas
+export const notificarCambioCita = onDocumentWritten(
+  'Usuarios/{usuarioId}/Cita/{citaId}',
+  async (event: any) => {
+    const beforeData = event.data?.before.data(); // Estado antes de la actualización
+    const afterData = event.data?.after.data(); // Estado después de la actualización
+    const usuarioId = afterData.usuarioId || event.params?.usuarioId;
+
+    if (!beforeData || !afterData) {
+      console.error('Datos inválidos en el evento');
+      return;
+    }
+
+    const citaId = event.params.citaId;
+
+    // Verificar si el estado o la hora han cambiado
+    if (beforeData.estado !== afterData.estado) {
+      const usuarioDoc = await firestore.collection('Usuarios').doc(usuarioId).get();
+
+      if (!usuarioDoc.exists) {
+        console.error(`Usuario ${usuarioId} no encontrado.`);
+        return;
+      }
+
+      const tokens = usuarioDoc.data()?.token || []; // Obtener los tokens de notificación
+
+      if (tokens.length === 0) {
+        console.log(`No hay tokens registrados para el usuario ${usuarioId}.`);
+        return;
+      }
+
+      // Crear mensaje basado en el nuevo estado
+      switch (afterData.estado) {
+        case 'aceptado':
+          message.title = 'Cita Aceptada';
+          message.content = `Tu cita ha sido aceptada.`;
+          break;
+        case 'anulada':
+          message.title = 'Cita Anulada';
+          message.content = `Tu cita ha sido anulada.`;
+          break;
+        case 'editada':
+          message.title = 'Cita Reprogramada';
+          message.content = `Tu cita ha sido reprogramada para el ${new Date(
+            afterData.hora
+          ).toLocaleString()}.`;
+          break;
+      }
+
+      // Enviar notificación
+      const data = { enlace: `/perfil` }; // Puedes personalizar el enlace
+      await sendNotificacionPush(tokens, message, data);
+      console.log(`Notificación enviada a usuario ${usuarioId} para la cita ${citaId}.`);
+    }
+  }
+);
+
+// Función para notificar retraso o adelanto en la hora de la cita
+export const notificarRetrasoAdelantoCita = onDocumentWritten(
+  'Usuarios/{usuarioId}/Cita/{citaId}',
+  async (event: any) => {
+    const beforeData = event.data?.before.data(); // Estado antes de la actualización
+    const afterData = event.data?.after.data(); // Estado después de la actualización
+
+    if (!beforeData || !afterData) {
+      console.error('Datos inválidos en el evento');
+      return;
+    }
+
+    const citaId = event.params.citaId;
+
+    // Verificar si la cita está aceptada y si la hora ha cambiado
+    if (afterData.estado === 'aceptada' && beforeData.hora !== afterData.hora) {
+      const beforeHora = new Date(beforeData.hora);
+      const afterHora = new Date(afterData.hora);
+
+      // Comparar si la cita se adelantó o se retrasó
+      let timeDifference = afterHora.getTime() - beforeHora.getTime();
+      let timeString = '';
+
+      if (timeDifference > 0) {
+        // La cita fue retrasada
+        timeString = `Tu cita ha sido retrasada. Nueva hora: ${afterHora.toLocaleString()}.`;
+      } else if (timeDifference < 0) {
+        // La cita fue adelantada
+        timeString = `Tu cita ha sido adelantada. Nueva hora: ${afterHora.toLocaleString()}.`;
+      }
+
+      if (timeString) {
+        // Enviar notificación de cambio de hora
+        const usuarioId = afterData.usuarioId; // ID del usuario asociado a la cita
+        const usuarioDoc = await firestore.collection('Usuarios').doc(usuarioId).get();
+
+        if (!usuarioDoc.exists) {
+          console.error(`Usuario ${usuarioId} no encontrado.`);
+          return;
         }
-  
-        const notification: INotification = {
-          data: dataFcm,
-          tokens: [token],
-          notification: {
-            title: '¡Importante!',
-            body: `Su cita para el día ${citaAfter.dia} ha sido modificada. La nueva hora es ${citaAfter.hora}.`
-          },
+
+        const tokens = usuarioDoc.data()?.token || []; // Obtener los tokens de notificación
+
+        if (tokens.length === 0) {
+          console.log(`No hay tokens registrados para el usuario ${usuarioId}.`);
+          return;
+        }
+
+        // Enviar la notificación de cambio de hora
+        const horaChangeMessage = {
+          title: 'Cambio en la hora de tu cita',
+          content: timeString,
         };
-        return sendNotification(notification);
-      } else {
-        return null;
+
+        const data = { enlace: `/perfil` }; // Puedes personalizar el enlace
+        await sendNotificacionPush(tokens, horaChangeMessage, data);
+        console.log(`Notificación de cambio de hora enviada a usuario ${usuarioId} para la cita ${citaId}.`);
       }
     }
-  );
-  
-// Notificación al actualizar un carrito de compras
-
-export const entregProducto = functions.firestore.onDocumentUpdated(
-    '/Usuarios/{userId}/Carrito/{carritoId}',
-    async (event: FirestoreEvent) => {
-      const userId = event.params.userId;
-      const pedido = event.data?.after.data(); // Accedemos a los datos después de la actualización
-  
-      const dataFcm = {
-        enlace: '/folder'
-      };
-  
-      const path = `/Usuarios/${userId}`;
-      const docInfo = await firestore.doc(path).get();
-      const dataUser = docInfo.data() as any;
-      const token = dataUser?.token;
-  
-      if (!token) {
-        console.error("Token no encontrado para el usuario:", userId);
-        return null;
-      }
-  
-      const notification: INotification = {
-        data: dataFcm,
-        tokens: [token],
-        notification: {
-          title: 'Su pedido ha llegado a la tienda',
-          body: `Su pedido lo puede recoger en la clínica.`,
-        },
-      };
-      return sendNotification(notification);
-    }
-  );
-
-    const sendNotification = (notification: INotification) => {
-        const message: admin.messaging.MulticastMessage = {
-          data: notification.data,
-          tokens: notification.tokens,
-          notification: notification.notification,
-          android: {
-            notification: {
-              icon: 'ic_stat_name',
-              color: '#EB9234'
-            }
-          },
-          apns: {
-            payload: {
-              aps: {
-                sound: {
-                  critical: true,
-                  name: 'default',
-                  volume: 1.0,
-                }
-              }
-            }
-          }
-        };
-      
-        return admin.messaging().sendMulticast(message)
-          .then((response) => {
-            if (response.failureCount > 0) {
-              const failedTokens: any[] = [];
-              response.responses.forEach((resp, idx) => {
-                if (!resp.success) {
-                  failedTokens.push(notification.tokens[idx]);
-                }
-              });
-              console.error('Failed tokens:', failedTokens);
-            }
-            console.log('Notificación enviada con éxito.');
-            return true;
-          })
-          .catch((error) => {
-            console.error('Error al enviar la notificación:', error);
-            return false;
-          });
-      };
-
-interface INotification {
-    data: any;
-    tokens: string[];
-    notification: admin.messaging.Notification;
-}
+  }
+);

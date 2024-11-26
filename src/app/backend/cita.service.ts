@@ -162,6 +162,17 @@ export class CitaService {
       );
     }
 
+    getCitasAnuladas() {
+      return this.getUsuariosCitas().pipe(
+        map(citas => {
+          const citasAnuladas = citas.filter(cita => {
+            return cita.estado === 'anulada';
+          });
+          return citasAnuladas;
+        })
+      );
+    }
+
   async atrasarCitasDentista(nombreDentista: string, retraso: number) {
     try {
       this.getCitasHoy().pipe(

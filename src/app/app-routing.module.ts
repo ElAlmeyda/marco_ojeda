@@ -180,7 +180,11 @@ const routes: Routes = [
   {
     path: 'admin-pedidos',
     loadChildren: () => import('./pages/admin-pedidos/admin-pedidos.module').then( m => m.AdminPedidosPageModule)
+  },  {
+    path: 'anuladas',
+    loadChildren: () => import('./pages/anuladas/anuladas.module').then( m => m.AnuladasPageModule)
   },
+
 
 
 

@@ -20,6 +20,8 @@ export class InicioSesionPage implements OnInit {
     correo: '',
     password: ''
   }
+  showPassword: boolean = false;
+
 
   constructor(private user: UsuariosService, public router: Router, public toast: ToastController, public notificacion: NotificacionService) { 
 
@@ -31,11 +33,15 @@ export class InicioSesionPage implements OnInit {
   login() {
 
     this.user.inicioSesion(this.credenciales.correo, this.credenciales.password)
-      .then(() => {
+      .then((userCredenciales) => {
         // Inicio de sesión exitoso
+
         this.router.navigate(['/folder']);
         this.presentToast("Inicio de sesion con éxito", 'success');
-        this.solicitarPermisos();
+        const uid = userCredenciales.user?.uid;
+        if(uid){
+          this.notificacion.inicializar(uid);
+        }
       })
       .catch(() => {
         // Error durante el inicio de sesión
@@ -43,24 +49,8 @@ export class InicioSesionPage implements OnInit {
       });
   }
 
-  solicitarPermisos() {
-    PushNotifications.requestPermissions().then(result => {
-      if (result.receive === 'granted') {
-        // Permiso concedido, registrar el token de registro
-        this.registrarToken();
-      } else {
-        // Permiso denegado, mostrar un mensaje al usuario
-        console.log('Los permisos para recibir notificaciones han sido denegados.');
-      }
-    });
-  }
-
-  registrarToken() {
-    PushNotifications.addListener('registration', (token: any) => {
-      console.log('Token de registro:', token.value);
-      // Envía el token de registro al servidor para su almacenamiento
-      this.notificacion.guardarToken(token.value);
-    });
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   async presentToast(msg: string, color: string) {

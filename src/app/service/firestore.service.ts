@@ -33,6 +33,12 @@ export class FirestoreService {
     return collection.doc(id).update(data);
   }
 
+  updateDocNotificacion(data: any, path: string) {
+    // Usamos directamente doc(path) para obtener la referencia al documento
+    const docRef = this.database.doc(`${path}`);
+    return docRef.update(data);
+  }
+
   addDoc(path:string, data: any, id:string){
     return this.database.collection(path).doc(id).set(data);
   }

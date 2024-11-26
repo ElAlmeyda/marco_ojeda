@@ -16,16 +16,24 @@ import { FirestoreService } from './firestore.service';
 })
 export class NotificacionService {
 
+
+  uid= '';
+
   constructor(
     private platform: Platform,
     private router: Router,
     private firestroreAuth: FirestoreAuthService,
     private firestoreService: FirestoreService
   ) { 
-    this.stateAuth();
   }
 
-  inicializar() {
+  async inicializar(uid: string) {
+    this.uid = uid;
+    console.log("Dentro del notificacion", this.uid)
+    if (!this.uid) {
+      console.error('No se ha obtenido el UID, no se pueden registrar notificaciones');
+      return;  // No continúes si el uid está vacío
+    }
     if (this.platform.is('capacitor')) {
       PushNotifications.requestPermissions().then(result => {
         console.log('Request permissions result: ', result);
@@ -36,18 +44,67 @@ export class NotificacionService {
           console.log('Push notifications permission not granted');
         }
       });
+    } else if (this.platform.is('pwa') || this.isWebApp()) {
+      console.log('Inicializando notificaciones para PWA');
+      if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+        console.error('Notificaciones Push no soportadas en este navegador');
+        return;
+      }
+    
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        console.error('Permisos para notificaciones no otorgados');
+        return;
+      }
+      const registration = await navigator.serviceWorker.register('/service-worker.js');
+      console.log('Service Worker registrado para PWA:', registration);
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: this.urlBase64ToUint8Array('BPn0jOtvqbcR4wTVViwpU1EuYyeZ_80qB7TjuGCs28L5lakZ9ATJMgG4BEXgfTyLt4l-rmS-RCuvUnrxTXzPMjc')
+      });
+      console.log('Suscripción para notificaciones Push:', subscription);
     } else {
-      console.log('PushNotifications.requestPermissions() -> no es un movil');
+      console.log('Entorno no compatible con notificaciones push');
     }
   }
 
-  addListeners() {
-    PushNotifications.addListener('registration',
-      (token: Token) => {
-        console.log('Push registration success, token: ' + token.value);
-        this.guardarToken(token.value);
+  urlBase64ToUint8Array(base64String: string): Uint8Array {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }
+  
+  
+
+  isWebApp(): boolean {
+    return window.matchMedia('(display-mode: standalone)').matches;
+  }
+
+  async addListeners() {
+    if (this.platform.is('capacitor')) {
+      PushNotifications.addListener('registration', async (token: Token) => {
+        console.log('Token recibido:', token.value);
+        await this.guardarToken(token.value);
+      });
+    } else if (this.platform.is('pwa') || this.isWebApp()) {
+      try {
+        const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: this.urlBase64ToUint8Array('BPn0jOtvqbcR4wTVViwpU1EuYyeZ_80qB7TjuGCs28L5lakZ9ATJMgG4BEXgfTyLt4l-rmS-RCuvUnrxTXzPMjc')
+        });
+        const token = JSON.stringify(subscription);
+        console.log('Token recibido para PWA:', token);
+        await this.guardarToken(token); 
+      } catch (error) {
+        console.error('Error al suscribirse a notificaciones push:', error);
       }
-    );
+    }
 
     PushNotifications.addListener('registrationError',
       (error: any) => {
@@ -71,21 +128,36 @@ export class NotificacionService {
   }
 
   async guardarToken(token: string) {
-    const uid = await this.firestroreAuth.getUid();
-    if (uid) {
-      const path = `Usuarios/${uid}`;
+    if (this.uid) {
+      const path = `Usuarios/${this.uid}`;  // Ruta en Firestore
       const userUpdate = {
         token: token,
       };
-      this.firestoreService.updateDoc(userUpdate, path, uid);
+  
+      try {
+        await this.firestoreService.updateDocNotificacion(userUpdate, path);  // Guardamos el token en Firestore
+        console.log('Token guardado correctamente en Firestore');
+      } catch (error) {
+        console.error('Error al guardar el token en Firestore:', error);
+      }
     }
   }
 
-  stateAuth() {
-    this.firestroreAuth.stateAuth().subscribe(res => {
-      if (res !== null) {
-        this.inicializar();
+  async eliminarToken() {
+    if (this.uid) {
+      const path = `Usuarios/${this.uid}`;  // Ruta en Firestore
+      const userUpdate = {
+        token: null,
+      };
+  
+      try {
+        await this.firestoreService.updateDocNotificacion(userUpdate, path);  // Guardamos el token en Firestore
+        console.log('Token guardado correctamente en Firestore');
+      } catch (error) {
+        console.error('Error al guardar el token en Firestore:', error);
       }
-    });
+    }
   }
+
+  
 }

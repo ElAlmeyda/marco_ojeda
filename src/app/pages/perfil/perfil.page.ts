@@ -207,4 +207,30 @@ export class PerfilPage implements OnInit {
     });
   }
 
+
+  async anularCita(item: Cita){
+    const alert = await this.alertController.create({
+      header: 'Confirmación',
+      message: '¿Estás seguro de que deseas anular la cita?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+          }
+        }, {
+          text: 'Anular',
+          handler: () => {
+            item.estado = "anulada";
+            this.citas.actualizarCita(item);
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
+  }
+
+
 }

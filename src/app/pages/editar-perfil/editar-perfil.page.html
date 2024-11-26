@@ -49,7 +49,13 @@
         
         <ion-item>
           <ion-icon name="key" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input type="password" name="password" value="{{actualizarUser.password}}" [(ngModel)]="actualizarUser.password" pattern="(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_]).{6,}" (ionBlur)="mostrarErrorContrasena()" (ngModelChange)="validacionFormulario()"></ion-input>
+          <ion-input [type]="showPassword ? 'text' : 'password'" name="password" value="{{actualizarUser.password}}" [(ngModel)]="actualizarUser.password" pattern="(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_]).{6,}" (ionBlur)="mostrarErrorContrasena()" (ngModelChange)="validacionFormulario()">
+          </ion-input>
+          <ion-icon 
+                name="eye" 
+                slot="end" 
+                (click)="togglePassword()" *ngIf="!showPassword"></ion-icon>
+            <ion-icon name="eye-off-outline"  slot="end" (click)="togglePassword()" *ngIf="showPassword"></ion-icon>
         </ion-item>
         
         

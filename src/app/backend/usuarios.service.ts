@@ -3,6 +3,7 @@ import { FirestoreService } from '../service/firestore.service';
 import { Usuario } from '../model';
 import { Observable, filter, map, pipe, tap } from 'rxjs';
 import { FirestoreAuthService } from '../service/firestore-auth.service';
+import { NotificacionService } from '../service/notificacion.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class UsuariosService {
 
   uid= '';
 
-  constructor(public firestoreService: FirestoreService,  public firestroreAuth: FirestoreAuthService) {
+  constructor(public firestoreService: FirestoreService,  public firestroreAuth: FirestoreAuthService, public notificacion: NotificacionService) {
   }
 
   changeUserLogin(change:boolean){
@@ -37,7 +38,7 @@ export class UsuariosService {
   }
 
   async createUser(nombre:string, correo:string, password:string, movil:string, rol:string){
-    const data = {nombre, correo, password, movil, uid:'', rol};
+    const data = {nombre, correo, movil, uid:'', rol};
       try{
         await this.firestroreAuth.registrarse(correo, password);
         const uid: string | null = await this.firestroreAuth.getUid();
@@ -46,6 +47,7 @@ export class UsuariosService {
           console.log(uidString);
           data['uid'] = uid;
           this.firestoreService.creatDoc(data, this.path, uidString);
+          this.notificacion.inicializar(uidString);
         } else {
           return false;
         }
@@ -61,8 +63,9 @@ export class UsuariosService {
     return this.firestroreAuth.login(correo, password);
   }
 
-  logout(){
+  async logout(){
     this.changeUserLogin(false);
+    await this.notificacion.eliminarToken();
     return this.firestroreAuth.logout();
   }
 

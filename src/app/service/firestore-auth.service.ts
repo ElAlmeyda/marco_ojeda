@@ -14,8 +14,8 @@ export class FirestoreAuthService {
     return this.auth.signInWithEmailAndPassword(email, password);
   }
 
-  logout(){
-    this.auth.signOut();
+  async logout(){
+    await this.auth.signOut();
   }
 
   registrarse(email: string, password: string){
