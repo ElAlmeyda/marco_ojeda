@@ -4,6 +4,7 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable, map, switchMap } from 'rxjs';
 import { Pedido } from '../model';
+import { idToken } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -33,11 +34,7 @@ export class FirestoreService {
     return collection.doc(id).update(data);
   }
 
-  updateDocNotificacion(data: any, path: string) {
-    // Usamos directamente doc(path) para obtener la referencia al documento
-    const docRef = this.database.doc(`${path}`);
-    return docRef.update(data);
-  }
+
 
   addDoc(path:string, data: any, id:string){
     return this.database.collection(path).doc(id).set(data);
@@ -73,5 +70,54 @@ export class FirestoreService {
 
   getUserPedidos(): Observable<any[]> {
     return this.database.collectionGroup('Carrito').valueChanges();
+  }
+
+  agregarTokens(idToken: string, uid: string): Promise<void> {
+    const docRef = this.database.doc(`Usuarios/${uid}`);
+    return docRef.get().toPromise().then((docSnapshot) => {
+      if (docSnapshot && docSnapshot.exists) {
+        const data = docSnapshot.data() as { token: string[] };
+        const currentToken = data.token || [];
+        if (!currentToken.includes(idToken)) {
+          const updateToken = [...currentToken, idToken];
+          return docRef.update({
+            token: updateToken
+          });
+        } else {
+          return Promise.resolve();
+        }
+      } else {
+        return docRef.set({
+          token: [idToken]
+        });
+      }
+    }).catch((error) => {
+      console.error('Error al actualizar los likes: ', error);
+      return Promise.reject(error);
+    });
+  }
+
+
+  eliminarToken(uid: string): Promise<void> {
+    const docRef = this.database.doc(`usuario/${uid}`);
+
+  // Obtener el documento actual para no sobrescribir los likes anteriores
+    return docRef.get().toPromise().then((docSnapshot) => {
+      if (docSnapshot && docSnapshot.exists) {
+        const data = docSnapshot.data() as { token: string[] };
+        const currentLikes = data.token || [];
+
+        // Filtrar el like que queremos eliminar
+
+        // Actualizar la lista en Firestore
+        return docRef.update({ token: null });
+      } else {
+        // Si el documento no existe, simplemente retornamos una promesa resuelta
+        return Promise.resolve(); // O puedes optar por Promise.reject(new Error('Usuario no encontrado'));
+      }
+    }).catch((error) => {
+      console.error('Error al eliminar el like: ', error);
+      return Promise.reject(error); // Devolvemos la promesa rechazada en caso de error
+    });
   }
 }

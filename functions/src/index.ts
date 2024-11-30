@@ -33,64 +33,73 @@ const sendNotificacionPush = async (
   }
 };
 
-let message = {
-  title: '',
-  content: '',
-};
-
 // Función para detectar cambios en las citas
 export const notificarCambioCita = onDocumentWritten(
   'Usuarios/{usuarioId}/Cita/{citaId}',
   async (event: any) => {
-    const beforeData = event.data?.before.data(); // Estado antes de la actualización
-    const afterData = event.data?.after.data(); // Estado después de la actualización
-    const usuarioId = afterData.usuarioId || event.params?.usuarioId;
+    const afterData = event.data?.after.data(); 
+    const beforeData = event.data?.before.data();
+    const usuarioId = afterData?.usuarioId || event.params?.usuarioId;
 
-    if (!beforeData || !afterData) {
+    if (!afterData) {
       console.error('Datos inválidos en el evento');
       return;
     }
-
-    const citaId = event.params.citaId;
-
-    // Verificar si el estado o la hora han cambiado
-    if (beforeData.estado !== afterData.estado) {
-      const usuarioDoc = await firestore.collection('Usuarios').doc(usuarioId).get();
-
-      if (!usuarioDoc.exists) {
-        console.error(`Usuario ${usuarioId} no encontrado.`);
-        return;
+    if(beforeData.estado === "pendiente"){
+      if (afterData.estado) {
+        const usuarioDoc = await firestore.collection('Usuarios').doc(usuarioId).get();
+  
+  
+        if (!usuarioDoc.exists) {
+          console.error(`Usuario ${usuarioId} no encontrado.`);
+          return;
+        }
+  
+        const tokens = usuarioDoc.data()?.token || []; // Obtener los tokens de notificación
+  
+        if (tokens.length === 0) {
+          console.log(`No hay tokens registrados para el usuario ${usuarioId}.`);
+          return;
+        }
+  
+        let formattedDate = '';
+        if (afterData.dia) {
+          const date = new Date(afterData.dia);
+          const day = String(date.getDate()).padStart(2, '0');
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const year = date.getFullYear();
+          formattedDate = `${day}/${month}/${year}`;
+        }
+  
+        let message = {
+          title: '',
+          content: '',
+        };
+  
+        switch (afterData.estado) {
+          case 'aceptado':
+            message.title = 'Cita Aceptada';
+            message.content = `Tu cita del dia ` + formattedDate + ` a las ` +  afterData.hora + `H ha sido aceptada.`;
+            break;
+          case 'anulada':
+            message.title = 'Cita Anulada';
+            message.content = `Tu cita del dia ` + formattedDate + ` a las ` +  afterData.hora + `H ha sido anulada.`;
+            break;
+          case 'editada':
+            message.title = 'Cita Reprogramada';
+            message.content = `Tu cita ha sido reprogramada para el día ` + formattedDate + ` a las ` + afterData.hora + `H`;
+            break;
+          default:
+            console.log('Estado desconocido, no se enviará notificación');
+            return; // Si el estado es desconocido, no se envía notificación
+        }
+  
+        // Enviar la notificación
+        const data = { enlace: `/perfil` + usuarioId };
+        await sendNotificacionPush(tokens, message, data);
+      } else {
+        console.log('El estado de la cita no ha sido actualizado correctamente.');
       }
-
-      const tokens = usuarioDoc.data()?.token || []; // Obtener los tokens de notificación
-
-      if (tokens.length === 0) {
-        console.log(`No hay tokens registrados para el usuario ${usuarioId}.`);
-        return;
-      }
-
-      // Crear mensaje basado en el nuevo estado
-      switch (afterData.estado) {
-        case 'aceptado':
-          message.title = 'Cita Aceptada';
-          message.content = `Tu cita ha sido aceptada.`;
-          break;
-        case 'anulada':
-          message.title = 'Cita Anulada';
-          message.content = `Tu cita ha sido anulada.`;
-          break;
-        case 'editada':
-          message.title = 'Cita Reprogramada';
-          message.content = `Tu cita ha sido reprogramada para el ${new Date(
-            afterData.hora
-          ).toLocaleString()}.`;
-          break;
-      }
-
-      // Enviar notificación
-      const data = { enlace: `/perfil` }; // Puedes personalizar el enlace
-      await sendNotificacionPush(tokens, message, data);
-      console.log(`Notificación enviada a usuario ${usuarioId} para la cita ${citaId}.`);
     }
   }
 );
@@ -99,60 +108,64 @@ export const notificarCambioCita = onDocumentWritten(
 export const notificarRetrasoAdelantoCita = onDocumentWritten(
   'Usuarios/{usuarioId}/Cita/{citaId}',
   async (event: any) => {
-    const beforeData = event.data?.before.data(); // Estado antes de la actualización
-    const afterData = event.data?.after.data(); // Estado después de la actualización
+    const beforeData = event.data?.before.data(); 
+    const afterData = event.data?.after.data(); 
+    const usuarioId = afterData?.usuarioId || event.params?.usuarioId;
 
+
+    // Si no hay datos antes o después, no procesamos el evento
     if (!beforeData || !afterData) {
-      console.error('Datos inválidos en el evento');
+      console.error('Datos inválidos en el evento (beforeData o afterData no encontrados)');
       return;
     }
 
-    const citaId = event.params.citaId;
 
-    // Verificar si la cita está aceptada y si la hora ha cambiado
-    if (afterData.estado === 'aceptada' && beforeData.hora !== afterData.hora) {
-      const beforeHora = new Date(beforeData.hora);
-      const afterHora = new Date(afterData.hora);
-
-      // Comparar si la cita se adelantó o se retrasó
-      let timeDifference = afterHora.getTime() - beforeHora.getTime();
-      let timeString = '';
-
-      if (timeDifference > 0) {
-        // La cita fue retrasada
-        timeString = `Tu cita ha sido retrasada. Nueva hora: ${afterHora.toLocaleString()}.`;
-      } else if (timeDifference < 0) {
-        // La cita fue adelantada
-        timeString = `Tu cita ha sido adelantada. Nueva hora: ${afterHora.toLocaleString()}.`;
-      }
-
-      if (timeString) {
-        // Enviar notificación de cambio de hora
-        const usuarioId = afterData.usuarioId; // ID del usuario asociado a la cita
-        const usuarioDoc = await firestore.collection('Usuarios').doc(usuarioId).get();
-
+    // Comprobar si la cita estaba "aceptada" antes del cambio
+    if (beforeData.estado === 'aceptado') {
+      const usuarioDoc = await firestore.collection('Usuarios').doc(usuarioId).get();
         if (!usuarioDoc.exists) {
           console.error(`Usuario ${usuarioId} no encontrado.`);
           return;
         }
-
-        const tokens = usuarioDoc.data()?.token || []; // Obtener los tokens de notificación
-
+        const tokens = usuarioDoc.data()?.token || [];
         if (tokens.length === 0) {
           console.log(`No hay tokens registrados para el usuario ${usuarioId}.`);
           return;
         }
 
-        // Enviar la notificación de cambio de hora
-        const horaChangeMessage = {
-          title: 'Cambio en la hora de tu cita',
-          content: timeString,
+        let message = {
+          title: '',
+          content: '',
         };
 
-        const data = { enlace: `/perfil` }; // Puedes personalizar el enlace
-        await sendNotificacionPush(tokens, horaChangeMessage, data);
-        console.log(`Notificación de cambio de hora enviada a usuario ${usuarioId} para la cita ${citaId}.`);
-      }
+        if (afterData.hora !== beforeData.hora) {
+          // Función para convertir "HH:mm" a un objeto Date
+          const stringToTime = (timeString: string): Date => {
+            const [hours, minutes] = timeString.split(':').map(Number);
+            const date = new Date(); // Usamos la fecha actual como base
+            date.setHours(hours, minutes, 0, 0); // Ajustamos solo la hora y los minutos
+            return date;
+          };
+    
+          const oldTime = stringToTime(beforeData.hora);
+          const newTime = stringToTime(afterData.hora);
+    
+          // Calcular la diferencia en minutos
+          const differenceInMinutes = (newTime.getTime() - oldTime.getTime()) / (1000 * 60);
+    
+          // Generar texto amigable
+          const differenceText =
+            differenceInMinutes > 0
+              ? `Tu cita ha sufrido un retraso de ${differenceInMinutes} minutos.`
+              : `Tu cita ha sido adelantada ${Math.abs(differenceInMinutes)} minutos.`;
+
+          message = {
+            title: 'Cambio de Hora en tu Cita',
+            content: `${differenceText} La nueva hora es ${afterData.hora}.`,
+         };
+        }
+        const data = { enlace: `/perfil` + usuarioId }; // Puedes personalizar el enlace
+        await sendNotificacionPush(tokens, message, data);
     }
   }
 );

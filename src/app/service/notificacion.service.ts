@@ -129,13 +129,8 @@ export class NotificacionService {
 
   async guardarToken(token: string) {
     if (this.uid) {
-      const path = `Usuarios/${this.uid}`;  // Ruta en Firestore
-      const userUpdate = {
-        token: token,
-      };
-  
       try {
-        await this.firestoreService.updateDocNotificacion(userUpdate, path);  // Guardamos el token en Firestore
+        await this.firestoreService.agregarTokens(token, this.uid);  // Guardamos el token en Firestore
         console.log('Token guardado correctamente en Firestore');
       } catch (error) {
         console.error('Error al guardar el token en Firestore:', error);
@@ -145,13 +140,8 @@ export class NotificacionService {
 
   async eliminarToken() {
     if (this.uid) {
-      const path = `Usuarios/${this.uid}`;  // Ruta en Firestore
-      const userUpdate = {
-        token: null,
-      };
-  
       try {
-        await this.firestoreService.updateDocNotificacion(userUpdate, path);  // Guardamos el token en Firestore
+        await this.firestoreService.eliminarToken(this.uid);  // Guardamos el token en Firestore
         console.log('Token guardado correctamente en Firestore');
       } catch (error) {
         console.error('Error al guardar el token en Firestore:', error);
