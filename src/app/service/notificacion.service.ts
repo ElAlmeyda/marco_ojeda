@@ -10,6 +10,7 @@ import { Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { FirestoreAuthService } from './firestore-auth.service';
 import { FirestoreService } from './firestore.service';
+import { getMessaging, getToken } from 'firebase/messaging';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class NotificacionService {
 
 
   uid= '';
+  token= '';
 
   constructor(
     private platform: Platform,
@@ -141,13 +143,26 @@ export class NotificacionService {
   async eliminarToken() {
     if (this.uid) {
       try {
-        await this.firestoreService.eliminarToken(this.uid);  // Guardamos el token en Firestore
-        console.log('Token guardado correctamente en Firestore');
+        this.obtenerToken();
+        await this.firestoreService.eliminarToken(this.uid, this.token);  // Guardamos el token en Firestore
       } catch (error) {
-        console.error('Error al guardar el token en Firestore:', error);
       }
     }
-  }
+  }  
 
-  
+  async obtenerToken() {
+    const messaging = getMessaging();
+    try {
+      const token = await getToken(messaging, { vapidKey: 'BPn0jOtvqbcR4wTVViwpU1EuYyeZ_80qB7TjuGCs28L5lakZ9ATJMgG4BEXgfTyLt4l-rmS-RCuvUnrxTXzPMjc' });
+      if (token) {
+        console.log("Token de dispositivo obtenido: ", token);
+        // Aquí puedes guardar el token en Firestore o en algún lugar
+        this.token = token;  // Guarda el token en una propiedad de tu clase o servicio
+      } else {
+        console.log("No se pudo obtener el token");
+      }
+    } catch (error) {
+      console.error("Error al obtener el token de FCM:", error);
+    }
+  }
 }

@@ -1,15 +1,13 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { UsuariosService } from './backend/usuarios.service';
 import { FirestoreAuthService } from './service/firestore-auth.service';
 import { FirestoreService } from './service/firestore.service';
 import { Cita, Usuario } from './model';
 import { CarritoService } from './backend/carrito.service';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CitaService } from './backend/cita.service';
 import { NotificacionService } from './service/notificacion.service';
 import { MenuController } from '@ionic/angular';
-import { Capacitor } from '@capacitor/core';
-import { SplashScreen } from '@capacitor/splash-screen';
 
 
 @Component({
@@ -45,7 +43,6 @@ export class AppComponent {
   constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, 
               public carritoService: CarritoService, public router: Router, public citas: CitaService, public notificacion: NotificacionService,
               private menu: MenuController) {
-                this.showSplash();
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -122,10 +119,5 @@ export class AppComponent {
     this.menu.close();
   }
 
-  async showSplash(){
-    await SplashScreen.show({
-      autoHide: true,
-      showDuration: 0
-    });
-  }
+  
 }

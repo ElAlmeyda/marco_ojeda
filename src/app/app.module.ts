@@ -28,12 +28,11 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { NgxPayPalModule } from 'ngx-paypal';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, HttpClientModule, IonicModule.forRoot(), AppRoutingModule, IonicModule, CommonModule,  
-    AngularFireModule.initializeApp(environment.firebaseConfig), NgxPayPalModule, AngularFireStorageModule, AngularFirestoreModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig), AngularFireStorageModule, AngularFirestoreModule,
     //provideAppCheck(() => { 
       // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_ //const provider = new ReCaptchaEnterpriseProvider(/* reCAPTCHA Enterprise site key */);
       //return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });

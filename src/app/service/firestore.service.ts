@@ -98,25 +98,32 @@ export class FirestoreService {
   }
 
 
-  eliminarToken(uid: string): Promise<void> {
+  eliminarToken(uid: string, token: string): Promise<void> {
     const docRef = this.database.doc(`usuario/${uid}`);
-
-  // Obtener el documento actual para no sobrescribir los likes anteriores
+  
+    // Obtener el documento actual para no sobrescribir los tokens anteriores
     return docRef.get().toPromise().then((docSnapshot) => {
       if (docSnapshot && docSnapshot.exists) {
         const data = docSnapshot.data() as { token: string[] };
-        const currentLikes = data.token || [];
-
-        // Filtrar el like que queremos eliminar
-
-        // Actualizar la lista en Firestore
-        return docRef.update({ token: null });
+        const currentTokens = data.token || [];
+  
+        // Filtrar el token que queremos eliminar
+        const updatedTokens = currentTokens.filter((t) => t !== token);
+  
+        // Si el array de tokens cambió (es decir, el token fue eliminado), actualizamos Firestore
+        if (updatedTokens.length !== currentTokens.length) {
+          return docRef.update({ token: updatedTokens });
+        } else {
+          // Si el token no estaba en el array, no hacemos nada
+          console.log('El token no se encontraba en el array');
+          return Promise.resolve();  // O lanzar un error si prefieres
+        }
       } else {
-        // Si el documento no existe, simplemente retornamos una promesa resuelta
-        return Promise.resolve(); // O puedes optar por Promise.reject(new Error('Usuario no encontrado'));
+        // Si el documento no existe, retornamos una promesa resuelta
+        return Promise.resolve();  // O puedes optar por Promise.reject(new Error('Usuario no encontrado'));
       }
     }).catch((error) => {
-      console.error('Error al eliminar el like: ', error);
+      console.error('Error al eliminar el token: ', error);
       return Promise.reject(error); // Devolvemos la promesa rechazada en caso de error
     });
   }

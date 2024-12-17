@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { IonModal, ToastController } from '@ionic/angular';
 import { CitaService } from 'src/app/backend/cita.service';
-import { Cita, Urgencia } from 'src/app/model';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
   selector: 'app-prediagnostico-virtual',
@@ -65,8 +65,60 @@ export class PrediagnosticoVirtualPage implements OnInit {
     return this.urgencia.foto ? this.urgencia.foto : 'Seleccionar foto';
   }
 
-  openFileInput() {
-    this.fileInput.nativeElement.click();
+  async openFileInput() {
+    // Verificar permisos antes de proceder
+    const hasPermission = await this.checkPermissions();
+    if (!hasPermission) {
+      console.log('Permisos requeridos no concedidos.');
+      return; // Si no se tienen los permisos necesarios, termina la función
+    }
+
+    // Mostrar un mensaje para que el usuario elija entre cámara o galería
+    const action = confirm('¿Quieres tomar una foto o seleccionar de la galería? Aceptar para tomar foto, cancelar para galería.');
+    if (action) {
+      // Si elige tomar una foto
+      await this.takePhoto();
+    } else {
+      // Si elige la galería, disparar el input file
+      this.fileInput.nativeElement.click();
+    }
+  }
+
+  async takePhoto() {
+    try {
+      const photo = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Camera,
+      });
+      if(photo.webPath){
+        this.urgencia.foto = photo.webPath;
+      }
+    } catch (error) {
+      console.error('Error al tomar la foto:', error);
+    }
+  }
+
+  async checkPermissions() {
+    // Verificar permisos de cámara
+    const cameraPermission = await Camera.checkPermissions();
+    if (cameraPermission.camera !== 'granted') {
+      const request = await Camera.requestPermissions({ permissions: ['camera'] });
+      if (request.camera !== 'granted') {
+        return false; 
+      }
+    }
+    // Verificar permisos de galería (fotos)
+    const photosPermission = await Camera.checkPermissions();
+    if (photosPermission.photos !== 'granted') {
+      const request = await Camera.requestPermissions({ permissions: ['photos'] });
+      if (request.photos !== 'granted') {
+        return false; 
+      }
+    }
+
+    return true;
   }
 
 

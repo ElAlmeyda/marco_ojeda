@@ -50,7 +50,6 @@ export class RegistrarsePage implements OnInit {
       if (check) {
         this.router.navigate(['/folder']);
         this.presentToast("Registrado con éxito", 'success');
-        console.log(this.crearUser);
       } else {          
       this.presentToast("Registrado fallido, ocurrió un error al crear el usuario", 'danger');
       }

@@ -1,10 +1,74 @@
 import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 import { onDocumentWritten } from 'firebase-functions/v2/firestore';
 
 admin.initializeApp();
 
 const firestore = admin.firestore();
+const stripe = require('stripe')('sk_test_51QS06lKujQS3YPoUBkLtllPARE2HucnvgX9itK5T1Xg0Uotm6RM5z8LDJSg8d1x5VpxkhCBilUs8nWe2NMN18QKG00WWCyomTE');
 
+exports.createCheckoutSession = functions.https.onRequest(async (req, res) => {
+  
+  try {
+    if (req.method !== 'POST') {
+      res.status(405).send('Método no permitido');
+      return; // Asegúrate de terminar la ejecución aquí
+    }
+
+    const { products } = req.body;
+
+    if (!products || !Array.isArray(products)) {
+      res.status(400).send('Los productos son requeridos y deben ser un arreglo');
+      return; // Asegúrate de terminar la ejecución aquí
+    }
+
+    const line_items = products.map((product) => ({
+      price_data: {
+        currency: 'usd',
+        product_data: { name: product.name },
+        unit_amount: product.price * 100,
+      },
+      quantity: product.quantity,
+    }));
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items,
+      mode: 'payment',
+      success_url: 'https://servicio-4f831.web.app/carrito?status=success',
+      cancel_url: 'https://servicio-4f831.web.app/carrito?status=cancel',
+    });
+
+    res.status(200).json({ url: session.url });
+  } catch (error) {
+    console.error('Error al crear la sesión:', error);
+    res.status(500).send('Hubo un error al crear la sesión de pago');
+  }
+});
+
+exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
+  const endpointSecret = 'whsec_XSOi39uneWdJj5EE5agHlJghefGsZPbz';
+  const sig = req.headers['stripe-signature'];
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.rawBody, sig, endpointSecret);
+  } catch (err) {
+    res.status(400).send(`Webhook Error: ${err}`);
+    return; // Asegúrate de terminar la ejecución aquí
+  }
+
+  // Manejar el evento
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    console.log('Pago completado:', session);
+
+    // Procesar el pedido aquí (por ejemplo, actualizar la base de datos)
+  }
+
+  res.status(200).send('Evento recibido');
+});
 
 // Función para enviar notificaciones push
 const sendNotificacionPush = async (
