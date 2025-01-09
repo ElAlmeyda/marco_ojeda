@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { CitaService } from 'src/app/backend/cita.service';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
-import { Cita, Usuario } from 'src/app/model';
+import { Cita, Pedido, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import 'hammerjs';
+import { CarritoService } from 'src/app/backend/carrito.service';
 
 
 @Component({
@@ -30,13 +31,18 @@ export class PerfilPage implements OnInit {
 
   historial: Cita[] = [];
 
+  public pedido: Pedido[] = []
+
   showList = false;
+  pedidoList = false;
 
 
   tipoPerfil='Datos';
 
 
-  constructor(public auth: FirestoreAuthService, public user: UsuariosService, public citas: CitaService, private alertController: AlertController) { 
+  constructor(public auth: FirestoreAuthService, public user: UsuariosService, public citas: CitaService, private alertController: AlertController,
+              private carritoService: CarritoService
+  ) { 
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -60,6 +66,7 @@ export class PerfilPage implements OnInit {
         this.usuario = usuario;
         this.obtenerCita();
         this.getHistorial();
+        this.getPedidosAceptados();
       } else {
         console.log('Usuario no encontrado');
       }
@@ -178,6 +185,10 @@ export class PerfilPage implements OnInit {
     this.showList = !this.showList;
   }
 
+  pedidosList() {
+    this.pedidoList = !this.pedidoList;
+  }
+
   revisarCitasVencidas() {
     const ahora = new Date();  // Hora actual
     
@@ -232,5 +243,13 @@ export class PerfilPage implements OnInit {
     await alert.present();
   }
 
+
+  getPedidosAceptados() {
+    this.carritoService.getPedidoAceptado().subscribe((res: Pedido | null) => {
+      if (res) {
+        this.pedido = [res];  // Asignar el pedido si no es null
+      }
+    });
+  }
 
 }

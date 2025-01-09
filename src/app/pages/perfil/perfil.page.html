@@ -78,6 +78,36 @@
           </div>
         </ion-item>
       </ion-card>
+      <ion-card>
+        <ion-item lines="none" style="text-align: center;">
+          <ion-label style="font-size: 20px; color: rgb(255, 255, 255);">Pedidos Aceptados</ion-label>
+          <!-- Icono para desplegar/colapsar el historial -->
+          <ion-icon slot="end" name="chevron-down-outline" *ngIf="!pedidoList" (click)="pedidosList()"></ion-icon>
+          <ion-icon slot="end" name="chevron-up-outline" *ngIf="pedidoList" (click)="pedidosList()"></ion-icon>
+        </ion-item>
+        <ion-item lines="none" style="text-align: center;">
+          <div style="margin-left: 1em;" *ngIf="pedidoList" >
+            <ion-item *ngFor="let item of pedido; let i = index">
+              <ion-label>
+                <h2>Pedido {{ i + 1 }}</h2> <!-- Número de pedido, comenzando desde 1 -->
+                
+                <p><strong>Productos:</strong></p>
+                <ion-list>
+                  <!-- Iterar sobre los productos dentro de cada pedido -->
+                  <ion-item *ngFor="let producto of item.productos">
+                    <ion-label>
+                      <p>{{ producto.producto.nombre }} - {{ producto.cantidad }} x {{ producto.producto.precio | currency: 'EUR' }}</p>
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+            
+                <p><strong>Precio Total:</strong> {{ item.precioTotal | currency: 'EUR' }}</p>
+                <p><strong>Estado:</strong> {{ item.estado }}</p>
+              </ion-label>
+            </ion-item>
+          </div>
+        </ion-item>
+      </ion-card>
     </div>
 
     <div *ngIf="tipoPerfil == 'Pendientes'">

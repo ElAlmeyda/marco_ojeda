@@ -49,7 +49,9 @@ export class CarritoPage implements OnInit {
       
       // Mostrar un mensaje en función del estado del pago
       if (this.estado === 'success') {
-        this.mensaje = '¡Tu pedido ha sido procesado con éxito!';
+        this.carrito.estado = "aceptado";
+        this.carritoService.comprado(this.carrito);
+        this.mensaje = '¡Tu pedido ha sido procesado con éxito! Lo encontrara en su perfil';
       } else if (this.estado === 'cancel') {
         this.mensaje = 'El pago ha sido cancelado. Intenta nuevamente.';
       }
@@ -78,8 +80,8 @@ export class CarritoPage implements OnInit {
     }
   }
 
-  cargarPedido(){
-    this.carritoService.getCarrito().subscribe(res =>{
+  cargarPedido() {
+    this.carritoService.getCarrito().subscribe(res => {
       this.carrito = res;
       this.actualizarImagenes();
       console.log(this.carrito);
@@ -87,54 +89,75 @@ export class CarritoPage implements OnInit {
   }
 
   async procesarPago() {
-    // Cargar Stripe
-    await loadStripe('pk_test_51QS06lKujQS3YPoU2aMt9ZACEyrq5dgTvsHLu4ABpGhrxACtQ23kZ0cHjU1i82kYjUFDGESQzgDBvknugJkItBlG00XYcD99RX')
-      .then((stripe) => {
-        this.stripe = stripe;
-      })
-      .catch((error) => {
-        console.error('Error al cargar Stripe:', error);
-        this.mostrarToast('Error al cargar Stripe. Intenta más tarde.');
-      });
-
-    // Productos (pasa tu propio carrito aquí)
-    const productos = [
-      { nombre: 'Producto 1', precio: 2000, cantidad: 1 },
-      { nombre: 'Producto 2', precio: 1500, cantidad: 2 },
-    ];
-
     try {
-      // Llamada al backend para crear la sesión de pago
-      const response = await fetch('https://us-central1-servicio-4f831.cloudfunctions.net/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ products: productos }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al crear la sesión de pago');
-      }
-
-      const session = await response.json();
-
-      // Redirigir al usuario a Stripe Checkout
-      const { error } = await this.stripe.redirectToCheckout({ sessionId: session.id });
-
-      if (error) {
-        console.error('Error al redirigir a Stripe Checkout:', error);
-        this.mostrarToast('Error al redirigir al pago. Intenta nuevamente.');
+      console.log('Contenido del carrito:', this.carrito); // <-- Revisa el carrito al iniciar
+  
+      this.stripe = await loadStripe('pk_test_51QS06lKujQS3YPoU2aMt9ZACEyrq5dgTvsHLu4ABpGhrxACtQ23kZ0cHjU1i82kYjUFDGESQzgDBvknugJkItBlG00XYcD99RX');
+      if (!this.stripe) {
+        this.mostrarToast('Error al cargar Stripe. Intenta más tarde.');
         return;
       }
-
-      // Si no hay errores, el flujo continúa en Stripe Checkout
+  
+      const productosStripe = this.mapearCarritoAProductosStripe(this.carrito);
+      console.log('Productos para Stripe:', productosStripe); // <-- Verifica los productos mapeados
+  
+      const session = await this.crearSesionDePago(productosStripe);
+      await this.redirigirAStripe(session.id);
     } catch (error) {
       console.error('Error al procesar el pago:', error);
       this.mostrarToast('Hubo un problema al procesar tu pago. Intenta nuevamente.');
     }
   }
+  
+  private mapearCarritoAProductosStripe(carrito: any): any[] {
+    
+    const precioTotal = carrito.precioTotal; // Ejemplo: precio total
+    const productosCarrito = carrito.productos;
+    console.log("ProductoScARRITO",productosCarrito);
 
+    if (!productosCarrito.length) {
+      throw new Error('El carrito está vacío o los datos no son válidos');
+    }
+  
+    return productosCarrito.map((item: any) => {
+      if (!item.producto || !item.producto.nombre || !item.producto.precio || !item.cantidad) {
+        console.error('Producto inválido en el carrito:', item); // <-- Log detallado de cada producto
+        throw new Error('Faltan datos en algún producto del carrito');
+      }
+  
+      return {
+        name: item.producto.nombre,
+        price: Math.round(Number(item.producto.precio) * 100),
+        quantity: item.cantidad,
+      };
+    });
+  }
+  
+  private async crearSesionDePago(productos: any[]): Promise<any> {
+    console.log('Enviando al backend los productos:', productos); // <-- Agrega esto para verificar los datos
+  
+    const response = await fetch('https://us-central1-servicio-4f831.cloudfunctions.net/createCheckoutSession', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ products: productos }),
+    });
+  
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error del backend:', errorText); // <-- Registra el error del backend
+      throw new Error(`Error al crear la sesión de pago: ${errorText}`);
+    }
+  
+    return response.json();
+  }
+  
+  private async redirigirAStripe(sessionId: string): Promise<void> {
+    const { error } = await this.stripe.redirectToCheckout({ sessionId });
+    if (error) {
+      console.error('Error al redirigir a Stripe Checkout:', error);
+      throw new Error('Error al redirigir al pago. Intenta nuevamente.');
+    }
+  }
   
 
   async eliminarDelCarrito(producto: ProductoPedido) {

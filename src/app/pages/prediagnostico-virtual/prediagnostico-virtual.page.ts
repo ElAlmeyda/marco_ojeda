@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { IonModal, ToastController } from '@ionic/angular';
+import { ActionSheetController, IonModal, ToastController } from '@ionic/angular';
 import { CitaService } from 'src/app/backend/cita.service';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
@@ -31,7 +31,7 @@ export class PrediagnosticoVirtualPage implements OnInit {
   terminosAceptados: boolean = false;
 
 
-  constructor(public cita: CitaService, public toastController: ToastController, private cdr: ChangeDetectorRef) { }
+  constructor(public cita: CitaService, public toastController: ToastController, private cdr: ChangeDetectorRef, private actionSheetController: ActionSheetController) { }
 
   ngOnInit() {
   }
@@ -47,23 +47,23 @@ export class PrediagnosticoVirtualPage implements OnInit {
     }
   }
 
-  nuevaImagen(event:any) {
+  nuevaImagen(event: any) {
     console.log(event);
-    if(event.target.files && event.target.files[0]) {
+    if (event.target.files && event.target.files[0]) {
       this.file = event.target.files[0];
       const reader = new FileReader();
       this.urgencia.foto = this.file.name;
-      reader.onload = (async (image) =>{
+      reader.onload = (async (image) => {
         this.imagenSubidaUrl = image.target?.result as string;
       });
       reader.readAsDataURL(event.target.files[0]);
     }
-
   }
 
   mostrarTextoSeleccionarFoto(): string {
     return this.urgencia.foto ? this.urgencia.foto : 'Seleccionar foto';
   }
+
 
   async openFileInput() {
     // Verificar permisos antes de proceder
@@ -73,16 +73,39 @@ export class PrediagnosticoVirtualPage implements OnInit {
       return; // Si no se tienen los permisos necesarios, termina la función
     }
 
-    // Mostrar un mensaje para que el usuario elija entre cámara o galería
-    const action = confirm('¿Quieres tomar una foto o seleccionar de la galería? Aceptar para tomar foto, cancelar para galería.');
-    if (action) {
-      // Si elige tomar una foto
-      await this.takePhoto();
-    } else {
-      // Si elige la galería, disparar el input file
-      this.fileInput.nativeElement.click();
-    }
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Selecciona una opción',
+      buttons: [
+        {
+          text: 'Tomar foto',
+          icon: 'camera',
+          handler: () => {
+            this.takePhoto();
+          }
+        },
+        {
+          text: 'Seleccionar de la galería',
+          icon: 'images',
+          handler: () => {
+            this.selectFromGallery();
+          }
+        },
+        {
+          text: 'Cancelar',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            console.log('Operación cancelada');
+          }
+        }
+      ]
+    });
+
+    await actionSheet.present();
+    
   }
+
+  
 
   async takePhoto() {
     try {
@@ -92,11 +115,28 @@ export class PrediagnosticoVirtualPage implements OnInit {
         resultType: CameraResultType.Uri,
         source: CameraSource.Camera,
       });
-      if(photo.webPath){
-        this.urgencia.foto = photo.webPath;
+      if (photo.webPath) {
+        this.urgencia.foto = photo.webPath; // La foto tomada se asigna a 'urgencia.foto'
       }
     } catch (error) {
       console.error('Error al tomar la foto:', error);
+    }
+  }
+
+  // Función para seleccionar una foto desde la galería
+  async selectFromGallery() {
+    try {
+      const photo = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Photos, // Abre la galería
+      });
+      if (photo.webPath) {
+        this.urgencia.foto = photo.webPath; // La foto seleccionada de la galería se asigna a 'urgencia.foto'
+      }
+    } catch (error) {
+      console.error('Error al seleccionar la foto desde la galería:', error);
     }
   }
 
@@ -117,7 +157,6 @@ export class PrediagnosticoVirtualPage implements OnInit {
         return false; 
       }
     }
-
     return true;
   }
 

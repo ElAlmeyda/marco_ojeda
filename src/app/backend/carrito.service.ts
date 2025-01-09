@@ -3,7 +3,7 @@ import { Pedido, Producto, ProductoPedido, Usuario } from "../model";
 import { FirestoreAuthService } from "../service/firestore-auth.service";
 import { FirestoreService } from "../service/firestore.service";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, Subject, Subscription } from "rxjs";
+import { BehaviorSubject, map, Observable, Subject, Subscription } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class CarritoService {
   cliente!: Usuario;
 
 
-  constructor(public fireAuth: FirestoreAuthService, public firestore: FirestoreService, public router: Router) { 
+  constructor(public fireAuth: FirestoreAuthService, public firestore: FirestoreService, public router: Router, public firestroreAuth: FirestoreAuthService) { 
     this.fireAuth.stateAuth().subscribe(res => {
       if(res != null){
         this.uid = res.uid;
@@ -98,6 +98,12 @@ export class CarritoService {
     return this.pedido$.asObservable();
   }
 
+  getPedidoAceptado(): Observable<Pedido | null> {
+    return this.pedido$.asObservable().pipe(
+      map((pedido: Pedido) => pedido.estado === 'aceptado' ? pedido : null)
+    );
+  }
+
   calcularTotal() {
     let precioFinal = 0;
     for (const item of this.pedido.productos) {
@@ -128,8 +134,37 @@ export class CarritoService {
     this.firestore.updateDoc(this.pedido, path, this.uid);
   }
 
-  public comprado(pedido: Pedido){
+  public async comprado(pedido: Pedido){
     const path = '/Usuarios/' + this.uid + '/' + this.path;
-    this.firestore.updateDoc(pedido, path, this.uid)
-  }
+    
+    // Actualizar el pedido a aceptado
+    this.firestore.updateDoc(pedido, path, this.uid);
+
+    if (this.pedido.estado === 'aceptado') {
+      // Vaciar el carrito actual (productos)
+      this.pedido.productos = []; 
+      this.pedido.estado = 'pendiente'; // Establecer el estado del nuevo pedido como pendiente
+      const uid: string | null = await this.firestroreAuth.getUid();
+
+      // Crear un nuevo pedido vacío
+      
+      const nuevoPedido: Pedido = {
+        cliente: this.pedido.cliente,  // Usamos la información del cliente actual
+        productos: [],  // El carrito está vacío al crear un nuevo pedido
+        precioTotal: 0,  // No hay productos, por lo que el precio es 0
+        estado: 'pendiente',  // Estado pendiente para el nuevo pedido
+        id: ''  // Usar el UID del cliente
+      };
+      if(uid){
+        nuevoPedido['id'] = uid;
+      }
+
+      // Guardar el nuevo pedido en la base de datos (esto creará el nuevo "carrito")
+      const nuevoPath = '/Usuarios/' + this.uid + '/' + this.path;
+      this.firestore.creatDoc(nuevoPedido, nuevoPath, this.uid);  // O crearDoc si es necesario
+
+      // Emitir el nuevo pedido a los observadores
+      this.pedido$.next(nuevoPedido);
+    }
+}
 }

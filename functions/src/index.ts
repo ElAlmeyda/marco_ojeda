@@ -6,69 +6,59 @@ admin.initializeApp();
 
 const firestore = admin.firestore();
 const stripe = require('stripe')('sk_test_51QS06lKujQS3YPoUBkLtllPARE2HucnvgX9itK5T1Xg0Uotm6RM5z8LDJSg8d1x5VpxkhCBilUs8nWe2NMN18QKG00WWCyomTE');
+const cors = require('cors')({ origin: '*' });
 
-exports.createCheckoutSession = functions.https.onRequest(async (req, res) => {
-  
-  try {
-    if (req.method !== 'POST') {
-      res.status(405).send('Método no permitido');
-      return; // Asegúrate de terminar la ejecución aquí
+exports.createCheckoutSession = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    try {
+      // Validar el método de solicitud
+      if (req.method !== 'POST') {
+        return res.status(405).send('Método no permitido');
+      }
+
+      // Validar y extraer los productos del cuerpo de la solicitud
+      const { products } = req.body;
+
+      if (!products || !Array.isArray(products) || products.length === 0) {
+        return res.status(400).send('Los productos son requeridos y deben ser un arreglo no vacío');
+      }
+
+      // Validación de cada producto
+      const line_items = products.map((product) => {
+        if (!product.name || typeof product.price !== 'number' || typeof product.quantity !== 'number' || product.price <= 0 || product.quantity <= 0) {
+          throw new Error('Cada producto debe tener nombre, precio y cantidad válidos');
+        }
+
+        return {
+          price_data: {
+            currency: 'eur',
+            product_data: { name: product.name },
+            unit_amount: product.price, // Stripe espera el precio en centavos
+          },
+          quantity: product.quantity,
+        };
+      });
+
+      // Crear la sesión de pago con Stripe
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items,
+        mode: 'payment',
+        success_url: 'https://servicio-4f831.web.app/carrito?status=success',
+        cancel_url: 'https://servicio-4f831.web.app/carrito?status=cancel',
+      });
+
+      // Responder con el ID de la sesión
+      return res.status(200).json({ id: session.id });
+    } catch (error) {
+      console.error('Error al crear la sesión:', error);
+
+      // Errores generales
+      return res.status(500).send('Hubo un error al crear la sesión de pago');
     }
-
-    const { products } = req.body;
-
-    if (!products || !Array.isArray(products)) {
-      res.status(400).send('Los productos son requeridos y deben ser un arreglo');
-      return; // Asegúrate de terminar la ejecución aquí
-    }
-
-    const line_items = products.map((product) => ({
-      price_data: {
-        currency: 'usd',
-        product_data: { name: product.name },
-        unit_amount: product.price * 100,
-      },
-      quantity: product.quantity,
-    }));
-
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items,
-      mode: 'payment',
-      success_url: 'https://servicio-4f831.web.app/carrito?status=success',
-      cancel_url: 'https://servicio-4f831.web.app/carrito?status=cancel',
-    });
-
-    res.status(200).json({ url: session.url });
-  } catch (error) {
-    console.error('Error al crear la sesión:', error);
-    res.status(500).send('Hubo un error al crear la sesión de pago');
-  }
+  });
 });
 
-exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
-  const endpointSecret = 'whsec_XSOi39uneWdJj5EE5agHlJghefGsZPbz';
-  const sig = req.headers['stripe-signature'];
-
-  let event;
-
-  try {
-    event = stripe.webhooks.constructEvent(req.rawBody, sig, endpointSecret);
-  } catch (err) {
-    res.status(400).send(`Webhook Error: ${err}`);
-    return; // Asegúrate de terminar la ejecución aquí
-  }
-
-  // Manejar el evento
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-    console.log('Pago completado:', session);
-
-    // Procesar el pedido aquí (por ejemplo, actualizar la base de datos)
-  }
-
-  res.status(200).send('Evento recibido');
-});
 
 // Función para enviar notificaciones push
 const sendNotificacionPush = async (

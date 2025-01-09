@@ -35,6 +35,7 @@ export interface Empleado {
 }
 
 export interface Pedido {
+    [x: string]: any;
     cliente: Usuario;
     productos: ProductoPedido [];
     precioTotal: number;
