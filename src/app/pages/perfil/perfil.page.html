@@ -85,6 +85,7 @@
           <ion-icon slot="end" name="chevron-down-outline" *ngIf="!pedidoList" (click)="pedidosList()"></ion-icon>
           <ion-icon slot="end" name="chevron-up-outline" *ngIf="pedidoList" (click)="pedidosList()"></ion-icon>
         </ion-item>
+
         <ion-item lines="none" style="text-align: center;">
           <div style="margin-left: 1em;" *ngIf="pedidoList" >
             <ion-item *ngFor="let item of pedidos; let i = index">

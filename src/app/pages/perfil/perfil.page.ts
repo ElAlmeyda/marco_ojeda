@@ -246,7 +246,7 @@ export class PerfilPage implements OnInit {
 
 
   getPedidos(){
-    this.firestore.getUserPedidos().subscribe((pedidos) => {
+    this.firestore.getUserPedidosPagados().subscribe((pedidos) => {
       this.pedidos = pedidos.filter(pedido => pedido.cliente.uid === this.uid);
     });
   }

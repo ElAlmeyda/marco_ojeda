@@ -72,6 +72,10 @@ export class FirestoreService {
     return this.database.collectionGroup('Carrito').valueChanges();
   }
 
+  getUserPedidosPagados(): Observable<any[]> {
+    return this.database.collectionGroup('Pedido').valueChanges();
+  }
+
   agregarTokens(idToken: string, uid: string): Promise<void> {
     const docRef = this.database.doc(`Usuarios/${uid}`);
     return docRef.get().toPromise().then((docSnapshot) => {
@@ -128,31 +132,25 @@ export class FirestoreService {
     });
   }
 
-  updatePedido(pedidoEstado: string, userId: string, pedidoId: string) {
-    console.log('Actualizando pedido con ID:', pedidoId);
-    
-    // Ruta del documento en la subcolección Carrito
+  updatePedido(nuevoEstado: string, userId: string, pedidoId: string) {
     const docRef = this.database
-      .collection('Usuarios')  // Colección Usuarios
-      .doc(userId)             // Documento del usuario específico
-      .collection('Carrito')   // Subcolección Carrito
-      .doc(pedidoId)           // Documento del pedido específico
+      .collection('Usuarios')
+      .doc(userId)
+      .collection('Pedido')
+      .doc(pedidoId);
   
-    // Obtener el documento y actualizar el campo 'estado'
     docRef.get().toPromise().then((docSnapshot) => {
       if (docSnapshot && docSnapshot.exists) {
-        // El documento existe, actualizamos solo el campo 'estado'
-        return docRef.update({ estado: pedidoEstado });
+        // El documento existe, procedemos a actualizar
+        return docRef.update({ estado: nuevoEstado });
       } else {
-        // El documento no existe, gestionamos el error
+        // El documento no existe, maneja el caso
         return Promise.reject('El documento no existe');
       }
-    })
-    .then(() => {
-      console.log(`Estado del pedido ${pedidoId} actualizado a 'pagado'`);
-    })
-    .catch((error) => {
-      console.error('Error al actualizar el estado del pedido:', error);
+    }).catch((error) => {
+      console.error('Error al actualizar el pedido:', error);
+      throw error;
     });
   }
+ 
 }

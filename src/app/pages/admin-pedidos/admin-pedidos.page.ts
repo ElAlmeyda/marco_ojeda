@@ -19,13 +19,14 @@ export class AdminPedidosPage implements OnInit {
   }
 
   getPedidos(){
-    this.firestore.getUserPedidos().subscribe((pedidos) => {
+    this.firestore.getUserPedidosPagados().subscribe((pedidos) => {
       this.pedidos = pedidos.filter(pedido => pedido.estado === 'pagado');
     });
   }
 
-  pedidoEntregado(id: any){
-    this.carritoService.comprado(id);
+  pedidoEntregado(item: Pedido){
+    console.log(item);
+    this.carritoService.updatePedido(item);
   }
 
 }

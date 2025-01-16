@@ -19,14 +19,14 @@
   </div>
 
   <ion-card *ngFor="let item of pedidos" style="font-family: 'Montserrat', sans-serif;">
-    <ion-card-header [routerLink]="['/editar-user', item.id]">
+    <ion-card-header>
       <ion-card-title > {{item.cliente.nombre}} </ion-card-title>
     </ion-card-header>
     <ion-card-content> {{item.precioTotal}} €
     </ion-card-content>
-    <ion-label style="margin-left: 15px;" *ngFor="let producto of item.productos"> {{producto.producto.nombre}} <br></ion-label>
+    <ion-label style="margin-left: 15px;" *ngFor="let producto of item.productos"> {{producto.producto.nombre}} ({{producto.cantidad}}) <br></ion-label>
     <ion-card-content style="text-align: right;"> 
-      <ion-icon name="checkmark-done-outline" style="font-size: 24px;" (click)="pedidoEntregado(item.id)"></ion-icon>
+      <ion-icon name="checkmark-done-outline" style="font-size: 24px;" (click)="pedidoEntregado(item)"></ion-icon>
     </ion-card-content>
   </ion-card>
 
