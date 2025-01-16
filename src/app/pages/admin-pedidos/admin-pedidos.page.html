@@ -26,7 +26,7 @@
     </ion-card-content>
     <ion-label style="margin-left: 15px;" *ngFor="let producto of item.productos"> {{producto.producto.nombre}} <br></ion-label>
     <ion-card-content style="text-align: right;"> 
-      <ion-icon name="checkmark-done-outline" style="font-size: 24px;"></ion-icon>
+      <ion-icon name="checkmark-done-outline" style="font-size: 24px;" (click)="pedidoEntregado(item.id)"></ion-icon>
     </ion-card-content>
   </ion-card>
 

@@ -10,7 +10,7 @@ import { BehaviorSubject, map, Observable, Subject, Subscription } from "rxjs";
 })
 export class CarritoService {
 
-  path ='Carrito/'
+  path ='Carrito'
   uid='';
   pedido!: Pedido;
   pedido$ = new Subject<Pedido>;
@@ -32,31 +32,30 @@ export class CarritoService {
       cliente: this.cliente,
       productos: [],
       precioTotal: 0,
-      estado: '',
+      estado: 'pendiente',
       id: this.uid
     }
     this.pedido$.next(this.pedido);
   }
 
   agregarAlCarrito(prod: Producto) {
-    const idProd = prod.id;
     const path = '/Usuarios/' + this.uid + '/' + this.path;
     if(this.uid.length){
       const foundIndex = this.pedido.productos.findIndex(item => item.producto.id === prod.id);
-      console.log(this.pedido.productos);
       if (foundIndex !== -1) {
         // El producto ya está en el carrito, aumentar la cantidad
         this.pedido.productos[foundIndex].cantidad++;
+        this.calcularTotal();
       } else {
         const add: ProductoPedido = {
           producto: prod,
           cantidad: 1
         };
         this.pedido.productos.push(add);
+        this.calcularTotal();
         this.firestore.creatDoc(this.pedido,path, this.uid)
       }
       this.pedido.estado= 'pendiente';
-      this.calcularTotal();
     }
   }
   
@@ -86,6 +85,7 @@ export class CarritoService {
     const index = this.pedido.productos.findIndex(p => p.producto.id === producto.producto.id);
     if (index !== -1) {
       this.pedido.productos.splice(index, 1);
+      this.calcularTotal();
       this.guardarCarritoEnBD();
     }
   }
@@ -98,9 +98,9 @@ export class CarritoService {
     return this.pedido$.asObservable();
   }
 
-  getPedidoAceptado(): Observable<Pedido | null> {
+  getPedidoId(id:string): Observable<Pedido | null> {
     return this.pedido$.asObservable().pipe(
-      map((pedido: Pedido) => pedido.estado === 'aceptado' ? pedido : null)
+      map((pedido: Pedido) => pedido.id === id ? pedido : null)
     );
   }
 
@@ -113,58 +113,47 @@ export class CarritoService {
     return this.pedido.precioTotal;
   }
 
-  realizarPedido(){
-    // Implementa la lógica para realizar un pedido
-  }
-
   clearCarrito(){
-    this.initCarrito(); // Reinicializa el carrito al estado inicial
+    const path = '/Usuarios/' + this.uid + '/' + this.path;
+    this.initCarrito();
+    this.calcularTotal();
+    this.firestore.updateDoc(this.pedido, path, this.uid);
+    this.pedido$.next(this.pedido);
   }
 
   actualizarCantidadEnCarrito(item: ProductoPedido) {
     const foundIndex = this.pedido.productos.findIndex(p => p.producto.id === item.producto.id);
     if (foundIndex !== -1) {
       this.pedido.productos[foundIndex].cantidad = item.cantidad;
+      this.calcularTotal();
       this.guardarCarritoEnBD();
     }
   }
 
-  private guardarCarritoEnBD() {
+  guardarCarritoEnBD() {
     const path = '/Usuarios/' + this.uid + '/' + this.path;
     this.firestore.updateDoc(this.pedido, path, this.uid);
   }
 
-  public async comprado(pedido: Pedido){
-    const path = '/Usuarios/' + this.uid + '/' + this.path;
-    
-    // Actualizar el pedido a aceptado
-    this.firestore.updateDoc(pedido, path, this.uid);
+  public async comprado(pedido: Pedido): Promise<void> {
+    try {
+      const path = '/Usuarios/' + this.uid + '/Pedido';
+      pedido.estado = "pagado";
+      pedido.id = this.firestore.getId();
+      await this.firestore.creatDoc(pedido, path, pedido.id);
 
-    if (this.pedido.estado === 'aceptado') {
-      // Vaciar el carrito actual (productos)
-      this.pedido.productos = []; 
-      this.pedido.estado = 'pendiente'; // Establecer el estado del nuevo pedido como pendiente
-      const uid: string | null = await this.firestroreAuth.getUid();
-
-      // Crear un nuevo pedido vacío
-      
-      const nuevoPedido: Pedido = {
-        cliente: this.pedido.cliente,  // Usamos la información del cliente actual
-        productos: [],  // El carrito está vacío al crear un nuevo pedido
-        precioTotal: 0,  // No hay productos, por lo que el precio es 0
-        estado: 'pendiente',  // Estado pendiente para el nuevo pedido
-        id: ''  // Usar el UID del cliente
-      };
-      if(uid){
-        nuevoPedido['id'] = uid;
+      this.pedido = {
+        cliente: this.cliente,
+        productos: [],
+        precioTotal: 0,
+        estado: 'pendiente',
+        id: this.uid
       }
-
-      // Guardar el nuevo pedido en la base de datos (esto creará el nuevo "carrito")
-      const nuevoPath = '/Usuarios/' + this.uid + '/' + this.path;
-      this.firestore.creatDoc(nuevoPedido, nuevoPath, this.uid);  // O crearDoc si es necesario
-
-      // Emitir el nuevo pedido a los observadores
-      this.pedido$.next(nuevoPedido);
+      this.pedido$.next(this.pedido);
+      
+    } catch (error) {
+      console.error('Error en el método comprado:', error);
+      throw new Error('No se pudo completar la operación de compra.');
     }
-}
+  }
 }

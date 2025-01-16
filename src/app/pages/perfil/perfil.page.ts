@@ -6,6 +6,7 @@ import { Cita, Pedido, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import 'hammerjs';
 import { CarritoService } from 'src/app/backend/carrito.service';
+import { FirestoreService } from 'src/app/service/firestore.service';
 
 
 @Component({
@@ -31,7 +32,7 @@ export class PerfilPage implements OnInit {
 
   historial: Cita[] = [];
 
-  public pedido: Pedido[] = []
+  public pedidos: Pedido[] = []
 
   showList = false;
   pedidoList = false;
@@ -41,7 +42,7 @@ export class PerfilPage implements OnInit {
 
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, public citas: CitaService, private alertController: AlertController,
-              private carritoService: CarritoService
+              public firestore: FirestoreService
   ) { 
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
@@ -66,7 +67,7 @@ export class PerfilPage implements OnInit {
         this.usuario = usuario;
         this.obtenerCita();
         this.getHistorial();
-        this.getPedidosAceptados();
+        this.getPedidos();
       } else {
         console.log('Usuario no encontrado');
       }
@@ -244,11 +245,9 @@ export class PerfilPage implements OnInit {
   }
 
 
-  getPedidosAceptados() {
-    this.carritoService.getPedidoAceptado().subscribe((res: Pedido | null) => {
-      if (res) {
-        this.pedido = [res];  // Asignar el pedido si no es null
-      }
+  getPedidos(){
+    this.firestore.getUserPedidos().subscribe((pedidos) => {
+      this.pedidos = pedidos.filter(pedido => pedido.cliente.uid === this.uid);
     });
   }
 

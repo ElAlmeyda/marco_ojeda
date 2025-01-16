@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CarritoService } from 'src/app/backend/carrito.service';
 import { Pedido } from 'src/app/model';
 import { FirestoreService } from 'src/app/service/firestore.service';
 
@@ -11,7 +12,7 @@ export class AdminPedidosPage implements OnInit {
 
   pedidos: Pedido[]=[];
 
-  constructor(public firestore: FirestoreService) { }
+  constructor(public firestore: FirestoreService, public carritoService: CarritoService) { }
 
   ngOnInit() {
     this.getPedidos();
@@ -19,9 +20,12 @@ export class AdminPedidosPage implements OnInit {
 
   getPedidos(){
     this.firestore.getUserPedidos().subscribe((pedidos) => {
-      this.pedidos = pedidos.filter(pedido => pedido.estado === 'aceptado');
-      console.log('Pedidos Aceptados: ', this.pedidos);
+      this.pedidos = pedidos.filter(pedido => pedido.estado === 'pagado');
     });
+  }
+
+  pedidoEntregado(id: any){
+    this.carritoService.comprado(id);
   }
 
 }

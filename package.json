@@ -25,6 +25,7 @@
     "@angular/service-worker": "^16.2.12",
     "@capacitor-firebase/messaging": "^6.2.0",
     "@capacitor/android": "^6.1.2",
+    "@capacitor/app": "^6.0.2",
     "@capacitor/assets": "^3.0.5",
     "@capacitor/camera": "^6.1.2",
     "@capacitor/core": "6.1.2",

@@ -37,6 +37,7 @@ export class ProductoPage implements OnInit {
       if(res != null){
         this.uid = res.uid;
         this.carrito.agregarAlCarrito(item);
+        this.mostrarToast("Producto añadido al carrito");
       } else {
         const alert = await this.alertController.create({
           header: 'No esta logueado',
@@ -87,6 +88,15 @@ export class ProductoPage implements OnInit {
         }
       }
     }
+  }
+
+  async mostrarToast(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2000, // Duración del toast en milisegundos
+      position: 'bottom' // Posición del toast en la pantalla
+    });
+    toast.present();
   }
 
 }

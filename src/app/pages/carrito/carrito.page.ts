@@ -5,8 +5,9 @@ import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductoService } from 'src/app/backend/producto.service';
-import { StripeService } from 'src/app/backend/stripe.service';
 import { loadStripe } from '@stripe/stripe-js';
+import { FirestoreService } from 'src/app/service/firestore.service';
+
 
 
 @Component({
@@ -26,7 +27,7 @@ export class CarritoPage implements OnInit {
     estado: '',
     id: ''
   };
-  
+  pedidos: Pedido[]=[];
 
   public productoPedido!: ProductoPedido;
   private stripe: any;
@@ -39,21 +40,27 @@ export class CarritoPage implements OnInit {
     id: '',
   }
   estado='';
-  mensaje='';
+  idPedido='';
 
   constructor(private carritoService: CarritoService, public fireAuth: FirestoreAuthService, public toastController: ToastController, public router: Router,
-              public alertController: AlertController, public productos: ProductoService, public stripeService: StripeService, private route: ActivatedRoute
+              public alertController: AlertController, public productos: ProductoService, private route: ActivatedRoute, public firestore: FirestoreService
   ) { 
     this.route.queryParams.subscribe(params => {
-      this.estado = params['status'];  // Puede ser 'success' o 'cancel'
-      
-      // Mostrar un mensaje en función del estado del pago
+      this.estado = params['status'];  
+      this.idPedido = params['orderId'];  
+    
       if (this.estado === 'success') {
-        this.carrito.estado = "aceptado";
-        this.carritoService.comprado(this.carrito);
-        this.mensaje = '¡Tu pedido ha sido procesado con éxito! Lo encontrara en su perfil';
+        this.firestore.getUserPedidos().subscribe({
+          next: (pedidos) => {
+            const pedido = this.pedidos = pedidos.find(p => p.id === this.idPedido);
+            if (pedido) {
+              this.carritoService.comprado(pedido);
+              this.mostrarToast('¡Tu pedido ha sido procesado con éxito! Lo encontrará en su perfil');
+            }
+          }
+        });
       } else if (this.estado === 'cancel') {
-        this.mensaje = 'El pago ha sido cancelado. Intenta nuevamente.';
+        this.mostrarToast('El pago ha sido cancelado. Intentelo de nuevo.');
       }
     });
   }
@@ -82,9 +89,10 @@ export class CarritoPage implements OnInit {
 
   cargarPedido() {
     this.carritoService.getCarrito().subscribe(res => {
-      this.carrito = res;
-      this.actualizarImagenes();
-      console.log(this.carrito);
+      if(res.estado === 'pendiente'){
+        this.carrito = res;
+        this.actualizarImagenes();
+      }
     });
   }
 
@@ -101,7 +109,7 @@ export class CarritoPage implements OnInit {
       const productosStripe = this.mapearCarritoAProductosStripe(this.carrito);
       console.log('Productos para Stripe:', productosStripe); // <-- Verifica los productos mapeados
   
-      const session = await this.crearSesionDePago(productosStripe);
+      const session = await this.crearSesionDePago(productosStripe, this.carrito);
       await this.redirigirAStripe(session.id);
     } catch (error) {
       console.error('Error al procesar el pago:', error);
@@ -111,9 +119,7 @@ export class CarritoPage implements OnInit {
   
   private mapearCarritoAProductosStripe(carrito: any): any[] {
     
-    const precioTotal = carrito.precioTotal; // Ejemplo: precio total
     const productosCarrito = carrito.productos;
-    console.log("ProductoScARRITO",productosCarrito);
 
     if (!productosCarrito.length) {
       throw new Error('El carrito está vacío o los datos no son válidos');
@@ -133,13 +139,12 @@ export class CarritoPage implements OnInit {
     });
   }
   
-  private async crearSesionDePago(productos: any[]): Promise<any> {
-    console.log('Enviando al backend los productos:', productos); // <-- Agrega esto para verificar los datos
+  private async crearSesionDePago(productos: any[], carrito: any): Promise<any> {
   
     const response = await fetch('https://us-central1-servicio-4f831.cloudfunctions.net/createCheckoutSession', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ products: productos }),
+      body: JSON.stringify({ products: productos, pedido_id: carrito.id  }),
     });
   
     if (!response.ok) {
@@ -153,10 +158,12 @@ export class CarritoPage implements OnInit {
   
   private async redirigirAStripe(sessionId: string): Promise<void> {
     const { error } = await this.stripe.redirectToCheckout({ sessionId });
+
     if (error) {
       console.error('Error al redirigir a Stripe Checkout:', error);
       throw new Error('Error al redirigir al pago. Intenta nuevamente.');
     }
+    
   }
   
 
@@ -195,7 +202,7 @@ export class CarritoPage implements OnInit {
   mas(item: ProductoPedido){
     if(item.cantidad < 10){
       item.cantidad++;
-    this.carritoService.actualizarCantidadEnCarrito(item);
+      this.carritoService.actualizarCantidadEnCarrito(item);
     }
     
   }
@@ -222,11 +229,5 @@ export class CarritoPage implements OnInit {
       position: 'bottom' // Posición del toast en la pantalla
     });
     toast.present();
-  }
-
-  onPaymentSuccess(event:any) {
-    console.log('Pago completado:', event);
-    this.carrito.estado = "aceptado";
-    this.carritoService.comprado(this.carrito);
   }
 }

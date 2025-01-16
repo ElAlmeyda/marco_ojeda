@@ -17,7 +17,7 @@ exports.createCheckoutSession = functions.https.onRequest((req, res) => {
       }
 
       // Validar y extraer los productos del cuerpo de la solicitud
-      const { products } = req.body;
+      const { products, pedido_id } = req.body;
 
       if (!products || !Array.isArray(products) || products.length === 0) {
         return res.status(400).send('Los productos son requeridos y deben ser un arreglo no vacío');
@@ -44,12 +44,12 @@ exports.createCheckoutSession = functions.https.onRequest((req, res) => {
         payment_method_types: ['card'],
         line_items,
         mode: 'payment',
-        success_url: 'https://servicio-4f831.web.app/carrito?status=success',
-        cancel_url: 'https://servicio-4f831.web.app/carrito?status=cancel',
+        success_url: `https://servicio-4f831.web.app/redirect?status=success&orderId=${pedido_id}`,
+        cancel_url: `https://servicio-4f831.web.app/redirect?status=cancel&orderId=${pedido_id}`,
       });
 
       // Responder con el ID de la sesión
-      return res.status(200).json({ id: session.id });
+      return res.status(200).json({ id: session.id, orderId: pedido_id });
     } catch (error) {
       console.error('Error al crear la sesión:', error);
 

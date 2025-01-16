@@ -7,7 +7,8 @@ import { CarritoService } from './backend/carrito.service';
 import { Router } from '@angular/router';
 import { CitaService } from './backend/cita.service';
 import { NotificacionService } from './service/notificacion.service';
-import { MenuController } from '@ionic/angular';
+import { MenuController, Platform } from '@ionic/angular';
+import { App } from '@capacitor/app';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class AppComponent {
 
   constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, 
               public carritoService: CarritoService, public router: Router, public citas: CitaService, public notificacion: NotificacionService,
-              private menu: MenuController) {
+              private menu: MenuController, private platform: Platform) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -57,7 +58,37 @@ export class AppComponent {
 
       }
     });
+    this.initializeApp();
+
   }
+
+  initializeApp() {
+    this.platform.ready().then(() => {
+      // Manejar redirecciones de URL personalizadas
+      App.addListener('appUrlOpen', (event: any) => {
+        const url = event.url;
+
+        // Aquí verificamos si la URL contiene la información esperada
+        if (url && url.includes('com.MarcoOjeda.app://')) {
+          const path = url.split('com.MarcoOjeda.app://')[1];
+          const status = this.getQueryParam('status', url);
+
+          // Lógica para redirigir a la página adecuada según el estado
+          if (path === 'carrito' && status) {
+            this.router.navigate(['/carrito'], { queryParams: { status } });
+          }
+        }
+      });
+    });
+  }
+
+  // Función para extraer parámetros de consulta de una URL
+  private getQueryParam(param: string, url: string): string | null {
+    const params = new URL(url).searchParams;
+    return params.get(param);
+  }
+
+  
 
   ngOnInit() {
     this.initMap();

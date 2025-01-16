@@ -99,7 +99,7 @@ export class FirestoreService {
 
 
   eliminarToken(uid: string, token: string): Promise<void> {
-    const docRef = this.database.doc(`usuario/${uid}`);
+    const docRef = this.database.doc(`Usuarios/${uid}`);
   
     // Obtener el documento actual para no sobrescribir los tokens anteriores
     return docRef.get().toPromise().then((docSnapshot) => {
@@ -125,6 +125,34 @@ export class FirestoreService {
     }).catch((error) => {
       console.error('Error al eliminar el token: ', error);
       return Promise.reject(error); // Devolvemos la promesa rechazada en caso de error
+    });
+  }
+
+  updatePedido(pedidoEstado: string, userId: string, pedidoId: string) {
+    console.log('Actualizando pedido con ID:', pedidoId);
+    
+    // Ruta del documento en la subcolección Carrito
+    const docRef = this.database
+      .collection('Usuarios')  // Colección Usuarios
+      .doc(userId)             // Documento del usuario específico
+      .collection('Carrito')   // Subcolección Carrito
+      .doc(pedidoId)           // Documento del pedido específico
+  
+    // Obtener el documento y actualizar el campo 'estado'
+    docRef.get().toPromise().then((docSnapshot) => {
+      if (docSnapshot && docSnapshot.exists) {
+        // El documento existe, actualizamos solo el campo 'estado'
+        return docRef.update({ estado: pedidoEstado });
+      } else {
+        // El documento no existe, gestionamos el error
+        return Promise.reject('El documento no existe');
+      }
+    })
+    .then(() => {
+      console.log(`Estado del pedido ${pedidoId} actualizado a 'pagado'`);
+    })
+    .catch((error) => {
+      console.error('Error al actualizar el estado del pedido:', error);
     });
   }
 }
