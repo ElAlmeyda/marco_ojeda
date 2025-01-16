@@ -156,4 +156,8 @@ export class CarritoService {
       throw new Error('No se pudo completar la operación de compra.');
     }
   }
+
+  updatePedido(item: Pedido){
+    return this.firestore.updatePedido("entregado", item.cliente.uid, item.id);
+  }
 }
