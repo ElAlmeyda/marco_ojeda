@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { CitaService } from 'src/app/backend/cita.service';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
-import { Cita, Pedido, Usuario } from 'src/app/model';
+import { Cita, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import 'hammerjs';
-import { CarritoService } from 'src/app/backend/carrito.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 
 @Component({
@@ -22,27 +22,22 @@ export class PerfilPage implements OnInit {
     uid: '',
     correo: '',
     movil: '',
-    password: '',
-    rol:''
   };
 
-  citaPendiente: Cita [] = [];
-  citaConfirmada: Cita [] = [];
-  citaEditada: Cita [] = [];
-
-  historial: Cita[] = [];
-
-  public pedidos: Pedido[] = []
-
-  showList = false;
-  pedidoList = false;
-
-
-  tipoPerfil='Datos';
-
+  correo: string='';
+  password: string='';
+  showPassword: any;
+  correoExistente=false;
+  registro=false;
+  correoInvalido=false;
+  nombre: string='';
+  nombreInvcalido=false;
+  phone: string='';
+  numeroIncorrecto=false;
+  usuariosBloqueados: Usuario[] = [];
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, public citas: CitaService, private alertController: AlertController,
-              public firestore: FirestoreService
+              public firestore: FirestoreService, private loadingCtrl: LoadingController, private afAuth: AngularFireAuth, public toast: ToastController,
   ) { 
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
@@ -65,190 +60,140 @@ export class PerfilPage implements OnInit {
       const usuario = this.user.getUsuarioConcreto(this.uid);
       if (usuario) {
         this.usuario = usuario;
-        this.obtenerCita();
-        this.getHistorial();
-        this.getPedidos();
       } else {
         console.log('Usuario no encontrado');
       }
     });
   }
 
-  obtenerCita() {
-    this.citas.getCitas().subscribe(res => {
-      if (res != undefined) {
-        this.citaPendiente = res.filter(cita => cita.estado === 'pendiente').filter(cita => {
-          const fechaCita = new Date(cita.dia);
-          const ahora = new Date();
-          
-          // Comparamos si la cita está vencida
-          if (fechaCita < ahora) {
-            // Si la cita está vencida, no la incluimos en la lista de citas pendientes
-            this.citas.eliminarCita(cita); // Eliminamos la cita directamente
-            return false; // Filtramos la cita
-          }
-          return true; // Si la cita no está vencida, la mantenemos
-        }).sort((a, b) => {
-          // Ordenar por fecha y hora
-          const fechaA = new Date(a.dia).getTime();
-          const fechaB = new Date(b.dia).getTime();
-  
-          if (fechaA === fechaB) {
-            // Si las fechas son iguales, comparar por hora
-            return new Date(a.hora).getHours() - new Date(b.hora).getHours() ||
-                   new Date(a.hora).getMinutes() - new Date(b.hora).getMinutes();
-          }
-          return fechaA - fechaB; // Si no son del mismo día, ordenar por fecha
-        });
-        this.citaConfirmada = res.filter(cita => cita.estado === 'aceptado').sort((a, b) => {
-          // Comparar primero por fecha
-          const fechaA = new Date(a.dia).getTime();
-          const fechaB = new Date(b.dia).getTime();
-          if (fechaA === fechaB) {
-            // Si las fechas son iguales, comparar por hora
-            return new Date(a.hora).getHours() - new Date(b.hora).getHours() ||
-                   new Date(a.hora).getMinutes() - new Date(b.hora).getMinutes();
-          }
-          return fechaA - fechaB; // Si no son del mismo día, ordenar por fecha
-        });
-        this.citaEditada = res.filter(cita => cita.estado === 'editada').filter(cita => {
-          const fechaCita = new Date(cita.dia);
-          const ahora = new Date();
-          
-          // Comparamos si la cita está vencida
-          if (fechaCita < ahora) {
-            // Si la cita está vencida, no la incluimos en la lista de citas pendientes
-            this.citas.eliminarCita(cita); // Eliminamos la cita directamente
-            return false; // Filtramos la cita
-          }
-          return true; // Si la cita no está vencida, la mantenemos
-        }).sort((a, b) => {
-          // Ordenar por fecha y hora
-          const fechaA = new Date(a.dia).getTime();
-          const fechaB = new Date(b.dia).getTime();
-  
-          if (fechaA === fechaB) {
-            // Si las fechas son iguales, comparar por hora
-            return new Date(a.hora).getHours() - new Date(b.hora).getHours() ||
-                   new Date(a.hora).getMinutes() - new Date(b.hora).getMinutes();
-          }
-          return fechaA - fechaB; // Si no son del mismo día, ordenar por fecha
-        });
-      }
-    this.revisarCitasVencidas();
-    });
-  }
-
-  aceptar(item: Cita){
-    item.estado="aceptado";
-    this.citas.actualizarCita(item);
-  }
-
-  async eliminar(item: Cita){
-    const alert = await this.alertController.create({
-      header: 'Confirmación',
-      message: '¿Estás seguro de que deseas eliminar este elemento?',
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-          }
-        }, {
-          text: 'Eliminar',
-          handler: () => {
-            this.citas.eliminarCita(item);
-          }
-        }
-      ]
-    });
-  
-    await alert.present();
-  }
-
-  citaOurgencia(event: any){
-    this.tipoPerfil = event.detail.value;
-  }
-
-  cambiarSegmento(direccion: string) {
-    const segmentos = ['Datos', 'Pendientes', 'Aceptadas'];
-    const indiceActual = segmentos.indexOf(this.tipoPerfil);
+  inicioSesion() {
     
-    if (direccion === 'derecha' && indiceActual < segmentos.length - 1) {
-      this.tipoPerfil = segmentos[indiceActual + 1];
-    } else if (direccion === 'izquierda' && indiceActual > 0) {
-      this.tipoPerfil = segmentos[indiceActual - 1];
+  }
+
+  formatCorreo(){
+    const correo = this.correo.trim().toLowerCase();
+     this.user.verificarCorreoExistente(correo).subscribe(existe => {
+      console.log(existe);
+      if(!existe){
+        this.registro = true;
+        console.log(this.registro, "Rgistro");
+      } else {
+        this.correoExistente = existe;
+      }
+    });
+  }
+
+  comprobarCorreo(){
+    const correo = this.correo.trim().toLowerCase();
+    const correoValido = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|outlook|yahoo)\.(com|es)$/i.test(correo);
+
+    if (!correoValido) {
+      this.correoInvalido = true;  // Nuevo flag para mostrar mensaje de error
+      return;
+    }
+    this.correoInvalido = false;  // Es válido, continúa con la verificación en la base de datos
+  }
+
+  comprobarNombre(){
+    if(this.nombre.length < 3){
+      this.nombreInvcalido = true;
+    } else {
+      this.nombreInvcalido = false;
     }
   }
 
-  toggleList() {
-    this.showList = !this.showList;
+  comprobarNumero() {
+    const phoneRegex = /^[0-9]{9}$/;
+    this.numeroIncorrecto = !phoneRegex.test(this.phone);
   }
 
-  pedidosList() {
-    this.pedidoList = !this.pedidoList;
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
-  revisarCitasVencidas() {
-    const ahora = new Date();  // Hora actual
-    
-    // Iteramos sobre las citas confirmadas (aceptadas)
-    this.citaConfirmada.forEach(cita => {
-      const fechaCita = new Date(cita.dia);  // Fecha de la cita (día)
-      const [hora, minutos] = cita.hora.split(':').map(Number);  // Hora y minutos de la cita
-  
-      // Establecer la hora y minutos en la fecha de la cita
-      fechaCita.setHours(hora, minutos, 0, 0);  // Añadir hora y minutos a la fecha
-      
-      // Si la cita está vencida (ya ha pasado completamente), la movemos al historial
-      if (fechaCita < ahora && cita.estado === 'aceptado') {
-        this.moverAlHistorial(cita);  // Mover al historial
+  isValidPassword(): boolean {
+    const passwordPattern = /(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_]).{6,}/;
+    return passwordPattern.test(this.password);
+  }
+
+  async crearUsuario(){
+    const loading = await this.loadingCtrl.create({
+      message: 'Se está terminando de crear tu perfil, por favor espera...',
+      spinner: 'circles',
+      backdropDismiss: false
+    });
+
+    await loading.present();
+
+    try {
+      // 1. Crear usuario
+      const usuario = await this.user.createUser(this.nombre, this.correo, this.password, this.phone);
+      if (!usuario) throw new Error('Error creando el usuario');
+
+      const user = await this.afAuth.currentUser;
+
+      try {
+        if(user)
+        await user.sendEmailVerification();
+      } catch (error) {
+        console.error('Error enviando correo de verificación:', error);
       }
-    });
+      // ✅ 8. Ocultar carga después de subir todo correctamente
+      await loading.dismiss();
+    } catch (error) {
+      console.error('Error en el registro:', error);
+      // ⚠️ Ocultar carga en caso de error también
+      await loading.dismiss();
+      // Puedes mostrar aquí un toast o alerta si quieres notificar el fallo
+    }
   }
+
+   async cambioContrasena(){
+    const user = await this.afAuth.currentUser;
+    if (user) {
+      if (!user.emailVerified) {
+          const alert = await this.alertController.create({
+            header: '¿Quieres cambiar la contraseña?',
+            message: 'Te llegara un correo para cambiar la contraseña, y luego tendras que volver a Iniciar Sesion',
+            buttons: [
+              {
+                text: 'Cancelar',
+                role: 'cancel',
+                handler: async () => {
+
+                }
+              },
+              {
+                text: 'Aceptar',
+                handler: async () => {
+                    await this.auth.resetPassword(this.correo);
+                    this.presentToast('Se te ha enviado el correo para cambiar la contraseña.', 'success');
+                  }
+                }
+            ],
+          });
   
-  moverAlHistorial(cita: Cita) {
-    this.citas.guardarHistorial(cita);
-    this.citas.eliminarCita(cita);
+          await alert.present();
+      }
+    } else {
+      const errorAlert = await this.alertController.create({
+        header: 'Error',
+        message: 'No se pudo obtener el usuario actual. Por favor, asegúrate de estar autenticado.',
+        buttons: ['OK'],
+      });
+      await errorAlert.present();
+    }
   }
 
-  getHistorial(){
-    this.citas.getHistorial(this.uid).subscribe(res=> {
-      this.historial = res;
+  async presentToast(msg: string, color: string) {
+    const toast = await this.toast.create({
+      message: msg,
+      duration: 3000,
+      position: 'bottom',
+      color: color
     });
-  }
 
-
-  async anularCita(item: Cita){
-    const alert = await this.alertController.create({
-      header: 'Confirmación',
-      message: '¿Estás seguro de que deseas anular la cita?',
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-          }
-        }, {
-          text: 'Anular',
-          handler: () => {
-            item.estado = "anulada";
-            this.citas.actualizarCita(item);
-          }
-        }
-      ]
-    });
-  
-    await alert.present();
-  }
-
-
-  getPedidos(){
-    this.firestore.getUserPedidosPagados().subscribe((pedidos) => {
-      this.pedidos = pedidos.filter(pedido => pedido.cliente.uid === this.uid);
-    });
+    await toast.present();
   }
 
 }

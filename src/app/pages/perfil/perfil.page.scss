@@ -1,25 +1,203 @@
-/* Clase para contenedor del avatar */
-.center-title {
+/* Contenedor general para el contenido principal */
+ion-content {
+    padding-top: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    justify-content: space-between; /* Espacio entre el contenido principal y el final */
+    height: 100%;
+    padding: 0;
+    box-sizing: border-box;
   }
   
-  .raton-menu {
-    width: 110px; /* Ajusta el tamaño del avatar según lo necesario */
-    height: 110px;
+  /* Contenedor para centrar el texto y el ion-select */
+  .center-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra horizontalmente */
+    margin: 10px 20px; 
   }
   
-  ion-toolbar {
-    --padding-start: 0px;
-    --padding-end: 0px;
+  /* Estilo para los elementos dentro del contenedor */
+  .center-item {
+    margin-top: 10px; /* Espacio entre los elementos */
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para ambos elementos */
+    box-sizing: border-box; /* Incluir padding y border en el tamaño del elemento */
+    padding: 10px; /* Opcional: ajusta el padding para que luzcan uniformes */
   }
 
-  .custom-label {
-    color: #FFFF00; /* Cambia a cualquier color que desees */
+  
+
+  .login-container ion-input {
+    font-size: 20px;
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para ambos elementos */
+    margin-bottom: 15px; /* Espacio entre los campos */
+    box-sizing: border-box; /* Incluir padding y border en el tamaño del elemento */
+    padding: 10px; /* Opcional: ajusta el padding para que luzcan uniformes */
+  }
+  
+  .center-item ion-select::part(native) {
+    height: auto; 
+    line-height: normal;
+  }
+  
+  .or-divider {
+    margin-bottom: 10px; 
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    margin: 20px 20px; 
   }
 
-  ion-input[disabled] {
-    color: #b0b0b0; /* Cambia el color del input cuando está deshabilitado */
+  .login-container input {
+    font-size: 20px;
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para los campos de entrada y el botón */
+    margin-bottom: 15px; /* Espacio entre los campos */
+    box-sizing: border-box; /* Asegura que el padding y el border no afecten el tamaño del elemento */
+    }
+    
+.login-container ion-button {
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para los campos de entrada y el botón */
+    margin-bottom: 15px; /* Espacio entre los campos */
+    box-sizing: border-box; /* Asegura que el padding y el border no afecten el tamaño del elemento */
+}
+
+.login-container ion-button:hover {
+    background-color: #0056b3;
+}
+
+.social-buttons {
+    display: flex; /* Usa Flexbox para alinear los botones en una línea */
+    gap: 10px; /* Espacio entre los botones */
+    justify-content: center; /* Centra los botones horizontalmente */
+    margin-top: 15px; /* Espacio superior para separar de otros elementos */
   }
+  
+
+  .forgot-password-container {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente el contenido */
+    margin-top: 15px; /* Espacio superior para separar del botón de inicio de sesión */
+  }
+/* Contenedor del enlace "Olvidaste la contraseña" */
+.forgot-password {
+    text-align: center; /* Centra el enlace dentro del contenedor */
+  }
+  
+  .forgot-password a {
+    font-size: 0.8rem; /* Tamaño de fuente más pequeño */
+    color: #007bff; /* Color del enlace, ajusta según sea necesario */
+    text-decoration: none; /* Sin subrayado por defecto */
+  }
+  
+  .forgot-password a:hover {
+    text-decoration: underline; /* Subrayado al pasar el ratón */
+  }
+  
+
+/* Contenedor que se posiciona en la parte inferior y al centro */
+.privacy-container {
+    bottom: 0px; /* Espacio desde el borde inferior */
+    width: 100%;
+    text-align: center; /* Centrar el bloque de texto */
+    color: grey; /* Color gris */
+    font-size: 0.8rem; /* Fuente más pequeña */
+    display: block;
+  }
+  
+  /* Estilo para los elementos dentro del contenedor de privacidad */
+  .privacy-item {
+    --ion-item-background: transparent; /* Fondo transparente */
+    --ion-item-padding-start: 0;
+    --ion-item-padding-end: 0;
+    text-align: center; /* Centra el bloque de texto dentro del item */
+  }
+  
+  /* Asegura que los enlaces dentro del texto de privacidad se alineen correctamente */
+  .privacy-item ion-label {
+    color: grey;
+    font-size: 0.8rem;
+    display: block; /* Bloque completo en vez de palabra por palabra */
+    text-align: center;
+    white-space: normal; /* Evita el centrado palabra por palabra */
+    max-width: 90%; /* Evita que el texto se salga del borde en pantallas pequeñas */
+    margin: 0 auto; /* Asegura que esté centrado en pantallas pequeñas */
+  }
+  
+  /* Enlaces dentro de la política de privacidad */
+  .privacy-item a {
+    color: grey;
+    text-decoration: none;
+  }
+  
+  .privacy-item a:hover {
+    text-decoration: underline;
+  }
+
+  .app-logo {
+    width: 125px; /* Ajusta el tamaño que desees */
+    height: 125px; /* Asegúrate de que el alto sea igual al ancho para mantener el círculo */
+  }
+
+  ion-input {
+    font-size: 18px;
+    border: 1px solid #ccc;
+    --padding-start: 20px;
+    --padding-end: 20px;
+    border-radius: 20px;
+  
+  }
+
+  .privacy-item {
+    --ion-item-background: transparent; /* Fondo transparente */
+    --ion-item-padding-start: 0;
+    --ion-item-padding-end: 0;
+    text-align: center; /* Centra el bloque de texto dentro del item */
+    color: grey;
+    font-size: 0.8rem;
+    display: block; /* Bloque completo en vez de palabra por palabra */
+    text-align: center;
+    white-space: normal; /* Evita el centrado palabra por palabra */
+    max-width: 90%; /* Evita que el texto se salga del borde en pantallas pequeñas */
+    margin: 0 auto; /* Asegura que esté centrado en pantallas pequeñas */
+    margin-bottom: 5px;
+  }
+
+  ion-input {
+    font-size: 20px;
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para ambos elementos */
+    margin-bottom: 15px; /* Espacio entre los campos */
+    box-sizing: border-box; /* Incluir padding y border en el tamaño del elemento */
+    padding: 10px; /* Opcional: ajusta el padding para que luzcan uniformes */
+  }
+
+/* Estilo para mensajes de error */
+.error-label {
+  height: 20px; /* Reservar espacio fijo */
+  font-size: 12px;
+  color: red;
+  padding-left: 8px;
+  transition: opacity 0.3s ease;
+}
+
+ion-list {
+  background: transparent !important;
+  margin-top: 25%;
+}
+
+ion-item {
+  --background: transparent !important;
+  background: transparent !important;
+  --ion-item-background: transparent;
+  --ion-background-color: transparent;
+}
   

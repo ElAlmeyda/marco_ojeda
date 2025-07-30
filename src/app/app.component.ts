@@ -3,12 +3,13 @@ import { UsuariosService } from './backend/usuarios.service';
 import { FirestoreAuthService } from './service/firestore-auth.service';
 import { FirestoreService } from './service/firestore.service';
 import { Cita, Usuario } from './model';
-import { CarritoService } from './backend/carrito.service';
 import { Router } from '@angular/router';
 import { CitaService } from './backend/cita.service';
 import { NotificacionService } from './service/notificacion.service';
 import { MenuController, Platform } from '@ionic/angular';
 import { App } from '@capacitor/app';
+import { take } from 'rxjs';
+import { UbicacionService } from './service/ubicacion.service';
 
 
 @Component({
@@ -29,31 +30,27 @@ export class AppComponent {
     uid: '',
     correo: '',
     movil: '',
-    password: '',
-    rol:''
+    avatar: ''
   };
   userName="";
   uid = "";
-  cita: Cita []= [];
+  progress = true;
   
 
   toggleList() {
     this.showList = !this.showList;
   }
 
-  constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, 
-              public carritoService: CarritoService, public router: Router, public citas: CitaService, public notificacion: NotificacionService,
-              private menu: MenuController, private platform: Platform) {
+  constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, public router: Router, public citas: CitaService, public notificacion: NotificacionService,
+              private menu: MenuController, private platform: Platform, public ubicacion: UbicacionService) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
         await this.obtenerUsuario();
-        this.obtenerCita();
       } else {
         this.uid= '';
         this.user.changeUserLogin(false);
         this.change = this.user.usuarioLogin;
-        this.usuario.rol='';
         this.router.navigate(['/folder']);
 
       }
@@ -64,34 +61,11 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      // Manejar redirecciones de URL personalizadas
-      App.addListener('appUrlOpen', (event: any) => {
-        const url = event.url;
-
-        // Aquí verificamos si la URL contiene la información esperada
-        if (url && url.includes('com.MarcoOjeda.app://')) {
-          const path = url.split('com.MarcoOjeda.app://')[1];
-          const status = this.getQueryParam('status', url);
-
-          // Lógica para redirigir a la página adecuada según el estado
-          if (path === 'carrito' && status) {
-            this.router.navigate(['/carrito'], { queryParams: { status } });
-          }
-        }
-      });
     });
   }
-
-  // Función para extraer parámetros de consulta de una URL
-  private getQueryParam(param: string, url: string): string | null {
-    const params = new URL(url).searchParams;
-    return params.get(param);
-  }
-
   
 
   ngOnInit() {
-    this.initMap();
   }
 
   obtenerUsuario() {
@@ -108,47 +82,49 @@ export class AppComponent {
     });
   }
 
-  obtenerCita() {
-    this.citas.getCitas().subscribe(res => {
-      if (res != undefined) {
-        this.cita = res.filter(res=> res.estado === 'aceptado');
-      }
-    });
-  }
-
-
   logout(){
     this.auth.logout();
     this.user.changeUserLogin(false);
     this.change = this.user.usuarioLogin;
-    this.usuario.rol='';
-    this.carritoService.clearCarrito();
   }
 
-  initMap() {
-    const clinicaLocation = { lat: 28.101109878824143, lng: -15.470295511575157 };
+  async checkConnectivityAndAuth() {
+    const isOnline = navigator.onLine;
 
-    const mapOptions: google.maps.MapOptions = {
-     center: clinicaLocation, 
-      zoom: 15,
-    };
+    if (!isOnline) {
+      this.progress = false;
+      return;
+    }
 
-    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+    this.auth.stateAuth().pipe(take(1)).subscribe(async res => {
+      const yaEntro = sessionStorage.getItem('yaEntro');
 
-    const marker = new google.maps.Marker({
-      position: clinicaLocation, 
-      map: this.map, 
-      title: 'Clínica', 
+      if (res != null && !yaEntro) {
+        // RevenueCat
+        sessionStorage.setItem('yaEntro', 'true');
+        this.usuario.uid = res.uid;
+
+        // Establece la ubicación
+        await this.ubicacion.obtenerUbicacion(res.uid);
+
+        // Navegación
+        await this.router.navigate(['/tabs/folder', res.uid]);
+        this.ocultarSplashScreen();
+
+      } else {
+        this.usuario.uid = '';
+        sessionStorage.setItem('yaEntro', 'true');
+        await this.router.navigate(['/inicio-sesion']);
+        this.ocultarSplashScreen();
+      }
     });
-
-    marker.addListener('click', () => {
-      window.open(`https://www.google.com/maps/search/?api=1&query=${clinicaLocation.lat},${clinicaLocation.lng}`);
-    });
   }
 
-  closeMenu(){
-    this.menu.close();
+   ocultarSplashScreen() {
+    const splashScreen = document.getElementById('splash-screen');
+    if (splashScreen) {
+      splashScreen.style.display ='none';
+    }
   }
-
   
 }

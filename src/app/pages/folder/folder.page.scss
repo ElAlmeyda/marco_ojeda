@@ -14,3 +14,62 @@
     --padding-start: 0px;
     --padding-end: 0px;
   }
+
+  .titulo-grande {
+    margin-left:10px;
+    padding: 10px;
+    font-size: 1rem; /* Puedes ajustar el tamaño como desees */
+    font-weight: bold; /* Para hacerlo más destacado */
+    margin-bottom: 16px; /* Espacio entre el título y las tarjetas */
+  }
+
+  .floating-right {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    z-index: 10;
+    position: fixed;
+    bottom: 20px;
+    right: 20px; /* Mueve el botón a la derecha */
+    z-index: 10000;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .big-button {
+    width: 64px;
+    height: 64px;
+    --padding-start: 0;
+    --padding-end: 0;
+    ion-icon {
+      font-size: 32px;
+      color:black;
+    }
+  }
+
+  .horizontal-scroll {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .cards-row {
+    display: inline-block;
+    margin-right: 16px; /* Ajusta el espacio entre las tarjetas */
+  }
+  
+  .user-card {
+    width: 200px; /* Ajusta el ancho de cada tarjeta */
+    display: inline-block;
+    margin-right: 16px; /* Ajusta el espacio entre tarjetas */
+  }
+  
+  ion-img {
+    width: 100%;
+    height: auto;
+  }
+  

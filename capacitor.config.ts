@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.MarcoOjeda.app',
-  appName: 'Marco Ojeda',
+  appName: 'ITattoo',
   webDir: 'www',
   server: {
     androidScheme: 'https',  

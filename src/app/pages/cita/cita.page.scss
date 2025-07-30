@@ -1,0 +1,25 @@
+.center-card {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+ion-card {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.center-text {
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+ion-button {
+  --border-radius: 12px;
+}

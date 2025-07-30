@@ -1,27 +1,45 @@
-
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-item class="center-title">
-      <ion-avatar class="raton-menu">
-        <ion-img alt="avatar" src="../../../assets/icon/favicon.png" >
-        </ion-img>
-      </ion-avatar>
-    </ion-item>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <div style="font-family: 'Montserrat', sans-serif; text-align: center;">
-    <h1 style="font-size: 40px; padding: 10px;"> Marco Ojeda </h1>
-    <p style="font-size: 40px; padding: 10px; margin: 10px;"> Policlinica Dental</p>
-  </div>
-  <ion-label style="font-family: 'Montserrat', sans-serif; text-align: center; padding: 150px;">
-    <h1 style="font-size: 25px; padding: 15px;" routerLink="/la-clinica"> La Clinica </h1>
-    <p style="font-size: 25px; padding: 15px;" routerLink="/noticias"> Noticias </p>
-    <h1 style="font-size: 25px; padding: 15px;" routerLink="/equipo"> Cuadro Clinico </h1>
-    <!-- <p style="font-size: 25px; padding: 15px;" routerLink="/kid_planet"> Kids Dental Planet </p>. --> 
-  </ion-label>
+  <ion-card-content class="card-content">
+    <ion-searchbar style="padding-top: 60px;" placeholder="Buscar" [(ngModel)]="searchTerm" (ionChange)="buscarMatches()"></ion-searchbar>
+      <div class="horizontal-scroll">
+        <ion-label class="titulo-grande"> Recomendados </ion-label>
+        <!-- Contenedor para los cards de usuarios con conversación -->
+        <ion-row *ngFor="let tipo of recomendado" size="auto">
+          <ion-card class="user-card">
+            <ion-img [src]=""></ion-img>
+            <ion-card-header>
+              <ion-card-title>{{ tipo.nombre }}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-row>
+      </div>
+      <div class="horizontal-scroll">
+        <ion-label class="titulo-grande"> Cerca de ti </ion-label>
+        <!-- Contenedor para los cards de usuarios con conversación -->
+        <ion-row *ngFor="let tipo of recomendado" size="auto">
+          <ion-card class="user-card">
+            <ion-img [src]=""></ion-img>
+            <ion-card-header>
+              <ion-card-title>{{ tipo.nombre }}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-row>
+      </div>
+      <div class="horizontal-scroll">
+        <ion-label class="titulo-grande"> Disponibles hoy </ion-label>
+        <!-- Contenedor para los cards de usuarios con conversación -->
+        <ion-row *ngFor="let tipo of recomendado" size="auto">
+          <ion-card class="user-card">
+            <ion-img [src]=""></ion-img>
+            <ion-card-header>
+              <ion-card-title>{{ tipo.nombre }}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-row>
+      </div>
+    </ion-card-content>
+    <ion-button class="floating-right big-button" shape="round" fill="solid" color="dark" routerLink="/mapa">
+      <ion-icon slot="icon-only" name="navigate-circle"></ion-icon>
+    </ion-button>
 </ion-content>
+

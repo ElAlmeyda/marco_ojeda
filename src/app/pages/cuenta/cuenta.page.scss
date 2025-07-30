@@ -1,0 +1,50 @@
+  .toolbar-label {
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .centered-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Espacio entre el contenido y el botón */
+    height: calc(100% - 56px); /* Ajusta el alto, restando el alto del menú */
+    text-align: center; /* Centra el texto */
+    margin-top: 20px; /* Separación con el menú */
+  }
+  
+  .top-content {
+    margin-top:25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra horizontalmente */
+    gap: 10px; /* Espacio entre los elementos */
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center; /* Centra el botón horizontalmente */
+    margin-top: 20px; /* Espacio adicional arriba del botón */
+  }
+
+  .delete-button {
+    margin-top: 20px; /* Espacio adicional arriba del botón */
+    width: auto; /* Botón no ocupa todo el ancho */
+    max-width: 200px; /* Ajusta el ancho máximo del botón */
+  }
+
+  /* Contenedor del enlace "Olvidaste la contraseña" */
+.forgot-password {
+    text-align: center; /* Centra el enlace dentro del contenedor */
+  }
+  
+  .forgot-password a {
+    font-size: 0.8rem; /* Tamaño de fuente más pequeño */
+    color: #007bff; /* Color del enlace, ajusta según sea necesario */
+    text-decoration: none; /* Sin subrayado por defecto */
+  }
+  
+  .forgot-password a:hover {
+    text-decoration: underline; /* Subrayado al pasar el ratón */
+  }
+  

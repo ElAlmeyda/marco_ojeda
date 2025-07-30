@@ -3,7 +3,6 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable, map, switchMap } from 'rxjs';
-import { Pedido } from '../model';
 import { idToken } from '@angular/fire/auth';
 
 @Injectable({
@@ -33,8 +32,6 @@ export class FirestoreService {
     const collection = this.database.collection(path);
     return collection.doc(id).update(data);
   }
-
-
 
   addDoc(path:string, data: any, id:string){
     return this.database.collection(path).doc(id).set(data);
@@ -66,14 +63,6 @@ export class FirestoreService {
       const tak = ref.put(file);
       resolve('este es el enlace');
     });
-  }
-
-  getUserPedidos(): Observable<any[]> {
-    return this.database.collectionGroup('Carrito').valueChanges();
-  }
-
-  getUserPedidosPagados(): Observable<any[]> {
-    return this.database.collectionGroup('Pedido').valueChanges();
   }
 
   agregarTokens(idToken: string, uid: string): Promise<void> {
@@ -150,6 +139,55 @@ export class FirestoreService {
     }).catch((error) => {
       console.error('Error al actualizar el pedido:', error);
       throw error;
+    });
+  }
+
+  verificarCorreoExistente(correo: string): Observable<boolean> {
+    return this.database.collection('Usuarios', ref => ref.where('correo', '==', correo))
+      .valueChanges()
+      .pipe(map(usuarios => usuarios.length > 0));
+  }
+
+  async guardarUbicacion(location: { latitude: number; longitude: number; timestamp: Date; },uid: string): Promise<void> {
+    try {
+      const docRef = this.database.doc(`Usuarios/${uid}`);
+
+      return docRef.get().toPromise().then((docSnapshot) => {
+        if (docSnapshot && docSnapshot.exists) {
+          const data = docSnapshot.data() as { ubicacion: string };
+          const currentLikes = data.ubicacion || [];
+  
+          // Filtrar el like que queremos eliminar
+  
+          // Actualizar la lista en Firestore
+          return docRef.update({ ubicacion: location });
+        } else {
+          // Si el documento no existe, simplemente retornamos una promesa resuelta
+          return Promise.resolve(); // O puedes optar por Promise.reject(new Error('Usuario no encontrado'));
+        }
+      }).catch((error) => {
+        return Promise.reject(error); // Devolvemos la promesa rechazada en caso de error
+      });
+    } catch (error) {
+    }
+  }
+
+  // Obtener todas las ubicaciones para poder comparar la distancia
+  obtenerUbicaciones() {
+    return this.database.collection('ubicacion').get();
+  }
+
+  updateCorreo(nuevoCorreo: string, userId: string) {
+    const docRef = this.database.collection('usuario').doc(userId);
+    docRef.get().toPromise().then((docSnapshot) => {
+      if (docSnapshot && docSnapshot.exists) {
+        // El documento existe, procedemos a actualizar
+        return docRef.update({ correo: nuevoCorreo });
+      } else {
+        // El documento no existe, maneja el caso
+        return Promise.reject('El documento no existe');
+      }
+      
     });
   }
  

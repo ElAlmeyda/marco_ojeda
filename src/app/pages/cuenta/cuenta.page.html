@@ -1,0 +1,38 @@
+
+<ion-content class="centered-content" style="margin-top:25%;">
+  <div class="top-content">
+    <ion-label>Asegúrate de recordar tu contraseña, luego la necesitarás.</ion-label>
+    <ion-item>{{ usuario.correo }}</ion-item>
+    <div class="button-container">
+      <ion-button class="delete-button" shape="round" (click)="showActionSheet('correo')">
+        <ion-icon name="refresh-outline"></ion-icon>Actualizar correo</ion-button>
+    </div>
+    
+    <ion-label class="forgot-password">
+      <a (click)="cambioContrasena()">Olvidaste la contraseña</a>
+    </ion-label>
+  </div>
+  <div class="button-container">
+    <ion-button class="delete-button" shape="round"  (click)="eliminar()">
+      <ion-icon name="trash-outline"></ion-icon>Eliminar cuenta</ion-button>
+  </div>
+  <div class="button-container">
+    <ion-button shape="round" (click)="logout()" routerLink="/inicio-sesion">
+      <ion-icon name="exit-outline" slot="start"></ion-icon>
+      Cerrar sesión
+    </ion-button>
+  </div>
+
+
+
+  <div class="verification-container" *ngIf="enviado">
+    <ion-icon name="mail-outline" class="verification-icon"></ion-icon>
+    <h2>¡Correo de verificación enviado!</h2>
+    <p>Hemos enviado un correo de verificación a <strong>{{ usuario.correo }}</strong>. Por favor, revisa tu bandeja de entrada y haz clic en el enlace para verificar tu correo.</p>
+    
+    <p>¿No recibiste el correo?</p>
+    <ion-button expand="block" (click)="reenviarCorreo()">Reenviar correo</ion-button>
+    
+    <ion-button color="primary" expand="block" (click)="verificarEstado()">Ya he verificado mi correo</ion-button>
+  </div>
+</ion-content>

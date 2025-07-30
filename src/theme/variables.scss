@@ -4,7 +4,7 @@
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
-  --ion-color-primary: #FED606;
+  --ion-color-primary: white;
   --ion-color-primary-rgb: 66, 140, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -130,4 +130,10 @@ ion-toolbar {
 
 body {
   font-family: 'Montserrat', sans-serif;
+}
+
+
+ion-button {
+  --background: white;
+  --color: black;
 }

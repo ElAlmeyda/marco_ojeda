@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirestoreService } from '../service/firestore.service';
 import { FirestoreAuthService } from '../service/firestore-auth.service';
-import { Cita, Urgencia } from '../model';
+import { Cita } from '../model';
 import { Observable, concatMap, forkJoin, from, map, mergeMap, take, tap } from 'rxjs';
 import { idToken } from '@angular/fire/auth';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
@@ -78,14 +78,6 @@ export class CitaService {
     return this.citaCollection;
   }
 
-  guardarUrgencia(urgencia: Urgencia){
-    const path = '/Urgencias';
-    const pathFoto ="gs://servicio-4f831.appspot.com/Urgencias/" + urgencia.foto;
-    urgencia.foto = pathFoto;
-    urgencia.id= this.firestrore.getId();
-    this.firestrore.creatDoc(urgencia, path, urgencia.id);
-  }
-
   public subirImagen(file: any){
     const nombre = file.name;
     const path = "gs://servicio-4f831.appspot.com/Urgencias/" + nombre;
@@ -95,16 +87,6 @@ export class CitaService {
   public getDownloadUrl(imagenRef: string) {
     const ref = this.storage.refFromURL(imagenRef);
     return ref.getDownloadURL();
-  }
-
-  eliminarUrgencia(urgencia: Urgencia){
-    const path = '/Urgencias';
-    this.firestrore.deleteDoc(path, urgencia.id);
-  }
-
-  getUrgencias() {    
-    const path = '/Urgencias';
-    return this.firestrore.getCollection<Urgencia>(path);
   }
 
 

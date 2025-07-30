@@ -1,86 +1,23 @@
 <ion-app>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
-  
-  
-  <ion-menu color="primary" contentId="main-content" type="overlay">
-    <ion-content class="custom-dropdown-menu">
-      <ion-list id="inbox-list" lines="none" >
-        <ion-item *ngIf="change == false" routerLink="/inicio-sesion" (click)="closeMenu()">
-          <ion-avatar>
-            <ion-icon name="person-outline" style="font-size: 30px;" ></ion-icon>
-          </ion-avatar>
-          <ion-list-header style="font-size: 16px;"> Iniciar sesion </ion-list-header>  
-        </ion-item>
-        <ion-item *ngIf="change == true" routerLink="/perfil" (click)="closeMenu()">
-          <ion-avatar>
-            <ion-icon name="person-outline" style="font-size: 30px;" ></ion-icon>
-          </ion-avatar>
-          <ion-list-header style="font-size: 16px;">{{userName}}</ion-list-header>
-          <ion-icon name="log-out" style="font-size: 30px;" (click)="logout()"></ion-icon>
-        </ion-item>
-      </ion-list>
-      <ion-list id="inbox-list" lines="none">
-        <ion-item routerLink="/la-clinica" (click)="closeMenu()">
-          <ion-icon name="home" style="padding-right: 10px;"></ion-icon>
-          La clinica
-        </ion-item>
-        <ion-item routerLink="/equipo" (click)="closeMenu()">
-          <ion-icon name="people" style="padding-right: 10px;"></ion-icon>
-          Cuadro Clinico
-        </ion-item>
-        <ion-item routerLink="/noticias" (click)="closeMenu()">
-          <ion-icon name="newspaper" style="padding-right: 10px;"></ion-icon>
-          Noticias
-        </ion-item> 
-      </ion-list>
-      <ion-list lines="none">
-        <ion-item *ngIf="uid">
-          Su cita:
-          <ion-icon slot="end" name="chevron-down-outline" *ngIf="!showList" (click)="toggleList()"></ion-icon>
-          <ion-icon slot="end" name="chevron-up-outline" *ngIf="showList" (click)="toggleList()"></ion-icon>
-        </ion-item>
-        <div style="margin-left: 1em;" *ngIf="showList" >
-          <ion-item *ngFor="let item of cita"> {{item.dia | date: 'dd/MM/yyyy'}} {{item.hora}}</ion-item> 
-        </div>
-        <ion-item *ngIf="usuario.rol == 'administrador'">
-          Gestion de datos: 
-          <ion-icon slot="end" name="chevron-forward-outline" routerLink="/administrador" (click)="closeMenu()"></ion-icon>
-        </ion-item>
-        <ion-item *ngIf="usuario.rol == 'gestor'">
-          Gestion de citas: 
-          <ion-icon slot="end" name="chevron-forward-outline" routerLink="/gestor" (click)="closeMenu()"></ion-icon>
-        </ion-item>
-      </ion-list>
-    </ion-content>
-
-    <ion-footer>
-      <ion-item >
-        <div #mapElement style="width: 100%; height: 150px; border: 1px solid #ccc; margin-bottom: 15px;" ></div>
-      </ion-item>
-      <ion-item lines="none" style="text-align: center;">
-        <ion-label style="font-size: 12px; color: grey;">CAWAC studio</ion-label>
-      </ion-item>
-    </ion-footer>
-    
-  </ion-menu>
   <ion-router-outlet id="main-content" main></ion-router-outlet>
 
   <ion-content [fullscreen]="true">
     <ion-tabs>
       <ion-tab-bar slot="bottom">
-        <ion-tab-button routerLink="/pide-cita">
-          <ion-icon name="calendar"></ion-icon>
-          Cita Online
+        <ion-tab-button routerLink="/folder" style="color:white">
+          <img src="assets/icon/icon.png" style="width: 32px; height: 32px;"/>
         </ion-tab-button>
-        <ion-tab-button routerLink="/tienda-dental">
-          <ion-icon name="storefront-outline"></ion-icon>
-          Tienda Dental
+        <ion-tab-button routerLink="/cita" style="color:white">
+          <ion-icon name="calendar-outline"></ion-icon>
         </ion-tab-button>
-        <ion-tab-button routerLink="/prediagnostico-virtual">
-          <ion-icon name="pulse-outline"></ion-icon>
-          Pre Diagnostico Virtual 
+        <ion-tab-button routerLink="/favoritos" style="color:white">
+          <ion-icon name="bookmark-outline"></ion-icon>
+        </ion-tab-button>
+        <ion-tab-button routerLink="/perfil" style="color:white">
+          <ion-icon name="person-outline" *ngIf="!usuario.avatar"></ion-icon>
+          <ion-avatar *ngIf="usuario.avatar">
+            <ion-img [src]="usuario.avatar[0]"></ion-img>
+          </ion-avatar>
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>

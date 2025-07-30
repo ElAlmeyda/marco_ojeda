@@ -1,151 +1,129 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title></ion-title>
-    <ion-item class="center-title">
-      <ion-avatar class="raton-menu">
-        <ion-img alt="avatar" src="../../../assets/icon/favicon.png" routerLink="/folder">
-        </ion-img>
-      </ion-avatar>
-      
-    </ion-item>
-  </ion-toolbar>
+<ion-header>
+
 </ion-header>
 
-<ion-content [fullscreen]="true" (swipeleft)="cambiarSegmento('derecha')" (swiperight)="cambiarSegmento('izquierda')">
-  <ion-card>
-    <ion-card-header>
-      <ion-item>
-        <ion-card-title style="flex: 1; text-align: center; width: calc(100% - 40px);">{{usuario.nombre}}</ion-card-title>
-        <ion-icon name="pencil-outline" routerLink="/editar-perfil"></ion-icon>
-      </ion-item>
+<ion-content>
+  
+  
+  <!-- Formulario de inicio de sesión centrado -->
+  <div class="login-container" *ngIf="!usuario.uid">
+      <div class="center-container">
+        <ion-img src="../../../assets/icon/icon.png" slot="start" class="app-logo" alt="App Logo"></ion-img>
+      </div>
+      <ion-input [(ngModel)]="correo" type="email" name="email" placeholder="Iniciar sesion" required (ngModelChange)="comprobarCorreo()" *ngIf="!registro && !correoExistente"></ion-input>
+      <ion-button type="submit" (click)="formatCorreo()" style="border-radius: 20px;" *ngIf="!registro && !correoExistente">Verificar correo</ion-button>
+      <ion-label class="error-label" style="margin:5px;" *ngIf="correoInvalido"><span>El formato del correo no es válido. Usa Gmail, Hotmail, Outlook o Yahoo.</span></ion-label>
 
-      <div style="text-align: center; margin-top: 20px; " (swipeleft)="cambiarSegmento('derecha')" (swiperight)="cambiarSegmento('izquierda')">
-        <ion-segment [ngModel]="tipoPerfil" value="defecto" (ionChange)="citaOurgencia($event)" style="width: 100%;">
-          <ion-segment-button value="Datos"  style="flex: 1;">
-            <ion-label style="font-size: 0.6em;">Datos</ion-label>
-          </ion-segment-button>
-          <ion-segment-button value="Pendientes"  style="flex: 1;">
-            <ion-label style="font-size: 0.6em; display: flex; align-items: center;">Pendientes
-            </ion-label>
-          </ion-segment-button>
-          <ion-segment-button value="Aceptadas"  style="flex: 1;">
-            <ion-label style="font-size: 0.6em; display: flex; align-items: center;">Aceptadas
-            </ion-label>
-          </ion-segment-button>
-        </ion-segment>
+      <ion-input *ngIf="correoExistente" type="email" [(ngModel)]="correo" (ngModelChange)="comprobarCorreo()" [ngModelOptions]="{standalone: true}" name="correo" required></ion-input>
+      <ion-label class="error-label" style="margin:5px;" *ngIf="correoInvalido && correoExistente"><span>El formato del correo no es válido. Usa Gmail, Hotmail, Outlook o Yahoo.</span></ion-label>
+      <ion-input [(ngModel)]="password" [type]="showPassword ? 'text' : 'password'"  name="password" placeholder="Contraseña" required *ngIf="correoExistente">
+        <ion-icon slot="end" name="eye" (click)="togglePassword()" *ngIf="!showPassword"></ion-icon>
+        <ion-icon slot="end" name="eye-off-outline" (click)="togglePassword()" *ngIf="showPassword"></ion-icon>
+      </ion-input>
+      <ion-button type="submit" (click)="inicioSesion()" style="border-radius: 20px;" *ngIf="correoExistente">Iniciar Sesión</ion-button>
+      <div class="forgot-password-container">
+        <ion-label class="forgot-password"> 
+          <a (click)="cambioContrasena()" *ngIf="correoExistente"> Olvidaste la contraseña </a>
+        </ion-label>
       </div>
 
-    </ion-card-header>
-    <ion-card-content>
-    <div *ngIf="tipoPerfil == 'Datos'">
-      <ion-item>
-        <ion-label position="stacked" class="custom-label">Su numero de telefono:</ion-label>
-        <ion-input type="text" value="{{usuario.movil}}" [readonly]="true"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked" class="custom-label">Su correo:</ion-label>
-        <ion-input type="email" value="{{usuario.correo}}" [readonly]="true"></ion-input>
-      </ion-item>
-      <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngIf="citaEditada.length != 0">
-        <ion-card-content *ngFor="let item of citaEditada; let i = index" [ngStyle]="{'border': '1px solid #ccc', 'border-radius': '8px', 'margin-bottom': '10px', 'background-color': '#f9f9f9'}">
-          <ion-label style="font-weight: bold;"> Acepta la siguiente cita </ion-label><br>
-          <ion-label>Nombre: {{ item.nombre }} <br> Día: {{ item.dia | date: 'dd/MM/yyyy' }} Hora: {{ item.hora }}</ion-label><br>
-          <ion-label>Dentista: {{ item.dentista }}<br> Servicio: {{ item.servicio }}</ion-label><br>
-          <ion-button style="padding-top: 1em;" (click)="aceptar(item)">Aceptar</ion-button>
-          <ion-button style="padding-top: 1em;" (click)="eliminar(item)" color="danger">Eliminar</ion-button>
-        </ion-card-content>
-      </ion-card>
+      <ion-input *ngIf="registro" label="Nombre:" [(ngModel)]="nombre" (ngModelChange)="comprobarNombre()" [ngModelOptions]="{standalone: true}" name="nombre" required autocapitalize></ion-input>
+      <ion-label class="error-label" style="margin:5px;" *ngIf="nombreInvcalido && registro"><span>Escriba un nombre verdadero.</span></ion-label>
+      <ion-input *ngIf="registro" label="Nª Telefono:" type="tel" [(ngModel)]="phone" (ngModelChange)="comprobarNumero()" [ngModelOptions]="{standalone: true}" name="correo" required></ion-input>
+      <ion-label class="error-label" style="margin:5px;" *ngIf="numeroIncorrecto && registro"><span>Escriba un numero verdadero.</span></ion-label>
+      <ion-input *ngIf="registro" type="email" label="Correo:" [(ngModel)]="correo" (ngModelChange)="comprobarCorreo()" [ngModelOptions]="{standalone: true}" name="correo" required></ion-input>
+      <ion-label class="error-label" style="margin:5px;" *ngIf="correoInvalido && registro"><span>El formato del correo no es válido. Usa Gmail, Hotmail, Outlook o Yahoo.</span></ion-label>
+      <ion-input *ngIf="registro" label="Contraseña:" [(ngModel)]="password" [type]="showPassword ? 'text' : 'password'" [ngModelOptions]="{standalone: true}" name="password" required>
+        <ion-icon slot="end" name="eye-off" (click)="togglePassword()" *ngIf="showPassword && registro"></ion-icon> 
+        <ion-icon slot="end" name="eye" (click)="togglePassword()" *ngIf="!showPassword && registro"></ion-icon>
+      </ion-input>
+       
+      <ion-label class="error-label" *ngIf="!isValidPassword() && registro"><span>La contraseña debe tener al menos 6 caracteres, incluir una letra, un número y un carácter especial.</span></ion-label>
+      <ion-button type="submit" (click)="crearUsuario()" *ngIf="registro" style="border-radius: 20px;">Registrate</ion-button>
+       <div class="privacy-container" *ngIf="registro">
+        <ion-item lines="none" class="privacy-item">
+          <ion-label> Nunca compartiremos tus datos sin permiso. </ion-label>
+        </ion-item>
+        <ion-item lines="none" class="privacy-item">
+          <ion-label> 
+            Al continuar aceptas nuestras <a [routerLink]="['/ajustes', uid]" [queryParams]="{ isCondicionUso: true }">Condiciones de uso</a>. Obtén más información de cómo se usan tus datos en nuestra 
+            <a [routerLink]="['/ajustes', uid]" [queryParams]="{ isPrivacidad: true }">Política de Privacidad</a>.
+          </ion-label>
+        </ion-item>
+      </div>
+      
+    </div>
 
-      <ion-card>
-        <ion-item lines="none" style="text-align: center;">
-          <ion-label style="font-size: 20px; color: rgb(255, 255, 255);">Historial de citas</ion-label>
-          <!-- Icono para desplegar/colapsar el historial -->
-          <ion-icon slot="end" name="chevron-down-outline" *ngIf="!showList" (click)="toggleList()"></ion-icon>
-          <ion-icon slot="end" name="chevron-up-outline" *ngIf="showList" (click)="toggleList()"></ion-icon>
-        </ion-item>
-        <ion-item lines="none" style="text-align: center;">
-          <div style="margin-left: 1em;" *ngIf="showList" >
-            <ion-item *ngFor="let item of historial">
-              <ion-label>
-                <h2>{{ item.dia | date: 'dd/MM/yyyy'}} - {{ item.hora }}</h2>
-                <p><strong>Especialista:</strong> {{ item.dentista }}</p>
-                <p><strong>Servicio:</strong> {{ item.servicio }}</p>
-              </ion-label>
-            </ion-item> 
-          </div>
-        </ion-item>
-      </ion-card>
-      <ion-card>
-        <ion-item lines="none" style="text-align: center;">
-          <ion-label style="font-size: 20px; color: rgb(255, 255, 255);">Pedidos Aceptados</ion-label>
-          <!-- Icono para desplegar/colapsar el historial -->
-          <ion-icon slot="end" name="chevron-down-outline" *ngIf="!pedidoList" (click)="pedidosList()"></ion-icon>
-          <ion-icon slot="end" name="chevron-up-outline" *ngIf="pedidoList" (click)="pedidosList()"></ion-icon>
-        </ion-item>
-
-        <ion-item lines="none" style="text-align: center;">
-          <div style="margin-left: 1em;" *ngIf="pedidoList" >
-            <ion-item *ngFor="let item of pedidos; let i = index">
-              <ion-label>
-                <h2>Pedido {{ i + 1 }}</h2> <!-- Número de pedido, comenzando desde 1 -->
-                
-                <p><strong>Productos:</strong></p>
-                <ion-list>
-                  <!-- Iterar sobre los productos dentro de cada pedido -->
-                  <ion-item *ngFor="let producto of item.productos">
-                    <ion-label>
-                      <p>{{ producto.producto.nombre }} - {{ producto.cantidad }} x {{ producto.producto.precio | currency: 'EUR' }}</p>
-                    </ion-label>
-                  </ion-item>
-                </ion-list>
-            
-                <p><strong>Precio Total:</strong> {{ item.precioTotal | currency: 'EUR' }}</p>
-                <p><strong>Estado:</strong> {{ item.estado }}</p>
-              </ion-label>
+    <div *ngIf="usuario.uid">
+        <ion-list style="padding: 10px; background:transparent;">
+            <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isInformacion: true }" >
+            <ion-icon name="information-circle-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>
+                <h2>Información Básica</h2>
+                <p class="small-description">Detalles de tu perfil y ajustes básicos.</p>
+            </ion-label>
             </ion-item>
-          </div>
-        </ion-item>
-      </ion-card>
-    </div>
+            
+            <ion-item routerLink="/cuenta">
+            <ion-icon name="person-circle-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>
+                <h2>Cuenta</h2>
+                <p class="small-description">Gestiona tu cuenta y preferencias.</p>
+            </ion-label>
+            </ion-item>
 
-    <div *ngIf="tipoPerfil == 'Pendientes'">
-      <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngIf="citaPendiente.length != 0">
-        <ion-card-content *ngFor="let item of citaPendiente; let i = index" [ngStyle]="{'border': '1px solid #ccc', 'border-radius': '8px', 'margin-bottom': '10px', 'background-color': '#f9f9f9'}">
-          <ion-label style="font-weight: bold;">Cita {{ i + 1 }} </ion-label> <br>
-          <ion-label>Día: {{ item.dia | date: 'dd/MM/yyyy' }} Hora: {{ item.hora }}</ion-label><br>
-          <ion-label> Dentista: {{ item.dentista }}<br> Servicio: {{ item.servicio }} </ion-label><br>
-        </ion-card-content>
-      </ion-card>
-      <ion-card *ngIf="citaPendiente.length == 0" style="margin: 2em; text-align: center; padding: 1em;">
-        <ion-label>No hay citas pendientes.</ion-label>
-      </ion-card>
-    </div>
+            <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isInformacion: true }">
+            <ion-icon name="information-circle-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>
+                <h2>Reseñas</h2>
+                <p class="small-description">Detalles de tu perfil y ajustes básicos.</p>
+            </ion-label>
+            </ion-item>
 
-    <div *ngIf="tipoPerfil == 'Aceptadas'">
-      <ion-card style="margin: 2em; text-align: center; padding: 1em;" *ngIf="citaConfirmada.length != 0">
-        <ion-card-content *ngFor="let item of citaConfirmada; let i = index" [ngStyle]="{'border': '1px solid #ccc', 'border-radius': '8px', 'margin-bottom': '10px', 'background-color': '#f9f9f9'}">
-          <ion-label style="font-weight: bold;">Cita {{ i + 1 }}</ion-label><br>
-          <ion-label>Día: {{ item.dia | date: 'dd/MM/yyyy' }} Hora: {{ item.hora }}</ion-label><br>
-          <ion-label>Dentista: {{ item.dentista }}<br> Servicio: {{ item.servicio }}</ion-label><br>
-          <ion-icon name="trash-outline" 
-          slot="end" 
-          (click)="anularCita(item)" 
-          style="position: absolute; bottom: 10px; right: 10px; font-size: 25px; cursor: pointer;"></ion-icon>
-        </ion-card-content>
-      </ion-card>
-      <ion-card *ngIf="citaConfirmada.length == 0" style="margin: 2em; text-align: center; padding: 1em;">
-        <ion-label>No tiene citas confirmadas.</ion-label>
-      </ion-card>
-    </div>
-      
+            <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isInformacion: true }">
+            <ion-icon name="information-circle-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>
+                <h2>Historial</h2>
+                <p class="small-description">Detalles de tu perfil y ajustes básicos.</p>
+            </ion-label>
+            </ion-item>
+            
+            
+            <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isAyuda: true }">
+            <ion-icon name="help-circle-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>
+                <h2>Centro de Ayuda</h2>
+                <p class="small-description">Encuentra respuestas a tus preguntas.</p>
+            </ion-label>
+            </ion-item>
+        
+            <ion-item *ngIf="usuariosBloqueados.length != 0" [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isBloqueo: true }">
+            <ion-icon name="ban-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>
+                <h2>Usuarios Bloqueados</h2>
+                <p class="small-description">Revisa los usuarios que has bloqueado.</p>
+            </ion-label>
+            </ion-item>
 
-      
-     
-      
-    </ion-card-content>
-  </ion-card>
+            <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isUSo: true }">
+            <ion-icon name="information-circle-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>
+                <h2>Sobre Nosotros</h2>
+                <p class="small-description">Conoce más acerca de nuestra aplicación.</p>
+            </ion-label>
+            </ion-item>
+            <ion-item lines="none">
+            <ion-grid>
+                <ion-row class="ion-justify-content-center ion-align-items-center">
+                <ion-col size="auto">
+                    <img style="height: 100px;" src="../../../assets/icon/icon.png" class="logo" alt="App Logo">
+                </ion-col>
+                </ion-row>
+            </ion-grid>
+            </ion-item>
+        </ion-list>
+
+    </div>
   
+ 
 </ion-content>

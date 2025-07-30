@@ -37,14 +37,13 @@ export class UsuariosService {
     );
   }
 
-  async createUser(nombre:string, correo:string, password:string, movil:string, rol:string){
-    const data = {nombre, correo, movil, uid:'', rol};
+  async createUser(nombre:string, correo:string, password:string, movil:string){
+    const data = {nombre, correo, movil, uid:'',};
       try{
         await this.firestroreAuth.registrarse(correo, password);
         const uid: string | null = await this.firestroreAuth.getUid();
         if(uid){
           const uidString = uid;
-          console.log(uidString);
           data['uid'] = uid;
           this.firestoreService.creatDoc(data, this.path, uidString);
           this.notificacion.inicializar(uidString);
@@ -99,5 +98,32 @@ export class UsuariosService {
       return false; 
     }
   }
+
+  verificarCorreoExistente(correo: string): Observable<boolean> {
+    return this.firestoreService.verificarCorreoExistente(correo);
+  }
+
+  marcarUsuarioComoEliminado(usuario: any, uid: string): Promise<void> {
+    const path = `Eliminado`; // Solo la colección
+    const datos = {
+      ...usuario,
+      eliminadoEn: new Date(),
+      eliminado: true
+    };
+
+    this.firestoreService.deleteDoc(this.path, uid);
+  
+    return this.firestoreService.creatDoc(datos, path, uid);
+  }
+
+  async updateCorreo(nuevoCorreo: string, uid:string){
+    try {
+      await this.firestoreService.updateCorreo(nuevoCorreo, uid);
+      return true;
+    } catch (error) {
+      console.error("Error al actualizar en Firestore:", error);
+      return false; 
+    }
+  }  
   
 }
