@@ -1,19 +1,61 @@
 <ion-content [fullscreen]="true">
  
-  <div class="center-card">
+   <div *ngIf="citas.length === 0" class="center-card">
     <ion-card>
       <ion-card-content>
         <ion-label class="center-text">
           No tienes ninguna cita programada
         </ion-label>
-        <ion-button expand="block" fill="outline" routerLink="/folder">
+        <ion-button expand="block" fill="outline" [routerLink]="['/tabs/folder', usuario.uid]" >
           ¿Quieres pedir una?
+        </ion-button>
+        <ion-button expand="block" fill="outline" routerLink="/mapa" >
+          ¿Buscas cerca de ti?
         </ion-button>
       </ion-card-content>
     </ion-card>
   </div>
+ <!-- Contenedor principal que ocupa todo el alto y permite scroll -->
+  <div style="display: flex; flex-direction: column; min-height: 100%; align-items: center; padding: 16px; box-sizing: border-box;">
+    
+    <!-- Contenedor de las tarjetas, centrado si hay pocas -->
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 500px; margin-top: auto; margin-bottom: auto;">
+      
+      <ion-card *ngFor="let cita of citas" style="width: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+        <!-- Header con título y WhatsApp -->
+        <ion-card-header style="padding: 0 16px; width: 100%;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; margin-top:10px">
+            <ion-card-title style="flex: 1; word-break: break-word; text-align: left; margin: 0;">
+              Tatuador: {{ cita.nombreTatuador }}
+            </ion-card-title>
 
-  <ion-card>
+            <ion-icon 
+              name="logo-whatsapp" 
+              style="font-size: 24px; cursor: pointer;" 
+              *ngIf="cita.tatuador?.telefono" 
+              (click)="abrirWhatsapp(cita.tatuador!.telefono!)" color="success">
+            </ion-icon>
+          </div>
+        </ion-card-header>
 
-  </ion-card>
+        <!-- Contenido -->
+        <ion-card-content style="word-break: break-word; text-align: left; margin: 0;">
+          <p>{{ cita.dia | date:'dd/MM/yyyy' }} - {{ cita.hora }}</p>
+          <p>{{ cita.estilo }} - {{cita.tipo}}</p>
+          <p [ngStyle]="{'color': cita.estado === 'Pendiente' ? 'red' : (cita.estado === 'Aceptado' ? 'green' : 'black')}">
+            {{ cita.estado }}
+          </p>
+        </ion-card-content>
+
+        <!-- Botón de basura -->
+        <div style="display: flex; justify-content: flex-end;">
+          <ion-button fill="clear" color="danger" (click)="eliminarCita(cita)" style="height: 24px; min-width: 24px; padding: 0;">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-card>
+
+    </div>
+  </div>
+
 </ion-content>

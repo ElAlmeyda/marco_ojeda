@@ -1,0 +1,174 @@
+<ion-header class="cabecera" [translucent]="true">
+  <ion-toolbar style="background-color: white;">
+    <ion-icon class="toolbar-icon" name="arrow-back-outline" slot="start" [routerLink]="['/tabs/folder', usuario.uid]"></ion-icon>
+    <h2 style="margin: 0; font-weight: bold;">{{tatuador.nombreTienda}}</h2>
+    <ion-icon class="toolbar-icon" name="star" slot="end" *ngIf="favorito" (click)="quitarFavorito()"></ion-icon>
+    <ion-icon class="toolbar-icon" name="star-outline" slot="end" *ngIf="!favorito" (click)="ponerFavorito()"></ion-icon>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="content">
+
+  <!-- 🧑 Avatar + Ciudad + Biografía -->
+  <div style="display: flex; align-items: flex-start; padding: 20px;">
+    <img [src]="tatuador.avatar || 'assets/icon/sin_avatar.png'" alt="Avatar"
+      style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-right: 15px;" />
+      
+    <div style="flex: 1; display: flex; flex-direction: column;">
+      <!-- Fila con ciudad a la izquierda y icono a la derecha -->
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <p style="margin: 0; font-size: 14px; color: gray;">{{ tatuador.ciudad }}</p>
+      </div>
+      
+      <!-- ion-text debajo -->
+      <ion-text style="margin-top: 5px;">{{ tatuador.biografia }}</ion-text>
+      <p>
+        <strong>Horario Disponible</strong><br />
+        <strong>Días:</strong> {{ diasResumen }}<br />
+        <strong>Horas:</strong> {{ horasResumen }}
+      </p>
+    </div>
+  </div>
+
+  <!-- 📱 Redes sociales (espaciadas) -->
+  <div style="display: flex; justify-content: center; gap: 20px; margin: 10px 0 30px;">
+    <ion-icon
+      name="logo-instagram"
+      style="font-size: 24px; cursor: pointer;"
+      *ngIf="tatuador.instagram"
+      (click)="abrirRedSocial('instagram', tatuador.instagram)">
+    </ion-icon>
+
+    <ion-icon
+      name="logo-facebook"
+      style="font-size: 24px; cursor: pointer;"
+      *ngIf="tatuador.facebook"
+      (click)="abrirRedSocial('facebook', tatuador.facebook)">
+    </ion-icon>
+
+    <ion-icon
+      name="logo-whatsapp"
+      style="font-size: 24px; cursor: pointer;"
+      *ngIf="tatuador.telefono"
+      (click)="abrirWhatsapp(tatuador.telefono)">
+    </ion-icon>
+
+    <ion-icon
+      name="logo-tiktok"
+      style="font-size: 24px; cursor: pointer;"
+      *ngIf="tatuador.tiktok"
+      (click)="abrirRedSocial('tiktok', tatuador.tiktok)">
+    </ion-icon>
+
+    <ion-icon
+      name="logo-twitter"
+      style="font-size: 24px; cursor: pointer;"
+      *ngIf="tatuador.twitter"
+      (click)="abrirRedSocial('twitter', tatuador.twitter)">
+    </ion-icon>
+  </div>
+
+
+
+  <!-- 🎨 Estilos (Chips alineados horizontalmente) -->
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 20px;">
+    <ion-chip *ngFor="let estilo of tatuador.estilos">
+      <ion-label>{{ estilo }}</ion-label>
+    </ion-chip>
+
+    <ng-container *ngIf="!tatuador.estilos || tatuador.estilos.length === 0">
+      <ion-chip color="medium">
+        <ion-label>No especificado</ion-label>
+      </ion-chip>
+    </ng-container>
+  </div>
+
+
+
+  <div style="display: flex; justify-content: center; padding: 20px;">
+    <ion-button (click)="pedirCita()"> Pedir Cita</ion-button>
+  </div>
+
+
+  <!-- 🖼️ Galería de fotos -->
+ <ion-grid>
+    <ion-row *ngIf="tatuador.foto">
+      <!-- Mostrar todas las fotos existentes -->
+      <ion-col size="6" *ngFor="let foto of tatuador.foto; let i = index">
+        <ion-img 
+          [src]="foto" 
+          style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; cursor: pointer;">
+        </ion-img>
+      </ion-col>
+    </ion-row>
+    <div *ngIf="!tatuador.foto" style="display: flex; justify-content: center; padding: 20px; color: gray;">
+      No tiene fotos para mostrar.
+    </div>
+  </ion-grid>
+
+  <!-- 📝 Bloque de reseñas -->
+  <div style="padding: 20px;">
+    <h3 style="margin-bottom: 10px;">Reseñas</h3>
+
+      <!-- 🔄 Lista de reseñas existentes -->
+      <ion-card *ngFor="let resena of resenas">
+    <ion-card-header>
+      <!-- Flex container para título y estrellas -->
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <!-- Nombre del usuario -->
+        <ion-card-title style="margin: 0;">{{ resena.nombreUsuario }}</ion-card-title>
+
+        <!-- Estrellas alineadas a la derecha -->
+        <ion-card-subtitle style="margin: 0;">
+          <ion-icon
+            *ngFor="let star of [1,2,3,4,5]"
+            [name]="resena.puntuacion >= star ? 'star' : 'star-outline'"
+            style="font-size: 20px; cursor: pointer; color: gold;">
+          </ion-icon>
+        </ion-card-subtitle>
+      </div>
+    </ion-card-header>
+
+    <ion-card-content>
+      {{ resena.mensaje }}
+    </ion-card-content>
+  </ion-card>
+
+
+
+    <!-- Si no hay reseñas -->
+    <div *ngIf="!resenas || resenas.length === 0" style="color: gray; text-align: center;">
+      Este tatuador aún no tiene reseñas.
+    </div>
+
+    <hr style="margin: 30px 0;" />
+
+    <!-- ✏️ Formulario para dejar una reseña -->
+    <div *ngIf="!resenaExistente">
+      <h4>Deja tu reseña</h4>
+
+      <!-- Estrellas -->
+      <div style="display: flex; gap: 5px; margin-bottom: 10px;">
+        <ion-icon
+          *ngFor="let star of [1,2,3,4,5]"
+          [name]="estrellaSeleccionada >= star ? 'star' : 'star-outline'"
+          style="font-size: 30px; cursor: pointer; color: gold;"
+          (click)="seleccionarEstrella(star)">
+        </ion-icon>
+      </div>
+
+      <!-- Mensaje -->
+      <ion-textarea
+        [(ngModel)]="mensajeResena"
+        placeholder="Escribe tu opinión..."
+        autoGrow="true">
+      </ion-textarea>
+
+      <!-- Botón -->
+      <ion-button expand="block" (click)="enviarResena()">
+        Enviar Reseña
+      </ion-button>
+    </div>
+  </div>
+
+</ion-content>

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Tienda, Usuario } from 'src/app/model';
+import { TiendaService } from 'src/app/backend/tienda.service';
+import { Tatuador, Usuario } from 'src/app/model';
+import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 
 @Component({
   selector: 'app-favoritos',
@@ -10,49 +12,51 @@ export class FavoritosPage implements OnInit {
 
   favorito=true;
   disfavorito=false;
+  favoritos!: Tatuador []
+  usuario: Usuario = {
+    uid: '',
+    nombre: '',
+    correo: '',
+  };
 
-  favoritos: Tienda [] = [
-     {
-    id: '1',
-    nombre: 'Panadería La Estrella',
-    descripcion: 'Deliciosos panes y pasteles artesanales.',
-    foto: 'assets/tiendas/panaderia.jpg',
-    precio: 0,
-    favorito: true
-  },
-  {
-    id: '2',
-    nombre: 'Cafetería Central',
-    foto: 'assets/tiendas/cafeteria.jpg',
-    descripcion: 'Deliciosos panes y pasteles artesanales.',
-    precio: 0,
-    favorito: true
-
-  },
-  {
-    id: '3',
-    nombre: 'Tienda Orgánica',
-    descripcion: 'Productos ecológicos y saludables.',
-    foto: 'assets/tiendas/organica.jpg',
-    precio: 0,
-    favorito: true
-
-  },
-  ];
-  usuario!: Usuario
-
-  constructor() { }
+  constructor(public tiendaService: TiendaService, public firestroreAuth: FirestoreAuthService) {
+    this.firestroreAuth.stateAuth().subscribe(async res => {
+      if (res != null) {
+        this.usuario.uid = res.uid;
+        await this.obtenerFavoritos();
+      } else {
+        this.usuario.uid= '';
+      }
+    });
+   }
 
   ngOnInit() {
 
   }
 
-  disfav(fav: any){
-    fav.favorito = false;
+  obtenerFavoritos() {
+    this.tiendaService.obtenerFavorito(this.usuario.uid).subscribe(res => {
+      this.favoritos = res || [];
+
+      this.favoritos.forEach(tatuador => {
+        this.tiendaService.getTatuadorById(tatuador.uid).subscribe(data => {
+          this.tiendaService.getAvataresDeTatuador(tatuador.uid).subscribe(avatares => {
+            if(avatares)
+            tatuador.avatar = avatares; // un array sólo con URLs válidas
+          });
+        });
+      });
+    });
   }
 
-  like(fav: any){
+  disfav(fav: any) {
+    fav.favorito = false;
+    this.tiendaService.quitarFavorito(this.usuario.uid, fav.uid); 
+  }
+
+  like(fav: any) {
     fav.favorito = true;
+    this.tiendaService.agregarFavorito(this.usuario.uid, fav.uid); 
   }
 
 }

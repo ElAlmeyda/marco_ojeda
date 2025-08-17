@@ -1,12 +1,12 @@
 export const environment = {
   production: true,
   firebaseConfig: {
-    apiKey: "AIzaSyAPn7jszWHUjwBC_AExXup4awmh8ti_bsE",
-    authDomain: "tienda-6b661.firebaseapp.com",
-    projectId: "tienda-6b661",
-    storageBucket: "tienda-6b661.firebasestorage.app",
-    messagingSenderId: "394907658354",
-    appId: "1:394907658354:web:b4af42422c9fe8666b7aeb",
-    measurementId: "G-ZX4GL89EHY"
+    apiKey: "AIzaSyC_8ji_Yj6X5kbs7-Fn7g4j6B0plrfhBR8",
+    authDomain: "itattoo-9f978.firebaseapp.com",
+    projectId: "itattoo-9f978",
+    storageBucket: "itattoo-9f978.firebasestorage.app",
+    messagingSenderId: "1056303888573",
+    appId: "1:1056303888573:web:1ee8e4fc7f7403eac29fd4",
+    measurementId: "G-T736764WXT"
   }
 };

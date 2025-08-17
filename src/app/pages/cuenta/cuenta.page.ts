@@ -29,7 +29,7 @@ export class CuentaPage implements OnInit {
               private afAuth: AngularFireAuth, public router: Router, public toast: ToastController, private loadingCtrl: LoadingController) {  
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
-        this.uid = res.uid;
+        this.usuario.uid = res.uid;
         this.obtenerUsuario();
       } 
     });
@@ -37,15 +37,19 @@ export class CuentaPage implements OnInit {
 
   async obtenerUsuario() {
     await this.user.getUsuarios().subscribe(() => {
-      const usuario = this.user.getUsuarioConcreto(this.uid);
+      const usuario = this.user.getUsuarioConcreto(this.usuario.uid);
       if (usuario) {
         this.usuario = usuario;
       }
     });
   }
+
   ngOnInit() {
   }
-
+  
+  volver(){
+    this.navCtrl.back();
+  }
 
   async cambioContrasena(){
     const user = await this.afAuth.currentUser;

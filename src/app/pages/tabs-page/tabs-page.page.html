@@ -1,0 +1,20 @@
+  <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button [routerLink]="['/tabs/folder', usuario.uid]" style="color:white">
+          <img src="assets/icon/icon.png" style="width: 32px; height: 32px;"/>
+        </ion-tab-button>
+        <ion-tab-button routerLink="/tabs/cita" style="color:white">
+          <ion-icon name="calendar-outline"></ion-icon>
+        </ion-tab-button>
+        <ion-tab-button routerLink="/tabs/favoritos" style="color:white">
+          <ion-icon name="bookmark-outline"></ion-icon>
+        </ion-tab-button>
+        <ion-tab-button routerLink="/tabs/perfil" style="color:white">
+          <ion-icon name="person-outline" *ngIf="!usuario.avatar"></ion-icon>
+          <ion-avatar *ngIf="usuario.avatar">
+            <ion-img [src]="usuario.avatar[0]"></ion-img>
+          </ion-avatar>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>  
+

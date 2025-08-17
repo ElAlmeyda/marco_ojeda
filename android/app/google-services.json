@@ -1,37 +1,45 @@
 {
   "project_info": {
-    "project_number": "867441361379",
-    "firebase_url": "https://servicio-4f831-default-rtdb.firebaseio.com",
-    "project_id": "servicio-4f831",
-    "storage_bucket": "servicio-4f831.appspot.com"
+    "project_number": "1056303888573",
+    "project_id": "itattoo-9f978",
+    "storage_bucket": "itattoo-9f978.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:867441361379:android:b1ff3a3e7f4316d09ee0d6",
+        "mobilesdk_app_id": "1:1056303888573:android:d327bd4734331c05c29fd4",
         "android_client_info": {
-          "package_name": "com.MarcoOjeda.app"
+          "package_name": "com.iTatooTatuador.app"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "867441361379-dsdgu9sf23g3pfi65c35bqa3hu53b4kn.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCVnH6AGxj_gfN5zbifW7aP1bG8rUzkeUU"
+          "current_key": "AIzaSyAK-TAVsq_DXBkCTFG-AgNz7fU1Z5yGy4A"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "867441361379-dsdgu9sf23g3pfi65c35bqa3hu53b4kn.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1056303888573:android:903fea09d53080c9c29fd4",
+        "android_client_info": {
+          "package_name": "com.iTattoo.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAK-TAVsq_DXBkCTFG-AgNz7fU1Z5yGy4A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
         }
       }
     }

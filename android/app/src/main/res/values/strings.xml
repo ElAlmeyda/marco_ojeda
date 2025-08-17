@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">ITattoo</string>
-    <string name="title_activity_main">ITattoo</string>
-    <string name="package_name">com.MarcoOjeda.app</string>
-    <string name="custom_url_scheme">com.MarcoOjeda.app</string>
+    <string name="app_name">iTattoo Cliente</string>
+    <string name="title_activity_main">iTattoo Cliente</string>
+    <string name="package_name">com.iTattoo.app</string>
+    <string name="custom_url_scheme">com.iTattoo.app</string>
 </resources>

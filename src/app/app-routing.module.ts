@@ -4,24 +4,39 @@ import { PreloadAllModules, Router, RouterModule, Routes } from '@angular/router
 import { ToastController } from '@ionic/angular';
 import { map, take, tap } from 'rxjs';
 import { RoleguardService } from './service/roleguard.service';
+import { TabsPagePage } from './pages/tabs-page/tabs-page.page';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'folder',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {
-    path: 'folder',
-    loadChildren: () => import('./pages/folder/folder.module').then( m => m.FolderPageModule)
+    path: 'tabs',
+    component: TabsPagePage,  // Usa el componente de tabs como contenedor
+    children: [
+      {
+        path: 'folder/:uid',
+        loadChildren: () => import('./pages/folder/folder.module').then(m => m.FolderPageModule)
+      },
+      {
+        path: 'perfil',
+        loadChildren: () => import('./pages/perfil/perfil.module').then(m => m.PerfilPageModule)
+      },
+      {
+        path: 'cita',
+        loadChildren: () => import('./pages/cita/cita.module').then( m => m.CitaPageModule)
+      },
+      {
+        path: 'favoritos',
+        loadChildren: () => import('./pages/favoritos/favoritos.module').then( m => m.FavoritosPageModule)
+      },
+    ]
   },
   {
     path: 'inicio-sesion',
     loadChildren: () => import('./pages/inicio-sesion/inicio-sesion.module').then( m => m.InicioSesionPageModule)
-  },
-  {
-    path: 'perfil',
-    loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
   {
     path: 'forgot-password',
@@ -35,13 +50,8 @@ const routes: Routes = [
     path: 'terminos',
     loadChildren: () => import('./pages/terminos/terminos.module').then( m => m.TerminosPageModule)
   },
-  {
-    path: 'favoritos',
-    loadChildren: () => import('./pages/favoritos/favoritos.module').then( m => m.FavoritosPageModule)
-  },  {
-    path: 'cita',
-    loadChildren: () => import('./pages/cita/cita.module').then( m => m.CitaPageModule)
-  },
+  
+  
   {
     path: 'cuenta',
     loadChildren: () => import('./pages/cuenta/cuenta.module').then( m => m.CuentaPageModule)
@@ -50,16 +60,22 @@ const routes: Routes = [
     path: 'mapa',
     loadChildren: () => import('./pages/mapa/mapa.module').then( m => m.MapaPageModule)
   },
-
-
-
-
-
-
-
-
-
-
+  {
+    path: 'tabs-page',
+    loadChildren: () => import('./pages/tabs-page/tabs-page.module').then( m => m.TabsPagePageModule)
+  },
+  {
+    path: 'tatuador/:uid',
+    loadChildren: () => import('./pages/tatuador/tatuador.module').then( m => m.TatuadorPageModule)
+  },
+  {
+    path: 'pedir-cita/:uid',
+    loadChildren: () => import('./pages/pedir-cita/pedir-cita.module').then( m => m.PedirCitaPageModule)
+  },
+  {
+    path: 'ajustes/:uid',
+    loadChildren: () => import('./pages/ajustes/ajustes.module').then( m => m.AjustesPageModule)
+  },
 
 
 ];

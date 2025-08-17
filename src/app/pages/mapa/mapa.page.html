@@ -1,3 +1,29 @@
 <ion-content [fullscreen]="true">
+  <ion-button fill="clear" [routerLink]="['/tabs/folder', usuario.uid]" style="position: absolute; top: 10px; left: 10px; z-index: 1000;">
+    <ion-icon name="arrow-back-outline"></ion-icon>
+  </ion-button>
   <div id="map"></div>
+
+  <ion-card *ngIf="tatuadorSeleccionado" 
+          style="position: fixed; bottom: 10px; left: 10px; right: 10px; height: 200px; border-radius: 12px; z-index: 9999; overflow: hidden;" >
+
+  <ion-icon 
+    name="close" 
+    (click)="tatuadorSeleccionado = null"
+    style="position: absolute; top: 10px; right: 10px; font-size: 24px; color: #666; cursor: pointer; z-index: 10;">
+  </ion-icon>
+
+  <ion-img 
+    [src]="tatuadorSeleccionado.foto?.[0] || 'assets/icon/sin_avatar.png'" 
+    style="height: 130px; width: 100%; object-fit: cover;" [routerLink]="['/tatuador', tatuadorSeleccionado.uid]">
+  </ion-img>
+
+  <ion-card-header style="padding: 8px 12px;">
+    <ion-card-title style="margin: 0; font-size: 18px; font-weight: bold;" [routerLink]="['/tatuador', tatuadorSeleccionado.uid]">
+      {{ tatuadorSeleccionado.nombreTienda }}
+    </ion-card-title>
+  </ion-card-header>
+
+</ion-card>
+
 </ion-content>

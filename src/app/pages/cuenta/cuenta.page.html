@@ -1,3 +1,9 @@
+<ion-header [translucent]="true">
+  <ion-toolbar style="padding: 10px;">
+    <ion-icon class="toolbar-icon" slot="start" name="chevron-back-outline" (click)="volver()"></ion-icon>
+    <ion-label class="toolbar-label"> Cuenta </ion-label>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content class="centered-content" style="margin-top:25%;">
   <div class="top-content">
@@ -5,7 +11,7 @@
     <ion-item>{{ usuario.correo }}</ion-item>
     <div class="button-container">
       <ion-button class="delete-button" shape="round" (click)="showActionSheet('correo')">
-        <ion-icon name="refresh-outline"></ion-icon>Actualizar correo</ion-button>
+        Actualizar correo</ion-button>
     </div>
     
     <ion-label class="forgot-password">
@@ -14,11 +20,10 @@
   </div>
   <div class="button-container">
     <ion-button class="delete-button" shape="round"  (click)="eliminar()">
-      <ion-icon name="trash-outline"></ion-icon>Eliminar cuenta</ion-button>
+      Eliminar cuenta</ion-button>
   </div>
   <div class="button-container">
     <ion-button shape="round" (click)="logout()" routerLink="/inicio-sesion">
-      <ion-icon name="exit-outline" slot="start"></ion-icon>
       Cerrar sesión
     </ion-button>
   </div>

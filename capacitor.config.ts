@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.MarcoOjeda.app',
-  appName: 'ITattoo',
+  appId: 'com.iTattoo.app',
+  appName: 'iTattoo Cliente',
   webDir: 'www',
   server: {
     androidScheme: 'https',  

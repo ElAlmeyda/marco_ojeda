@@ -37,12 +37,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       //return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
     //}), 
   provideFirestore(() => getFirestore()), provideDatabase(() => getDatabase()), 
-  provideFunctions(() => getFunctions()), provideMessaging(() => getMessaging()), providePerformance(() => getPerformance()), provideStorage(() => getStorage()), provideRemoteConfig(() => getRemoteConfig()), ServiceWorkerModule.register('ngsw-worker.js', {
-  enabled: !isDevMode(),
-  // Register the ServiceWorker as soon as the application is stable
-  // or after 30 seconds (whichever comes first).
-  registrationStrategy: 'registerWhenStable:30000'
-})],
+  provideFunctions(() => getFunctions()), provideMessaging(() => getMessaging()), providePerformance(() => getPerformance()), provideStorage(() => getStorage()), provideRemoteConfig(() => getRemoteConfig())],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, DatePipe, ScreenTrackingService, UserTrackingService],
   bootstrap: [AppComponent],
 })

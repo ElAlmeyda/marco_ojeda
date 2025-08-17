@@ -1,38 +1,38 @@
 <ion-content [fullscreen]="true">
   <ion-card-content class="card-content">
-    <ion-searchbar style="padding-top: 60px;" placeholder="Buscar" [(ngModel)]="searchTerm" (ionChange)="buscarMatches()"></ion-searchbar>
-      <div class="horizontal-scroll">
-        <ion-label class="titulo-grande"> Recomendados </ion-label>
+    <ion-searchbar style="padding-top: 60px;" placeholder="Buscar" [(ngModel)]="searchTerm" (ionChange)="buscarTatuador()"></ion-searchbar>
+      <div class="horizontal-scroll" *ngIf="recomendado.length > 0">
+        <ion-label class="titulo-grande"><strong>Recomendados</strong></ion-label>
         <!-- Contenedor para los cards de usuarios con conversación -->
         <ion-row *ngFor="let tipo of recomendado" size="auto">
-          <ion-card class="user-card">
-            <ion-img [src]=""></ion-img>
+          <ion-card class="user-card" [routerLink]="['/tatuador', tipo.uid]">
+            <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png' "></ion-img>
             <ion-card-header>
-              <ion-card-title>{{ tipo.nombre }}</ion-card-title>
+              <ion-card-title class="titulo-tienda">{{ tipo.nombreTienda }}</ion-card-title>
             </ion-card-header>
           </ion-card>
         </ion-row>
       </div>
-      <div class="horizontal-scroll">
+      <div class="horizontal-scroll" *ngIf="cerca.length > 0">
         <ion-label class="titulo-grande"> Cerca de ti </ion-label>
         <!-- Contenedor para los cards de usuarios con conversación -->
-        <ion-row *ngFor="let tipo of recomendado" size="auto">
-          <ion-card class="user-card">
-            <ion-img [src]=""></ion-img>
+        <ion-row *ngFor="let tipo of cerca" size="auto">
+          <ion-card class="user-card" [routerLink]="['/tatuador', tipo.uid]">
+            <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png'"></ion-img>
             <ion-card-header>
-              <ion-card-title>{{ tipo.nombre }}</ion-card-title>
+              <ion-card-title>{{ tipo.nombreTienda }}</ion-card-title>
             </ion-card-header>
           </ion-card>
         </ion-row>
       </div>
-      <div class="horizontal-scroll">
-        <ion-label class="titulo-grande"> Disponibles hoy </ion-label>
+      <div class="horizontal-scroll" *ngIf="valoracion.length > 0">
+        <ion-label class="titulo-grande"> Valoración </ion-label>
         <!-- Contenedor para los cards de usuarios con conversación -->
-        <ion-row *ngFor="let tipo of recomendado" size="auto">
-          <ion-card class="user-card">
-            <ion-img [src]=""></ion-img>
+        <ion-row *ngFor="let tipo of valoracion" size="auto">
+          <ion-card class="user-card" [routerLink]="['/tatuador', tipo.uid]">
+            <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png'"></ion-img>
             <ion-card-header>
-              <ion-card-title>{{ tipo.nombre }}</ion-card-title>
+              <ion-card-title>{{ tipo.nombreTienda }}</ion-card-title>
             </ion-card-header>
           </ion-card>
         </ion-row>

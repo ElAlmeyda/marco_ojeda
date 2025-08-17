@@ -10,24 +10,49 @@ export interface Usuario {
 }
 
 
-export interface Tienda {
+export interface Tatuador {
     nombre: string;
-    descripcion: string;
-    foto: string;
+    nombreTienda: string;
+    telefono: string;
+    biografia: string;
+    foto?: string[];
+    estilos?: string[];
+    avatar: string;
     precio: number;
-    id: string;
-    favorito?: boolean;
+    uid: string;
+    fecha?:string[];
+    hora?:string[];
+    fav?: boolean;
+    ciudad?: string;
+    facebook?: string;
+    instagram?: string;
+    tiktok?: string;
+    twitter?: string;
+    trabajadores?: string[];
 }
 
 
 export interface Cita {
-    nombre: string;
-    servicio: string;
+    nombreUser: string;
+    nombreTatuador: string;
     movil: string;
-    dentista: string;
-    dia: string;
     hora: string;
-    estado:string;
-    id: string;
+    dia: string;
+    estilo: string;
+    tipo:string;
+    mensaje:string;
+    correo:string;
     uid:string;
+    estado?:string;
+    uidTatuador?:string;
+    tatuador?: Tatuador;
+}
+
+export interface Resena {
+    id?: string;
+    puntuacion: number;
+    mensaje: string;
+    nombreUsuario: string;
+    nombreTatuador?: string;
+    uidTatuador?: string;
 }

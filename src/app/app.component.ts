@@ -4,7 +4,6 @@ import { FirestoreAuthService } from './service/firestore-auth.service';
 import { FirestoreService } from './service/firestore.service';
 import { Cita, Usuario } from './model';
 import { Router } from '@angular/router';
-import { CitaService } from './backend/cita.service';
 import { NotificacionService } from './service/notificacion.service';
 import { MenuController, Platform } from '@ionic/angular';
 import { App } from '@capacitor/app';
@@ -41,18 +40,18 @@ export class AppComponent {
     this.showList = !this.showList;
   }
 
-  constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, public router: Router, public citas: CitaService, public notificacion: NotificacionService,
+  constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, public router: Router, public notificacion: NotificacionService,
               private menu: MenuController, private platform: Platform, public ubicacion: UbicacionService) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
         await this.obtenerUsuario();
+        this.router.navigate(['/tabs/folder', this.uid]);
       } else {
         this.uid= '';
         this.user.changeUserLogin(false);
         this.change = this.user.usuarioLogin;
-        this.router.navigate(['/folder']);
-
+        this.router.navigate(['/tabs/folder', this.uid]);
       }
     });
     this.initializeApp();
@@ -97,15 +96,13 @@ export class AppComponent {
     }
 
     this.auth.stateAuth().pipe(take(1)).subscribe(async res => {
-      const yaEntro = sessionStorage.getItem('yaEntro');
-
-      if (res != null && !yaEntro) {
+      console.log(res?.uid);
+      if (res != null) {
         // RevenueCat
-        sessionStorage.setItem('yaEntro', 'true');
         this.usuario.uid = res.uid;
 
         // Establece la ubicación
-        await this.ubicacion.obtenerUbicacion(res.uid);
+        await this.ubicacion.obtenerUbicacionPrimero();
 
         // Navegación
         await this.router.navigate(['/tabs/folder', res.uid]);
@@ -113,8 +110,7 @@ export class AppComponent {
 
       } else {
         this.usuario.uid = '';
-        sessionStorage.setItem('yaEntro', 'true');
-        await this.router.navigate(['/inicio-sesion']);
+        await this.router.navigate(['/tabs/folder', this.usuario.uid]);
         this.ocultarSplashScreen();
       }
     });

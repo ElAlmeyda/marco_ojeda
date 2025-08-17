@@ -1,0 +1,16 @@
+/* Estilo para solo el borde en el día seleccionado */
+ion-datetime::part(active) {
+  background: transparent;       /* sin relleno */
+  border: 2px solid var(--ion-color-primary); /* borde en color principal */
+  border-radius: 50%;            /* redondo */
+  color: var(--ion-color-primary); /* color del texto */
+}
+
+ion-datetime::part(today) {
+  background: transparent; /* sin fondo */
+  border: none;            /* sin borde */
+  border-radius: 0;        /* sin redondeo */
+  color: var(--ion-color-primary); /* texto azul (color primario) */
+  font-weight: bold;
+}
+

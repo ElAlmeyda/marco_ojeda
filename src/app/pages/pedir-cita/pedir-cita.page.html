@@ -1,0 +1,58 @@
+
+<ion-content>
+
+   <ion-card style="margin-top: 10%;">
+    <ion-card-header>
+      <ion-item> 
+      <ion-icon class="toolbar-icon" name="arrow-back-outline" slot="start" (click)="volver()" ></ion-icon>
+        <ion-card-title style="margin: auto;">Pedir Cita a {{tatuador.nombreTienda}}</ion-card-title>
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content>
+
+      <form>
+        <div *ngIf="primerPaso" style="display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 16px;">
+          <ion-select (ionChange)="obtenerHoraDisponibles()" [(ngModel)]="tatuadorSeleccionado" label="Trabajador:" style="width: 100%;" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let trabajador of tatuador.trabajadores">{{trabajador}}</ion-select-option>
+          </ion-select>
+          <ion-datetime *ngIf="fechasDisponibles.length > 0" presentation="date" [value]="fechasDisponibles[0]" [min]="fechaMin" [isDateEnabled]="habilitarFecha"
+              [(ngModel)]="fechaSeleccionada" [ngModelOptions]="{standalone: true}" (ionChange)="obtenerHoraDisponibles()"
+              style="width: 100%; margin-bottom: 10px;"></ion-datetime>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+            <ion-chip
+              *ngFor="let hora of horasLibres"
+              [color]="horaSeleccionada === hora ? 'primary' : 'medium'"
+              (click)="horaSeleccionada = hora">
+              {{ hora }}
+            </ion-chip>
+            <ion-chip color="medium" disabled *ngIf="!horasLibres" >
+              No hay horas disponibles
+            </ion-chip>
+          </div>
+          <ion-button expand="full" (click)="siguiente()" [disabled]="!tatuadorSeleccionado || !fechaSeleccionada || !horaSeleccionada">Siguiente</ion-button>
+        </div>
+        <div *ngIf="segundoPaso" style="display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 16px;">
+          <ion-select label="Estilos:" [(ngModel)]="estilo" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let estilos of tatuador.estilos">{{estilos}}</ion-select-option>
+          </ion-select>
+          <ion-select label="Tipo de cita:" [(ngModel)]="tipo" [ngModelOptions]="{standalone: true}">
+            <ion-select-option value="primera_cita">1ª Cita</ion-select-option>
+            <ion-select-option value="consulta">Consulta previa</ion-select-option>
+            <ion-select-option value="tatuaje">Tatuaje</ion-select-option>
+            <ion-select-option value="retoque">Retoque</ion-select-option>
+          </ion-select>
+
+          <ion-textarea label="Comentarios adicionales:" name="comentarios" style="height: 100px;" [(ngModel)]="mensaje"></ion-textarea>
+          <ion-checkbox [(ngModel)]="acepto" labelPlacement="end" style="white-space: normal; width: 100%;" [ngModelOptions]="{standalone: true}"><span style="white-space: normal; overflow: visible; text-overflow: clip;">
+            Acepto los términos y condiciones y la política de cancelación del tatuador.
+          </span></ion-checkbox>
+          <div style="display: flex; justify-content: center; margin-top: 20px;">
+            <ion-button (click)="guardarCita()" [disabled]="!estilo || !tipo || !acepto">Pedir cita</ion-button>
+          </div>
+        </div>
+
+      </form>
+    
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { FirestoreService } from '../service/firestore.service';
 import { Usuario } from '../model';
-import { Observable, filter, map, pipe, tap } from 'rxjs';
+import { Observable, filter, finalize, lastValueFrom, map, pipe, tap } from 'rxjs';
 import { FirestoreAuthService } from '../service/firestore-auth.service';
 import { NotificacionService } from '../service/notificacion.service';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class UsuariosService {
 
   uid= '';
 
-  constructor(public firestoreService: FirestoreService,  public firestroreAuth: FirestoreAuthService, public notificacion: NotificacionService) {
+  constructor(public firestoreService: FirestoreService,  public firestroreAuth: FirestoreAuthService, public notificacion: NotificacionService, public storage: AngularFireStorage) {
   }
 
   changeUserLogin(change:boolean){
@@ -125,5 +126,38 @@ export class UsuariosService {
       return false; 
     }
   }  
+
+  async subirImagen(files: File[], uid: string): Promise<string[]> {
+    const urls: string[] = [];
+
+    for (const file of files) {
+      const filePath = `avatars/${uid}/${file.name}`;
+      const fileRef = this.storage.ref(filePath);
+      
+      const uploadTask = this.storage.upload(filePath, file);
+      
+      // Espera a que la subida se complete completamente
+      await lastValueFrom(uploadTask.snapshotChanges().pipe(
+        finalize(() => {
+          console.log(`Subida finalizada para: ${file.name}`);
+        })
+      ));
+      
+      // Luego obtiene la URL del archivo subido
+      const url = await lastValueFrom(fileRef.getDownloadURL());
+      urls.push(url);
+    }
+
+    return urls;
+  }
   
+
+   async actualizarAvatar(userId: string, data: string): Promise<void> {
+    return this.firestoreService.updateDocAvatar(userId, data);
+  }
+
+  getAvatar(uid: string){
+    return this.firestoreService.obtenerAvatar(uid);
+  }
+
 }
