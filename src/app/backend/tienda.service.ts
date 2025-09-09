@@ -72,6 +72,10 @@ export class TiendaService {
     return this.firestrore.guardarCita(cita, uidCliente, uidTatuador);
   }
 
+  guardarConsulta(cita:any, uidCliente:string, uidTatuador:string){
+    return this.firestrore.guardarConsulta(cita, uidCliente, uidTatuador);
+  }
+
   getCitasUsuario(uid: string) {
     return this.firestrore.getCitasUsuario(uid);
   }
@@ -100,4 +104,20 @@ export class TiendaService {
     return this.firestrore.actualizarResena(uidCliente, uidTatuador, uidResena, resena);
   }
 
+  getTrabajadores(estudioId: string){
+    return this.firestrore.getTrabajadores(estudioId);
+  }
+
+  eliminarCita(cita: Cita, uidCita: string, userId: string){
+    console.log("Citaid tatuador", cita.uidTatuador, "Citaid" ,uidCita);
+    return this.firestrore.eliminarCita(cita, uidCita, userId);
+  }
+
+  aceptarCita(uidCita: string, uidTatuador:string, userId: string){
+    return this.firestrore.aceptarCita(uidCita, uidTatuador, userId, 'Aceptado');
+  }
+
+  getFotosTatuador(estudioId: string){
+    return this.firestrore.getFotosTatuador(estudioId);
+  }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { Tatuador, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
@@ -19,7 +20,7 @@ export class FavoritosPage implements OnInit {
     correo: '',
   };
 
-  constructor(public tiendaService: TiendaService, public firestroreAuth: FirestoreAuthService) {
+  constructor(public tiendaService: TiendaService, public firestroreAuth: FirestoreAuthService, private router: Router) {
     this.firestroreAuth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.usuario.uid = res.uid;
@@ -32,6 +33,10 @@ export class FavoritosPage implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  irAlTatuador(fav: any) {
+    this.router.navigate(['/tatuador', fav.uid]);
   }
 
   obtenerFavoritos() {
@@ -58,5 +63,6 @@ export class FavoritosPage implements OnInit {
     fav.favorito = true;
     this.tiendaService.agregarFavorito(this.usuario.uid, fav.uid); 
   }
+  
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { Tatuador, Usuario } from 'src/app/model';
@@ -22,8 +22,11 @@ export class MapaPage implements OnInit {
   map: any;
   tatuadores !: Tatuador[]
   tatuadorSeleccionado: Tatuador | null = null;
+  imagenCargada: any;
+  latUsuario: number = 0;
+  lonUsuario: number = 0;
 
-  constructor(private navCtrl: NavController, public firestroreAuth: FirestoreAuthService, public tiendaService: TiendaService) {
+  constructor(private navCtrl: NavController, public firestroreAuth: FirestoreAuthService, public tiendaService: TiendaService, private zone: NgZone) {
      this.firestroreAuth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.usuario.uid = res.uid;
@@ -69,13 +72,12 @@ export class MapaPage implements OnInit {
       const position = await Geolocation.getCurrentPosition({
         enableHighAccuracy: true
       });
-
-      const myLat = position.coords.latitude;
-      const myLng = position.coords.longitude;
+      this.latUsuario = position.coords.latitude;
+      this.lonUsuario = position.coords.longitude;
 
       // Crear el mapa centrado en la ubicación del usuario
       this.map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
-        center: { lat: myLat, lng: myLng },
+        center: { lat: this.latUsuario, lng: this.lonUsuario },
         zoom: 14,
         disableDefaultUI: true,
         styles: [
@@ -89,7 +91,7 @@ export class MapaPage implements OnInit {
 
       // ✅ Añadir marcador de tu ubicación con ícono azul
       const tuUbicacionMarker = new google.maps.Marker({
-        position: { lat: myLat, lng: myLng },
+        position: { lat: this.latUsuario, lng: this.lonUsuario },
         map: this.map,
         title: 'Tu ubicación',
         icon: {
@@ -100,25 +102,48 @@ export class MapaPage implements OnInit {
 
       // Obtener y mostrar los tatuadores
       this.tiendaService.getTatuadores().subscribe(tatuadores => {
-        tatuadores.forEach(tatuador => {
+        tatuadores.forEach(async tatuador => {
           if (tatuador.ciudad) {
-            this.geocodeDireccion(tatuador.ciudad).then(coords => {
-              if (coords) {
-                const marker = new google.maps.Marker({
-                  position: coords,
-                  map: this.map,
-                  title: tatuador.nombreTienda || 'Tatuador',
-                  icon: {
-                    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
-                    scaledSize: new google.maps.Size(35, 35)
-                  }
-                });
+            const coords = await this.geocodeDireccion(tatuador.ciudad);
+            if (coords) {
+              // Guardar latitud, longitud y distancia usando cast a any
+              (tatuador as any).latitud = coords.lat;
+              (tatuador as any).longitud = coords.lng;
 
-                marker.addListener('click', () => {
+              // Suponiendo que tienes this.latUsuario y this.lonUsuario
+              if (this.latUsuario && this.lonUsuario) {
+                (tatuador as any).distancia = this.calcularDistancia(
+                  this.latUsuario,
+                  this.lonUsuario,
+                  coords.lat,
+                  coords.lng
+                );
+              } else {
+                (tatuador as any).distancia = null;
+              }
+
+              // Crear el marcador
+              const marker = new google.maps.Marker({
+                position: coords,
+                map: this.map,
+                title: tatuador.nombreTienda || 'Tatuador',
+                icon: {
+                  url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                  scaledSize: new google.maps.Size(35, 35)
+                }
+              });
+
+              marker.addListener('click', () => {
+                this.zone.run(() => {
                   this.tatuadorSeleccionado = tatuador;
                 });
-              }
-            });
+              });
+
+              // Cargar fotos
+              this.tiendaService.getFotosTatuador(tatuador.uid).subscribe(fotos => {
+                tatuador.foto = fotos;
+              });
+            }
           }
         });
       });
@@ -192,7 +217,27 @@ export class MapaPage implements OnInit {
   }
 
   mostrarInfoTatuador(tatuador: Tatuador) {
+    this.imagenCargada = false; // resetear para que aparezca skeleton
     this.tatuadorSeleccionado = tatuador;
   }
+
+  calcularDistancia(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const radioTierra = 6371; // km
+    const dLat = this.degToRad(lat2 - lat1);
+    const dLon = this.degToRad(lon2 - lon1);
+
+    const a = Math.sin(dLat / 2) ** 2 +
+              Math.cos(this.degToRad(lat1)) * Math.cos(this.degToRad(lat2)) *
+              Math.sin(dLon / 2) ** 2;
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return radioTierra * c;
+  }
+
+  degToRad(deg: number): number {
+    return deg * (Math.PI / 180);
+  }
+
 
 }

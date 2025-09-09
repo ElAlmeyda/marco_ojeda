@@ -1,14 +1,26 @@
 
 
 <ion-content [fullscreen]="true">
+  <div *ngIf="usuario.uid === ''" class="center-card">
+    <ion-card>
+      <ion-card-content>
+        <ion-label class="center-text">
+          Inicia sesion para poder tener tatuadores favoritos
+        </ion-label>
+        <ion-button style="white-space: normal;" expand="block" fill="outline" [routerLink]="['/tabs/perfil']" >
+          ¿Quieres tener tatuadores favoritos?
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
   <ion-list>
-    <ion-item lines="none" *ngFor="let fav of favoritos">
-      <ion-avatar style="margin-right: 12px;" [routerLink]="['/tatuador', fav.uid]">
-        <ion-img [src]="fav.avatar"></ion-img>
+    <ion-item lines="none" *ngFor="let fav of favoritos" (click)="irAlTatuador(fav)">
+      <ion-avatar style="margin-right: 12px;">
+        <ion-img [src]="fav.avatar || 'assets/icon/sin_avatar.png'"></ion-img>
       </ion-avatar>
-      <ion-label [routerLink]="['/tatuador', fav.uid]">{{fav.nombreTienda}}</ion-label>
-      <ion-icon slot="end" name="star" *ngIf="fav.fav" (click)="disfav(fav)"></ion-icon>
-      <ion-icon slot="end" name="star-outline" *ngIf="!fav.fav" (click)="like(fav)"></ion-icon>
+      <ion-label>{{fav.nombreTienda}}</ion-label>
+      <ion-icon slot="end" name="star" *ngIf="fav.fav" (click)="disfav(fav); $event.stopPropagation()"></ion-icon>
+      <ion-icon slot="end" name="star-outline" *ngIf="!fav.fav" (click)="like(fav); $event.stopPropagation()"></ion-icon>
     </ion-item>
 
     <ion-item lines="none" *ngIf="favoritos && favoritos.length === 0">

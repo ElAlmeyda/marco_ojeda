@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { Cita, Tatuador, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
@@ -20,7 +21,7 @@ export class CitaPage implements OnInit {
 
   tatuador: Tatuador | undefined;
 
-  constructor(public firestroreAuth: FirestoreAuthService, public tiendaService: TiendaService) {
+  constructor(public firestroreAuth: FirestoreAuthService, public tiendaService: TiendaService, private alertController: AlertController) {
     this.firestroreAuth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.usuario.uid = res.uid;
@@ -36,8 +37,11 @@ export class CitaPage implements OnInit {
 
   obtenerCitas(){
     this.tiendaService.getCitasUsuario(this.usuario.uid).subscribe((citas: any) => {
+     
       console.log('Citas del usuario:', citas);
       this.citas = citas;
+      console.log(this.citas);
+     
       this.citas.sort((a, b) => {
         const fechaA = new Date(a.dia).getTime();
         const fechaB = new Date(b.dia).getTime();
@@ -63,15 +67,43 @@ export class CitaPage implements OnInit {
     });
   }
 
-    abrirWhatsapp(telefono: string) {
+  abrirWhatsapp(telefono: string) {
     if (telefono) {
       const url = `https://wa.me/${telefono}`;
       window.open(url, '_blank');
     }
   }
 
-  eliminarCita(cita: Cita){
-    
+  async eliminarCita(cita: Cita, uidCita: string){
+    console.log('Borrar cita:', cita);
+    const alert = await this.alertController.create({
+      header: 'Confirmar borrado',
+      message: `¿Estás seguro que quieres borrar la cita de ${cita.nombreUser} a las ${cita.hora}?`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary'
+        }, {
+          text: 'Borrar',
+          handler: () => {
+            this.tiendaService.eliminarCita(cita, uidCita, this.usuario.uid);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  aceptarCita(cita: Cita) {
+    return this.tiendaService.aceptarCita(cita.uidCita, cita.uidTatuador!, this.usuario.uid);
+  }
+
+
+  abrirMaps(direccion: string) {
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(direccion)}`;
+    window.open(url, '_blank');
   }
 
 }

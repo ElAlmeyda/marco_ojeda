@@ -23,12 +23,18 @@ export interface Tatuador {
     fecha?:string[];
     hora?:string[];
     fav?: boolean;
+    horario?: Horario[];
     ciudad?: string;
     facebook?: string;
     instagram?: string;
     tiktok?: string;
     twitter?: string;
+    distancia?: string;
+    web?: string;
     trabajadores?: string[];
+    fechaDisponibleDesde?: string;
+    promedio?: number;
+    objetivos?: boolean [];    
 }
 
 
@@ -42,17 +48,57 @@ export interface Cita {
     tipo:string;
     mensaje:string;
     correo:string;
-    uid:string;
+    uidCita:string;
     estado?:string;
     uidTatuador?:string;
     tatuador?: Tatuador;
+    direccion?: string;
+    zona?: string;
+    alergia?: string;
+    boceto?: string;
+    consulta?: string;
+    duracion: number;      // duración real en minutos
+    descanso: number;
 }
 
 export interface Resena {
     id?: string;
-    puntuacion: number;
+    estrella: number;
     mensaje: string;
     nombreUsuario: string;
+    imagen: string;
     nombreTatuador?: string;
     uidTatuador?: string;
+
+}
+
+export interface Trabajador {
+    uid: string;
+    nombre: string;
+    horario: string;
+    diasLibres: string[];
+}
+
+export interface Ofertas {
+    uid: string;
+    uidTatuador: string;
+    titulo: string;
+    descripcion: string;
+    imagenUrl: string;
+    tatuador: Tatuador;
+}
+
+export interface Noticia {
+  id?: string;
+  titulo: string;
+  descripcion: string;
+  fecha?: any;   // Timestamp de Firestore
+  imagenes?: string;
+}
+
+export interface Horario {
+  filter(arg0: (h: any) => any): unknown;
+  dia: string;
+  inicio: string;
+  fin: string;
 }

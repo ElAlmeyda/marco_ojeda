@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AlertController } from '@ionic/angular';
 import { TiendaService } from 'src/app/backend/tienda.service';
-import { Tatuador } from 'src/app/model';
+import { Ofertas, Tatuador } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
+import { FirestoreService } from 'src/app/service/firestore.service';
 import { UbicacionService } from 'src/app/service/ubicacion.service';
 
 @Component({
@@ -12,16 +13,41 @@ import { UbicacionService } from 'src/app/service/ubicacion.service';
   styleUrls: ['./folder.page.scss'],
 })
 export class FolderPage implements OnInit {
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
   searchTerm: string = '';
   recomendado: Tatuador[] = [];
   cerca: Tatuador []= [];
+  resultadosBusqueda: Tatuador[] = [];
   valoracion: Tatuador []= [];
   latUsuario: number = 0;    // Latitud del usuario
   lonUsuario: number = 0;    // Longitud del usuario
   uid=''
-  
-  constructor(public tiendaService: TiendaService, public firestroreAuth: FirestoreAuthService, public ubicacion: UbicacionService) {
+  estiloSeleccionado: string | null = null;
+  estilos = [
+    { nombre: 'Realismo', imagen: 'assets/estilos/realismo.jpg' },
+    { nombre: 'Tradicional', imagen: 'assets/estilos/tradicional.jpg' },
+    { nombre: 'Neotradicional', imagen: 'assets/estilos/neotradicional.jpg' },
+    { nombre: 'Blackwork', imagen: 'assets/estilos/blackwork.jpg' },
+    { nombre: 'Fineline', imagen: 'assets/estilos/fineline.jpg' },
+    { nombre: 'Geométrico', imagen: 'assets/estilos/geometrico.jpg' },
+    { nombre: 'Dotwork', imagen: 'assets/estilos/dotwork.jpg' },
+    { nombre: 'Lettering', imagen: 'assets/estilos/lettering.jpg' },
+    { nombre: 'Trash Polka', imagen: 'assets/estilos/trashpolka.jpg' },
+    { nombre: 'Watercolor', imagen: 'assets/estilos/watercolor.jpg' },
+    { nombre: 'Japanese', imagen: 'assets/estilos/japones.jpg' },
+    { nombre: 'Tribal', imagen: 'assets/estilos/tribal.jpg' },
+    { nombre: 'Surrealismo', imagen: 'assets/estilos/surrealismo.jpg' },
+    { nombre: 'Biomecánico', imagen: 'assets/estilos/biomecanico.jpg' },
+    { nombre: 'Anime', imagen: 'assets/estilos/anime.jpg' }
+  ];
+  ofertas: Ofertas[] = [];
+  todosTatuadores: any[] = [];
+  filtroValoracion: boolean = false;
+  filtroCercania: boolean = false;
+  mostrarFormulario=false;
+
+  constructor(public tiendaService: TiendaService, public firestroreAuth: FirestoreAuthService, public ubicacion: UbicacionService, public firestore: FirestoreService) {
     this.firestroreAuth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -33,8 +59,12 @@ export class FolderPage implements OnInit {
   }
 
   ngOnInit() {
+    this.firestore.getTodosLosAnuncios().subscribe(data => {
+      this.ofertas = data;
+      console.log("Todos los anuncios:", this.ofertas);
+    });
   }
-
+  
   async obtenerUbicacionYFiltrarTatuadores() {
     try {
       // 1. Obtener la ubicación del usuario
@@ -57,39 +87,52 @@ export class FolderPage implements OnInit {
 
         const tatuadoresConUbicacion = await Promise.all(
           data.map(async tatuador => {
-            console.log("Evaluando tatuador:", tatuador.nombreTienda, "Lat:", tatuador.latitud, "Lon:", tatuador.longitud);
+            console.log("Evaluando tatuador:", tatuador.nombreTienda);
 
-            if (
-              (!tatuador.latitud || !tatuador.longitud ||
-              tatuador.latitud === 0 || tatuador.longitud === 0) &&
-              tatuador.ciudad
-            ) {
-              console.log("Geocodificando tatuador:", tatuador.nombreTienda);
+            // Geocodificación si hace falta
+            if ((!tatuador.latitud || !tatuador.longitud || tatuador.latitud === 0 || tatuador.longitud === 0) && tatuador.ciudad) {
               const resultado = await this.geocodeDireccion(tatuador.ciudad);
               if (resultado) {
                 tatuador.latitud = resultado.lat;
                 tatuador.longitud = resultado.lng;
               }
-            } else if (!tatuador.ciudad) {
-              console.warn("Tatuador sin dirección:", tatuador.nombreTienda);
             }
+
+            // Calcular distancia respecto a usuario (solo si tenemos coordenadas)
+            if (tatuador.latitud && tatuador.longitud && this.latUsuario && this.lonUsuario) {
+              tatuador.distancia = this.calcularDistancia(
+                this.latUsuario,
+                this.lonUsuario,
+                tatuador.latitud,
+                tatuador.longitud
+              );
+            } else {
+              tatuador.distancia = null; // si no hay coordenadas
+            }
+
+            // Obtener fotos desde Storage
+            this.tiendaService.getFotosTatuador(tatuador.uid).subscribe(fotos => {
+              tatuador.foto = fotos;
+              console.log('Fotos cargadas para', tatuador.nombreTienda, fotos);
+            });
 
             return tatuador;
           })
         );
 
+        // Asignar a tus listas
         this.cerca = this.filtrarTatuadoresCercanos(tatuadoresConUbicacion);
-        console.log("Cerca", this.cerca);
-
         this.valoracion = this.calcularValoracionesPromedio(this.cerca);
-        console.log("Valoracion", this.valoracion);
-
         this.recomendado = this.filtrarTatuadoresRecomendados(tatuadoresConUbicacion);
+
+        console.log("Cerca", this.cerca);
+        console.log("Valoracion", this.valoracion);
         console.log("Recomendado", this.recomendado);
       },
       error: err => console.error("Error al obtener tatuadores:", err)
     });
   }
+
 
 
   // Filtrar tatuadores cercanos por ubicación
@@ -171,15 +214,53 @@ export class FolderPage implements OnInit {
     const termino = this.searchTerm.trim().toLowerCase();
 
     if (termino !== '') {
-      this.recomendado = this.recomendado.filter(tatuador =>
-        tatuador.nombreTienda.toLowerCase().includes(termino)
+      // 1️⃣ Unir los tres arrays
+      const todos = [...this.cerca, ...this.valoracion, ...this.recomendado];
+
+      // 2️⃣ Eliminar duplicados por UID
+      const unicos = todos.filter(
+        (t, index, self) =>
+          index === self.findIndex(s => s.uid === t.uid)
+      );
+
+      // 3️⃣ Filtrar por nombreTienda
+      this.resultadosBusqueda = unicos.filter(tatuador =>
+        tatuador.nombreTienda?.toLowerCase().includes(termino)
       );
     } else {
-      this.tiendaService.getTatuadores().subscribe((data:any) => {
-        this.recomendado = data; 
-      });
+      this.cargarTatuadores();
     }
   }
 
+  seleccionarEstilo(estilo: any) {
+    console.log("Estilo", estilo.nombre);
+    this.estiloSeleccionado = this.estiloSeleccionado === estilo.nombre ? null : estilo.nombre;
+    this.buscarEstilos();
+  }
+  
+  buscarEstilos() {
+    if (this.estiloSeleccionado) {
+      // 1️⃣ Unir los tres arrays
+      const todos = [...this.cerca, ...this.valoracion, ...this.recomendado];
 
+      // 2️⃣ Filtrar por estilo
+      const filtradosPorEstilo = todos.filter(t =>
+        t.estilos?.some((e: string) => e === this.estiloSeleccionado)
+      );
+
+      // 3️⃣ Eliminar duplicados por UID
+      this.resultadosBusqueda = filtradosPorEstilo.filter(
+        (t, index, self) =>
+          index === self.findIndex(s => s.uid === t.uid)
+      );
+
+    } else {
+      // Si no hay estilo seleccionado, mostrar todos
+      this.resultadosBusqueda = this.todosTatuadores;
+    }
+  }
+
+  toggleFormulario() {
+    this.mostrarFormulario = !this.mostrarFormulario;
+  }
 }

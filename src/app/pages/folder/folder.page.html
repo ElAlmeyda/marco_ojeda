@@ -1,45 +1,184 @@
 <ion-content [fullscreen]="true">
   <ion-card-content class="card-content">
-    <ion-searchbar style="padding-top: 60px;" placeholder="Buscar" [(ngModel)]="searchTerm" (ionChange)="buscarTatuador()"></ion-searchbar>
-      <div class="horizontal-scroll" *ngIf="recomendado.length > 0">
-        <ion-label class="titulo-grande"><strong>Recomendados</strong></ion-label>
-        <!-- Contenedor para los cards de usuarios con conversación -->
-        <ion-row *ngFor="let tipo of recomendado" size="auto">
-          <ion-card class="user-card" [routerLink]="['/tatuador', tipo.uid]">
-            <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png' "></ion-img>
-            <ion-card-header>
-              <ion-card-title class="titulo-tienda">{{ tipo.nombreTienda }}</ion-card-title>
-            </ion-card-header>
-          </ion-card>
-        </ion-row>
+    <ion-searchbar style="padding-top: 60px;" placeholder="Buscar" [(ngModel)]="searchTerm" (ionInput)="buscarTatuador()"></ion-searchbar>
+    <ion-card>
+     <ion-card-header (click)="toggleFormulario()" style="cursor: pointer;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Más filtros</h2>
+        <ion-icon [name]="mostrarFormulario ? 'remove-outline' : 'add-outline'"></ion-icon>
       </div>
-      <div class="horizontal-scroll" *ngIf="cerca.length > 0">
-        <ion-label class="titulo-grande"> Cerca de ti </ion-label>
-        <!-- Contenedor para los cards de usuarios con conversación -->
-        <ion-row *ngFor="let tipo of cerca" size="auto">
-          <ion-card class="user-card" [routerLink]="['/tatuador', tipo.uid]">
-            <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png'"></ion-img>
-            <ion-card-header>
-              <ion-card-title>{{ tipo.nombreTienda }}</ion-card-title>
-            </ion-card-header>
-          </ion-card>
-        </ion-row>
+    </ion-card-header>
+      <div *ngIf="mostrarFormulario" #scrollContainer class="filtros-estilos" style="display: flex; overflow-x: auto; padding: 10px; gap: 10px; scroll-behavior: smooth;">
+        <div 
+          *ngFor="let estilo of estilos" 
+          style="flex: 0 0 auto; text-align: center; cursor: pointer;"
+          (click)="seleccionarEstilo(estilo)">
+          
+          <ion-avatar 
+            [style.border]="estiloSeleccionado === estilo.nombre ? '2px solid #3880ff' : '2px solid transparent'" 
+            style="width: 70px; height: 70px; margin: auto;">
+            <img [src]="estilo.imagen" />
+          </ion-avatar>
+          
+          <p style="font-size: 12px; margin-top: 5px; width: 80px; white-space: normal;">{{ estilo.nombre }}</p>
+        </div>
       </div>
-      <div class="horizontal-scroll" *ngIf="valoracion.length > 0">
-        <ion-label class="titulo-grande"> Valoración </ion-label>
-        <!-- Contenedor para los cards de usuarios con conversación -->
-        <ion-row *ngFor="let tipo of valoracion" size="auto">
-          <ion-card class="user-card" [routerLink]="['/tatuador', tipo.uid]">
-            <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png'"></ion-img>
-            <ion-card-header>
-              <ion-card-title>{{ tipo.nombreTienda }}</ion-card-title>
-            </ion-card-header>
-          </ion-card>
-        </ion-row>
+     <div *ngIf="resultadosBusqueda && resultadosBusqueda.length === 0 && estiloSeleccionado">
+        <ion-item lines="none" style="text-align: center; color: gray; margin-top: 20px;">
+          No se encontraron tatuadores con el estilo seleccionado.
+        </ion-item>
       </div>
+      
+    
+      <div *ngIf="resultadosBusqueda && resultadosBusqueda.length > 0">
+        <ion-label class="titulo-grande"><strong>Resultado Búsqueda</strong></ion-label>
+        <div class="horizontal-scroll">
+          <div class="cards-row" *ngFor="let tipo of resultadosBusqueda" [routerLink]="['/tatuador', tipo.uid]">
+            
+            <ion-card class="user-card">
+              <!-- Imagen del tatuador -->
+              <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png'" class="user-card-img"></ion-img>
+              
+              <!-- Info -->
+              <ion-card-header>
+                <ion-row class="ion-align-items-center ion-justify-content-between">
+                  <ion-col size="auto">
+                    <ion-card-title class="titulo-tienda">{{ tipo.nombreTienda }}</ion-card-title>
+                  </ion-col>
+                  <ion-col size="auto">
+                    <ion-label>
+                      {{ tipo.promedio?.toFixed(1) || 'SV' }}
+                    </ion-label>
+                  </ion-col>
+                </ion-row>
+              </ion-card-header>
+
+                <!-- Sub-info (ubicación y distancia) -->
+                <ion-card-subtitle class="sub-info">
+                  <span *ngIf="tipo.distancia">📍 {{ tipo.distancia | number:'1.0-1' }} km</span>
+                </ion-card-subtitle>
+
+              <!-- Estilos del tatuador -->
+              <ion-card-content *ngIf="tipo.estilos && tipo.estilos.length > 0">
+                <ion-chip color="primary" outline="true">
+                  {{ tipo.estilos[0] }}
+                </ion-chip>
+                <ion-chip *ngIf="tipo.estilos.length > 1" color="primary" outline="true">
+                  +{{ tipo.estilos.length - 1 }}
+                </ion-chip>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </div>
+      </div>
+    </ion-card>
+    <!-- Recomendados -->
+      <div *ngIf="recomendado.length > 0 && (!resultadosBusqueda || resultadosBusqueda.length === 0)">
+        <ion-label class="titulo-grande">Cerca de ti</ion-label>
+        <div class="horizontal-scroll">
+          <div class="cards-row" *ngFor="let tipo of cerca" [routerLink]="['/tatuador', tipo.uid]">
+            <ion-card class="user-card">
+              <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png'" class="user-card-img"></ion-img>
+
+              <ion-card-header>
+                <ion-row class="ion-align-items-center ion-justify-content-between">
+                  <ion-col size="auto">
+                    <ion-card-title class="titulo-tienda">{{ tipo.nombreTienda }}</ion-card-title>
+                  </ion-col>
+                  <ion-col size="auto">
+                    <ion-label>{{ tipo.promedio?.toFixed(1) || 'SV' }}</ion-label>
+                  </ion-col>
+                </ion-row>
+                <!-- Sub-info debajo del row, no afecta la altura de la fila superior -->
+                <div class="sub-info" *ngIf="tipo.distancia">
+                  📍 {{ tipo.distancia | number:'1.0-1' }} km
+                </div>
+              </ion-card-header>
+              <ion-card-content *ngIf="tipo.estilos && tipo.estilos.length > 0">
+                <ion-chip color="primary" outline="true">{{ tipo.estilos[0] }}</ion-chip>
+                <ion-chip *ngIf="tipo.estilos.length > 1" color="primary" outline="true">
+                  +{{ tipo.estilos.length - 1 }}
+                </ion-chip>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </div>
+      </div>
+
+          <!-- Cerca de ti -->
+      <div *ngIf="cerca.length > 0 && (!resultadosBusqueda || resultadosBusqueda.length === 0)">
+        <ion-label class="titulo-grande">Cerca de ti</ion-label>
+        <div class="horizontal-scroll">
+          <div class="cards-row" *ngFor="let tipo of cerca" [routerLink]="['/tatuador', tipo.uid]">
+            <ion-card class="user-card">
+              <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png'" class="user-card-img"></ion-img>
+
+              <ion-card-header>
+                <ion-row class="ion-align-items-center ion-justify-content-between">
+                  <ion-col size="auto">
+                    <ion-card-title class="titulo-tienda">{{ tipo.nombreTienda }}</ion-card-title>
+                  </ion-col>
+                  <ion-col size="auto">
+                    <ion-label>{{ tipo.promedio?.toFixed(1) || 'SV' }}</ion-label>
+                  </ion-col>
+                </ion-row>
+                <!-- Sub-info debajo del row, no afecta la altura de la fila superior -->
+                <div class="sub-info" *ngIf="tipo.distancia">
+                  📍 {{ tipo.distancia | number:'1.0-1' }} km
+                </div>
+              </ion-card-header>
+              <ion-card-content *ngIf="tipo.estilos && tipo.estilos.length > 0">
+                <ion-chip color="primary" outline="true">{{ tipo.estilos[0] }}</ion-chip>
+                <ion-chip *ngIf="tipo.estilos.length > 1" color="primary" outline="true">
+                  +{{ tipo.estilos.length - 1 }}
+                </ion-chip>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </div>
+      </div>
+
+      <!-- Valoración -->
+      <div *ngIf="valoracion.length > 0 && (!resultadosBusqueda || resultadosBusqueda.length === 0)">
+        <ion-label class="titulo-grande">Cerca de ti</ion-label>
+        <div class="horizontal-scroll">
+          <div class="cards-row" *ngFor="let tipo of cerca" [routerLink]="['/tatuador', tipo.uid]">
+            <ion-card class="user-card">
+              <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png'" class="user-card-img"></ion-img>
+
+              <ion-card-header>
+                <ion-row class="ion-align-items-center ion-justify-content-between">
+                  <ion-col size="auto">
+                    <ion-card-title class="titulo-tienda">{{ tipo.nombreTienda }}</ion-card-title>
+                  </ion-col>
+                  <ion-col size="auto">
+                    <ion-label>{{ tipo.promedio?.toFixed(1) || 'SV' }}</ion-label>
+                  </ion-col>
+                </ion-row>
+                <!-- Sub-info debajo del row, no afecta la altura de la fila superior -->
+                <div class="sub-info" *ngIf="tipo.distancia">
+                  📍 {{ tipo.distancia | number:'1.0-1' }} km
+                </div>
+              </ion-card-header>
+              <ion-card-content *ngIf="tipo.estilos && tipo.estilos.length > 0">
+                <ion-chip color="primary" outline="true">{{ tipo.estilos[0] }}</ion-chip>
+                <ion-chip *ngIf="tipo.estilos.length > 1" color="primary" outline="true">
+                  +{{ tipo.estilos.length - 1 }}
+                </ion-chip>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </div>
+      </div>
+
+
+
     </ion-card-content>
     <ion-button class="floating-right big-button" shape="round" fill="solid" color="dark" routerLink="/mapa">
       <ion-icon slot="icon-only" name="navigate-circle"></ion-icon>
+    </ion-button>
+    <ion-button *ngIf="ofertas.length !== 0" class="floating-left big-button" shape="round" fill="solid" color="dark" routerLink="/ofertas">
+      <ion-icon slot="icon-only" name="pricetag-outline"></ion-icon>
     </ion-button>
 </ion-content>
 

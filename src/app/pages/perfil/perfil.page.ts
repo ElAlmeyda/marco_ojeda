@@ -50,11 +50,27 @@ export class PerfilPage implements OnInit {
         this.obtenerUsuario();
       } else {
         this.uid= '';
+        this.usuario = { nombre: '', uid: '', correo: '', movil: '', avatar: '' };
+        this.resetearEstado();
       }
     });
   }
 
-  
+  resetearEstado() {
+    this.uid = '';
+    this.usuario = { nombre: '', uid: '', correo: '', movil: '', avatar: '' };
+    this.correo = '';
+    this.password = '';
+    this.nombre = '';
+    this.phone = '';
+    this.registro = false;
+    this.correoExistente = false;
+    this.correoInvalido = false;
+    this.nombreInvcalido = false;
+    this.numeroIncorrecto = false;
+    this.showPassword = false;
+  }
+
 
   ngOnInit() {
      
@@ -123,7 +139,7 @@ export class PerfilPage implements OnInit {
   }
 
   comprobarNumero() {
-    const phoneRegex = /^[0-9]{9}$/;
+    const phoneRegex = /^\+\d{1,2}[0-9]{9}$/;
     this.numeroIncorrecto = !phoneRegex.test(this.phone);
   }
 

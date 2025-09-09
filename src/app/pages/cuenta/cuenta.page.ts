@@ -26,7 +26,7 @@ export class CuentaPage implements OnInit {
   nuevoCorreo='';
 
   constructor(public firestore: FirestoreService, public user: UsuariosService, private navCtrl: NavController, public auth: FirestoreAuthService, public alertController: AlertController,
-              private afAuth: AngularFireAuth, public router: Router, public toast: ToastController, private loadingCtrl: LoadingController) {  
+              private afAuth: AngularFireAuth, public router: Router, public toast: ToastController, private loadingCtrl: LoadingController, public authFire: AngularFireAuth) {  
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.usuario.uid = res.uid;
@@ -290,13 +290,19 @@ export class CuentaPage implements OnInit {
     }
   }
 
-  logout() {
-    this.user.logout().then(() => {
-      this.router.navigate(['/inicio-sesion'], { replaceUrl: true });
-    }).catch(err => {
-      console.error("Error al cerrar sesión:", err);
-    });
+  async logout() {
+  try {
+    await this.authFire.signOut();   // Cierra sesión en Firebase
+    
+    // Limpia el objeto usuario para que no muestre nada
+    this.usuario = { uid: '', nombre: '', movil: '', avatar: '', correo: '' };
+    
+    // Opcional: redirige a login o inicio
+    this.router.navigate(['/tabs/folder', this.usuario.uid], { replaceUrl: true });
+  } catch (err) {
+    console.error("❌ Error al cerrar sesión:", err);
   }
+}
 
   async presentToast(msg: string, color: string) {
     const toast = await this.toast.create({

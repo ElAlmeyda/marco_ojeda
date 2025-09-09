@@ -7,23 +7,39 @@
   <ion-card *ngIf="tatuadorSeleccionado" 
           style="position: fixed; bottom: 10px; left: 10px; right: 10px; height: 200px; border-radius: 12px; z-index: 9999; overflow: hidden;" >
 
-  <ion-icon 
-    name="close" 
-    (click)="tatuadorSeleccionado = null"
-    style="position: absolute; top: 10px; right: 10px; font-size: 24px; color: #666; cursor: pointer; z-index: 10;">
-  </ion-icon>
+    <ion-icon 
+      name="close" 
+      (click)="tatuadorSeleccionado = null"
+      style="position: absolute; top: 10px; right: 10px; font-size: 24px; color:white; cursor: pointer; z-index: 10;">
+    </ion-icon>
 
-  <ion-img 
-    [src]="tatuadorSeleccionado.foto?.[0] || 'assets/icon/sin_avatar.png'" 
-    style="height: 130px; width: 100%; object-fit: cover;" [routerLink]="['/tatuador', tatuadorSeleccionado.uid]">
-  </ion-img>
+    <ion-skeleton-text 
+        *ngIf="!imagenCargada" 
+        animated 
+        style="height: 130px; width: 100%; display: block;">
+    </ion-skeleton-text>
 
-  <ion-card-header style="padding: 8px 12px;">
-    <ion-card-title style="margin: 0; font-size: 18px; font-weight: bold;" [routerLink]="['/tatuador', tatuadorSeleccionado.uid]">
-      {{ tatuadorSeleccionado.nombreTienda }}
-    </ion-card-title>
-  </ion-card-header>
+    <ion-img 
+      [src]="tatuadorSeleccionado.foto?.[0] || 'assets/icon/sin_avatar.png'" 
+      style="height: 130px; width: 100%; object-fit: cover;" 
+      [routerLink]="['/tatuador', tatuadorSeleccionado.uid]" 
+      (ionImgDidLoad)="imagenCargada = true">
+    </ion-img>
 
-</ion-card>
+    <ion-card-header style="padding: 8px 12px;">
+      <ion-card-title style="margin: 0; font-size: 18px; font-weight: bold;" [routerLink]="['/tatuador', tatuadorSeleccionado.uid]">
+        {{ tatuadorSeleccionado.nombreTienda }}
+      </ion-card-title>
+
+      <!-- Sub-info: distancia y promedio -->
+      <div class="sub-info" style="margin-top: 2px; font-size: 0.9rem; color: white;">
+        <span *ngIf="tatuadorSeleccionado.distancia">📍 {{ tatuadorSeleccionado.distancia | number:'1.0-1' }} km</span>
+        <span> {{ tatuadorSeleccionado.promedio?.toFixed(1) || 'SV' }}
+        </span>
+      </div>
+    </ion-card-header>
+
+  </ion-card>
+
 
 </ion-content>

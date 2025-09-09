@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" >
  
    <div *ngIf="citas.length === 0" class="center-card">
     <ion-card>
@@ -16,13 +16,10 @@
     </ion-card>
   </div>
  <!-- Contenedor principal que ocupa todo el alto y permite scroll -->
-  <div style="display: flex; flex-direction: column; min-height: 100%; align-items: center; padding: 16px; box-sizing: border-box;">
-    
-    <!-- Contenedor de las tarjetas, centrado si hay pocas -->
-    <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 500px; margin-top: auto; margin-bottom: auto;">
-      
-      <ion-card *ngFor="let cita of citas" style="width: 100%; display: flex; flex-direction: column; justify-content: space-between;">
-        <!-- Header con título y WhatsApp -->
+  <div style="margin-top:30%; display: flex; flex-direction: column; min-height: 100%; padding: 16px; box-sizing: border-box;">
+    <div style="display: flex; flex-direction: column; gap: 12px; max-width: 500px; margin: auto;">
+      <ion-card *ngFor="let cita of citas" style="width: 280px; display: flex; flex-direction: column; justify-content: space-between;">
+        <!-- Header -->
         <ion-card-header style="padding: 0 16px; width: 100%;">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; margin-top:10px">
             <ion-card-title style="flex: 1; word-break: break-word; text-align: left; margin: 0;">
@@ -39,21 +36,35 @@
         </ion-card-header>
 
         <!-- Contenido -->
-        <ion-card-content style="word-break: break-word; text-align: left; margin: 0;">
-          <p>{{ cita.dia | date:'dd/MM/yyyy' }} - {{ cita.hora }}</p>
+        <ion-card-content style="word-break: break-word; text-align: left; margin: 0; white-space: normal;">
+          <p *ngIf="cita.estado !== 'Editada'">{{ cita.dia | date:'dd/MM/yyyy' }} - {{ cita.hora }}</p>
+          <p *ngIf="cita.estado === 'Editada'" style="color:red">Nueva Fecha: {{ cita.dia | date:'dd/MM/yyyy' }} - {{ cita.hora }}</p>
+          <p *ngIf="cita.consulta" style="color:green">{{ cita.consulta }}</p>
           <p>{{ cita.estilo }} - {{cita.tipo}}</p>
+          <p *ngIf="cita.direccion" (click)="abrirMaps(cita.direccion)" style="white-space: normal; word-break: break-word;">
+            {{ cita.direccion }}
+          </p>
           <p [ngStyle]="{'color': cita.estado === 'Pendiente' ? 'red' : (cita.estado === 'Aceptado' ? 'green' : 'black')}">
             {{ cita.estado }}
           </p>
         </ion-card-content>
 
         <!-- Botón de basura -->
-        <div style="display: flex; justify-content: flex-end;">
-          <ion-button fill="clear" color="danger" (click)="eliminarCita(cita)" style="height: 24px; min-width: 24px; padding: 0;">
+        <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+          <ion-button *ngIf="cita.estado !== 'Editada'" fill="clear" color="danger" (click)="eliminarCita(cita, cita.uidCita)" style="height: 24px; min-width: 24px; padding: 0;">
             <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
           </ion-button>
         </div>
+        <div style="margin-top: 16px; text-align: center;" *ngIf="cita.estado === 'Editada'">
+          <ion-button expand="block" color="success" (click)="aceptarCita(cita)">
+            Aceptar Cita
+          </ion-button>
+          <ion-button expand="block" color="danger" (click)="eliminarCita(cita, cita.uidCita)">
+            Rechazar Cita
+          </ion-button>
+        </div>
       </ion-card>
+
 
     </div>
   </div>

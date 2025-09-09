@@ -1,0 +1,20 @@
+.titulo-noticia {
+  font-size: 1.6rem;      /* más grande */
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: var(--ion-color-dark);
+  line-height: 1.3;
+}
+
+.fecha-noticia {
+  font-size: 0.9rem;
+  color: var(--ion-color-medium);
+  margin-bottom: 12px;
+}
+
+.descripcion-noticia {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--ion-color-dark);
+  text-align: justify;
+}

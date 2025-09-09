@@ -137,3 +137,10 @@ ion-button {
   --background: white;
   --color: black;
 }
+
+ion-tab-bar {
+  --padding-bottom: var(--ion-safe-area-bottom);
+}
+ion-header {
+  --padding-top: var(--ion-safe-area-top);
+}

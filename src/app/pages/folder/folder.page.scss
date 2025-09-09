@@ -41,6 +41,24 @@
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
   }
 
+  .floating-left {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    z-index: 10;
+    position: fixed;
+    bottom: 20px;
+    left: 20px; /* Mueve el botón a la derecha */
+    z-index: 10000;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
   .big-button {
     width: 64px;
     height: 64px;
@@ -51,25 +69,75 @@
       color:black;
     }
   }
-
-  .horizontal-scroll {
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-  
-  .cards-row {
-    display: inline-block;
-    margin-right: 16px; /* Ajusta el espacio entre las tarjetas */
-  }
-  
-  .user-card {
-    width: 200px; /* Ajusta el ancho de cada tarjeta */
-    display: inline-block;
-    margin-right: 16px; /* Ajusta el espacio entre tarjetas */
-  }
   
   ion-img {
     width: 100%;
     height: auto;
   }
-  
+
+  .horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* para scroll suave en iOS */
+  padding-bottom: 10px; /* espacio debajo de las tarjetas */
+}
+
+.cards-row {
+  flex: 0 0 auto; /* no se encoge ni crece */
+  margin-right: 16px;
+  cursor: pointer;
+}
+
+.filtros-estilos::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari y Opera */
+  -ms-overflow-style: none;  /* IE y Edge */
+  scrollbar-width: none;
+}
+
+.user-card-img {
+  width: 100%;        /* que ocupe todo el ancho de la card */
+  height: 150px;      /* altura fija igual para todas */
+  object-fit: cover;  /* recorta la imagen para llenar el contenedor sin deformar */
+  border-radius: 8px; /* opcional, bordes redondeados */
+}
+
+.user-card {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease;
+  min-width: 200px;
+  max-width: 200px;
+}
+
+.user-card:hover {
+  transform: scale(1.03);
+}
+
+.titulo-tienda {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.sub-info {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 3px;
+}
+
+.valoracion-row {
+  margin-top: 5px;
+}
+
+.valoracion-row ion-icon {
+  font-size: 18px;
+  margin-right: 2px;
+}
+
+ion-chip {
+  margin: 3px;
+  font-size: 0.8rem;
+}
+
+

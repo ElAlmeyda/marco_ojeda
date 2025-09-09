@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable, map, switchMap, tap } from 'rxjs';
+import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
 import { idToken } from '@angular/fire/auth';
-import { Tatuador } from '../model';
+import { Cita, Tatuador } from '../model';
+import { getDownloadURL, getStorage, listAll, ref } from 'firebase/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -284,26 +285,67 @@ export class FirestoreService {
     await this.database.collection(`Tatuador/${uidTatuador}/citas`).doc(idCita).set(datosCita);
   }
 
+  async guardarConsulta(cita: any, uidCliente: string, uidTatuador: string) {
+    // Crear un id único para la cita
+    const idCita = this.database.createId();
+    // Datos cita con uid y referencias
+    const datosCita = {
+      ...cita,
+      uidCita: idCita,
+      uidCliente,
+      uidTatuador,
+      estado: 'Pendiente', // ejemplo
+      fechaCreacion: new Date()
+    };
+    // Guardar bajo el usuario
+    await this.database.collection(`Usuarios/${uidCliente}/consulta`).doc(idCita).set(datosCita);
+    // Guardar bajo el tatuador
+    await this.database.collection(`Tatuador/${uidTatuador}/consulta`).doc(idCita).set(datosCita);
+  }
+
   getCitasUsuario(uid: string) {
     return this.database.collection(`Usuarios/${uid}/citas`).valueChanges({ idField: 'id' });
   }
 
   async guardarResena(resena: any, uidCliente: string, uidTatuador: string) {
-    // Crear un id único para la cita
+    const tatuadorRef = this.database.doc(`Tatuador/${uidTatuador}`).ref;
+    const resenasRef = this.database.collection(`Tatuador/${uidTatuador}/reseñas`);
+
     const idResena = this.database.createId();
-    // Datos cita con uid y referencias
-    const datosCita = {
-      ...resena,
-      uidResena: idResena,
-      uidCliente,
-      uidTatuador,
-      fechaCreacion: new Date()
-    };
-    // Guardar bajo el usuario
-    await this.database.collection(`Usuarios/${uidCliente}/reseñas`).doc(idResena).set(datosCita);
-    // Guardar bajo el tatuador
-    await this.database.collection(`Tatuador/${uidTatuador}/reseñas`).doc(idResena).set(datosCita);
+
+    return this.database.firestore.runTransaction(async (transaction) => {
+      const tatuadorDoc = await transaction.get(tatuadorRef);
+      if (!tatuadorDoc.exists) throw new Error("El tatuador no existe");
+
+      // ✅ Tipos explícitos
+      const data = tatuadorDoc.data() as { sumaValoraciones?: number; totalValoraciones?: number; promedio?: number } || {};
+      const total = data.totalValoraciones || 0;
+      const suma = data.sumaValoraciones || 0;
+
+      const nuevaTotal = total + 1;
+      const nuevaSuma = suma + resena.estrella;
+      const nuevoPromedio = nuevaSuma / nuevaTotal;
+
+      // ✅ Guardar en historial
+      const resenaDocRef = resenasRef.doc(idResena).ref;
+      transaction.set(resenaDocRef, {
+        ...resena,
+        uidCliente,
+        uidTatuador,
+        uidResena: idResena,
+        fechaCreacion: new Date()
+      });
+
+      // ✅ Actualizar datos del tatuador
+      transaction.update(tatuadorRef, {
+        sumaValoraciones: nuevaSuma,
+        totalValoraciones: nuevaTotal,
+        promedio: nuevoPromedio
+      });
+    });
   }
+
+
 
   getResenaTatuador(uid: string) {
     return this.database.collection(`Tatuador/${uid}/reseñas`).valueChanges({ idField: 'id' });
@@ -397,4 +439,153 @@ export class FirestoreService {
       );
   }
 
+  getTrabajadores(estudioId: string): Observable<any[]> {
+    return this.database
+      .collection('Tatuador')
+      .doc(estudioId)
+      .collection('trabajadores')
+      .valueChanges({ idField: 'uid' }); // opcional: añade el id de cada trabajador
+  }
+
+
+  eliminarCita(cita: Cita, uidCita:string, userId: string){
+    const citaTatuadorRef = this.database
+      .collection(`Tatuador/${cita.uidTatuador}/citas`)
+      .doc(uidCita);
+
+    const citaUsuarioRef = this.database
+      .collection(`Usuarios/${userId}/citas`)
+      .doc(uidCita);
+
+    return Promise.all([
+      citaTatuadorRef.delete(),
+      citaUsuarioRef.delete()
+    ])
+    .then(() => {
+      console.log('✅ Cita eliminada en tatuador y usuario');
+    })
+    .catch((error) => {
+      console.error('❌ Error al eliminar la cita en ambos lugares', error);
+      throw error;
+    });
+  }
+
+  getHorasBloqueadas(estudioId: string, trabajadorId: string, fecha: string): Observable<string[]> {
+    const path = `Tatuador/${estudioId}/trabajadores/${trabajadorId}`;
+    const campoPlano = `horasReservadas.${fecha}`;
+    console.log(campoPlano);
+    return this.database.doc(path).valueChanges().pipe(
+      map((doc: any) => doc?.[campoPlano] || [])
+    );
+  }
+
+  getTodosLosAnuncios(): Observable<any[]> {
+    // collectionGroup busca en todas las subcolecciones llamadas "anuncios"
+    return this.database.collectionGroup('anuncios').valueChanges({ idField: 'id' });
+  }
+
+  getEventos(trabajadorId: string, tatuadorId: string): Observable<any[]> {
+    const path = `Tatuador/${tatuadorId}/trabajadores/${trabajadorId}/eventos`;
+    return this.database.collection(path).valueChanges({ idField: 'id' });
+  }
+
+  getFotosTatuador(estudioId: string): Observable<string[]> {
+    return this.database
+      .collection('Tatuador')           // colección de tatuadores
+      .doc(estudioId)                   // documento del tatuador
+      .collection('avatar')             // subcolección avatar
+      .doc('imagenes')                  // documento que tiene el array de URLs
+      .valueChanges()                   // devuelve { urls: [...] }
+      .pipe(
+        map((doc: any) => doc?.urls || []) // extraemos el array de URLs
+      );
+  }
+
+  getPromedioValoraciones(tatuadorId: string): Observable<number> {
+    return this.database
+      .collection(`Tatuador/${tatuadorId}/reseñas`)
+      .valueChanges()
+      .pipe(
+        map((valoraciones: any[]) => {
+          if (!valoraciones || valoraciones.length === 0) {
+            return 0; // sin valoraciones → promedio 0
+          }
+          const suma = valoraciones.reduce((acc, v) => acc + (v.puntuacion || 0), 0);
+          return suma / valoraciones.length;
+        })
+      );
+  }
+
+   aceptarCita(uidCita: string, userIdTatuador: string, userIdCliente: string, nuevoEstado: string) {
+    const citaTatuadorRef = this.database
+      .collection('Tatuador')
+      .doc(userIdTatuador)
+      .collection('citas')
+      .doc(uidCita);
+
+    const citaUsuarioRef = this.database
+      .collection('Usuarios')
+      .doc(userIdCliente)
+      .collection('citas')
+      .doc(uidCita);
+
+    return Promise.all([
+      citaTatuadorRef.update({ estado: nuevoEstado }),
+      citaUsuarioRef.update({ estado: nuevoEstado })
+    ])
+    .then(() => {
+      console.log('✅ Estado actualizado en Tatuador y Usuario');
+    })
+    .catch((error) => {
+      console.error('❌ Error al actualizar en ambos lugares', error);
+      throw error;
+    });
+  }
+
+  getCitasDelDia(estudioId: string, trabajadorId: string, fecha: string) {
+    // fecha en formato 'YYYY-MM-DD'
+    return this.database.collection(`Tatuador/${estudioId}/citas`, ref =>
+      ref.where('uidTatuador', '==', estudioId)
+         .where('nombreTatuador', '==', trabajadorId) // asegúrate de tener este campo
+         .where('dia', '==', fecha)
+    ).valueChanges();
+  }
+
+  getNoticias(): Observable<any[]> {
+    return this.database
+      .collection(`Noticias/`)
+      .valueChanges({ idField: 'id' });
+  }
+
+   isPremium(uid: string): Observable<boolean> {
+    return this.database.collection('Usuarios').doc(uid).valueChanges().pipe(
+      map((data: any) => {
+        return data?.isPremium === true;
+      }),
+      catchError(() => of(false))
+    );
+  }
+
+  async updatePremium(userId: string, subscriptionData: any) {
+    try {
+      const userRef = this.database.collection('Usuarios').doc(userId);
+
+      // Crear un objeto con flags dependiendo del plan comprado
+      let flagsUpdate = {
+        isPremium: false,
+      };
+
+      flagsUpdate.isPremium = true;
+
+      // Actualizar el documento del usuario con la info de suscripción y flags
+      await userRef.set({
+        suscripcion: subscriptionData,
+        ...flagsUpdate
+      }, { merge: true });
+
+    } catch (error) {
+      console.error('Error actualizando suscripción y flags:', error);
+      throw error;
+    }
+  }
 }

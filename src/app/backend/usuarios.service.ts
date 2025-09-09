@@ -150,14 +150,79 @@ export class UsuariosService {
 
     return urls;
   }
+
+  async subirImagenResena(files: File[], uidUsuario: string, uidTatuador: string): Promise<string[]> {
+    const urls: string[] = [];
+
+    for (const file of files) {
+      // Cambiamos la carpeta para reseñas
+      const filePath = `resenas/${uidTatuador}/${uidUsuario}_${Date.now()}_${file.name}`;
+      const fileRef = this.storage.ref(filePath);
+
+      const uploadTask = this.storage.upload(filePath, file);
+
+      // Espera a que la subida se complete
+      await lastValueFrom(uploadTask.snapshotChanges().pipe(
+        finalize(() => {
+          console.log(`Subida de reseña finalizada para: ${file.name}`);
+        })
+      ));
+
+      // Obtiene la URL del archivo subido
+      const url = await lastValueFrom(fileRef.getDownloadURL());
+      urls.push(url);
+    }
+
+    return urls;
+  }
+
+  async subirImagenBoceto(files: File[], uidUsuario: string, uidTatuador: string): Promise<string[]> {
+    const urls: string[] = [];
+
+    for (const file of files) {
+      // Cambiamos la carpeta para reseñas
+      const filePath = `boceto/${uidTatuador}/${uidUsuario}_${Date.now()}_${file.name}`;
+      const fileRef = this.storage.ref(filePath);
+
+      const uploadTask = this.storage.upload(filePath, file);
+
+      // Espera a que la subida se complete
+      await lastValueFrom(uploadTask.snapshotChanges().pipe(
+        finalize(() => {
+          console.log(`Subida de reseña finalizada para: ${file.name}`);
+        })
+      ));
+
+      // Obtiene la URL del archivo subido
+      const url = await lastValueFrom(fileRef.getDownloadURL());
+      urls.push(url);
+    }
+
+    return urls;
+  }
+
   
 
-   async actualizarAvatar(userId: string, data: string): Promise<void> {
+  async actualizarAvatar(userId: string, data: string): Promise<void> {
     return this.firestoreService.updateDocAvatar(userId, data);
   }
 
   getAvatar(uid: string){
     return this.firestoreService.obtenerAvatar(uid);
+  }
+  
+  async isPremium(uid: string): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      this.firestoreService.isPremium(uid).subscribe(
+        (res) => {
+          resolve(res); // Resolvemos la promesa con el valor obtenido
+        },
+        (error) => {
+          console.error("Error al verificar premium:", error);
+          reject(false); // Rechazamos la promesa si ocurre un error
+        }
+      );
+    });
   }
 
 }

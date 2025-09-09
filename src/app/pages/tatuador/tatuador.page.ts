@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { Resena, Tatuador, Usuario } from 'src/app/model';
@@ -18,6 +18,32 @@ export class TatuadorPage implements OnInit {
     nombre: '',
     correo: '',
   };
+  imagenSeleccionada: string | null = null;
+  datosConsulta = {
+    nombre: '',
+    diseno: '',
+    ubicacion: '',
+    tamano: '',
+    color: '',
+    notas: '',
+    tatuador: '',
+    telefono: '',
+    correo: ''
+  };
+  objetivos = [
+    { nombre: '100 citas', alcanzado: false, activated: false, img: 'assets/objetivos/100citas.png' },
+    { nombre: '250 citas', alcanzado: false, activated: false, img: 'assets/objetivos/250citas.png' },
+    { nombre: '500 citas', alcanzado: false, activated: false, img: 'assets/objetivos/500citas.png' },
+    { nombre: '1000 citas', alcanzado: false, activated: false, img: 'assets/objetivos/1000citas.png' },
+    { nombre: '100 reseñas', alcanzado: false, activated: false, img: 'assets/objetivos/100resenas.png' },
+    { nombre: '250 reseñas', alcanzado: false, activated: false, img: 'assets/objetivos/250resenas.png' },
+    { nombre: '500 reseñas', alcanzado: false, activated: false, img: 'assets/objetivos/500resenas.png' },
+    { nombre: '1 año', alcanzado: false, activated: false, img: 'assets/objetivos/1ano.png' },
+    { nombre: '2 años', alcanzado: false, activated: false, img: 'assets/objetivos/2anos.png' },
+  ];
+  imagenResena: string | null = null; // base64 para preview
+  imagenFile: File | null = null;
+  previewImage: string | null = null;
 
   tatuador: Tatuador = {
     nombre: '',
@@ -42,7 +68,7 @@ export class TatuadorPage implements OnInit {
   resenaExistente: boolean = false;
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private route: ActivatedRoute, public tiendaTatuador: TiendaService, public toast: ToastController,
-    private router: Router
+    private router: Router, private alertController: AlertController
   ) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
@@ -77,10 +103,9 @@ export class TatuadorPage implements OnInit {
           if(avatares)
           this.tatuador.avatar = avatares; // un array sólo con URLs válidas
         });
-        if(this.tatuador.fecha)
-        this.diasResumen = this.resumirDiasDesdeArray(this.tatuador.fecha);
-        if(this.tatuador.hora)
-        this.horasResumen = this.resumirHorasDesdeArray(this.tatuador.hora);
+        this.tiendaTatuador.getFotosTatuador(this.uid).subscribe(fotos => {
+          this.tatuador.foto = fotos;
+        });
 
        if (this.usuario.uid) {
           this.tiendaTatuador.verificarFavorito(this.usuario.uid, this.uid).then(esFavorito => {
@@ -89,6 +114,7 @@ export class TatuadorPage implements OnInit {
         }
         await this.cargarResenas();
         this.verificarSiYaReseno();
+        this.actualizarObjetivos();
       } else {
         console.warn('No se encontró el tatuador');
       }
@@ -124,135 +150,83 @@ export class TatuadorPage implements OnInit {
     await toast.present();
   }
 
-  resumirDiasDesdeArray(dias: string[]): string {
-    const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 
-    // Elimina tildes y convierte a minúsculas
-    const normalizar = (str: string): string =>
-      str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  async pedirCita() {
+    if (this.usuario.uid) {
+      const alert = await this.alertController.create({
+        header: 'Advertencia',
+        message: 'El tatuador se puede negar a agendar la cita si no se ha realizado una consulta previa. ¿Deseas continuar?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel'
+          },
+          {
+            text: 'Continuar',
+            handler: async () => {
+              const uidTatuador = this.tatuador.uid;
+              // Navegar a la página 'pedir-cita' pasando el uid como parámetro
+              await this.router.navigate(['/pedir-cita', uidTatuador]);
+            }
+          }
+        ]
+      });
 
-    const diasNormalizados = dias
-      .map(d => normalizar(d.trim()))
-      .filter(d => diasSemana.map(normalizar).includes(d));
-
-    // Convertimos los días normalizados a índices
-    const indices = diasNormalizados
-      .map(d => diasSemana.findIndex(s => normalizar(s) === d))
-      .sort((a, b) => a - b);
-
-    if (indices.length === 0) return '';
-
-    // Agrupar días consecutivos
-    const rangos: [number, number][] = [];
-    let inicio = indices[0];
-    let fin = indices[0];
-
-    for (let i = 1; i < indices.length; i++) {
-      if (indices[i] === fin + 1) {
-        fin = indices[i];
-      } else {
-        rangos.push([inicio, fin]);
-        inicio = fin = indices[i];
-      }
-    }
-    rangos.push([inicio, fin]);
-
-    // Formatear los rangos
-    return rangos.map(([start, end]) => {
-      if (start === end) {
-        return diasSemana[start];
-      } else if (end === start + 1) {
-        return `${diasSemana[start]}, ${diasSemana[end]}`;
-      } else {
-        return `${diasSemana[start]} a ${diasSemana[end]}`;
-      }
-    }).join(', ');
-  }
-
-  resumirHorasDesdeArray(horas: string[]): string {
-    if (!horas || horas.length === 0) return '';
-
-    // Convertir a números para ordenarlos y comparar
-    const horaToNumber = (h: string) => {
-      const [hStr, mStr] = h.split(':');
-      return parseInt(hStr) * 60 + parseInt(mStr); // minutos totales
-    };
-
-    const numberToHora = (n: number) => {
-      const h = Math.floor(n / 60);
-      const m = n % 60;
-      return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-    };
-
-    const horasNumericas = horas
-      .map(h => h.trim())
-      .filter(h => /^\d{2}:\d{2}$/.test(h)) // asegurarse que tengan formato correcto
-      .map(horaToNumber)
-      .sort((a, b) => a - b);
-
-    const rangos: [number, number][] = [];
-    let inicio = horasNumericas[0];
-    let fin = horasNumericas[0];
-
-    for (let i = 1; i < horasNumericas.length; i++) {
-      if (horasNumericas[i] === fin + 60) {
-        // siguiente hora exacta → continuar el rango
-        fin = horasNumericas[i];
-      } else {
-        rangos.push([inicio, fin]);
-        inicio = fin = horasNumericas[i];
-      }
-    }
-    rangos.push([inicio, fin]);
-
-    // Formatear los rangos
-    return rangos.map(([start, end]) => {
-      if (start === end) {
-        return numberToHora(start);
-      } else {
-        return `${numberToHora(start)} a ${numberToHora(end)}`;
-      }
-    }).join(', ');
-  }
-
-  async pedirCita(){
-    if(this.usuario.uid){
-      const uidTatuador = this.tatuador.uid;
-      // Navegar a la página 'pedir-cita' pasando el uid como parámetro
-      await this.router.navigate(['/pedir-cita', uidTatuador]);
+      await alert.present();
     } else {
-      this.presentToast("Tienes que iniciar sesion para pedir una cita", 'warning');
+      this.presentToast("Tienes que iniciar sesión para pedir una cita", 'warning');
     }
   }
 
-  enviarResena() {
+
+  async enviarResena() {
     if (this.estrellaSeleccionada === 0 || !this.mensajeResena.trim()) {
-      this.presentToast("Escribaa un comentario o seleccione las estrellas", 'warning');
+      this.presentToast("Escriba un comentario o seleccione las estrellas", 'warning');
       return;
     }
 
     const uidUsuario = this.usuario.uid;
     const uidTatuador = this.tatuador.uid;
 
-    const resena = {
+    const resena: any = {
       estrella: this.estrellaSeleccionada,
       mensaje: this.mensajeResena.trim(),
-      nombreUsuario: this.usuario.nombre // o displayName
+      nombreUsuario: this.usuario.nombre
     };
+
+    if (this.imagenFile) {
+      // Subir imagen a tu backend o Firebase
+      const urlImagen = await this.user.subirImagenResena([this.imagenFile], uidUsuario, uidTatuador);
+      resena.imagen = urlImagen;
+    }
 
     this.tiendaTatuador.guardarResena(resena, uidUsuario, uidTatuador);
 
-    // Limpia
+    // Limpiar campos
     this.estrellaSeleccionada = 0;
     this.mensajeResena = '';
+    this.imagenResena = null;
+    this.imagenFile = null;
     this.resenaExistente = true;
-    this.cargarResenas(); // Opcional: recarga
+    this.cargarResenas();
+  } 
+
+  onImagenSeleccionada(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewImage = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   cargarResenas() {
     const uidTatuador = this.tatuador.uid;
     this.tiendaTatuador.getResenaTatuador(uidTatuador).subscribe(res => {
       this.resenas = res as Resena[];
+      console.log(this.resenas);
     });
   }
 
@@ -263,8 +237,16 @@ export class TatuadorPage implements OnInit {
 
 
   verificarSiYaReseno() {
+    // Comprobar que el usuario está logueado
+    if (!this.usuario || !this.usuario.uid) {
+      console.log('Usuario no logueado, no se puede verificar la reseña.');
+      this.resenaExistente = false; // opcional, para deshabilitar UI
+      return;
+    }
+
     const uidUsuario = this.usuario.uid;
     const uidTatuador = this.tatuador.uid;
+
     this.tiendaTatuador.existeResena(uidUsuario, uidTatuador).subscribe(
       (existe) => {
         this.resenaExistente = existe;
@@ -274,6 +256,7 @@ export class TatuadorPage implements OnInit {
       }
     );
   }
+
 
   seleccionarEstrella(valor: number) {
     this.estrellaSeleccionada = valor;
@@ -310,4 +293,70 @@ export class TatuadorPage implements OnInit {
       window.open(url, '_blank');
     }
   }
+
+  abrirSitioWeb(url: string) {
+    if (url) {
+      const sitio = url.startsWith('http://') || url.startsWith('https://')
+        ? url
+        : `https://${url}`;
+      window.open(sitio, '_blank');
+    }
+  }
+
+
+  get avatarUrl(): string {
+    const avatar = this.tatuador?.avatar;
+
+    // Verifica que avatar sea una cadena y no vacía
+    if (typeof avatar === 'string' && avatar.trim() !== '') {
+      return avatar;
+    }
+
+    // Si no es válido, regresa la imagen por defecto
+    return 'assets/icon/sin_avatar.png';
+  }
+
+  async consultaPrevia() {
+    if (this.usuario.uid) {
+      const uidTatuador = this.tatuador.uid;
+      await this.router.navigate(['/pedir-cita', uidTatuador], {
+        queryParams: {
+          consulta: true
+        }
+      });
+    } else {
+      this.presentToast("Tienes que iniciar sesión para pedir una consulta previa", 'warning');
+    }
+  }
+
+  verImagen(foto: string) {
+    this.imagenSeleccionada = foto;
+  }
+
+  cerrarImagen() {
+    this.imagenSeleccionada = null;
+  }
+
+  actualizarObjetivos() {
+    // Si es un array lo convertimos en objeto vacío
+    console.log(this.tatuador.objetivos);
+    const objetivosUsuario: Record<string, boolean> = 
+      (this.tatuador.objetivos && !Array.isArray(this.tatuador.objetivos)) 
+        ? this.tatuador.objetivos 
+        : {};
+
+    this.objetivos = this.objetivos.map(obj => {
+      const key = obj.nombre.replace(/\s+/g, '_').toLowerCase(); // "100 citas" → "100_citas"
+      return {
+        ...obj,
+        alcanzado: objetivosUsuario[key] === true
+      };
+    });
+  }
+  
+  abrirMaps(direccion: string) {
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(direccion)}`;
+    window.open(url, '_blank');
+  }
+
 }

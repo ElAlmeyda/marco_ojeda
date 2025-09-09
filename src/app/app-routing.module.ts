@@ -32,11 +32,11 @@ const routes: Routes = [
         path: 'favoritos',
         loadChildren: () => import('./pages/favoritos/favoritos.module').then( m => m.FavoritosPageModule)
       },
+      {
+        path: 'noticias',
+        loadChildren: () => import('./pages/noticias/noticias.module').then( m => m.NoticiasPageModule)
+      },
     ]
-  },
-  {
-    path: 'inicio-sesion',
-    loadChildren: () => import('./pages/inicio-sesion/inicio-sesion.module').then( m => m.InicioSesionPageModule)
   },
   {
     path: 'forgot-password',
@@ -50,8 +50,6 @@ const routes: Routes = [
     path: 'terminos',
     loadChildren: () => import('./pages/terminos/terminos.module').then( m => m.TerminosPageModule)
   },
-  
-  
   {
     path: 'cuenta',
     loadChildren: () => import('./pages/cuenta/cuenta.module').then( m => m.CuentaPageModule)
@@ -76,6 +74,22 @@ const routes: Routes = [
     path: 'ajustes/:uid',
     loadChildren: () => import('./pages/ajustes/ajustes.module').then( m => m.AjustesPageModule)
   },
+  {
+    path: 'eventos',
+    loadChildren: () => import('./pages/eventos/eventos.module').then( m => m.EventosPageModule)
+  },
+  {
+    path: 'ofertas',
+    loadChildren: () => import('./pages/ofertas/ofertas.module').then( m => m.OfertasPageModule)
+  },
+  {
+    path: 'pago',
+    loadChildren: () => import('./pages/pago/pago.module').then( m => m.PagoPageModule)
+  },
+
+  
+
+
 
 
 ];

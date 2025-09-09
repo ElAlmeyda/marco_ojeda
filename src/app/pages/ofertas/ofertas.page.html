@@ -1,0 +1,24 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-icon name="close-outline" slot="start" [routerLink]="['/tabs/folder', usuario.uid]" style="margin-left: 10px; font-size: 24px;"></ion-icon>
+    <ion-title size="large" style="text-align: center;">Ofertas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" *ngFor="let oferta of ofertas">
+        <ion-card class="card-uniforme" [routerLink]="['/tatuador', oferta.uidTatuador]">
+          <ion-img [src]="oferta.imagenUrl"></ion-img>
+          <ion-card-header>
+            <ion-card-title>{{ oferta.titulo }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            {{ oferta.descripcion }}
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

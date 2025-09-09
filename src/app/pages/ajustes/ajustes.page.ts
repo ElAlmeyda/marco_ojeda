@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ActionSheetController, AlertController, IonModal, NavController, ToastController } from '@ionic/angular';
 import { Cita, Resena, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
@@ -24,6 +24,7 @@ export class AjustesPage implements OnInit {
   };
   isDarkMode: boolean = false;
   selectedTheme: string = 'isSystem';
+  imagenSeleccionada: string | null = null;
 
   uid='';
   isAyuda=false;
@@ -136,10 +137,13 @@ export class AjustesPage implements OnInit {
       abierto: false,
     },
   ];
+  isPago: any;
+  isPremium: any;
 
 
   constructor(public firestore: FirestoreService, public user: UsuariosService, private navCtrl: NavController, public auth: FirestoreAuthService, public tiendaService: TiendaService,
               private route: ActivatedRoute, public alertController: AlertController, private actionSheetController: ActionSheetController, private toastController: ToastController,
+              private router: Router
   ) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
@@ -157,6 +161,7 @@ export class AjustesPage implements OnInit {
       this.isAjustes = queryParams['isAjustes']; 
       this.isHistorial = queryParams['isHistorial']; 
       this.isResena = queryParams['isResena']; 
+      this.isPago = queryParams['isPago']; 
       this.obtenerUsuario();
       this.isDarkMode = document.body.classList.contains('dark');
       this.loadTheme();
@@ -164,10 +169,11 @@ export class AjustesPage implements OnInit {
   }
 
   obtenerUsuario() {
-    this.user.getUsuarios().subscribe(() => {
+    this.user.getUsuarios().subscribe(async () => {
       const usuario = this.user.getUsuarioConcreto(this.usuarioActual.uid);
       if (usuario) {
         this.usuarioActual = usuario;
+        this.isPremium = await this.user.isPremium(this.usuarioActual.uid);
         if(this.isResena){
           this.obtenerResenas();
         }
@@ -274,11 +280,20 @@ export class AjustesPage implements OnInit {
 
 
   obtenerHistorial() {
-    this.tiendaService.getCitasUsuario(this.usuarioActual.uid).subscribe((citas: any) => {
-      this.citas = citas;
-      console.log('Citas del usuario:', citas);
+    this.tiendaService.getCitasUsuario(this.usuarioActual.uid).subscribe((citas: any[]) => {
+      
+      // Filtrar solo citas aceptadas y que ya hayan pasado
+      const ahora = new Date();
+
+      this.citas = citas.filter(cita => {
+        const fechaCita = new Date(cita.fecha); // si tienes fecha + hora, ajusta: new Date(cita.fecha + ' ' + cita.hora)
+        return cita.estado === 'aceptada' && fechaCita < ahora;
+      });
+
+      console.log('Historial de citas pasadas y aceptadas:', this.citas);
     });
   }
+
 
   async ngOnInit() {
   }
@@ -390,6 +405,19 @@ export class AjustesPage implements OnInit {
       document.body.classList.add('light');
     }
     // Si no es claro ni oscuro, dejamos que el sistema decida (no se pone ninguna clase)
+  }
+
+  verImagen(foto: string) {
+    this.imagenSeleccionada = foto;
+  }
+
+  cerrarImagen() {
+    this.imagenSeleccionada = null;
+  }
+
+  goToPago() {
+    // Llévalo a la página de pago
+    this.router.navigate(['/pago']);
   }
 
 }
