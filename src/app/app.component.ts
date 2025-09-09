@@ -53,6 +53,7 @@ export class AppComponent {
         this.router.navigate(['/tabs/folder', this.uid]);
       } else {
         this.uid= '';
+        this.isPremiun = false;
         this.user.changeUserLogin(false);
         this.change = this.user.usuarioLogin;
         this.router.navigate(['/tabs/folder', this.uid]);
@@ -69,7 +70,6 @@ export class AppComponent {
 
       this.router.events.subscribe(event => {
         const currentRoute = this.router.url;
-        console.log("IsPremiun", this.isPremiun);
         if(!this.isPremiun){
           if (this.isInsideTabs(currentRoute)) {
             this.showBanner();

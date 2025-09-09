@@ -42,7 +42,7 @@ export class FolderPage implements OnInit {
     { nombre: 'Anime', imagen: 'assets/estilos/anime.jpg' }
   ];
   ofertas: Ofertas[] = [];
-  todosTatuadores: any[] = [];
+  todosTatuadores: Tatuador[] = [];
   filtroValoracion: boolean = false;
   filtroCercania: boolean = false;
   mostrarFormulario=false;
@@ -82,95 +82,51 @@ export class FolderPage implements OnInit {
 
   cargarTatuadores() {
     this.tiendaService.getTatuadores().subscribe({
-      next: async (data: any[]) => {
-        console.log("Tatuadores recibidos:", data);
+      next: (data: any[]) => {
+        // Filtrar solo los tatuadores premium
+        const tatuadoresPremium = data.filter(tatuador => tatuador.isPremium === true);
 
-        const tatuadoresConUbicacion = await Promise.all(
-          data.map(async tatuador => {
-            console.log("Evaluando tatuador:", tatuador.nombreTienda);
+        // Calcular distancia respecto a usuario y obtener la primera foto
+        const tatuadoresConDistancia = tatuadoresPremium.map(tatuador => {
+          if (tatuador.latitud && tatuador.longitud && this.latUsuario && this.lonUsuario) {
+            tatuador.distancia = this.calcularDistancia(
+              this.latUsuario,
+              this.lonUsuario,
+              tatuador.latitud,
+              tatuador.longitud
+            );
+          } else {
+            tatuador.distancia = null;
+          }
 
-            // Geocodificación si hace falta
-            if ((!tatuador.latitud || !tatuador.longitud || tatuador.latitud === 0 || tatuador.longitud === 0) && tatuador.ciudad) {
-              const resultado = await this.geocodeDireccion(tatuador.ciudad);
-              if (resultado) {
-                tatuador.latitud = resultado.lat;
-                tatuador.longitud = resultado.lng;
-              }
-            }
+          // Obtener la primera foto
+          this.tiendaService.getFotosTatuador(tatuador.uid).subscribe(fotos => {
+            tatuador.foto = fotos.length > 0 ? [fotos[0]] : [];
+            console.log('Foto principal para', tatuador.nombreTienda, tatuador.foto);
+          });
 
-            // Calcular distancia respecto a usuario (solo si tenemos coordenadas)
-            if (tatuador.latitud && tatuador.longitud && this.latUsuario && this.lonUsuario) {
-              tatuador.distancia = this.calcularDistancia(
-                this.latUsuario,
-                this.lonUsuario,
-                tatuador.latitud,
-                tatuador.longitud
-              );
-            } else {
-              tatuador.distancia = null; // si no hay coordenadas
-            }
+          return tatuador;
+        });
 
-            // Obtener fotos desde Storage
-            this.tiendaService.getFotosTatuador(tatuador.uid).subscribe(fotos => {
-              tatuador.foto = fotos;
-              console.log('Fotos cargadas para', tatuador.nombreTienda, fotos);
-            });
-
-            return tatuador;
-          })
-        );
-
-        // Asignar a tus listas
-        this.cerca = this.filtrarTatuadoresCercanos(tatuadoresConUbicacion);
+        // Filtrar listas
+        this.cerca = this.filtrarTatuadoresCercanos(tatuadoresConDistancia);
         this.valoracion = this.calcularValoracionesPromedio(this.cerca);
-        this.recomendado = this.filtrarTatuadoresRecomendados(tatuadoresConUbicacion);
-
-        console.log("Cerca", this.cerca);
-        console.log("Valoracion", this.valoracion);
-        console.log("Recomendado", this.recomendado);
+        this.recomendado = this.filtrarTatuadoresRecomendados(tatuadoresConDistancia);
       },
       error: err => console.error("Error al obtener tatuadores:", err)
     });
   }
 
 
-
   // Filtrar tatuadores cercanos por ubicación
   filtrarTatuadoresCercanos(tatuadores: any[]) {
-    const distanciaMaxima = 100; // Distancia máxima en km (puedes ajustarla)
-
-    return tatuadores.filter(tatuador => {
-      const latTatuador = tatuador.latitud;
-      const lonTatuador = tatuador.longitud;
-
-      const distancia = this.calcularDistancia(this.latUsuario, this.lonUsuario, latTatuador, lonTatuador);
-
-      // Filtra tatuadores que están dentro de la distancia máxima
-      return distancia <= distanciaMaxima;
-    });
-  }
-
-  geocodeDireccion(direccion: string): Promise<{ lat: number, lng: number } | null> {
-    const geocoder = new google.maps.Geocoder();
-    return new Promise((resolve) => {
-      geocoder.geocode({ address: direccion }, (results, status) => {
-        if (status === 'OK' && results && results[0]) {
-          const location = results[0].geometry.location;
-          resolve({
-            lat: location.lat(),
-            lng: location.lng()
-          });
-        } else {
-          console.error('Error geocodificando dirección:', direccion, status);
-          resolve(null);
-        }
-      });
-    });
+    const distanciaMaxima = 100;
+    return tatuadores.filter(tatuador => tatuador.distancia !== null && tatuador.distancia <= distanciaMaxima);
   }
 
   // Filtrar tatuadores recomendados por el flag `recomendado`
   filtrarTatuadoresRecomendados(tatuadores: any[]) {
-    return tatuadores.filter(tatuador => tatuador.recomendado === true);
+    return tatuadores.filter(tatuador => tatuador.isRecomendado === true);
   }
 
   // Método para calcular la distancia entre dos coordenadas geográficas usando la fórmula de Haversine
@@ -217,20 +173,19 @@ export class FolderPage implements OnInit {
       // 1️⃣ Unir los tres arrays
       const todos = [...this.cerca, ...this.valoracion, ...this.recomendado];
 
-      // 2️⃣ Eliminar duplicados por UID
-      const unicos = todos.filter(
-        (t, index, self) =>
-          index === self.findIndex(s => s.uid === t.uid)
-      );
+      // 2️⃣ Eliminar duplicados por UID usando Map (más eficiente)
+      const map = new Map();
+      todos.forEach(t => map.set(t.uid, t));
 
       // 3️⃣ Filtrar por nombreTienda
-      this.resultadosBusqueda = unicos.filter(tatuador =>
-        tatuador.nombreTienda?.toLowerCase().includes(termino)
+      this.resultadosBusqueda = Array.from(map.values()).filter(t =>
+        t.nombreTienda?.toLowerCase().includes(termino)
       );
     } else {
       this.cargarTatuadores();
     }
   }
+
 
   seleccionarEstilo(estilo: any) {
     console.log("Estilo", estilo.nombre);

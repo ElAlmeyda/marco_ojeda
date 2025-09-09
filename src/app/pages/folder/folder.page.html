@@ -74,9 +74,9 @@
     </ion-card>
     <!-- Recomendados -->
       <div *ngIf="recomendado.length > 0 && (!resultadosBusqueda || resultadosBusqueda.length === 0)">
-        <ion-label class="titulo-grande">Cerca de ti</ion-label>
+        <ion-label class="titulo-grande">Recomendados</ion-label>
         <div class="horizontal-scroll">
-          <div class="cards-row" *ngFor="let tipo of cerca" [routerLink]="['/tatuador', tipo.uid]">
+          <div class="cards-row" *ngFor="let tipo of recomendado" [routerLink]="['/tatuador', tipo.uid]">
             <ion-card class="user-card">
               <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png'" class="user-card-img"></ion-img>
 
@@ -140,9 +140,9 @@
 
       <!-- Valoración -->
       <div *ngIf="valoracion.length > 0 && (!resultadosBusqueda || resultadosBusqueda.length === 0)">
-        <ion-label class="titulo-grande">Cerca de ti</ion-label>
+        <ion-label class="titulo-grande">Valoracion</ion-label>
         <div class="horizontal-scroll">
-          <div class="cards-row" *ngFor="let tipo of cerca" [routerLink]="['/tatuador', tipo.uid]">
+          <div class="cards-row" *ngFor="let tipo of valoracion" [routerLink]="['/tatuador', tipo.uid]">
             <ion-card class="user-card">
               <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png'" class="user-card-img"></ion-img>
 

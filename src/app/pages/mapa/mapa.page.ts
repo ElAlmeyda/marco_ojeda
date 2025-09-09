@@ -101,8 +101,13 @@ export class MapaPage implements OnInit {
       });
 
       // Obtener y mostrar los tatuadores
+      // Obtener y mostrar los tatuadores
       this.tiendaService.getTatuadores().subscribe(tatuadores => {
-        tatuadores.forEach(async tatuador => {
+
+        // Filtrar solo los tatuadores premium
+        const tatuadoresPremium = tatuadores.filter(t => t.isPremium === true);
+
+        tatuadoresPremium.forEach(async tatuador => {
           if (tatuador.ciudad) {
             const coords = await this.geocodeDireccion(tatuador.ciudad);
             if (coords) {
@@ -110,7 +115,6 @@ export class MapaPage implements OnInit {
               (tatuador as any).latitud = coords.lat;
               (tatuador as any).longitud = coords.lng;
 
-              // Suponiendo que tienes this.latUsuario y this.lonUsuario
               if (this.latUsuario && this.lonUsuario) {
                 (tatuador as any).distancia = this.calcularDistancia(
                   this.latUsuario,
@@ -122,7 +126,7 @@ export class MapaPage implements OnInit {
                 (tatuador as any).distancia = null;
               }
 
-              // Crear el marcador
+              // Crear marcador en el mapa
               const marker = new google.maps.Marker({
                 position: coords,
                 map: this.map,
@@ -147,7 +151,6 @@ export class MapaPage implements OnInit {
           }
         });
       });
-
     } catch (error) {
       console.error('Error al inicializar el mapa:', error);
     }

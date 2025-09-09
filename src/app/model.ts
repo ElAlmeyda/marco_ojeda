@@ -35,6 +35,7 @@ export interface Tatuador {
     fechaDisponibleDesde?: string;
     promedio?: number;
     objetivos?: boolean [];    
+    isPremium?: boolean;
 }
 
 
