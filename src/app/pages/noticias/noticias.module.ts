@@ -7,12 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { NoticiasPageRoutingModule } from './noticias-routing.module';
 
 import { NoticiasPage } from './noticias.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    TranslateModule,
     NoticiasPageRoutingModule
   ],
   declarations: [NoticiasPage]

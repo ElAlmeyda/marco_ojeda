@@ -80,7 +80,7 @@
 
     <ng-container *ngIf="!tatuador.estilos || tatuador.estilos.length === 0">
       <ion-chip color="medium">
-        <ion-label>No especificado</ion-label>
+        <ion-label>{{ 'NOT_SPECIFIED' | translate }}</ion-label>
       </ion-chip>
     </ng-container>
   </div>
@@ -106,8 +106,8 @@
 
 
   <div style="display: flex; justify-content: center; padding: 20px;">
-    <ion-button (click)="consultaPrevia()"> Consulta Previa</ion-button>
-    <ion-button (click)="pedirCita()"> Pedir Cita</ion-button>
+    <ion-button (click)="consultaPrevia()">{{ 'PRE_CONSULTATION' | translate }}</ion-button>
+    <ion-button (click)="pedirCita()">{{ 'BOOK_APPOINTMENT' | translate }}</ion-button>
   </div>
 
 
@@ -123,13 +123,13 @@
       </ion-col>
     </ion-row>
     <div *ngIf="!tatuador.foto" style="display: flex; justify-content: center; padding: 20px; color: gray;">
-      No tiene fotos para mostrar.
+      {{ 'NO_PHOTOS' | translate }}
     </div>
   </ion-grid>
 
   <!-- 📝 Bloque de reseñas -->
   <div style="padding: 20px;">
-    <h3 style="margin-bottom: 10px;">Reseñas</h3>
+    <h3 style="margin-bottom: 10px;"> {{ 'REVIEWS' | translate }}</h3>
 
       <!-- 🔄 Lista de reseñas existentes -->
       <ion-card *ngFor="let resena of resenas">
@@ -177,14 +177,14 @@
 
     <!-- Si no hay reseñas -->
     <div *ngIf="!resenas || resenas.length === 0" style="color: gray; text-align: center;">
-      Este tatuador aún no tiene reseñas.
+       {{ 'NO_REVIEWS' | translate }}
     </div>
 
     <hr style="margin: 30px 0;" />
 
     <!-- ✏️ Formulario para dejar una reseña -->
     <div *ngIf="!resenaExistente && usuario.uid">
-      <h4>Deja tu reseña</h4>
+      <h4>{{ 'LEAVE_REVIEW' | translate }}</h4>
 
       <!-- Estrellas -->
       <div style="display: flex; gap: 5px; margin-bottom: 10px;">
@@ -208,7 +208,7 @@
         <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
           <ion-button expand="block" fill="outline" (click)="fileInput.click()">
             <ion-icon name="image-outline" slot="start"></ion-icon>
-            Seleccionar foto
+            {{ 'SELECT_PHOTO' | translate }}
           </ion-button>
 
           <!-- Vista previa si hay imagen -->
@@ -226,7 +226,7 @@
 
       <!-- Botón -->
       <ion-button expand="block" (click)="enviarResena()">
-        Enviar Reseña
+        {{ 'SEND_REVIEW' | translate }}
       </ion-button>
     </div>
   </div>

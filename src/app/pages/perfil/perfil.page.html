@@ -10,20 +10,20 @@
       <div class="center-container">
         <ion-img src="../../../assets/icon/icon.png" slot="start" class="app-logo" alt="App Logo"></ion-img>
       </div>
-      <ion-input [(ngModel)]="correo" type="email" name="email" placeholder="Verificar correo" required (ngModelChange)="comprobarCorreo()" *ngIf="!registro && !correoExistente"></ion-input>
-      <ion-button type="submit" (click)="formatCorreo()" style="border-radius: 20px;" *ngIf="!registro && !correoExistente">Verificar correo</ion-button>
-      <ion-label class="error-label" style="margin:5px;" *ngIf="correoInvalido"><span>El formato del correo no es válido. Usa Gmail, Hotmail, Outlook o Yahoo.</span></ion-label>
+      <ion-input [(ngModel)]="correo" type="email" name="email" [placeholder]=" 'LOGIN.VERIFY_EMAIL' | translate " required (ngModelChange)="comprobarCorreo()" *ngIf="!registro && !correoExistente"></ion-input>
+      <ion-button type="submit" (click)="formatCorreo()" style="border-radius: 20px;" *ngIf="!registro && !correoExistente">{{ 'LOGIN.VERIFY_EMAIL_BTN' | translate }}</ion-button>
+      <ion-label class="error-label" style="margin:5px;" *ngIf="correoInvalido"><span>{{ 'LOGIN.INVALID_EMAIL' | translate }}</span></ion-label>
 
       <div class="login-container" *ngIf="correoExistente">
         <form method="POST">
-          <ion-input [(ngModel)]="correo" type="email" name="email" label="Correo" required></ion-input>
+          <ion-input [(ngModel)]="correo" type="email" name="email" label="{{ 'LOGIN.EMAIL' | translate }}" required></ion-input>
           <div style="display: flex; align-items: center; padding-right: 10px;">
             <ion-input
               style="flex: 1;"
               [(ngModel)]="password"
               [type]="showPassword ? 'text' : 'password'"
               name="password"
-              placeholder="Contraseña"
+              placeholder="{{ 'LOGIN.PASSWORD' | translate }}"
               required>
             </ion-input>
 
@@ -33,10 +33,10 @@
               (click)="togglePassword()">
             </ion-icon>
           </div>
-          <ion-button type="submit" (click)="inicioSesion()" style="border-radius: 20px;">Iniciar Sesión</ion-button>
+          <ion-button type="submit" (click)="inicioSesion()" style="border-radius: 20px;">{{ 'LOGIN.SIGN_IN' | translate }}</ion-button>
           <div class="forgot-password-container">
             <ion-label class="forgot-password"> 
-              <a routerLink="/forgot-password"> Olvidaste la contraseña </a>
+              <a routerLink="/forgot-password"> {{ 'LOGIN.FORGOT_PASSWORD' | translate }} </a>
             </ion-label>
           </div>
         </form>
@@ -44,40 +44,43 @@
 
       <div class="login-container" *ngIf="registro">
         <form method="POST">
-          <ion-input *ngIf="registro" label="Nombre:" [(ngModel)]="nombre" (ngModelChange)="comprobarNombre()" [ngModelOptions]="{standalone: true}" name="nombre" required autocapitalize></ion-input>
-          <ion-label class="error-label" style="margin:5px;" *ngIf="nombreInvcalido && registro"><span>Escriba un nombre verdadero.</span></ion-label>
-          <ion-input *ngIf="registro" label="Nª Telefono:" placeholder="Ponga su prefijo" type="tel" [(ngModel)]="phone" (ngModelChange)="comprobarNumero()" [ngModelOptions]="{standalone: true}" name="correo" required></ion-input>
-          <ion-label class="error-label" style="margin:5px;" *ngIf="numeroIncorrecto && registro"><span>Escriba un numero verdadero.</span></ion-label>
-          <ion-input *ngIf="registro" type="email" label="Correo:" [(ngModel)]="correo" (ngModelChange)="comprobarCorreo()" [ngModelOptions]="{standalone: true}" name="correo" required></ion-input>
-          <ion-label class="error-label" style="margin:5px;" *ngIf="correoInvalido && registro"><span>El formato del correo no es válido. Usa Gmail, Hotmail, Outlook o Yahoo.</span></ion-label>
+          <ion-input *ngIf="registro" label="{{ 'REGISTER.NAME' | translate }}" [(ngModel)]="nombre" (ngModelChange)="comprobarNombre()" [ngModelOptions]="{standalone: true}" name="nombre" required autocapitalize></ion-input>
+          <ion-label class="error-label" style="margin:5px;" *ngIf="nombreInvcalido && registro"><span>{{ 'REGISTER.INVALID_NAME' | translate }}</span></ion-label>
+          
+          <ion-input *ngIf="registro" label="{{ 'REGISTER.PHONE' | translate }}" placeholder="{{ 'REGISTER.PHONE_PLACEHOLDER' | translate }}" type="tel" [(ngModel)]="phone" (ngModelChange)="comprobarNumero()" [ngModelOptions]="{standalone: true}" name="correo" required></ion-input>
+          <ion-label class="error-label" style="margin:5px;" *ngIf="numeroIncorrecto && registro"><span>{{ 'REGISTER.INVALID_PHONE' | translate }}</span></ion-label>
+          
+          <ion-input *ngIf="registro" type="email" label="{{ 'REGISTER.EMAIL' | translate }}" [(ngModel)]="correo" (ngModelChange)="comprobarCorreo()" [ngModelOptions]="{standalone: true}" name="correo" required></ion-input>
+          <ion-label class="error-label" style="margin:5px;" *ngIf="correoInvalido && registro"><span>{{ 'REGISTER.INVALID_EMAIL' | translate }}</span></ion-label>
+          
           <div style="display: flex; align-items: center; padding-right: 10px;">
             <ion-input
               style="flex: 1;"
               [(ngModel)]="password"
               [type]="showPassword ? 'text' : 'password'"
               name="password"
-              placeholder="Contraseña"
+              placeholder="{{ 'REGISTER.PASSWORD' | translate }}"
               required>
             </ion-input>
-
             <ion-icon
               name="{{ showPassword ? 'eye-off' : 'eye' }}"
               style="cursor: pointer; margin-left: 12px; margin-top: -6px; font-size: 28px;"
               (click)="togglePassword()">
             </ion-icon>
           </div>
-          <ion-label class="error-label" *ngIf="!isValidPassword() && registro"><span>La contraseña debe tener al menos 6 caracteres, incluir una letra, un número y un carácter especial.</span></ion-label>
-          <ion-button type="submit" (click)="crearUsuario()" [disabled]="!registro || nombreInvcalido ||
-              numeroIncorrecto || correoInvalido || !isValidPassword() ||!nombre || !phone ||!correo ||!password" style="border-radius: 20px;">Registrate</ion-button>
+          <ion-label class="error-label" *ngIf="!isValidPassword() && registro"><span>{{ 'REGISTER.INVALID_PASSWORD' | translate }}</span></ion-label>
+          <ion-button type="submit" (click)="crearUsuario()" [disabled]="!registro || nombreInvcalido || numeroIncorrecto || correoInvalido || !isValidPassword() || !nombre || !phone || !correo || !password" style="border-radius: 20px;">{{ 'REGISTER.SIGN_UP' | translate }}</ion-button>
         </form>
         <div class="privacy-container" *ngIf="registro">
           <ion-item lines="none" class="privacy-item">
-            <ion-label> Nunca compartiremos tus datos sin permiso. </ion-label>
+            <ion-label>{{ 'REGISTER.PRIVACY_INFO1' | translate }}</ion-label>
           </ion-item>
           <ion-item lines="none" class="privacy-item">
-            <ion-label> 
-              Al continuar aceptas nuestras <a [routerLink]="['/ajustes', uid]" [queryParams]="{ isCondicionUso: true }">Condiciones de uso</a>. Obtén más información de cómo se usan tus datos en nuestra 
-              <a [routerLink]="['/ajustes', uid]" [queryParams]="{ isPrivacidad: true }">Política de Privacidad</a>.
+            <ion-label>
+              {{ 'REGISTER.PRIVACY_INFO2' | translate }}
+              <a [routerLink]="['/ajustes', uid]" [queryParams]="{ isCondicionUso: true }">{{ 'REGISTER.TERMS' | translate }}</a>.
+              {{ 'REGISTER.PRIVACY_INFO3' | translate }}
+              <a [routerLink]="['/ajustes', uid]" [queryParams]="{ isPrivacidad: true }">{{ 'REGISTER.PRIVACY_POLICY' | translate }}</a>.
             </ion-label>
           </ion-item>
         </div>
@@ -85,75 +88,75 @@
     </div>
 
     <div *ngIf="usuario.uid">
-        <ion-list style="padding: 10px; background:transparent;">
-            <div style="display: flex; align-items: center; justify-content: flex-start; padding: 20px;">
-              <img [src]="usuario.avatar || 'assets/icon/sin_avatar.png'" alt="Avatar" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;" (click)="actualizarAvatar()" />
-              <input type="file" #fileInput accept="image/*" style="display:none" (change)="onFileSelectedAvatar($event)" />
-              <div style="display: flex; flex-direction: column; align-items: flex-start;" [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isInformacion: true }">
-                <h2 style="margin: 0; font-weight: bold;">{{usuario.nombre}}</h2>
-                <p style="margin: 0; font-size: 14px; color: gray;">{{usuario.movil}}</p>
-              </div>
-              <ion-icon name="chevron-forward-outline" slot="end" style="margin-left: auto; font-size: 20px;" [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isInformacion: true }"></ion-icon>
-            </div>
-            
-            <ion-item routerLink="/cuenta">
-              <ion-label>
-                <h2>Cuenta</h2>
-                <p class="small-description">Gestiona tu cuenta y preferencias.</p>
-              </ion-label>
-              <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
-            </ion-item>
+      <ion-list style="padding: 10px; background:transparent;">
+        <div style="display: flex; align-items: center; justify-content: flex-start; padding: 20px;">
+          <img [src]="usuario.avatar || 'assets/icon/sin_avatar.png'" alt="Avatar" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;" (click)="actualizarAvatar()" />
+          <input type="file" #fileInput accept="image/*" style="display:none" (change)="onFileSelectedAvatar($event)" />
+          <div style="display: flex; flex-direction: column; align-items: flex-start;" [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isInformacion: true }">
+            <h2 style="margin: 0; font-weight: bold;">{{usuario.nombre}}</h2>
+            <p style="margin: 0; font-size: 14px; color: gray;">{{usuario.movil}}</p>
+          </div>
+          <ion-icon name="chevron-forward-outline" slot="end" style="margin-left: auto; font-size: 20px;" [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isInformacion: true }"></ion-icon>
+        </div>
 
-            <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isResena: true }">
-            <ion-label>
-                <h2>Reseñas</h2>
-                <p class="small-description">Revisa y administra las reseñas que has dejado o recibido.</p>
-            </ion-label>
-            <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
-            </ion-item>
+        <ion-item routerLink="/cuenta">
+          <ion-label>
+            <h2>{{ 'SETTINGS.ACCOUNT' | translate }}</h2>
+            <p class="small-description">{{ 'SETTINGS.ACCOUNT_DESC' | translate }}</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </ion-item>
 
-            <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isHistorial: true }">
-              <ion-label>
-                  <h2>Historial</h2>
-                  <p class="small-description">Consulta todas tus citas pasadas y el estado de cada una.</p>
-              </ion-label>
-              <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
-            </ion-item>
-            
-             <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isPago: true }">
-              <ion-label>
-                  <h2>Suscripciones</h2>
-                  <p class="small-description">Suscribite o mira tu suscripción.</p>
-              </ion-label>
-              <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
-            </ion-item>
-            
-            <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isAyuda: true }">
-            <ion-label>
-                <h2>Centro de Ayuda</h2>
-                <p class="small-description">Encuentra respuestas a tus preguntas.</p>
-            </ion-label>
-            <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
-            </ion-item>
+        <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isResena: true }">
+          <ion-label>
+            <h2>{{ 'SETTINGS.REVIEWS' | translate }}</h2>
+            <p class="small-description">{{ 'SETTINGS.REVIEWS_DESC' | translate }}</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </ion-item>
 
-            <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isUSo: true }">
-            <ion-label>
-                <h2>Sobre Nosotros</h2>
-                <p class="small-description">Conoce más acerca de nuestra aplicación.</p>
-            </ion-label>
-            <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
-            </ion-item>
-            <ion-item lines="none">
-            <ion-grid>
-                <ion-row class="ion-justify-content-center ion-align-items-center">
-                <ion-col size="auto">
-                    <img style="height: 100px;" src="../../../assets/icon/icon.png" class="logo" alt="App Logo">
-                </ion-col>
-                </ion-row>
-            </ion-grid>
-            </ion-item>
-        </ion-list>
+        <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isHistorial: true }">
+          <ion-label>
+            <h2>{{ 'SETTINGS.HISTORY' | translate }}</h2>
+            <p class="small-description">{{ 'SETTINGS.HISTORY_DESC' | translate }}</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </ion-item>
 
+        <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isPago: true }">
+          <ion-label>
+            <h2>{{ 'SETTINGS.SUBSCRIPTIONS' | translate }}</h2>
+            <p class="small-description">{{ 'SETTINGS.SUBSCRIPTIONS_DESC' | translate }}</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </ion-item>
+
+        <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isAyuda: true }">
+          <ion-label>
+            <h2>{{ 'SETTINGS.HELP_CENTER' | translate }}</h2>
+            <p class="small-description">{{ 'SETTINGS.HELP_CENTER_DESC' | translate }}</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </ion-item>
+
+        <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isUSo: true }">
+          <ion-label>
+            <h2>{{ 'SETTINGS.ABOUT_US' | translate }}</h2>
+            <p class="small-description">{{ 'SETTINGS.ABOUT_US_DESC' | translate }}</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-grid>
+            <ion-row class="ion-justify-content-center ion-align-items-center">
+              <ion-col size="auto">
+                <img style="height: 100px;" src="../../../assets/icon/icon.png" class="logo" alt="App Logo">
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
     </div>
   
  

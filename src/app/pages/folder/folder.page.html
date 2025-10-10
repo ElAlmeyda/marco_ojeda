@@ -4,7 +4,7 @@
     <ion-card>
      <ion-card-header (click)="toggleFormulario()" style="cursor: pointer;">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>Más filtros</h2>
+        <h2>{{ 'MORE_FILTERS' | translate }}</h2>
         <ion-icon [name]="mostrarFormulario ? 'remove-outline' : 'add-outline'"></ion-icon>
       </div>
     </ion-card-header>
@@ -20,18 +20,18 @@
             <img [src]="estilo.imagen" />
           </ion-avatar>
           
-          <p style="font-size: 12px; margin-top: 5px; width: 80px; white-space: normal;">{{ estilo.nombre }}</p>
+          <p style="font-size: 12px; margin-top: 5px; width: 80px; white-space: normal;">{{ ('STYLE.' + estilo.nombre) | translate }}</p>
         </div>
       </div>
      <div *ngIf="resultadosBusqueda && resultadosBusqueda.length === 0 && estiloSeleccionado">
         <ion-item lines="none" style="text-align: center; color: gray; margin-top: 20px;">
-          No se encontraron tatuadores con el estilo seleccionado.
+           {{ 'NO_RESULTS_STYLE' | translate }}
         </ion-item>
       </div>
       
     
       <div *ngIf="resultadosBusqueda && resultadosBusqueda.length > 0">
-        <ion-label class="titulo-grande"><strong>Resultado Búsqueda</strong></ion-label>
+        <ion-label class="titulo-grande"><strong>{{ 'SEARCH_RESULTS' | translate }}</strong></ion-label>
         <div class="horizontal-scroll">
           <div class="cards-row" *ngFor="let tipo of resultadosBusqueda" [routerLink]="['/tatuador', tipo.uid]">
             
@@ -74,7 +74,7 @@
     </ion-card>
     <!-- Recomendados -->
       <div *ngIf="recomendado.length > 0 && (!resultadosBusqueda || resultadosBusqueda.length === 0)">
-        <ion-label class="titulo-grande">Recomendados</ion-label>
+        <ion-label class="titulo-grande">{{ 'RECOMMENDED' | translate }}</ion-label>
         <div class="horizontal-scroll">
           <div class="cards-row" *ngFor="let tipo of recomendado" [routerLink]="['/tatuador', tipo.uid]">
             <ion-card class="user-card">
@@ -107,7 +107,7 @@
 
           <!-- Cerca de ti -->
       <div *ngIf="cerca.length > 0 && (!resultadosBusqueda || resultadosBusqueda.length === 0)">
-        <ion-label class="titulo-grande">Cerca de ti</ion-label>
+        <ion-label class="titulo-grande">{{ 'NEAR_YOU' | translate }}</ion-label>
         <div class="horizontal-scroll">
           <div class="cards-row" *ngFor="let tipo of cerca" [routerLink]="['/tatuador', tipo.uid]">
             <ion-card class="user-card">
@@ -140,7 +140,7 @@
 
       <!-- Valoración -->
       <div *ngIf="valoracion.length > 0 && (!resultadosBusqueda || resultadosBusqueda.length === 0)">
-        <ion-label class="titulo-grande">Valoracion</ion-label>
+        <ion-label class="titulo-grande">{{ 'TOP_RATED' | translate }}</ion-label>
         <div class="horizontal-scroll">
           <div class="cards-row" *ngFor="let tipo of valoracion" [routerLink]="['/tatuador', tipo.uid]">
             <ion-card class="user-card">
@@ -177,10 +177,10 @@
                   (!resultadosBusqueda || resultadosBusqueda.length == 0)">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>No encontramos tatuadores cerca de ti.</ion-card-title>
+            <ion-card-title>{{ 'NO_TATTOO_ARTISTS_FOUND' | translate }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            Haz click en el icono del mapa.
+             {{ 'CLICK_MAP_ICON' | translate }}
           </ion-card-content>
         </ion-card>
       </div>

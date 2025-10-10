@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { Cita, Tatuador, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
@@ -21,7 +22,7 @@ export class CitaPage implements OnInit {
 
   tatuador: Tatuador | undefined;
 
-  constructor(public firestroreAuth: FirestoreAuthService, public tiendaService: TiendaService, private alertController: AlertController) {
+  constructor(public firestroreAuth: FirestoreAuthService, public translate: TranslateService, public tiendaService: TiendaService, private alertController: AlertController) {
     this.firestroreAuth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.usuario.uid = res.uid;
@@ -74,27 +75,34 @@ export class CitaPage implements OnInit {
     }
   }
 
-  async eliminarCita(cita: Cita, uidCita: string){
-    console.log('Borrar cita:', cita);
-    const alert = await this.alertController.create({
-      header: 'Confirmar borrado',
-      message: `¿Estás seguro que quieres borrar la cita de ${cita.nombreUser} a las ${cita.hora}?`,
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          cssClass: 'secondary'
-        }, {
-          text: 'Borrar',
-          handler: () => {
-            this.tiendaService.eliminarCita(cita, uidCita, this.usuario.uid);
-          }
-        }
-      ]
-    });
+  async eliminarCita(cita: Cita, uidCita: string) {
+  console.log('Borrar cita:', cita);
 
-    await alert.present();
-  }
+  const header = await this.translate.get('DELETE_CONFIRM_HEADER').toPromise();
+  const message = await this.translate.get('DELETE_CONFIRM_MESSAGE', { name: cita.nombreUser, time: cita.hora }).toPromise();
+  const cancelText = await this.translate.get('CANCEL').toPromise();
+  const deleteText = await this.translate.get('DELETE').toPromise();
+
+  const alert = await this.alertController.create({
+    header,
+    message,
+    buttons: [
+      {
+        text: cancelText,
+        role: 'cancel',
+        cssClass: 'secondary'
+      },
+      {
+        text: deleteText,
+        handler: () => {
+          this.tiendaService.eliminarCita(cita, uidCita, this.usuario.uid);
+        }
+      }
+    ]
+  });
+
+  await alert.present();
+}
 
   aceptarCita(cita: Cita) {
     return this.tiendaService.aceptarCita(cita.uidCita, cita.uidTatuador!, this.usuario.uid);

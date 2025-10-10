@@ -7,12 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { CitaPageRoutingModule } from './cita-routing.module';
 
 import { CitaPage } from './cita.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    TranslateModule,
     CitaPageRoutingModule
   ],
   declarations: [CitaPage]

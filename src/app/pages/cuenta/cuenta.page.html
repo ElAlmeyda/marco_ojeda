@@ -1,30 +1,30 @@
 <ion-header [translucent]="true">
   <ion-toolbar style="padding: 10px;">
     <ion-icon class="toolbar-icon" slot="start" name="chevron-back-outline" (click)="volver()"></ion-icon>
-    <ion-label class="toolbar-label"> Cuenta </ion-label>
+    <ion-label class="toolbar-label"> {{ 'ACCOUNT.TITLE' | translate }} </ion-label>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="centered-content" style="margin-top:25%;">
   <div class="top-content">
-    <ion-label>Asegúrate de recordar tu contraseña, luego la necesitarás.</ion-label>
+    <ion-label>{{ 'ACCOUNT.REMEMBER_PASSWORD' | translate }}</ion-label>
     <ion-item>{{ usuario.correo }}</ion-item>
     <div class="button-container">
       <ion-button class="delete-button" shape="round" (click)="showActionSheet('correo')">
-        Actualizar correo</ion-button>
+         {{ 'ACCOUNT.UPDATE_EMAIL' | translate }}</ion-button>
     </div>
     
     <ion-label class="forgot-password">
-      <a (click)="cambioContrasena()">Olvidaste la contraseña</a>
+      <a (click)="cambioContrasena()">{{ 'ACCOUNT.FORGOT_PASSWORD' | translate }}</a>
     </ion-label>
   </div>
   <div class="button-container">
     <ion-button class="delete-button" shape="round"  (click)="eliminar()">
-      Eliminar cuenta</ion-button>
+      {{ 'ACCOUNT.DELETE_ACCOUNT' | translate }}</ion-button>
   </div>
   <div class="button-container">
     <ion-button shape="round" (click)="logout()" routerLink="/inicio-sesion">
-      Cerrar sesión
+       {{ 'ACCOUNT.LOGOUT' | translate }}
     </ion-button>
   </div>
 
@@ -32,12 +32,13 @@
 
   <div class="verification-container" *ngIf="enviado">
     <ion-icon name="mail-outline" class="verification-icon"></ion-icon>
-    <h2>¡Correo de verificación enviado!</h2>
-    <p>Hemos enviado un correo de verificación a <strong>{{ usuario.correo }}</strong>. Por favor, revisa tu bandeja de entrada y haz clic en el enlace para verificar tu correo.</p>
+    <h2>{{ 'ACCOUNT.VERIFICATION_SENT_TITLE' | translate }}</h2>
+    <p>{{ 'ACCOUNT.VERIFICATION_SENT_MESSAGE' | translate }}
+      <strong>{{ usuario.correo }}</strong>.</p>
     
-    <p>¿No recibiste el correo?</p>
-    <ion-button expand="block" (click)="reenviarCorreo()">Reenviar correo</ion-button>
+    <p>{{ 'ACCOUNT.NOT_RECEIVED' | translate }}</p>
+    <ion-button expand="block" (click)="reenviarCorreo()">{{ 'ACCOUNT.RESEND_EMAIL' | translate }}</ion-button>
     
-    <ion-button color="primary" expand="block" (click)="verificarEstado()">Ya he verificado mi correo</ion-button>
+    <ion-button color="primary" expand="block" (click)="verificarEstado()">{{ 'ACCOUNT.ALREADY_VERIFIED' | translate }}</ion-button>
   </div>
 </ion-content>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { Resena, Tatuador, Usuario } from 'src/app/model';
@@ -68,7 +69,7 @@ export class TatuadorPage implements OnInit {
   resenaExistente: boolean = false;
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private route: ActivatedRoute, public tiendaTatuador: TiendaService, public toast: ToastController,
-    private router: Router, private alertController: AlertController
+    private router: Router, private alertController: AlertController, public translate: TranslateService
   ) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
@@ -126,7 +127,7 @@ export class TatuadorPage implements OnInit {
       await this.tiendaTatuador.agregarFavorito(this.usuario.uid, this.tatuador);
       this.favorito = true;
     } else {
-      this.presentToast("Tienes que iniciar sesion para guardarlo", 'warning');
+      this.presentToast(this.translate.instant('LOGIN_REQUIRED'), 'warning');
     }
   }
 
@@ -135,7 +136,7 @@ export class TatuadorPage implements OnInit {
       await this.tiendaTatuador.quitarFavorito(this.usuario.uid, this.tatuador.uid);
       this.favorito = false;
     } else {
-      this.presentToast("Tienes que iniciar sesion para guardarlo", 'warning');
+      this.presentToast(this.translate.instant('LOGIN_REQUIRED'), 'warning');
     }
   }
 
@@ -154,18 +155,17 @@ export class TatuadorPage implements OnInit {
   async pedirCita() {
     if (this.usuario.uid) {
       const alert = await this.alertController.create({
-        header: 'Advertencia',
-        message: 'El tatuador se puede negar a agendar la cita si no se ha realizado una consulta previa. ¿Deseas continuar?',
+        header: this.translate.instant('WARNING'),
+        message: this.translate.instant('APPOINTMENT_WARNING'),
         buttons: [
           {
-            text: 'Cancelar',
+            text: this.translate.instant('CANCEL'),
             role: 'cancel'
           },
           {
-            text: 'Continuar',
+            text: this.translate.instant('CONTINUE'),
             handler: async () => {
               const uidTatuador = this.tatuador.uid;
-              // Navegar a la página 'pedir-cita' pasando el uid como parámetro
               await this.router.navigate(['/pedir-cita', uidTatuador]);
             }
           }
@@ -174,14 +174,16 @@ export class TatuadorPage implements OnInit {
 
       await alert.present();
     } else {
-      this.presentToast("Tienes que iniciar sesión para pedir una cita", 'warning');
+      const mensaje = this.translate.instant('LOGIN_REQUIRED_APPOINTMENT');
+      this.presentToast(mensaje, 'warning');
     }
   }
 
 
+
   async enviarResena() {
     if (this.estrellaSeleccionada === 0 || !this.mensajeResena.trim()) {
-      this.presentToast("Escriba un comentario o seleccione las estrellas", 'warning');
+      this.presentToast(this.translate.instant('REVIEW_REQUIRED'), 'warning');
       return;
     }
 
@@ -325,7 +327,7 @@ export class TatuadorPage implements OnInit {
         }
       });
     } else {
-      this.presentToast("Tienes que iniciar sesión para pedir una consulta previa", 'warning');
+      this.presentToast(this.translate.instant('LOGIN_REQUIRED'), 'warning');
     }
   }
 

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AdMob, InterstitialAdPluginEvents } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
 import { NavController, ToastController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { Cita, Horario, Tatuador, Trabajador, Usuario } from 'src/app/model';
@@ -74,7 +75,7 @@ export class PedirCitaPage implements OnInit {
   isPremium=false;
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private route: ActivatedRoute, public tiendaTatuador: TiendaService, public toast: ToastController,
-      private router: Router, public navCtrl: NavController, public firestore: FirestoreService) {
+      private router: Router, public navCtrl: NavController, public firestore: FirestoreService, public translate: TranslateService) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         
@@ -251,7 +252,7 @@ export class PedirCitaPage implements OnInit {
     if (!this.cita) this.cita = {} as Cita;
 
     if(!this.acepto){
-      this.presentToast("Debes aceptar las condiciones", "danger");
+      this.presentToast(this.translate.instant('APPOINTMENT.ACCEPT_CONDITIONS'), "danger");
       console.warn("⚠️ No aceptó las condiciones");
       return;
     }
@@ -282,7 +283,7 @@ export class PedirCitaPage implements OnInit {
         await this.tiendaTatuador.guardarCita(this.cita, this.usuario.uid, this.tatuador.uid);
         console.log("✅ Cita guardada con éxito");
 
-        await this.presentToast("La cita ha sido realizada, espera a que el tatuador conteste.", "success");
+        await this.presentToast(this.translate.instant('APPOINTMENT.SAVED_SUCCESS'), "success");
 
         try {
           if (!this.isPremium) {
@@ -308,7 +309,7 @@ export class PedirCitaPage implements OnInit {
         this.router.navigate(['/tabs/cita']);
       } catch (err) {
         console.error("❌ Error al guardar cita:", err);
-        this.presentToast("Error al guardar la cita.", "danger");
+        this.presentToast(this.translate.instant('APPOINTMENT.MISSING_FIELDS'), "danger");
       }
     } else {
       console.warn("⚠️ Faltan campos obligatorios para guardar la cita");
@@ -320,7 +321,7 @@ export class PedirCitaPage implements OnInit {
     if (!this.cita) this.cita = {} as Cita;
 
     if(!this.acepto){
-      this.presentToast("Debes aceptar las condiciones", "danger");
+      this.presentToast(this.translate.instant('APPOINTMENT.ACCEPT_CONDITIONS'), "danger");
       return; // salir si no acepta
     }
 
@@ -343,12 +344,12 @@ export class PedirCitaPage implements OnInit {
           await this.mostrarInterstitial();
         }
 
-        await this.presentToast("La consulta ha sido realizada, espera a que el tatuador conteste.", "success");
+        await this.presentToast(this.translate.instant('APPOINTMENT.SAVED_SUCCESS'), "success");
 
         this.router.navigate(['/tabs/folder/' + this.usuario.uid]);
       } catch (err) {
         console.error(err);
-        this.presentToast("Error al guardar la consulta.", "danger");
+        this.presentToast(this.translate.instant('APPOINTMENT.MISSING_FIELDS'), "danger");
       }
     }
   }
@@ -407,7 +408,10 @@ export class PedirCitaPage implements OnInit {
     // Revisar si hay eventos del día
     const evento = this.diasConEventos[fecha];
     this.cita.direccion = evento ? evento.ciudad : this.tatuador.ciudad;
-    if (evento) this.presentToast(`⚠️ El tatuador estará en ${evento.ciudad}`, 'warning');
+    if (evento) {
+      const msg = this.translate.instant('TATTOOIST.EVENT_WARNING', { ciudad: evento.ciudad });
+      this.presentToast(msg, 'warning');
+    } 
 
     const diasSemanaArray = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
 
@@ -550,7 +554,8 @@ export class PedirCitaPage implements OnInit {
     const evento = this.diasConEventos[fecha];
     if (evento) {
       // Mostrar alerta de ciudad temporal
-      this.presentToast(`⚠️ El tatuador estará en ${evento.ciudad}`, 'warning');
+      const msg = this.translate.instant('TATTOOIST.EVENT_WARNING', { ciudad: evento.ciudad });
+      this.presentToast(msg, 'warning');
 
       // Actualizar dirección de la cita
       this.cita.direccion = evento.ciudad;
