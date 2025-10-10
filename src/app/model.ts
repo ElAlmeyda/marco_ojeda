@@ -26,6 +26,8 @@ export interface Tatuador {
     horario?: Horario[];
     ciudad?: string;
     facebook?: string;
+    latitude?: number;
+    longitude?: number;
     instagram?: string;
     tiktok?: string;
     twitter?: string;

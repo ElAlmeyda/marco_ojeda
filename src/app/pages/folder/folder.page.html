@@ -171,7 +171,19 @@
         </div>
       </div>
 
-
+      <div *ngIf="(!recomendado || recomendado.length == 0) &&
+                  (!cerca || cerca.length == 0) &&
+                  (!valoracion || valoracion.length == 0) &&
+                  (!resultadosBusqueda || resultadosBusqueda.length == 0)">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>No encontramos tatuadores cerca de ti.</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Haz click en el icono del mapa.
+          </ion-card-content>
+        </ion-card>
+      </div>
 
     </ion-card-content>
     <ion-button class="floating-right big-button" shape="round" fill="solid" color="dark" routerLink="/mapa">

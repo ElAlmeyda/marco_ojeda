@@ -10,7 +10,8 @@ import { App } from '@capacitor/app';
 import { take } from 'rxjs';
 import { UbicacionService } from './service/ubicacion.service';
 import { AdMob, BannerAdOptions, BannerAdPosition, BannerAdSize } from '@capacitor-community/admob';
-
+import { TranslateService } from '@ngx-translate/core';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-root',
@@ -43,7 +44,7 @@ export class AppComponent {
   }
 
   constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, public router: Router, public notificacion: NotificacionService,
-              private menu: MenuController, private platform: Platform, public ubicacion: UbicacionService, private navController: NavController,  public alertController: AlertController) {
+              private menu: MenuController, public storage: Storage, public translate:TranslateService, private platform: Platform, public ubicacion: UbicacionService, private navController: NavController,  public alertController: AlertController) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -99,7 +100,19 @@ export class AppComponent {
   }
   
 
-  ngOnInit() {
+  async ngOnInit() {
+    const savedLang = await this.storage.get('app_language');
+    if (savedLang) {
+      // Set default lang solo una vez
+      this.translate.setDefaultLang('es'); 
+      // Usar el idioma guardado
+      this.translate.use(savedLang);
+    } else {
+      const defaultLang = 'es';
+      this.translate.setDefaultLang(defaultLang);
+      this.translate.use(defaultLang);
+      await this.storage.set('app_language', defaultLang);
+    }
   }
 
   obtenerUsuario() {

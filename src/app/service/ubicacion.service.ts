@@ -14,24 +14,19 @@ export class UbicacionService {
     if (this.platform.is('capacitor') || this.platform.is('ios') || this.platform.is('android')) {
       try {
         const permiso = await Geolocation.requestPermissions();
-  
+
         if (permiso.location === 'granted') {
-          const posicion = await Geolocation.getCurrentPosition();
-  
+          // Aumentar timeout a 20 segundos y enableHighAccuracy para mejor precisión
+          const posicion = await Geolocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 20000 // 20 segundos
+          });
+
           const latitude = posicion.coords.latitude;
           const longitude = posicion.coords.longitude;
-  
-          // Obtener la ciudad antes de guardar en Firestore
-  
-          const userLocation = {
-            latitude,
-            longitude,
-            timestamp: new Date(),
-          };
-  
-  
-          // Retornar la ubicación obtenida
+
           return { latitude, longitude };
+
         } else {
           console.error('Permiso de ubicación denegado');
           throw new Error('Permiso de ubicación denegado');

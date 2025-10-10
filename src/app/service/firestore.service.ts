@@ -311,6 +311,8 @@ export class FirestoreService {
     const tatuadorRef = this.database.doc(`Tatuador/${uidTatuador}`).ref;
     const resenasRef = this.database.collection(`Tatuador/${uidTatuador}/reseñas`);
 
+    const usuarioResenasRef = this.database.collection(`Usuarios/${uidCliente}/reseñas`);
+
     const idResena = this.database.createId();
 
     return this.database.firestore.runTransaction(async (transaction) => {
@@ -326,15 +328,23 @@ export class FirestoreService {
       const nuevaSuma = suma + resena.estrella;
       const nuevoPromedio = nuevaSuma / nuevaTotal;
 
-      // ✅ Guardar en historial
-      const resenaDocRef = resenasRef.doc(idResena).ref;
-      transaction.set(resenaDocRef, {
+      // ✅ Referencias de reseña
+      const resenaDocRefTatuador = resenasRef.doc(idResena).ref;
+      const resenaDocRefUsuario = usuarioResenasRef.doc(idResena).ref;
+
+      const resenaData = {
         ...resena,
         uidCliente,
         uidTatuador,
         uidResena: idResena,
         fechaCreacion: new Date()
-      });
+      };
+
+      // ✅ Guardar reseña en tatuador
+      transaction.set(resenaDocRefTatuador, resenaData);
+
+      // ✅ Guardar reseña en usuario
+      transaction.set(resenaDocRefUsuario, resenaData);
 
       // ✅ Actualizar datos del tatuador
       transaction.update(tatuadorRef, {
@@ -344,6 +354,7 @@ export class FirestoreService {
       });
     });
   }
+
 
 
 

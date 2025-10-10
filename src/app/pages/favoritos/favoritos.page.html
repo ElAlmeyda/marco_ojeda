@@ -14,6 +14,11 @@
     </ion-card>
   </div>
   <ion-list>
+    <ion-list-header>
+      <ion-label>
+        <h2 style="font-weight: bold;">Tatuadores favoritos</h2>
+      </ion-label>
+    </ion-list-header>
     <ion-item lines="none" *ngFor="let fav of favoritos" (click)="irAlTatuador(fav)">
       <ion-avatar style="margin-right: 12px;">
         <ion-img [src]="fav.avatar || 'assets/icon/sin_avatar.png'"></ion-img>

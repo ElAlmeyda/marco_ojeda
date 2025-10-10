@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AlertController } from '@ionic/angular';
+import { firstValueFrom } from 'rxjs';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { Ofertas, Tatuador } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
@@ -22,6 +23,7 @@ export class FolderPage implements OnInit {
   valoracion: Tatuador []= [];
   latUsuario: number = 0;    // Latitud del usuario
   lonUsuario: number = 0;    // Longitud del usuario
+  R = 6371;
   uid=''
   estiloSeleccionado: string | null = null;
   estilos = [
@@ -61,7 +63,6 @@ export class FolderPage implements OnInit {
   ngOnInit() {
     this.firestore.getTodosLosAnuncios().subscribe(data => {
       this.ofertas = data;
-      console.log("Todos los anuncios:", this.ofertas);
     });
   }
   
@@ -72,7 +73,7 @@ export class FolderPage implements OnInit {
 
       this.latUsuario = latitude;
       this.lonUsuario = longitude;
-      this.cargarTatuadores();
+      await this.cargarTatuadores();
 
       // Aquí puedes hacer lo que necesites con los tatuadores cercanos (mostrar en UI, etc.)
     } catch (error) {
@@ -80,42 +81,53 @@ export class FolderPage implements OnInit {
     }
   }
 
-  cargarTatuadores() {
-    this.tiendaService.getTatuadores().subscribe({
-      next: (data: any[]) => {
-        // Filtrar solo los tatuadores premium
-        const tatuadoresPremium = data.filter(tatuador => tatuador.isPremium === true);
+  async cargarTatuadores() {
+    try {
+      const data: any[] = await firstValueFrom(this.tiendaService.getTatuadores());
 
-        // Calcular distancia respecto a usuario y obtener la primera foto
-        const tatuadoresConDistancia = tatuadoresPremium.map(tatuador => {
-          if (tatuador.latitud && tatuador.longitud && this.latUsuario && this.lonUsuario) {
+      // Filtrar solo los tatuadores premium
+      const tatuadoresPremium = data.filter(t => t.isPremium);
+
+
+      // Procesar cada tatuador
+      const tatuadoresConDistancia = await Promise.all(
+        tatuadoresPremium.map(async (tatuador) => {
+          // Calcular distancia
+          if (tatuador.latitude && tatuador.longitude && this.latUsuario && this.lonUsuario) {
             tatuador.distancia = this.calcularDistancia(
               this.latUsuario,
               this.lonUsuario,
-              tatuador.latitud,
-              tatuador.longitud
+              tatuador.latitude,
+              tatuador.longitude
             );
+            console.log("Distancia",tatuador.distancia);
           } else {
             tatuador.distancia = null;
           }
 
-          // Obtener la primera foto
-          this.tiendaService.getFotosTatuador(tatuador.uid).subscribe(fotos => {
-            tatuador.foto = fotos.length > 0 ? [fotos[0]] : [];
-            console.log('Foto principal para', tatuador.nombreTienda, tatuador.foto);
-          });
+          // Obtener la primera foto como promesa
+          const fotos: any[] = await firstValueFrom(this.tiendaService.getFotosTatuador(tatuador.uid));
+          tatuador.foto = fotos.length > 0 ? [fotos[0]] : [];
 
           return tatuador;
-        });
+        })
+      );
 
-        // Filtrar listas
-        this.cerca = this.filtrarTatuadoresCercanos(tatuadoresConDistancia);
-        this.valoracion = this.calcularValoracionesPromedio(this.cerca);
-        this.recomendado = this.filtrarTatuadoresRecomendados(tatuadoresConDistancia);
-      },
-      error: err => console.error("Error al obtener tatuadores:", err)
-    });
+      // Guardar todos los tatuadores
+      this.todosTatuadores = tatuadoresConDistancia;
+
+      // Filtrar listas
+      this.cerca = this.filtrarTatuadoresCercanos(tatuadoresConDistancia);
+      this.valoracion = this.calcularValoracionesPromedio(this.cerca);
+      this.recomendado = this.filtrarTatuadoresRecomendados(tatuadoresConDistancia);
+
+      console.log('Tatuadores cercanos:', this.cerca);
+
+    } catch (error) {
+      console.error('Error cargando tatuadores:', error);
+    }
   }
+
 
 
   // Filtrar tatuadores cercanos por ubicación
@@ -129,25 +141,25 @@ export class FolderPage implements OnInit {
     return tatuadores.filter(tatuador => tatuador.isRecomendado === true);
   }
 
-  // Método para calcular la distancia entre dos coordenadas geográficas usando la fórmula de Haversine
   calcularDistancia(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const radioTierra = 6371; // Radio de la Tierra en kilómetros
+    if (lat1 == null || lon1 == null || lat2 == null || lon2 == null) {
+      return -1; // Ubicación no disponible
+    }
+    console.log("📍 Usuario:", lat1, lon1);
+    console.log("📍 Tatuador:", lat2, lon2);
 
-    const dLat = this.degToRad(lat2 - lat1);
-    const dLon = this.degToRad(lon2 - lon1);
+    const radLat1 = lat1 * (Math.PI / 180);
+    const radLat2 = lat2 * (Math.PI / 180);
+    const deltaLat = (lat2 - lat1) * (Math.PI / 180);
+    const deltaLon = (lon2 - lon1) * (Math.PI / 180);
 
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(this.degToRad(lat1)) * Math.cos(this.degToRad(lat2)) *
-              Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
+    const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+              Math.cos(radLat1) * Math.cos(radLat2) *
+              Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    return radioTierra * c; // Distancia en kilómetros
-  }
-
-  // Convierte grados a radianes
-  degToRad(deg: number): number {
-    return deg * (Math.PI / 180);
+    const distancia = this.R * c; // Asegúrate de que this.R = 6371 para km
+    console.log("📏 Distancia calculada (km):", distancia);
+    return distancia;
   }
 
   // Calcular la puntuación promedio de cada tatuador y ordenar por puntuación

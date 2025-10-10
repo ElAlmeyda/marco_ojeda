@@ -242,12 +242,18 @@ export class PedirCitaPage implements OnInit {
   };
 
   async guardarCita() {
-    console.log(this.acepto);
+    console.log("📌 guardarCita() iniciada");
+    console.log("✅ Usuario:", this.usuario);
+    console.log("✅ Fecha seleccionada:", this.fechaSeleccionada);
+    console.log("✅ Hora seleccionada:", this.horaSeleccionada);
+    console.log("✅ Boceto file:", this.bocetoFile);
+
     if (!this.cita) this.cita = {} as Cita;
 
     if(!this.acepto){
       this.presentToast("Debes aceptar las condiciones", "danger");
-      return; // salir si no acepta
+      console.warn("⚠️ No aceptó las condiciones");
+      return;
     }
 
     if(this.usuario.movil && this.horaSeleccionada && this.estilo && this.mensaje && this.tipo){
@@ -255,7 +261,7 @@ export class PedirCitaPage implements OnInit {
       this.cita.correo = this.usuario.correo;
       this.cita.nombreUser = this.usuario.nombre;
       this.cita.movil = this.usuario.movil;
-      this.cita.dia = this.fechaSeleccionada;
+      this.cita.dia = this.fechaSeleccionada.split('T')[0];
       this.cita.hora = this.horaSeleccionada;
       this.cita.nombreTatuador = this.tatuadorSeleccionado.nombre;
       this.cita.estilo = this.estilo;
@@ -265,26 +271,30 @@ export class PedirCitaPage implements OnInit {
       this.cita.alergia = this.alergias;
 
       try {
-        // Subir boceto si existe
         if (this.bocetoFile) {
+          console.log("📤 Subiendo boceto:", this.bocetoFile.name);
           const urls = await this.user.subirImagenBoceto([this.bocetoFile], this.usuario.uid, this.tatuador.uid);
-          this.cita.boceto = urls[0]; // Guardamos la URL
+          console.log("✅ Boceto subido con URL:", urls);
+          this.cita.boceto = urls[0];
         }
 
-        // Guardar cita
+        console.log("📝 Guardando cita en Firestore:", this.cita);
         await this.tiendaTatuador.guardarCita(this.cita, this.usuario.uid, this.tatuador.uid);
+        console.log("✅ Cita guardada con éxito");
+
         await this.presentToast("La cita ha sido realizada, espera a que el tatuador conteste.", "success");
 
         try {
           if (!this.isPremium) {
+            console.log("📺 Mostrando interstitial");
             await this.mostrarInterstitial();
           }
         } catch (err) {
-          console.warn("Interstitial no se pudo mostrar:", err);
+          console.warn("⚠️ Interstitial no se pudo mostrar:", err);
         }
 
-
         // Resetear campos
+        console.log("🔄 Reseteando formulario");
         this.cita = {} as Cita;
         this.horaSeleccionada = '';
         this.estilo = '';
@@ -297,9 +307,11 @@ export class PedirCitaPage implements OnInit {
 
         this.router.navigate(['/tabs/cita']);
       } catch (err) {
-        console.error(err);
+        console.error("❌ Error al guardar cita:", err);
         this.presentToast("Error al guardar la cita.", "danger");
       }
+    } else {
+      console.warn("⚠️ Faltan campos obligatorios para guardar la cita");
     }
   }
 

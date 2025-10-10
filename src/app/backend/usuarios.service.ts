@@ -177,7 +177,7 @@ export class UsuariosService {
   }
 
   async subirImagenBoceto(files: File[], uidUsuario: string, uidTatuador: string): Promise<string[]> {
-    const urls: string[] = [];
+     const urls: string[] = [];
 
     for (const file of files) {
       // Cambiamos la carpeta para reseñas
@@ -200,6 +200,8 @@ export class UsuariosService {
 
     return urls;
   }
+
+
 
   
 
