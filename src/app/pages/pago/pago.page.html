@@ -1,34 +1,51 @@
+
 <ion-header [translucent]="true">
-  <ion-toolbar class="toolbar-sin-fondo" style="margin: 10px;">
+  <ion-toolbar class="toolbar-sin-fondo" style="margin: 10px; padding-top: var(--ion-safe-area-top); padding-inline: 10px;">
     <ion-icon style="font-size: 30px;" class="toolbar-icon" slot="start" name="close-circle-outline" (click)="volver()"></ion-icon>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-card-content class="card-content">
-   <div class="horizontal-scroll">
+    <div class="horizontal-scroll">
       <ion-card class="user-card" 
           *ngFor="let producto of productos" 
           [class.selected]="selectedPlanId === producto.id"
           (click)="selectPlan(producto)">
 
-        <ion-label style="color: black;">Plan Sin Anuncios</ion-label>
+        <ion-label style="color: black; font-weight: bold; margin-top:10px; text-align: center;">
+         {{ 'PLAN.NO_ADS' | translate }}
+        </ion-label>
 
-        <ion-list *ngIf="producto.id === 'sin_anuncios:sin-anuncios'">
-          <ion-item>Sin Anuncios<ion-icon slot="end" name="checkmark-outline" color="black"></ion-icon></ion-item>
+        <ion-list *ngIf="producto.id === 'sinanuncios'">
+          <ion-item>
+            <ion-label>{{ 'PLAN.NO_ADS' | translate }}</ion-label>
+            <ion-icon slot="end" name="checkmark-outline" color="success"></ion-icon>
+          </ion-item>
         </ion-list>
 
-        <ion-item class="price-item" lines="none">{{ producto.precio }}</ion-item>
+        <!-- Precio + duración -->
+        <ion-item class="price-item" lines="none">
+          {{ producto.precio }} / mes (1 mes de duración)
+        </ion-item>
       </ion-card>
     </div>
   </ion-card-content>
 
   <ion-footer>
     <ion-label class="privacy-item">
-      Su suscripción se renovará automáticamente por el mismo precio y periodo, hasta que la canceles en la Play Store o App Store. Estarás aceptando nuestros 
-      <a [routerLink]="['/ajustes', usuarioActual.uid]" [queryParams]="{ isPrivacidad: true }">Términos y Condiciones</a>.
+        • {{ 'PLANS.RENEWAL_POLICY' | translate }}<br/>
+        • {{ 'PLANS.MANAGE_SUBSCRIPTION' | translate }}<br/><br/>
+        {{ 'PLANS.ACCEPT_TERMS' | translate }}
+      <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank">
+          {{ 'PLANS.TERMS_OF_USE' | translate }}
+      </a> {{ 'PLANS.AND' | translate }}
+      <a href="https://doc-hosting.flycricket.io/privacy-policy/c513bb80-96fb-498d-b73d-860d530bda0a/privacy" target="_blank">
+          {{ 'PLANS.PRIVACY_POLICY' | translate }}
+      </a>.
     </ion-label>
     <ion-button expand="full" (click)="pagar()">{{ buyText }}</ion-button>
   </ion-footer>
+
 </ion-content>
 

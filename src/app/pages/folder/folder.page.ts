@@ -46,6 +46,8 @@ export class FolderPage implements OnInit {
   filtroValoracion: boolean = false;
   filtroCercania: boolean = false;
   mostrarFormulario=false;
+  isError=false;
+  isLoading= false;
 
   constructor(public tiendaService: TiendaService, public firestroreAuth: FirestoreAuthService, public ubicacion: UbicacionService, public firestore: FirestoreService) {
     this.firestroreAuth.stateAuth().subscribe(async res => {
@@ -68,6 +70,8 @@ export class FolderPage implements OnInit {
   async obtenerUbicacionYFiltrarTatuadores() {
     try {
       // 1. Obtener la ubicación del usuario
+      this.isError=false;
+      this.isLoading=true;
       const { latitude, longitude } = await this.ubicacion.obtenerUbicacionPrimero();
 
       this.latUsuario = latitude;
@@ -77,7 +81,13 @@ export class FolderPage implements OnInit {
       // Aquí puedes hacer lo que necesites con los tatuadores cercanos (mostrar en UI, etc.)
     } catch (error) {
       console.error('Error al obtener tatuadores cercanos:', error);
+    } finally {
+      this.isLoading=false;
     }
+  }
+
+  reintentarCarga(){
+    this.obtenerUbicacionYFiltrarTatuadores();
   }
 
   cargarTatuadores() {

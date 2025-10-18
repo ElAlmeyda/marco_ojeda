@@ -5,3 +5,8 @@ app-map {
   width: 100%;
   height: 200px; /* Ajusta la altura según tus necesidades */
 }
+
+ion-app {
+  padding-top: env(safe-area-inset-top); /* ajusta el contenido debajo del notch */
+}
+

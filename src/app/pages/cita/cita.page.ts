@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { Cita, Tatuador, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
@@ -21,7 +22,7 @@ export class CitaPage implements OnInit {
 
   tatuador: Tatuador | undefined;
 
-  constructor(public firestroreAuth: FirestoreAuthService, public tiendaService: TiendaService, private alertController: AlertController) {
+  constructor(public firestroreAuth: FirestoreAuthService, public translate: TranslateService, public tiendaService: TiendaService, private alertController: AlertController) {
     this.firestroreAuth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.usuario.uid = res.uid;
@@ -35,37 +36,61 @@ export class CitaPage implements OnInit {
   ngOnInit() {
   }
 
-  obtenerCitas(){
+  tipoKey(tipo: string): string {
+    const map: {[key: string] : string} = {
+      'Chico' : 'SIZE_SMALL',
+      'Mediano' : 'SIZE_MEDIUM',
+      'Grande' : 'SIZE_LARGE',
+      'Proyecto' : 'PROJECT',
+      'Retoque' : 'TOUCH_UP',
+      'Piercing' : 'PIERCING',
+      'Sesion' : 'SESSION',
+    }
+    return map[tipo] || tipo
+  }
+  obtenerCitas() {
     this.tiendaService.getCitasUsuario(this.usuario.uid).subscribe((citas: any) => {
-     
       console.log('Citas del usuario:', citas);
-      this.citas = citas;
-      console.log(this.citas);
-     
+
+      const ahora = new Date();
+
+      // Filtrar citas futuras
+      this.citas = citas.filter((cita:any) => {
+        const fechaCita = new Date(cita.dia); // dia como string 'YYYY-MM-DD'
+        if (!cita.hora) return false;
+
+        const [hora, min] = cita.hora.split(':').map(Number);
+        fechaCita.setHours(hora, min, 0, 0); // establecer hora exacta
+
+        return fechaCita >= ahora; // solo citas futuras
+      });
+
+      // Ordenar por fecha y hora
       this.citas.sort((a, b) => {
-        const fechaA = new Date(a.dia).getTime();
-        const fechaB = new Date(b.dia).getTime();
-
-        if (fechaA !== fechaB) {
-          return fechaA - fechaB; // orden por día
-        }
-
-        // Si es el mismo día, comparar por hora
-        // Suponiendo que `a.hora` y `b.hora` están en formato 'HH:mm'
+        const fechaA = new Date(a.dia);
         const [horaA, minA] = a.hora.split(':').map(Number);
+        fechaA.setHours(horaA, minA, 0, 0);
+
+        const fechaB = new Date(b.dia);
         const [horaB, minB] = b.hora.split(':').map(Number);
+        fechaB.setHours(horaB, minB, 0, 0);
 
-        return (horaA * 60 + minA) - (horaB * 60 + minB); // orden por hora
+        return fechaA.getTime() - fechaB.getTime();
       });
 
+      // Obtener datos del tatuador
       this.citas.forEach(cita => {
-        if(cita.uidTatuador)
-        this.tiendaService.getTatuadorById(cita.uidTatuador).subscribe(res => {
-          cita.tatuador = res;
-        })
+        if (cita.uidTatuador) {
+          this.tiendaService.getTatuadorById(cita.uidTatuador).subscribe(res => {
+            cita.tatuador = res;
+          });
+        }
       });
+
+      console.log('Citas filtradas y ordenadas:', this.citas);
     });
   }
+
 
   abrirWhatsapp(telefono: string) {
     if (telefono) {
@@ -76,16 +101,20 @@ export class CitaPage implements OnInit {
 
   async eliminarCita(cita: Cita, uidCita: string){
     console.log('Borrar cita:', cita);
+    const header = await this.translate.get('DELETE_CONFIRM_HEADER').toPromise();
+    const message = await this.translate.get('DELETE_CONFIRM_MESSAGE', { name: cita.nombreUser, time: cita.hora }).toPromise();
+    const cancelText = await this.translate.get('CANCEL').toPromise();
+    const deleteText = await this.translate.get('DELETE').toPromise();
     const alert = await this.alertController.create({
-      header: 'Confirmar borrado',
-      message: `¿Estás seguro que quieres borrar la cita de ${cita.nombreUser} a las ${cita.hora}?`,
+      header: header,
+      message: message,
       buttons: [
         {
-          text: 'Cancelar',
+          text: cancelText,
           role: 'cancel',
           cssClass: 'secondary'
         }, {
-          text: 'Borrar',
+          text: deleteText,
           handler: () => {
             this.tiendaService.eliminarCita(cita, uidCita, this.usuario.uid);
           }

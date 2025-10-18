@@ -1,7 +1,9 @@
+
 <ion-header class="cabecera" [translucent]="true">
-  <ion-toolbar style="background-color: white;">
+  <ion-toolbar style="background-color: white; padding-top: var(--ion-safe-area-top); padding-inline: 10px;">
     <ion-icon class="toolbar-icon" name="arrow-back-outline" slot="start" [routerLink]="['/tabs/folder', usuario.uid]"></ion-icon>
     <h2 style="margin: 0; font-weight: bold;">{{tatuador.nombreTienda}}</h2>
+    <ion-icon class="toolbar-icon" name="share-social-outline" slot="end" (click)="compartir()"></ion-icon>
     <ion-icon class="toolbar-icon" name="star" slot="end" *ngIf="favorito" (click)="quitarFavorito()"></ion-icon>
     <ion-icon class="toolbar-icon" name="star-outline" slot="end" *ngIf="!favorito" (click)="ponerFavorito()"></ion-icon>
   </ion-toolbar>
@@ -11,19 +13,32 @@
 
   <!-- 🧑 Avatar + Ciudad + Biografía -->
   <div style="display: flex; align-items: flex-start; padding: 20px;">
-    <ion-img  [src]="avatarUrl" alt="Avatar"
-      style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-right: 15px;" (click)="verImagen(avatarUrl)" />
-      
-    <div style="flex: 1; display: flex; flex-direction: column;">
-      <!-- Fila con ciudad a la izquierda y icono a la derecha -->
+    <!-- Contenedor circular del avatar -->
+    <div style="width: 70px; height: 70px; border-radius: 50%; overflow: hidden; margin-right: 15px; flex-shrink: 0;">
+      <ion-img 
+        [src]="avatarUrl" 
+        alt="Avatar" 
+        style="width: 100%; height: 100%; object-fit: cover; display: block;" 
+        (click)="verImagen(avatarUrl)">
+      </ion-img>
+    </div>
+    
+    <!-- Contenido -->
+    <div style="flex: 1; display: flex; flex-direction: column; min-width: 0;">
+      <!-- Ciudad -->
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <p style="margin: 0; font-size: 14px; color: gray;" *ngIf="tatuador.ciudad"(click)="abrirMaps(tatuador.ciudad)">{{ tatuador.ciudad }}</p>
+        <p style="margin: 0; font-size: 14px; color: gray; cursor: pointer;" *ngIf="tatuador.ciudad" (click)="abrirMaps(tatuador.ciudad)">
+          {{ tatuador.ciudad }}
+        </p>
       </div>
       
-      <!-- ion-text debajo -->
-      <ion-text style="margin-top: 5px;">{{ tatuador.biografia }}</ion-text>
+      <!-- Biografía -->
+      <ion-text style="margin-top: 5px; word-wrap: break-word; overflow-wrap: break-word;">
+        {{ tatuador.biografia }}
+      </ion-text>
     </div>
   </div>
+
 
   <!-- 📱 Redes sociales (espaciadas) -->
   <div style="display: flex; justify-content: center; gap: 20px; margin: 10px 0 30px;">
@@ -75,12 +90,12 @@
   <!-- 🎨 Estilos (Chips alineados horizontalmente) -->
   <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 20px;">
     <ion-chip *ngFor="let estilo of tatuador.estilos">
-      <ion-label>{{ estilo }}</ion-label>
+      <ion-label>{{ ("STYLE." + estilo) | translate }}</ion-label>
     </ion-chip>
 
     <ng-container *ngIf="!tatuador.estilos || tatuador.estilos.length === 0">
       <ion-chip color="medium">
-        <ion-label>No especificado</ion-label>
+        <ion-label>{{ 'NOT_SPECIFIED' | translate }}</ion-label>
       </ion-chip>
     </ng-container>
   </div>
@@ -106,8 +121,8 @@
 
 
   <div style="display: flex; justify-content: center; padding: 20px;">
-    <ion-button (click)="consultaPrevia()"> Consulta Previa</ion-button>
-    <ion-button (click)="pedirCita()"> Pedir Cita</ion-button>
+    <ion-button (click)="consultaPrevia()">{{ 'PRE_CONSULTATION' | translate }}</ion-button>
+    <ion-button (click)="pedirCita()">{{ 'BOOK_APPOINTMENT' | translate }}</ion-button>
   </div>
 
 
@@ -123,13 +138,13 @@
       </ion-col>
     </ion-row>
     <div *ngIf="!tatuador.foto" style="display: flex; justify-content: center; padding: 20px; color: gray;">
-      No tiene fotos para mostrar.
+     {{ 'NO_PHOTOS' | translate }}
     </div>
   </ion-grid>
 
   <!-- 📝 Bloque de reseñas -->
   <div style="padding: 20px;">
-    <h3 style="margin-bottom: 10px;">Reseñas</h3>
+    <h3 style="margin-bottom: 10px;">{{ 'REVIEWS' | translate }}</h3>
 
       <!-- 🔄 Lista de reseñas existentes -->
       <ion-card *ngFor="let resena of resenas">
@@ -177,14 +192,14 @@
 
     <!-- Si no hay reseñas -->
     <div *ngIf="!resenas || resenas.length === 0" style="color: gray; text-align: center;">
-      Este tatuador aún no tiene reseñas.
+       {{ 'NO_REVIEWS' | translate }}
     </div>
 
     <hr style="margin: 30px 0;" />
 
     <!-- ✏️ Formulario para dejar una reseña -->
     <div *ngIf="!resenaExistente && usuario.uid">
-      <h4>Deja tu reseña</h4>
+      <h4>{{ 'LEAVE_REVIEW' | translate }}</h4>
 
       <!-- Estrellas -->
       <div style="display: flex; gap: 5px; margin-bottom: 10px;">
@@ -199,7 +214,7 @@
       <!-- Mensaje -->
       <ion-textarea
         [(ngModel)]="mensajeResena"
-        placeholder="Escribe tu opinión..."
+        placeholder="{{ 'COMMENT_PLACEHOLDER' | translate }}"
         autoGrow="true">
       </ion-textarea>
 
@@ -208,7 +223,7 @@
         <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
           <ion-button expand="block" fill="outline" (click)="fileInput.click()">
             <ion-icon name="image-outline" slot="start"></ion-icon>
-            Seleccionar foto
+            {{ 'SELECT_PHOTO' | translate }}
           </ion-button>
 
           <!-- Vista previa si hay imagen -->
@@ -226,7 +241,7 @@
 
       <!-- Botón -->
       <ion-button expand="block" (click)="enviarResena()">
-        Enviar Reseña
+       {{ 'SEND_REVIEW' | translate }}
       </ion-button>
     </div>
   </div>

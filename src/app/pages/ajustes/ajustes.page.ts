@@ -7,6 +7,8 @@ import { FirestoreService } from 'src/app/service/firestore.service';
 import { App } from '@capacitor/app';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { TiendaService } from 'src/app/backend/tienda.service';
+import { TranslateService } from '@ngx-translate/core';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-ajustes',
@@ -46,96 +48,26 @@ export class AjustesPage implements OnInit {
 
   usuariosBloqueados: Usuario[] = [];
   preguntas = [
-    {
-      titulo: '¿Cómo puedo crear una cuenta?',
-      respuesta: 'Para crear una cuenta, ve a la sección de registro, ingresa tu correo electrónico, crea una contraseña segura y completa tu perfil como cliente o tatuador.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Cómo agendo una cita con un tatuador?',
-      respuesta: 'Puedes agendar una cita desde el perfil del tatuador. Selecciona la fecha, hora y el servicio que deseas. Luego confirma la cita y recibirás una notificación.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Puedo cancelar o reprogramar una cita?',
-      respuesta: 'Sí, puedes cancelar o reprogramar tu cita desde la sección "Mis citas". Te recomendamos hacerlo con al menos 24 horas de anticipación para evitar cargos.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Cómo funcionan las reseñas y valoraciones?',
-      respuesta: 'Después de tu cita, puedes dejar una reseña y calificar al tatuador según tu experiencia. Esto ayuda a otros usuarios a tomar decisiones informadas.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Cómo encuentro tatuadores cerca de mí?',
-      respuesta: 'Utiliza el buscador y activa la ubicación para ver tatuadores cercanos. Puedes filtrar por estilo, precio, valoraciones y disponibilidad.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Puedo comunicarme con el tatuador antes de la cita?',
-      respuesta: 'Sí, puedes enviar mensajes al tatuador desde su perfil o desde los detalles de tu cita una vez confirmada.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Cómo reporto un problema con un tatuador o una cita?',
-      respuesta: 'Si tuviste una mala experiencia o hubo un problema, puedes reportarlo desde el perfil del tatuador.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Qué hago si un tatuador no se presenta a la cita?',
-      respuesta: 'Lamentamos la situación. Por favor, repórtalo desde la sección de soporte para que podamos ayudarte a resolver el caso y aplicar las políticas correspondientes.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Puedo guardar mis tatuadores favoritos?',
-      respuesta: 'Sí, puedes marcar como favoritos los perfiles de tatuadores que te interesen para acceder fácilmente a ellos después.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Cómo puedo registrarme como tatuador?',
-      respuesta: 'Desde la pantalla de registro, a traves de nuestra otra aplicación. Completa tu perfil profesional, añade fotos de tu trabajo, servicios, precios y disponibilidad.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Qué medidas de seguridad tienen para proteger mis datos?',
-      respuesta: 'Tu información está protegida mediante protocolos de encriptación y seguridad. No compartimos tus datos personales sin tu consentimiento.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Cómo puedo editar mi perfil?',
-      respuesta: 'Puedes modificar tu información personal y más desde la sección "Perfil" en la aplicación.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Puedo recibir recordatorios de mis citas?',
-      respuesta: 'Sí, te enviaremos recordatorios por notificación push antes de tu cita para que no la olvides.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Qué estilos de tatuajes puedo encontrar?',
-      respuesta: 'Puedes buscar tatuadores por estilos como realismo, tradicional, minimalista, blackwork, entre otros, usando los filtros de búsqueda.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Puedo subir referencias o ideas para mi tatuaje?',
-      respuesta: 'Sí, puedes subir imágenes de referencia al momento de agendar tu cita o enviarlas directamente al tatuador mediante el chat.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Cómo puedo eliminar mi cuenta?',
-      respuesta: 'Puedes eliminar tu cuenta desde la sección de configuración. Ten en cuenta que esta acción es irreversible y se perderán todos tus datos.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Puedo agendar varias citas al mismo tiempo?',
-      respuesta: 'Sí, puedes reservar varias citas con el mismo tatuador o con diferentes tatuadores, según tu disponibilidad y necesidades.',
-      abierto: false,
-    },
-    {
-      titulo: '¿Qué hago si olvidé mi contraseña?',
-      respuesta: 'En la pantalla de Cuenta dentro de tu perfil o a traves de cuando inicies sesión, haz clic en "¿Olvidaste tu contraseña?" y sigue las instrucciones para restablecerla.',
-      abierto: false,
-    },
+ { titulo: 'FAQ.P1.TITLE', respuesta: 'FAQ.P1.ANSWER', abierto: false },
+    { titulo: 'FAQ.P2.TITLE', respuesta: 'FAQ.P2.ANSWER', abierto: false },
+    { titulo: 'FAQ.P3.TITLE', respuesta: 'FAQ.P3.ANSWER', abierto: false },
+    { titulo: 'FAQ.P4.TITLE', respuesta: 'FAQ.P4.ANSWER', abierto: false },
+    { titulo: 'FAQ.P5.TITLE', respuesta: 'FAQ.P5.ANSWER', abierto: false },
+    { titulo: 'FAQ.P6.TITLE', respuesta: 'FAQ.P6.ANSWER', abierto: false },
+    { titulo: 'FAQ.P7.TITLE', respuesta: 'FAQ.P7.ANSWER', abierto: false },
+    { titulo: 'FAQ.P8.TITLE', respuesta: 'FAQ.P8.ANSWER', abierto: false },
+    { titulo: 'FAQ.P9.TITLE', respuesta: 'FAQ.P9.ANSWER', abierto: false },
+    { titulo: 'FAQ.P10.TITLE', respuesta: 'FAQ.P10.ANSWER', abierto: false },
+    { titulo: 'FAQ.P11.TITLE', respuesta: 'FAQ.P11.ANSWER', abierto: false },
+    { titulo: 'FAQ.P12.TITLE', respuesta: 'FAQ.P12.ANSWER', abierto: false },
+    { titulo: 'FAQ.P13.TITLE', respuesta: 'FAQ.P13.ANSWER', abierto: false },
+    { titulo: 'FAQ.P14.TITLE', respuesta: 'FAQ.P14.ANSWER', abierto: false },
+    { titulo: 'FAQ.P15.TITLE', respuesta: 'FAQ.P15.ANSWER', abierto: false },
+    { titulo: 'FAQ.P16.TITLE', respuesta: 'FAQ.P16.ANSWER', abierto: false },
+    { titulo: 'FAQ.P17.TITLE', respuesta: 'FAQ.P17.ANSWER', abierto: false },
+    { titulo: 'FAQ.P18.TITLE', respuesta: 'FAQ.P18.ANSWER', abierto: false },
+    { titulo: 'FAQ.P19.TITLE', respuesta: 'FAQ.P19.ANSWER', abierto: false },
+    { titulo: 'FAQ.P20.TITLE', respuesta: 'FAQ.P20.ANSWER', abierto: false }
   ];
   isPago: any;
   isPremium: any;
@@ -143,7 +75,7 @@ export class AjustesPage implements OnInit {
 
   constructor(public firestore: FirestoreService, public user: UsuariosService, private navCtrl: NavController, public auth: FirestoreAuthService, public tiendaService: TiendaService,
               private route: ActivatedRoute, public alertController: AlertController, private actionSheetController: ActionSheetController, private toastController: ToastController,
-              private router: Router
+              private router: Router, public translate: TranslateService, public storage: Storage
   ) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
@@ -189,6 +121,22 @@ export class AjustesPage implements OnInit {
     this.modal.dismiss(null, 'cancel');
   }
 
+  cargarPreguntas() {
+    const keys = Array.from({length: 20}, (_, i) => `P${i+1}`); // P1, P2, ..., P20
+    
+    this.preguntas = keys.map(key => ({
+      titulo: this.translate.instant(`FAQ.${key}.TITLE`),
+      respuesta: this.translate.instant(`FAQ.${key}.ANSWER`),
+      abierto: false
+    }));
+  }
+
+  async cambiarIdioma(lang: string) {
+    this.translate.use(lang);
+    await this.storage.set('app_language', lang);
+    this.cargarPreguntas();
+  }
+
   obtenerResenas() {
     this.tiendaService.getResenaUsuario(this.usuarioActual.uid).subscribe((resenas: any[]) => {
       this.resenas = resenas;
@@ -220,7 +168,7 @@ export class AjustesPage implements OnInit {
       this.obtenerResenas(); // recarga
     });
     this.setOpen(false);
-    this.presentToast("Reseña Actualizada");
+    this.presentToast(this.translate.instant('REVIEW_UPDATED'));
   }
 
 
@@ -247,18 +195,18 @@ export class AjustesPage implements OnInit {
 
   async eliminarResena(resena: any) {
     const alert = await this.alertController.create({
-      header: 'Eliminar Reseña',
-      message: '¿Estás seguro de que quieres eliminar esta reseña?',
+     header: this.translate.instant('DELETE_REVIEW'),
+      message: this.translate.instant('DELETE_REVIEW_CONFIRM'),
       buttons: [
         {
-          text: 'Cancelar',
+          text: this.translate.instant('CANCEL'),
           role: 'cancel',
           handler: () => {
             console.log('Eliminación cancelada');
           }
         },
         {
-          text: 'Eliminar',
+          text: this.translate.instant('DELETE'),
           role: 'destructive',
           handler: () => {
             this.tiendaService
@@ -296,22 +244,28 @@ export class AjustesPage implements OnInit {
 
 
   async ngOnInit() {
+    this.cargarPreguntas();
+    
+    // Actualizar traducciones si el usuario cambia de idioma
+    this.translate.onLangChange.subscribe(() => {
+      this.cargarPreguntas();
+    });
   }
 
   async showActionSheet(campo: string) {
     const actionSheet = await this.alertController.create({
-      header: `Editar ${campo}`,
+      header:this.translate.instant('EDIT_FIELD'),
       inputs: [
         {
           name: 'nombre',
           type: 'text',
-          placeholder: 'Ingrese el nuevo nombre',
+          placeholder: this.translate.instant('PLACEHOLDER_NAME'),
           value: this.usuarioActual.nombre
         }
       ],
       buttons: [
         {
-          text: 'Editar',
+          text: this.translate.instant('BUTTON_EDIT'),
         handler: (data: { nombre: string; }) => {
           if (data.nombre) {
             this.usuarioActual.nombre = data.nombre;
@@ -320,7 +274,7 @@ export class AjustesPage implements OnInit {
           }
         },
         {
-          text: 'Cancelar',
+          text: this.translate.instant('BUTTON_CANCEL'),
           role: 'cancel'
         }
       ]
@@ -331,18 +285,18 @@ export class AjustesPage implements OnInit {
 
   async showActionSheetMovil(campo: string) {
     const actionSheet = await this.alertController.create({
-      header: `Editar ${campo}`,
+      header: this.translate.instant('EDIT_FIELD'),
       inputs: [
         {
           name: 'movil',
           type: 'text',
-          placeholder: 'Ingrese el nuevo movil',
+          placeholder: this.translate.instant('PLACEHOLDER_MOBILE'),
           value: this.usuarioActual.movil
         }
       ],
       buttons: [
         {
-          text: 'Editar',
+          text: this.translate.instant('BUTTON_EDIT'),
         handler: (data: { movil: string; }) => {
           if (data.movil) {
             this.usuarioActual.movil = data.movil;
@@ -351,7 +305,7 @@ export class AjustesPage implements OnInit {
           }
         },
         {
-          text: 'Cancelar',
+          text: this.translate.instant('BUTTON_CANCEL'),
           role: 'cancel'
         }
       ]

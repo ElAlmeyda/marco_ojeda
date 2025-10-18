@@ -7,12 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { OfertasPageRoutingModule } from './ofertas-routing.module';
 
 import { OfertasPage } from './ofertas.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    TranslateModule,
     OfertasPageRoutingModule
   ],
   declarations: [OfertasPage]

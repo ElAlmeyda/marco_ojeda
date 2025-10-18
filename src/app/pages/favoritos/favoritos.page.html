@@ -1,19 +1,27 @@
-
+<ion-header [translucent]="true">
+  <ion-toolbar style="padding-top: var(--ion-safe-area-top); padding-inline: 10px;">
+  </ion-toolbar>
+</ion-header>
 
 <ion-content [fullscreen]="true">
   <div *ngIf="usuario.uid === ''" class="center-card">
     <ion-card>
       <ion-card-content>
         <ion-label class="center-text">
-          Inicia sesion para poder tener tatuadores favoritos
+          {{ 'FAVS.LOGIN_REQUIRED' | translate }}
         </ion-label>
         <ion-button style="white-space: normal;" expand="block" fill="outline" [routerLink]="['/tabs/perfil']" >
-          ¿Quieres tener tatuadores favoritos?
+          {{ 'FAVS.WANT_TO_HAVE_FAVORITES' | translate }}
         </ion-button>
       </ion-card-content>
     </ion-card>
   </div>
-  <ion-list>
+  <ion-list *ngIf="favoritos && favoritos.length !== 0">
+    <ion-list-header>
+      <ion-label>
+        <h2 style="font-weight: bold;">{{ 'FAVS.HEADER' | translate }}</h2>
+      </ion-label>
+    </ion-list-header>
     <ion-item lines="none" *ngFor="let fav of favoritos" (click)="irAlTatuador(fav)">
       <ion-avatar style="margin-right: 12px;">
         <ion-img [src]="fav.avatar || 'assets/icon/sin_avatar.png'"></ion-img>
@@ -22,16 +30,16 @@
       <ion-icon slot="end" name="star" *ngIf="fav.fav" (click)="disfav(fav); $event.stopPropagation()"></ion-icon>
       <ion-icon slot="end" name="star-outline" *ngIf="!fav.fav" (click)="like(fav); $event.stopPropagation()"></ion-icon>
     </ion-item>
+  </ion-list>
 
-    <ion-item lines="none" *ngIf="favoritos && favoritos.length === 0">
+   <ion-item class="center-text" lines="none" *ngIf="favoritos && favoritos.length === 0">
       <ion-label style="display: flex; justify-content: center; margin-top: 20px;">
-          No tienes ningun tatuador favorito
+          {{ 'FAVS.NO_FAVORITES' | translate }}
         </ion-label>
     </ion-item>
     <div style="display: flex; justify-content: center; margin-top: 20px;" *ngIf="favoritos && favoritos.length === 0">
       <ion-button fill="outline" [routerLink]="['/tabs/folder', usuario.uid]" style="display: flex; justify-content: center; margin-top: 20px; --border-radius: 12px;">
-          ¿Quieres buscar?
+          {{ 'FAVS.SEARCH_ARTISTS' | translate }}
         </ion-button>
     </div>
-  </ion-list>
 </ion-content>

@@ -7,11 +7,13 @@ import { IonicModule } from '@ionic/angular';
 import { PedirCitaPageRoutingModule } from './pedir-cita-routing.module';
 
 import { PedirCitaPage } from './pedir-cita.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    TranslateModule,
     IonicModule,
     PedirCitaPageRoutingModule
   ],

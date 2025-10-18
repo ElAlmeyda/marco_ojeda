@@ -10,6 +10,8 @@ import { App } from '@capacitor/app';
 import { take } from 'rxjs';
 import { UbicacionService } from './service/ubicacion.service';
 import { AdMob, BannerAdOptions, BannerAdPosition, BannerAdSize } from '@capacitor-community/admob';
+import { TranslateService } from '@ngx-translate/core';
+import { Storage } from '@ionic/storage-angular';
 
 
 @Component({
@@ -43,7 +45,7 @@ export class AppComponent {
   }
 
   constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, public router: Router, public notificacion: NotificacionService,
-              private menu: MenuController, private platform: Platform, public ubicacion: UbicacionService, private navController: NavController,  public alertController: AlertController) {
+              private menu: MenuController, public translate:TranslateService, public storage: Storage, private platform: Platform, public ubicacion: UbicacionService, private navController: NavController,  public alertController: AlertController) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -60,7 +62,20 @@ export class AppComponent {
       }
     });
     this.initializeApp();
+    this.handleDeepLinks
+  }
 
+ async handleDeepLinks() {
+    // 🔹 Cuando la app se abre desde un enlace
+    App.addListener('appUrlOpen', (event: any) => {
+      console.log('Deep link recibido:', event.url);
+      // Ejemplo de URL: iTattoo://tatuador/abc123
+      const match = event.url.match(/tatuador\/(.+)$/);
+      if (match) {
+        const uid = match[1];
+        this.router.navigate(['/tatuador', uid]);
+      }
+    });
   }
 
   initializeApp() {
@@ -69,37 +84,61 @@ export class AppComponent {
       await AdMob.requestTrackingAuthorization();
 
       this.router.events.subscribe(event => {
-        const currentRoute = this.router.url;
-        if(!this.isPremiun){
-          if (this.isInsideTabs(currentRoute)) {
-            this.showBanner();
-          } else {
-            this.hideBanner();
+        if (event instanceof NavigationEnd) {
+          const currentRoute = this.router.url;
+          if(!this.isPremiun){
+            console.log("Anuncio", this.isInsideTabs(currentRoute))
+            if (this.isInsideTabs(currentRoute)) {
+              this.showBanner();
+            } else {
+              this.hideBanner();
+            }
           }
         }
       });
+
       this.handleBackButton();
     });
-
-    
   }
 
   async showBanner() {
+    await this.hideBanner();
+    let margin = 0;
+
+    if (this.platform.is('ios')) {
+      const header = document.querySelector('ion-header');
+      margin = header ? (header.clientHeight + 10) : 60; // ajuste extra
+    }
+
     const options: BannerAdOptions = {
-      adId: 'ca-app-pub-1532953644939730/7244903225', // reemplaza con tu ID real
+      adId: 'ca-app-pub-1532953644939730/3954231769',
       adSize: BannerAdSize.BANNER,
       position: BannerAdPosition.TOP_CENTER,
-      margin: 35 
+      margin: margin
     };
+
     await AdMob.showBanner(options);
   }
+
 
   async hideBanner() {
     await AdMob.removeBanner();
   }
-  
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.storage.create();
+     const savedLang = await this.storage.get('app_language');
+    if (savedLang) {
+      // Set default lang solo una vez
+      this.translate.setDefaultLang('es'); 
+      // Usar el idioma guardado
+      this.translate.use(savedLang);
+    } else {
+      const defaultLang = 'es';
+      this.translate.setDefaultLang(defaultLang);
+      this.translate.use(defaultLang);
+      await this.storage.set('app_language', defaultLang);
+    }
   }
 
   obtenerUsuario() {
@@ -188,9 +227,9 @@ export class AppComponent {
     });
   }
 
-  // Función para verificar si la ruta actual está dentro de las pestañas
   isInsideTabs(route: string): boolean {
     // Verifica si la ruta actual corresponde a una de las rutas dentro de 'tabs'
     return route.startsWith('/tabs');
   }
+
 }

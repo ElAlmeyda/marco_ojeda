@@ -16,6 +16,14 @@ ion-content {
     align-items: center; /* Centra horizontalmente */
     margin: 10px 20px; 
   }
+
+  .language-wrapper {
+    position: absolute;
+    top: 0;      // ajusta según la altura que quieras
+    right: 0;    // esto lo mueve a la derecha
+    margin: 10px; // opcional, para separarlo de los bordes
+    width: 120px; // opcional, para controlar el ancho
+  }
   
   /* Estilo para los elementos dentro del contenedor */
   .center-item {

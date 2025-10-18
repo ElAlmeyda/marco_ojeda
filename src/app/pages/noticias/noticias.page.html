@@ -1,3 +1,7 @@
+<ion-header [translucent]="true">
+  <ion-toolbar style="padding-top: var(--ion-safe-area-top); padding-inline: 10px;">
+  </ion-toolbar>
+</ion-header>
 <ion-content [fullscreen]="true">
   <ion-list lines="none" style="margin-top: 30%; background-color: transparent;">
     <ion-card *ngFor="let noticia of noticias" class="noticia-card" (click)="abrirModal(noticia)">
@@ -18,9 +22,9 @@
   <ion-modal #modal>
     <ng-template>
       <ion-header>
-        <ion-toolbar>
+        <ion-toolbar style="margin-top: 60px;">
           <ion-buttons slot="end">
-            <ion-button (click)="cerrarModal()">Cerrar</ion-button>
+            <ion-button (click)="cerrarModal()">{{ 'CLOSE' | translate }}</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
@@ -29,7 +33,7 @@
         <ion-img 
           *ngIf="noticiaSeleccionada?.imagenes" 
           [src]="noticiaSeleccionada.imagenes" 
-          style="width: 100%; max-height: 250px; object-fit: cover;">
+          style="width: 100%; height: 250px; object-fit: cover;">
         </ion-img>
 
        <ion-card-content>

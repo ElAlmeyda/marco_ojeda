@@ -4,6 +4,7 @@ import { Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
 import { CustomerInfo, LOG_LEVEL, Purchases } from '@revenuecat/purchases-capacitor';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-pago',
@@ -32,7 +33,7 @@ export class PagoPage implements OnInit {
     private platform: Platform,
     public toast: ToastController,
     public firestore: FirestoreService,
-    public auth: FirestoreAuthService,
+    public auth: FirestoreAuthService, public translate: TranslateService
   ) {
      this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
@@ -49,14 +50,14 @@ export class PagoPage implements OnInit {
         await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG });
 
         const apiKey = this.platform.is('ios')
-          ? 'appl_JTYmAafcZkHsWBSWCPjfmMRdcPA'    // Cambia por tu clave pública de iOS
+          ? 'appl_DvawkfETtdUHEvggwucMjIGLmeb'    // Cambia por tu clave pública de iOS
           : 'goog_BKQFgSYBqZxAEaOedanxRnpUSNu';  // Clave pública de Android
 
         await Purchases.configure({ apiKey });
 
         const offerings = await Purchases.getOfferings();
 
-        const premiumOffering = offerings.all['sin_anuncios'];
+        const premiumOffering = offerings.all['iOS'];
 
         this.productos = [];
 
@@ -90,7 +91,7 @@ export class PagoPage implements OnInit {
   
   async pagar() {
       if (!this.selectedPackage) {
-        this.presentToast('Selecciona un plan primero', 'warning');
+        this.presentToast(this.translate.instant('PAYMENT.SELECT_PLAN_FIRST'), 'warning');
         return;
       }
 
@@ -114,7 +115,7 @@ export class PagoPage implements OnInit {
           activo: true,
         });
 
-        this.presentToast('¡Compra realizada con éxito!', 'success');
+        this.presentToast(this.translate.instant('PAYMENT.SUCCESS_PURCHASE'), 'success');
         // Aquí puedes guardar el estado de la suscripción en tu backend
       } catch (error: any) {
         if (error.userCancelled) {

@@ -1,0 +1,2 @@
+<key>NSUserNotificationUsageDescription</key>
+<string>Queremos enviarte notificaciones para recordarte tus citas con tatuadores y avisarte de novedades o promociones en estudios cercanos.</string>

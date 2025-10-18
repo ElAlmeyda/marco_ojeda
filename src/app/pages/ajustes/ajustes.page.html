@@ -1,84 +1,84 @@
+
 <ion-header [translucent]="true">
-  <ion-toolbar style="padding: 10px;">
+  <ion-toolbar style="padding-top: var(--ion-safe-area-top); padding-inline: 10px;">
     <ion-icon *ngIf="isAjustes" class="toolbar-icon" slot="start" name="chevron-back-outline" [routerLink]="['/tabs/perfil', usuarioActual.uid]"></ion-icon>
     <ion-icon *ngIf="!isAjustes" class="toolbar-icon" slot="start" name="chevron-back-outline" (click)="volver()"></ion-icon>
-    <ion-label *ngIf="isCondicionUso" class="toolbar-label"> Condiciones de Uso </ion-label>
-    <ion-label *ngIf="isAyuda" class="toolbar-label"> Centro de ayuda </ion-label>
-    <ion-label *ngIf="isCondicion" class="toolbar-label"> Condiciones de Uso </ion-label>
-    <ion-label *ngIf="isPrivacidad" class="toolbar-label"> Privacidad </ion-label> 
-    <ion-label *ngIf="isUSo" class="toolbar-label"> Sobre nosotros </ion-label>
-    <ion-label *ngIf="isInformacion" class="toolbar-label"> Información basica </ion-label>
-    <ion-label *ngIf="isAjustes" class="toolbar-label"> Configuración </ion-label>
-    <ion-label *ngIf="isResena" class="toolbar-label"> Reseñas </ion-label>
-    <ion-label *ngIf="isHistorial" class="toolbar-label"> Historial de citas </ion-label>
-    <ion-label *ngIf="isPago" class="toolbar-label"> Suscripciones </ion-label>
+    <ion-label *ngIf="isCondicionUso" class="toolbar-label">{{ 'TERMS_OF_USE' | translate }}</ion-label>
+    <ion-label *ngIf="isAyuda" class="toolbar-label">{{ 'HELP_CENTER' | translate }}</ion-label>
+    <ion-label *ngIf="isCondicion" class="toolbar-label">{{ 'TERMS_OF_USE' | translate }}</ion-label>
+    <ion-label *ngIf="isPrivacidad" class="toolbar-label">{{ 'PRIVACY' | translate }}</ion-label> 
+    <ion-label *ngIf="isUSo" class="toolbar-label">{{ 'ABOUT_US' | translate }}</ion-label>
+    <ion-label *ngIf="isInformacion" class="toolbar-label">{{ 'BASIC_INFO' | translate }}</ion-label>
+    <ion-label *ngIf="isAjustes" class="toolbar-label">{{ 'SETTINGS' | translate }}</ion-label>
+    <ion-label *ngIf="isResena" class="toolbar-label">{{ 'REVIEWS' | translate }}</ion-label>
+    <ion-label *ngIf="isHistorial" class="toolbar-label">{{ 'APPOINTMENT_HISTORY' | translate }}</ion-label>
+    <ion-label *ngIf="isPago" class="toolbar-label">{{ 'SUBSCRIPTIONS' | translate }}</ion-label>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" *ngIf="isCondicionUso">
   <div class="container" style="margin: 5px;">
-    <p><strong>Dario Almeida</strong>, trabajador autónomo registrado en España y sin domicilio físico. Para consultas legales, contáctame en almeyda.dw.studio&#64;gmail.com.</p>
-    <p>Si resides fuera de EE. UU., se aplicarán estas condiciones. Si resides en EE. UU., consulta las Condiciones de Uso correspondientes.</p>
+   <p><strong>{{ 'LEGAL_OWNER' | translate }}</strong>, {{ 'LEGAL_INFO' | translate }}</p>
+    <p>{{ 'LEGAL_RESIDENCE' | translate }}</p>
+    <h2>{{ 'SUMMARY' | translate }}</h2>
+    <ul>
+       <li>{{ 'SUMMARY_AGE' | translate }}</li>
+      <li>{{ 'SUMMARY_CONTENT_RESPONSIBILITY' | translate }}</li>
+      <li>{{ 'SUMMARY_USER_RESPONSIBILITY' | translate }}</li>
+      <li>{{ 'SUMMARY_COMMUNITY_RULES' | translate }}</li>
+      <li>{{ 'SUMMARY_PRIVACY_POLICY' | translate }}</li>
+    </ul>
+    
+   <h2>{{ 'LEGAL_SECTION' | translate }}</h2>
+    <p>{{ 'LEGAL_APP_DESC' | translate }}</p>
 
-    <h2>Sumario</h2>
+     <h2>{{ 'APP_USE_RULES' | translate }}</h2>
+    <h3>{{ 'WHO_CAN_USE' | translate }}</h3>
+    <p>{{ 'WHO_CAN_USE_DESC' | translate }}</p>
+    <p>{{ 'USER_GUARANTEE' | translate }}</p>
+
+    <h3>{{ 'ALLOWED_CONTENT' | translate }}</h3>
     <ul>
-      <li>La app es solo para mayores de 18 años.</li>
-      <li>No nos hacemos responsables de lo que publiques, pero podemos eliminar contenido inapropiado.</li>
-      <li>Eres responsable de todo lo que publiques.</li>
-      <li>Revisa nuestras Normas de la Comunidad.</li>
-      <li>Consulta nuestra Política de Privacidad.</li>
+     <li>{{ 'ALLOWED_CONTENT_1' | translate }}</li>
+      <li>{{ 'ALLOWED_CONTENT_2' | translate }}</li>
+      <li>{{ 'ALLOWED_CONTENT_3' | translate }}</li>
     </ul>
     
-    <h2>Parte Legal</h2>
-    <p>iTattoo es una red social diseñada para conocer gente, compartir fotos y noticias. Nos esforzamos por mantener un ambiente seguro y agradable.</p>
+   <h2>{{ 'PAID_SERVICES' | translate }}</h2>
+    <h3>{{ 'WHAT_CAN_I_BUY' | translate }}</h3>
+    <p>{{ 'WHAT_CAN_I_BUY_DESC' | translate }}</p>
     
-    <h2>Uso de la App y Normas de Contenido</h2>
-    <h3>¿Quién puede usar iTattoo?</h3>
-    <p>Solo mayores de 18 años o personas que hayan alcanzado la mayoría de edad en su país pueden usar la app.</p>
-    <p>Garantizas que nunca has sido condenado por delitos de violencia, acoso o conducta sexual inapropiada.</p>
-    
-    <h3>Contenido Permitido</h3>
+    <h3>{{ 'PAYMENT_METHODS' | translate }}</h3>
     <ul>
-      <li>No publicar contenido ilegal, ofensivo o que infrinja derechos de terceros.</li>
-      <li>No suplantar identidades ni promover actividades comerciales sin autorización.</li>
-      <li>No compartir contenido con virus o software malicioso.</li>
+       <li>{{ 'PAYMENT_METHOD_1' | translate }}</li>
+      <li>{{ 'PAYMENT_METHOD_2' | translate }}</li>
+      <li>{{ 'PAYMENT_METHOD_3' | translate }}</li>
     </ul>
     
-    <h2>Servicios de Pago</h2>
-    <h3>¿Qué puedo comprar?</h3>
-    <p>Ofrecemos servicios premium y la función "Cita a ciegas".</p>
-    
-    <h3>Métodos de Pago</h3>
+    <h3>{{ 'CANCELLATION_REFUNDS' | translate }}</h3>
+    <p>{{ 'CANCELLATION_REFUNDS_DESC_1' | translate }}</p>
+    <p>{{ 'CANCELLATION_REFUNDS_DESC_2' | translate }}</p>
+
+   <h2>{{ 'APP_ACCESS' | translate }}</h2>
+    <p>{{ 'APP_ACCESS_DESC' | translate }}</p>
+
+     <h2>{{ 'SERVICE_TERMINATION' | translate }}</h2>
+    <p>{{ 'SERVICE_TERMINATION_DESC' | translate }}</p>
+
+    <h2>{{ 'ABUSE_COMPLAINTS' | translate }}</h2>
     <ul>
-      <li>App Store de Apple o Google Play.</li>
-      <li>Tarjeta de crédito/débito.</li>
-      <li>PayPal.</li>
+       <li>{{ 'ABUSE_1' | translate }}</li>
+      <li>{{ 'ABUSE_2' | translate }}</li>
     </ul>
     
-    <h3>Cancelación y Reembolsos</h3>
-    <p>Las suscripciones se renuevan automáticamente. Debes cancelarlas al menos 24 horas antes del próximo cobro.</p>
-    <p>Los reembolsos dependen del método de pago y de las regulaciones locales.</p>
-    
-    <h2>Acceso a la Aplicación</h2>
-    <p>No garantizamos la disponibilidad permanente del servicio. Puede haber interrupciones por mantenimiento o fallos técnicos.</p>
-    
-    <h2>Terminación del Servicio</h2>
-    <p>Puedes eliminar tu cuenta en el menú de configuración. Conservaremos tus datos durante 28 días por si deseas restaurar tu cuenta.</p>
-    
-    <h2>Abusos y Quejas</h2>
-    <ul>
-      <li>Nos reservamos el derecho a suspender o eliminar cuentas con actividad sospechosa.</li>
-      <li>Podemos informar a las autoridades en casos de conducta ilegal.</li>
-    </ul>
-    
-    <h2>Exclusión de Garantías y Responsabilidad</h2>
-    <p>No nos responsabilizamos por el comportamiento de los usuarios ni por el contenido publicado.</p>
-    
-    <h2>Modificaciones en los Términos</h2>
-    <p>Nos reservamos el derecho de modificar estos términos en cualquier momento, con al menos 14 días de aviso previo.</p>
-    
-    <h2>Fecha Efectiva</h2>
-    <p><strong>Última actualización:</strong> 28 de febrero de 2025.</p>
+   <h2>{{ 'DISCLAIMER' | translate }}</h2>
+    <p>{{ 'DISCLAIMER_DESC' | translate }}</p>
+
+    <h2>{{ 'MODIFICATION_TERMS' | translate }}</h2>
+    <p>{{ 'MODIFICATION_TERMS_DESC' | translate }}</p>
+
+    <h2>{{ 'EFFECTIVE_DATE' | translate }}</h2>
+    <p><strong>{{ 'LAST_UPDATE' | translate }}</strong> 28/02/2025</p>
   </div>
 </ion-content>
 
@@ -86,7 +86,7 @@
 
   <!-- Mensaje si no hay citas -->
   <ion-item *ngIf="citas.length === 0"> 
-    <ion-label> No has tenido ninguna cita programada.</ion-label>
+     <ion-label> {{ 'HISTORY_NO_APPOINTMENTS' | translate }}</ion-label>
   </ion-item>
 
   <!-- Lista de citas -->
@@ -99,8 +99,8 @@
     </ion-card-header>
 
     <ion-card-content>
-      <p><strong>Ubicación:</strong> {{ cita.direccion }}</p>
-      <p *ngIf="cita.estilo"><strong>Estilo:</strong> {{ cita.estilo }}</p>
+      <p><strong>{{ 'HISTORY_LOCATION' | translate }}:</strong> {{ cita.direccion }}</p>
+      <p *ngIf="cita.estilo"><strong>{{ 'HISTORY_STYLE' | translate }}:</strong> {{ cita.estilo }}</p>
     </ion-card-content>
 
   </ion-card>
@@ -124,7 +124,7 @@
         </div>
         <div style="margin-top: 8px;">
           <ion-button size="small" *ngIf="resena.imagen" (click)="verImagen(resena.imagen)">
-            Ver Imagen
+            {{ 'REVIEW_VIEW_IMAGE' | translate }}
           </ion-button>
         </div>
         
@@ -146,7 +146,7 @@
         <ng-template>
           <ion-header>
             <ion-toolbar>
-              <ion-title>Editar Reseñas</ion-title>
+              <ion-title>{{ 'REVIEW_EDIT_TITLE' | translate }}</ion-title>
               <ion-buttons slot="end">
                 <ion-button (click)="setOpen(false)"><ion-icon name="close-outline"></ion-icon></ion-button>
               </ion-buttons>
@@ -165,13 +165,13 @@
             <!-- Mensaje -->
             <ion-textarea
               [(ngModel)]="mensajeResena"
-              placeholder="Escribe tu opinión..."
+               placeholder="'REVIEW_WRITE_PLACEHOLDER' | translate"
               autoGrow="true">
             </ion-textarea>
 
             <!-- Botón -->
             <ion-button expand="block" (click)="editarResena(resena)">
-              Editar Reseña
+              {{ 'REVIEW_EDIT_BUTTON' | translate }}
             </ion-button>
           </ion-content>
         </ng-template>
@@ -185,7 +185,7 @@
 
   <ng-template *ngIf="resenas.length === 0">
     <ion-text color="medium">
-      <p class="ion-padding">No tienes reseñas todavía.</p>
+      <p class="ion-padding">{{ 'REVIEW_NO_REVIEWS' | translate }}</p>
     </ion-text>
   </ng-template>
 </ion-content>
@@ -198,7 +198,7 @@
         <ion-icon slot="end" name="{{ pregunta.abierto ? 'chevron-up' : 'chevron-down' }}"></ion-icon>
       </ion-item>
       <ion-item *ngIf="pregunta.abierto">
-        <ion-label>
+        <ion-label style="white-space: normal; word-break: break-word;">
           {{ pregunta.respuesta }}
         </ion-label>
       </ion-item>
@@ -208,126 +208,127 @@
 
 <ion-content [fullscreen]="true" class="content" *ngIf="isCondicion">
   
-  <h1 class="title" style="margin: 5px; font-weight: bold;">Condiciones de uso y Política de privacidad de iTattoo</h1>
-  <p class="intro-text" style="margin: 5px;">Al usar nuestra aplicación, das tu consentimiento al cumplimiento de las Condiciones de Uso de iTattoo y confirmas que eres mayor de 18 años. Puedes consultar la versión completa aquí.</p>
-
-  <p class="subheading" style="margin: 5px;">Puntos principales:</p>
+  <h1 class="title" style="margin: 5px; font-weight: bold;">{{ 'TERMS_TITLE' | translate }}</h1>
+  <p class="intro-text" style="margin: 5px;">{{ 'TERMS_INTRO' | translate }}</p>
+  <p class="subheading" style="margin: 5px;">{{ 'TERMS_KEY_POINTS' | translate }}</p>
   <ul class="points-list" style="margin: 5px;">
-    <li>Debes ser mayor de 18 años.</li>
-    <li>La información que facilites estará disponible para otros usuarios de iTattoo.</li>
-    <li>Bajo ningún concepto:
-      <ol> a. Engañar o acosar a otros usuarios.</ol>
-      <ol> b. Vender contenido dentro de la aplicación ni productos o servicios.</ol>
-      <ol> c. Insultar o añadir contenido ilegal.</ol>
-      <ol> d. Añadir contenido inapropiado, pornográfico u obsceno.</ol>
-      <ol> e. Subir material de otras personas sin su consentimiento.</ol>
-      <ol> f. Se permiten insultos racistas, xenófobos y demás.</ol>
+     <li>{{ 'TERMS_POINT_1' | translate }}</li>
+    <li>{{ 'TERMS_POINT_2' | translate }}</li>
+    <li>
+      {{ 'TERMS_POINT_3' | translate }}
+      <ol> 
+        <li>{{ 'TERMS_POINT_3A' | translate }}</li>
+        <li>{{ 'TERMS_POINT_3B' | translate }}</li>
+        <li>{{ 'TERMS_POINT_3C' | translate }}</li>
+        <li>{{ 'TERMS_POINT_3D' | translate }}</li>
+        <li>{{ 'TERMS_POINT_3E' | translate }}</li>
+        <li>{{ 'TERMS_POINT_3F' | translate }}</li>
+      </ol>
     </li>
-    <li>iTattoo denunciará a las autoridades cualquier actividad ilegal.</li>
-    <li>iTattoo no proporcionará a nadie tus datos confidenciales, ni venderá tu información a terceros.</li>
+    <li>{{ 'TERMS_POINT_4' | translate }}</li>
+    <li>{{ 'TERMS_POINT_5' | translate }}</li>
   </ul>
 </ion-content>
 
 <ion-content [fullscreen]="true" *ngIf="isPrivacidad">
   <div class="container" style="margin: 5px;">
-    <p>Bienvenido a la app de <strong>iTattoo</strong>. A continuación, explicamos cómo recopilamos, almacenamos, protegemos y compartimos tu información.</p>
-    
+    <p>{{ 'PRIVACY_INTRO' | translate }}</p>
+
     <div class="section">
-      <h2>1. Quiénes Somos</h2>
-      <p><strong>Dario Almeida</strong>, trabajador autónomo registrado en España y sin domicilio físico. Para consultas legales, contáctame en almeyda.dw.studio&#64;gmail.com.</p>
+      <h2>{{ 'PRIVACY_SECTION_1_TITLE' | translate }}</h2>
+      <p>{{ 'PRIVACY_SECTION_1_TEXT' | translate }}</p>
     </div>
     
     <div class="section">
-      <h2>2. Recopilación de Información</h2>
-      <p>Al registrarte, solicitamos los siguientes datos:</p>
+      <h2>{{ 'PRIVACY_SECTION_2_TITLE' | translate }}</h2>
+      <p>{{ 'PRIVACY_SECTION_2_TEXT' | translate }}</p>
       <ul>
-        <li>Nombre</li>
-        <li>Correo electrónico</li>
-        <li>Móvil</li>
-        <li>Identidad de género</li>
-        <li>Fecha de nacimiento</li>
-        <li>Preferencia sexual</li>
-        <li>Fotos</li>
-        <li>Ubicación</li>
+        <li>{{ 'PRIVACY_SECTION_2_POINT_1' | translate }}</li>
+        <li>{{ 'PRIVACY_SECTION_2_POINT_2' | translate }}</li>
+        <li>{{ 'PRIVACY_SECTION_2_POINT_3' | translate }}</li>
+        <li>{{ 'PRIVACY_SECTION_2_POINT_4' | translate }}</li>
+        <li>{{ 'PRIVACY_SECTION_2_POINT_5' | translate }}</li>
+        <li>{{ 'PRIVACY_SECTION_2_POINT_6' | translate }}</li>
+        <li>{{ 'PRIVACY_SECTION_2_POINT_7' | translate }}</li>
+        <li>{{ 'PRIVACY_SECTION_2_POINT_8' | translate }}</li>
       </ul>
     </div>
 
     <div class="section">
-      <h2>3. Información del Perfil</h2>
-      <p>Recomendamos no compartir información sensible en tu perfil, como números de teléfono o datos bancarios.</p>
+     <h2>{{ 'PRIVACY_SECTION_3_TITLE' | translate }}</h2>
+      <p>{{ 'PRIVACY_SECTION_3_TEXT' | translate }}</p>
     </div>
 
     <div class="section">
-      <h2>4. Información sobre Compras</h2>
-      <p>Si adquieres servicios premium, procesamos tu información de pago de manera segura para prevenir fraudes.</p>
+      <h2>{{ 'PRIVACY_SECTION_4_TITLE' | translate }}</h2>
+      <p>{{ 'PRIVACY_SECTION_4_TEXT' | translate }}</p>
     </div>
     
     <div class="section">
-      <h2>5. Información de Geolocalización</h2>
-      <p>Si otorgas permisos de ubicación, iTattoo usará tus coordenadas para mejorar tu experiencia.</p>
+     <h2>{{ 'PRIVACY_SECTION_5_TITLE' | translate }}</h2>
+      <p>{{ 'PRIVACY_SECTION_5_TEXT' | translate }}</p>
     </div>
 
     <div class="section">
-      <h2>6. Uso de tu Información</h2>
-      <p>Usamos tu información para:</p>
+      <h2>{{ 'PRIVACY_SECTION_6_TITLE' | translate }}</h2>
+      <p>{{ 'PRIVACY_SECTION_6_TEXT' | translate }}</p>
       <ul>
-        <li>Ofrecerte nuestros servicios.</li>
-        <li>Personalizar tu experiencia.</li>
-        <li>Resolver disputas y mejorar la seguridad.</li>
-        <li>Investigar fraudes.</li>
+        <li>{{ 'PRIVACY_SECTION_6_POINT_1' | translate }}</li>
+        <li>{{ 'PRIVACY_SECTION_6_POINT_2' | translate }}</li>
+        <li>{{ 'PRIVACY_SECTION_6_POINT_3' | translate }}</li>
+        <li>{{ 'PRIVACY_SECTION_6_POINT_4' | translate }}</li>
       </ul>
     </div>
     
     <div class="section">
-      <h2>7. Algoritmo de Compatibilidad</h2>
-      <p>Utilizamos algoritmos para predecir tu compatibilidad con otros usuarios según tus preferencias y actividad en la app.</p>
+    <h2>{{ 'PRIVACY_SECTION_8_TITLE' | translate }}</h2>
+      <p>{{ 'PRIVACY_SECTION_8_TEXT' | translate }}</p>
     </div>
     
     <div class="section">
-      <h2>8. Seguridad</h2>
-      <p>Aplicamos medidas de seguridad avanzadas, pero te recomendamos proteger tu información personal.</p>
+     <h2>{{ 'PRIVACY_SECTION_9_TITLE' | translate }}</h2>
+      <p>{{ 'PRIVACY_SECTION_9_TEXT' | translate }}</p>
     </div>
     
     <div class="section">
-      <h2>9. Tus Derechos</h2>
-      <p>Según la ley, tienes derecho a acceder, rectificar o eliminar tus datos. Para ejercer estos derechos, envía un correo a: <em>almeyda.dw.studio&#64;gmail.com</em>.</p>
-    </div>
-    
-    <div class="section">
-      <h2>10. Retención y Eliminación de Datos</h2>
-      <p>Conservamos tu información el tiempo necesario para cumplir con requisitos legales. Puedes solicitar la eliminación enviando un correo a: <em>almeyda.dw.studio&#64;gmail.com</em>.</p>
+     <h2>{{ 'PRIVACY_SECTION_10_TITLE' | translate }}</h2>
+      <p>{{ 'PRIVACY_SECTION_10_TEXT' | translate }}</p>
     </div>
 
     <div class="section">
-      <h2>12. Exclusión de garantías y exclusión de responsabilidad</h2>
-      <p>Me he olvidado de las normas de iTattoo y alguien me ha amenazado con demandarme. ¿Me podrán ayudar vuestros abogados?</p>
-      <p>No. Si te comportas de una manera que resulta ofensiva para otros usuarios, serás el único responsable de las consecuencias. Renunciamos de manera rotunda a cualquier responsabilidad,
-        parcial o total, relacionada con tu conducta o la conducta de otro usuario de iTattoo, así como con el contenido publicado en nuestra página por ti o por cualquier otro miembro.
-      </p>
-      <p>En la máxima medida permitida por la ley, iTattoo excluye expresamente:</p>
+      <h2>{{ 'PRIVACY_SECTION_11_TITLE' | translate }}</h2>
+      <p>{{ 'PRIVACY_SECTION_11_TEXT_1' | translate }}</p>
+      <p>{{ 'PRIVACY_SECTION_11_TEXT_2' | translate }}</p>
+      <p>{{ 'PRIVACY_SECTION_11_TEXT_3' | translate }}</p>
       <ul>
-        <li>Muerte o daños personales causados por nuestra negligencia demostrada.</li>
-        <li>Fraude o tergiversación fraudulenta.</li>
-        <li>Cualquier responsabilidad que no pueda ser limitada o excluida por la ley.</li>
+        <li>{{ 'PRIVACY_SECTION_11_POINT_1' | translate }}</li>
+        <li>{{ 'PRIVACY_SECTION_11_POINT_2' | translate }}</li>
+        <li>{{ 'PRIVACY_SECTION_11_POINT_3' | translate }}</li>
       </ul>
     </div>
 
     <div class="section">
-      <h2>12. Modificaciones</h2>
-      <p>Podemos actualizar esta política ocasionalmente. La versión más reciente estará disponible en nuestra app.</p>
+     <h2>{{ 'PRIVACY_SECTION_12_TITLE' | translate }}</h2>
+      <p>{{ 'PRIVACY_SECTION_12_TEXT' | translate }}</p>
     </div>
 
-    <p><strong>Última actualización:</strong> 3 de marzo de 2025</p>
+    <p><strong>{{ 'PRIVACY_LAST_UPDATED' | translate }}</strong></p>
   </div>
 </ion-content>
 
 <ion-content *ngIf="isUSo">
   <ion-list style="padding: 10px;">
-    <ion-item [routerLink]="['/ajustes', usuarioActual.uid]" [queryParams]="{ isCondicion: true }"> Condiciones de uso (resumen) </ion-item>
-    <ion-item [routerLink]="['/ajustes', usuarioActual.uid]" [queryParams]="{ isCondicionUso: true }"> Condiciones de uso </ion-item>
-    <ion-item [routerLink]="['/ajustes', usuarioActual.uid]" [queryParams]="{ isPrivacidad: true }"> Privacidad </ion-item>
+    <ion-item [routerLink]="['/ajustes', usuarioActual.uid]" [queryParams]="{ isCondicion: true }">
+      {{ 'ABOUT_US_TERMS_SUMMARY' | translate }}
+    </ion-item>
+    <ion-item [routerLink]="['/ajustes', usuarioActual.uid]" [queryParams]="{ isCondicionUso: true }">
+      {{ 'ABOUT_US_TERMS' | translate }}
+    </ion-item>
+    <ion-item [routerLink]="['/ajustes', usuarioActual.uid]" [queryParams]="{ isPrivacidad: true }">
+      {{ 'ABOUT_US_PRIVACY' | translate }}
+    </ion-item>
     <ion-item> 
-      <ion-label> Versión</ion-label>
+      <ion-label>{{ 'ABOUT_US_VERSION_LABEL' | translate }}</ion-label>
       <ion-label> 1.2.0 </ion-label>
     </ion-item>
     
@@ -338,14 +339,14 @@
   <ion-list style="padding: 10px;">
       <ion-item (click)="showActionSheet('nombre')">
         <ion-label >
-          Nombre
+          {{ 'INFO_NAME_LABEL' | translate }}
         </ion-label>
         <ion-label class="info-label" slot="end"> {{usuarioActual.nombre}}</ion-label>
         <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
       </ion-item>
       <ion-item (click)="showActionSheetMovil('movil')">
         <ion-label >
-          Telefono
+          {{ 'INFO_PHONE_LABEL' | translate }}
         </ion-label>
         <ion-label class="info-label" slot="end"> {{usuarioActual.movil}}</ion-label>
         <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
@@ -355,19 +356,19 @@
 
 <ion-content *ngIf="isPago">
   <div *ngIf="isPremium; else noPago">
-    <h2>Ya eres un usuario premium de la app.</h2>
+    <h2>{{ 'PAY_PREMIUM_MESSAGE' | translate }}</h2>
   </div>
 
   <!-- Si NO es premium -->
   <ng-template #noPago>
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Hazte Premium</ion-card-title>
+        <ion-card-title>{{ 'PAY_GO_PREMIUM_TITLE' | translate }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <p>Accede a todas las funciones sin anuncios.</p>
+         <p>{{ 'PAY_GO_PREMIUM_DESC' | translate }}</p>
         <ion-button expand="block" color="dark" (click)="goToPago()">
-          Ir al pago
+          {{ 'PAY_GO_PREMIUM_BTN' | translate }}
         </ion-button>
       </ion-card-content>
     </ion-card>

@@ -47,10 +47,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/reset-password/reset-password.module').then( m => m.ResetPasswordPageModule)
   },
   {
-    path: 'terminos',
-    loadChildren: () => import('./pages/terminos/terminos.module').then( m => m.TerminosPageModule)
-  },
-  {
     path: 'cuenta',
     loadChildren: () => import('./pages/cuenta/cuenta.module').then( m => m.CuentaPageModule)
   },

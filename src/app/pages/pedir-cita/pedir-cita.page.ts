@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AdMob, InterstitialAdPluginEvents } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
 import { NavController, ToastController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { Cita, Horario, Tatuador, Trabajador, Usuario } from 'src/app/model';
@@ -73,8 +74,14 @@ export class PedirCitaPage implements OnInit {
   diasConEventos: { [fecha: string]: any } = {};
   isPremium=false;
 
+  piercings = [
+    "LOB","HELIX","TRAGUS","ANTI_TRAGUS","DAITH","CONCH","INDUSTRIAL",
+    "ROOK","SNUG","EYEBROW","NOSE","SEPTUM","LIP","MONROE","LABRET",
+    "FRENUM","BELLY_BUTTON","NIPPLE"
+  ];
+
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private route: ActivatedRoute, public tiendaTatuador: TiendaService, public toast: ToastController,
-      private router: Router, public navCtrl: NavController, public firestore: FirestoreService) {
+      private router: Router, public navCtrl: NavController, public firestore: FirestoreService, public translate: TranslateService) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         
@@ -246,7 +253,7 @@ export class PedirCitaPage implements OnInit {
     if (!this.cita) this.cita = {} as Cita;
 
     if(!this.acepto){
-      this.presentToast("Debes aceptar las condiciones", "danger");
+      this.presentToast(this.translate.instant('APPOINTMENT.ACCEPT_CONDITIONS'), "danger");
       return; // salir si no acepta
     }
 
@@ -255,7 +262,7 @@ export class PedirCitaPage implements OnInit {
       this.cita.correo = this.usuario.correo;
       this.cita.nombreUser = this.usuario.nombre;
       this.cita.movil = this.usuario.movil;
-      this.cita.dia = this.fechaSeleccionada;
+      this.cita.dia = this.fechaSeleccionada.split('T')[0];
       this.cita.hora = this.horaSeleccionada;
       this.cita.nombreTatuador = this.tatuadorSeleccionado.nombre;
       this.cita.estilo = this.estilo;
@@ -273,7 +280,7 @@ export class PedirCitaPage implements OnInit {
 
         // Guardar cita
         await this.tiendaTatuador.guardarCita(this.cita, this.usuario.uid, this.tatuador.uid);
-        await this.presentToast("La cita ha sido realizada, espera a que el tatuador conteste.", "success");
+        await this.presentToast(this.translate.instant('APPOINTMENT.SAVED_SUCCESS'), "success");
 
         try {
           if (!this.isPremium) {
@@ -298,7 +305,7 @@ export class PedirCitaPage implements OnInit {
         this.router.navigate(['/tabs/cita']);
       } catch (err) {
         console.error(err);
-        this.presentToast("Error al guardar la cita.", "danger");
+        this.presentToast(this.translate.instant('APPOINTMENT.MISSING_FIELDS'), "danger");
       }
     }
   }
@@ -308,7 +315,7 @@ export class PedirCitaPage implements OnInit {
     if (!this.cita) this.cita = {} as Cita;
 
     if(!this.acepto){
-      this.presentToast("Debes aceptar las condiciones", "danger");
+      this.presentToast(this.translate.instant('APPOINTMENT.ACCEPT_CONDITIONS'), "danger");
       return; // salir si no acepta
     }
 
@@ -331,12 +338,12 @@ export class PedirCitaPage implements OnInit {
           await this.mostrarInterstitial();
         }
 
-        await this.presentToast("La consulta ha sido realizada, espera a que el tatuador conteste.", "success");
+        await this.presentToast(this.translate.instant('APPOINTMENT.SAVED_SUCCESS'), "success");
 
         this.router.navigate(['/tabs/folder/' + this.usuario.uid]);
       } catch (err) {
         console.error(err);
-        this.presentToast("Error al guardar la consulta.", "danger");
+        this.presentToast(this.translate.instant('APPOINTMENT.MISSING_FIELDS'), "danger");
       }
     }
   }
@@ -344,7 +351,7 @@ export class PedirCitaPage implements OnInit {
   async mostrarInterstitial() {
     try {
         const adId = Capacitor.getPlatform() === 'ios' 
-          ? 'ca-app-pub-1532953644939730/3954231769' 
+          ? 'ca-app-pub-1532953644939730/9719324641' 
           : 'ca-app-pub-1532953644939730/4820289551';
 
         await AdMob.prepareInterstitial({ adId });
@@ -395,7 +402,10 @@ export class PedirCitaPage implements OnInit {
     // Revisar si hay eventos del día
     const evento = this.diasConEventos[fecha];
     this.cita.direccion = evento ? evento.ciudad : this.tatuador.ciudad;
-    if (evento) this.presentToast(`⚠️ El tatuador estará en ${evento.ciudad}`, 'warning');
+    if (evento) {
+      const msg = this.translate.instant('TATTOOIST.EVENT_WARNING', { ciudad: evento.ciudad });
+      this.presentToast(msg, 'warning');
+    } 
 
     const diasSemanaArray = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
 
@@ -538,7 +548,8 @@ export class PedirCitaPage implements OnInit {
     const evento = this.diasConEventos[fecha];
     if (evento) {
       // Mostrar alerta de ciudad temporal
-      this.presentToast(`⚠️ El tatuador estará en ${evento.ciudad}`, 'warning');
+      const msg = this.translate.instant('TATTOOIST.EVENT_WARNING', { ciudad: evento.ciudad });
+      this.presentToast(msg, 'warning');
 
       // Actualizar dirección de la cita
       this.cita.direccion = evento.ciudad;

@@ -1,10 +1,15 @@
+<ion-header [translucent]="true">
+  <ion-toolbar style="padding-top: var(--ion-safe-area-top); padding-inline: 10px;">
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true">
   <ion-card-content class="card-content">
-    <ion-searchbar style="padding-top: 60px;" placeholder="Buscar" [(ngModel)]="searchTerm" (ionInput)="buscarTatuador()"></ion-searchbar>
+    <ion-searchbar style="padding-top: 60px;" placeholder="{{ 'PLACEHOLDER' | translate }}" [(ngModel)]="searchTerm" (ionInput)="buscarTatuador()"></ion-searchbar>
     <ion-card>
      <ion-card-header (click)="toggleFormulario()" style="cursor: pointer;">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>Más filtros</h2>
+        <h2>{{ "MORE_FILTERS" | translate }}</h2>
         <ion-icon [name]="mostrarFormulario ? 'remove-outline' : 'add-outline'"></ion-icon>
       </div>
     </ion-card-header>
@@ -20,18 +25,18 @@
             <img [src]="estilo.imagen" />
           </ion-avatar>
           
-          <p style="font-size: 12px; margin-top: 5px; width: 80px; white-space: normal;">{{ estilo.nombre }}</p>
+          <p style="font-size: 12px; margin-top: 5px; width: 80px; white-space: normal;">{{ ("STYLE." + estilo.nombre) | translate }}</p>
         </div>
       </div>
      <div *ngIf="resultadosBusqueda && resultadosBusqueda.length === 0 && estiloSeleccionado">
         <ion-item lines="none" style="text-align: center; color: gray; margin-top: 20px;">
-          No se encontraron tatuadores con el estilo seleccionado.
+         {{ "NO_RESULTS_STYLE" | translate }}
         </ion-item>
       </div>
       
     
       <div *ngIf="resultadosBusqueda && resultadosBusqueda.length > 0">
-        <ion-label class="titulo-grande"><strong>Resultado Búsqueda</strong></ion-label>
+        <ion-label class="titulo-grande"><strong>{{ "SEARCH_RESULTS" | translate }}</strong></ion-label>
         <div class="horizontal-scroll">
           <div class="cards-row" *ngFor="let tipo of resultadosBusqueda" [routerLink]="['/tatuador', tipo.uid]">
             
@@ -43,7 +48,7 @@
               <ion-card-header>
                 <ion-row class="ion-align-items-center ion-justify-content-between">
                   <ion-col size="auto">
-                    <ion-card-title class="titulo-tienda">{{ tipo.nombreTienda }}</ion-card-title>
+                    <ion-card-title class="titulo-tienda"> {{ tipo.nombreTienda }} </ion-card-title>
                   </ion-col>
                   <ion-col size="auto">
                     <ion-label>
@@ -61,7 +66,7 @@
               <!-- Estilos del tatuador -->
               <ion-card-content *ngIf="tipo.estilos && tipo.estilos.length > 0">
                 <ion-chip color="primary" outline="true">
-                  {{ tipo.estilos[0] }}
+                  {{ ("STYLE." + tipo.estilos[0]) | translate }}
                 </ion-chip>
                 <ion-chip *ngIf="tipo.estilos.length > 1" color="primary" outline="true">
                   +{{ tipo.estilos.length - 1 }}
@@ -72,9 +77,35 @@
         </div>
       </div>
     </ion-card>
+    <!-- Spinner de carga -->
+    <div *ngIf="isLoading" class="loading-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 20px;">
+      <p class="loading-text" style="margin-top: 10px; text-align: center;">
+        {{ 'LOADING_TATTOO_ARTISTS' | translate }}
+      </p>
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+
+    <!-- Mensaje de error -->
+    <div *ngIf="isError && !isLoading" class="center-card">
+      <ion-card>
+        <ion-card-content class="error-content">
+          <ion-label class="error-label">
+            {{ 'ERROR_LOADING_TATTOO_ARTISTS' | translate }}
+          </ion-label>
+
+          <ion-button 
+            fill="outline" 
+            (click)="reintentarCarga()" 
+            class="retry-button">
+            {{ 'RETRY' | translate }}
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
     <!-- Recomendados -->
       <div *ngIf="recomendado.length > 0 && (!resultadosBusqueda || resultadosBusqueda.length === 0)">
-        <ion-label class="titulo-grande">Recomendados</ion-label>
+        <ion-label class="titulo-grande">{{ "RECOMMENDED" | translate }}</ion-label>
         <div class="horizontal-scroll">
           <div class="cards-row" *ngFor="let tipo of recomendado" [routerLink]="['/tatuador', tipo.uid]">
             <ion-card class="user-card">
@@ -83,7 +114,7 @@
               <ion-card-header>
                 <ion-row class="ion-align-items-center ion-justify-content-between">
                   <ion-col size="auto">
-                    <ion-card-title class="titulo-tienda">{{ tipo.nombreTienda }}</ion-card-title>
+                    <ion-card-title class="titulo-tienda"> {{ tipo.nombreTienda }} </ion-card-title>
                   </ion-col>
                   <ion-col size="auto">
                     <ion-label>{{ tipo.promedio?.toFixed(1) || 'SV' }}</ion-label>
@@ -95,7 +126,7 @@
                 </div>
               </ion-card-header>
               <ion-card-content *ngIf="tipo.estilos && tipo.estilos.length > 0">
-                <ion-chip color="primary" outline="true">{{ tipo.estilos[0] }}</ion-chip>
+                <ion-chip color="primary" outline="true">{{ ("STYLE." + tipo.estilos[0]) | translate }}</ion-chip>
                 <ion-chip *ngIf="tipo.estilos.length > 1" color="primary" outline="true">
                   +{{ tipo.estilos.length - 1 }}
                 </ion-chip>
@@ -107,7 +138,7 @@
 
           <!-- Cerca de ti -->
       <div *ngIf="cerca.length > 0 && (!resultadosBusqueda || resultadosBusqueda.length === 0)">
-        <ion-label class="titulo-grande">Cerca de ti</ion-label>
+        <ion-label class="titulo-grande">{{ "NEAR_YOU" | translate }}</ion-label>
         <div class="horizontal-scroll">
           <div class="cards-row" *ngFor="let tipo of cerca" [routerLink]="['/tatuador', tipo.uid]">
             <ion-card class="user-card">
@@ -116,7 +147,7 @@
               <ion-card-header>
                 <ion-row class="ion-align-items-center ion-justify-content-between">
                   <ion-col size="auto">
-                    <ion-card-title class="titulo-tienda">{{ tipo.nombreTienda }}</ion-card-title>
+                    <ion-card-title class="titulo-tienda"> {{ tipo.nombreTienda }} </ion-card-title>
                   </ion-col>
                   <ion-col size="auto">
                     <ion-label>{{ tipo.promedio?.toFixed(1) || 'SV' }}</ion-label>
@@ -128,7 +159,7 @@
                 </div>
               </ion-card-header>
               <ion-card-content *ngIf="tipo.estilos && tipo.estilos.length > 0">
-                <ion-chip color="primary" outline="true">{{ tipo.estilos[0] }}</ion-chip>
+                <ion-chip color="primary" outline="true">{{ ("STYLE." + tipo.estilos[0]) | translate }}</ion-chip>
                 <ion-chip *ngIf="tipo.estilos.length > 1" color="primary" outline="true">
                   +{{ tipo.estilos.length - 1 }}
                 </ion-chip>
@@ -140,7 +171,7 @@
 
       <!-- Valoración -->
       <div *ngIf="valoracion.length > 0 && (!resultadosBusqueda || resultadosBusqueda.length === 0)">
-        <ion-label class="titulo-grande">Valoracion</ion-label>
+        <ion-label class="titulo-grande">{{ "TOP_RATED" | translate }}</ion-label>
         <div class="horizontal-scroll">
           <div class="cards-row" *ngFor="let tipo of valoracion" [routerLink]="['/tatuador', tipo.uid]">
             <ion-card class="user-card">
@@ -149,7 +180,7 @@
               <ion-card-header>
                 <ion-row class="ion-align-items-center ion-justify-content-between">
                   <ion-col size="auto">
-                    <ion-card-title class="titulo-tienda">{{ tipo.nombreTienda }}</ion-card-title>
+                    <ion-card-title class="titulo-tienda"> {{ tipo.nombreTienda }} </ion-card-title>
                   </ion-col>
                   <ion-col size="auto">
                     <ion-label>{{ tipo.promedio?.toFixed(1) || 'SV' }}</ion-label>
@@ -161,7 +192,7 @@
                 </div>
               </ion-card-header>
               <ion-card-content *ngIf="tipo.estilos && tipo.estilos.length > 0">
-                <ion-chip color="primary" outline="true">{{ tipo.estilos[0] }}</ion-chip>
+                <ion-chip color="primary" outline="true">{{ ("STYLE." + tipo.estilos[0]) | translate }}</ion-chip>
                 <ion-chip *ngIf="tipo.estilos.length > 1" color="primary" outline="true">
                   +{{ tipo.estilos.length - 1 }}
                 </ion-chip>
@@ -171,7 +202,22 @@
         </div>
       </div>
 
-
+      <!-- Mensaje si no hay resultados -->
+      <div *ngIf="
+        (!recomendado || recomendado.length === 0) &&
+        (!cerca || cerca.length === 0) &&
+        (!valoracion || valoracion.length === 0) &&
+        (!resultadosBusqueda || resultadosBusqueda.length === 0)
+      " class="no-result-container">
+        <ion-card class="no-result-message">
+          <ion-card-header>
+            <ion-card-title>{{ "NO_TATTOO_ARTISTS_FOUND" | translate }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+             {{ "CLICK_MAP_ICON" | translate }}
+          </ion-card-content>
+        </ion-card>
+      </div>
 
     </ion-card-content>
     <ion-button class="floating-right big-button" shape="round" fill="solid" color="dark" routerLink="/mapa">
@@ -181,4 +227,3 @@
       <ion-icon slot="icon-only" name="pricetag-outline"></ion-icon>
     </ion-button>
 </ion-content>
-

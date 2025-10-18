@@ -7,6 +7,8 @@ import 'hammerjs';
 import { FirestoreService } from 'src/app/service/firestore.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NotificacionService } from 'src/app/service/notificacion.service';
+import { TranslateService } from '@ngx-translate/core';
+import { Storage } from '@ionic/storage-angular';
 
 
 @Component({
@@ -42,8 +44,9 @@ export class PerfilPage implements OnInit {
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private alertController: AlertController,
               public firestore: FirestoreService, private loadingCtrl: LoadingController, private afAuth: AngularFireAuth, public toast: ToastController,
-               public notificacion: NotificacionService
+               public notificacion: NotificacionService, public translate: TranslateService, public storage: Storage
   ) { 
+    this.translate.setDefaultLang('es');
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -54,6 +57,11 @@ export class PerfilPage implements OnInit {
         this.resetearEstado();
       }
     });
+  }
+
+  async cambiarIdioma(lang: string){
+    this.translate.use(lang);
+    await this.storage.set('app_language', lang);
   }
 
   resetearEstado() {
@@ -94,7 +102,7 @@ export class PerfilPage implements OnInit {
       .then((userCredenciales) => {
         // Inicio de sesión exitoso
 
-        this.presentToast("Inicio de sesion con éxito", 'success');
+        this.presentToast(this.translate.instant('LOGIN.SUCCESS'),'success');
         const uid = userCredenciales.user?.uid;
         if(uid){
           this.notificacion.inicializar(uid);
@@ -102,7 +110,7 @@ export class PerfilPage implements OnInit {
       })
       .catch(() => {
         // Error durante el inicio de sesión
-        this.presentToast("Contraseña o email son incorrectos", 'danger');
+        this.presentToast(this.translate.instant('LOGIN.ERROR'), 'danger');
       });
   }
 
@@ -154,7 +162,7 @@ export class PerfilPage implements OnInit {
 
   async crearUsuario(){
     const loading = await this.loadingCtrl.create({
-      message: 'Se está terminando de crear tu perfil, por favor espera...',
+      message: this.translate.instant('LOGIN.CREATING_PROFILE'),
       spinner: 'circles',
       backdropDismiss: false
     });
@@ -189,21 +197,21 @@ export class PerfilPage implements OnInit {
     if (user) {
       if (!user.emailVerified) {
           const alert = await this.alertController.create({
-            header: '¿Quieres cambiar la contraseña?',
-            message: 'Te llegara un correo para cambiar la contraseña, y luego tendras que volver a Iniciar Sesion',
+            header: this.translate.instant('LOGIN.CHANGE_HEADER'),
+            message: this.translate.instant('LOGIN.CHANGE_MESSAGE'),
             buttons: [
               {
-                text: 'Cancelar',
+                text: this.translate.instant('LOGIN.CANCEL'),
                 role: 'cancel',
                 handler: async () => {
 
                 }
               },
               {
-                text: 'Aceptar',
+                text: this.translate.instant('LOGIN.ACCEPT'),
                 handler: async () => {
                     await this.auth.resetPassword(this.correo);
-                    this.presentToast('Se te ha enviado el correo para cambiar la contraseña.', 'success');
+                    this.presentToast(this.translate.instant('LOGIN.MAIL_SENT'), 'success');
                   }
                 }
             ],
@@ -213,9 +221,9 @@ export class PerfilPage implements OnInit {
       }
     } else {
       const errorAlert = await this.alertController.create({
-        header: 'Error',
-        message: 'No se pudo obtener el usuario actual. Por favor, asegúrate de estar autenticado.',
-        buttons: ['OK'],
+        header: this.translate.instant('LOGIN.ERROR_HEADER'),
+        message: this.translate.instant('LOGIN.ERROR_MESSAGE'),
+        buttons: [this.translate.instant('LOGIN.OK')],
       });
       await errorAlert.present();
     }
@@ -245,7 +253,7 @@ export class PerfilPage implements OnInit {
 
   async subirFotoAvatar(file: File) {
     try {
-      const loading = await this.mostrarLoading('Subiendo avatar...');
+      const loading = await this.mostrarLoading(this.translate.instant('AVATAR.UPLOADING'));
       // Subes la imagen y recibes el URL (un string)
       const urls = await this.user.subirImagen([file], this.usuario.uid); // urls: string[]
 
@@ -261,15 +269,15 @@ export class PerfilPage implements OnInit {
       await this.user.actualizarAvatar(this.usuario.uid,this.usuario.avatar);
 
       loading.dismiss();
-      this.presentToast('Avatar actualizado.', 'success');
+      this.presentToast(this.translate.instant('AVATAR.UPDATED'), 'success');
     } catch (error) {
       console.error(error);
-      this.presentToast('Error al subir avatar.', 'danger');
+      this.presentToast(this.translate.instant('AVATAR.ERROR'),'danger');
     }
   }
 
 
-  async mostrarLoading(mensaje: string = 'Procesando, por favor espera...') {
+  async mostrarLoading(mensaje: string = this.translate.instant('LOADING.PROCESSING')) {
     const loading = await this.loadingCtrl.create({
       message: mensaje,
       spinner: 'circles',
@@ -286,25 +294,28 @@ export class PerfilPage implements OnInit {
     const buttons: any[] = [];
     buttons.push(
       {
-        text: tieneAvatar ? 'Actualizar Avatar' : 'Subir Avatar',
+        text: tieneAvatar ? this.translate.instant('AVATAR.UPDATE') : this.translate.instant('AVATAR.UPLOAD'),
         handler: () => {
           this.fileInput.nativeElement.click();
         },
       },
       {
-        text: 'Cancelar',
+        text:  this.translate.instant('AVATAR.CANCEL'),
         role: 'cancel'
       }
     );
 
     const alert = await this.alertController.create({
-      header: 'Avatar',
-      message: tieneAvatar ? '¿Qué deseas hacer con tu foto de perfil?' : 'No tienes avatar. ¿Deseas subir una foto?',
+     header: this.translate.instant('AVATAR.TITLE'),
+      message: tieneAvatar
+        ? this.translate.instant('AVATAR.OPTIONS')
+        : this.translate.instant('AVATAR.NO_AVATAR'),
       buttons
     });
 
     await alert.present();
   }
+
 
 
 }

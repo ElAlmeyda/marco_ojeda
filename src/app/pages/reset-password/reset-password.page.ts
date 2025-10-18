@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-reset-password',
@@ -19,7 +20,7 @@ export class ResetPasswordPage implements OnInit {
     private afAuth: AngularFireAuth,
     private route: ActivatedRoute,
     private router: Router,
-    private alertController: AlertController,
+    private alertController: AlertController, public translate:TranslateService
   ) {
   }
 
@@ -44,16 +45,16 @@ export class ResetPasswordPage implements OnInit {
     try {
       await this.afAuth.confirmPasswordReset(this.oobCode, this.newPassword);
       const alert = await this.alertController.create({
-        header: 'Éxito',
-        message: 'Tu contraseña ha sido restablecida.',
-        buttons: ['OK']
+       header: this.translate.instant('ALERT.SUCCESS'),
+        message: this.translate.instant('RESET_PASSWORD.SUCCESS_MESSAGE'),
+        buttons: [this.translate.instant('ALERT.OK')]
       });
       await alert.present();
     } catch (error) {
       const alert = await this.alertController.create({
-        header: 'Error',
-        message: 'Hubo un error al restablecer la contraseña.',
-        buttons: ['OK']
+        header: this.translate.instant('ALERT.ERROR'),
+        message: this.translate.instant('RESET_PASSWORD.ERROR_MESSAGE'),
+        buttons: [this.translate.instant('ALERT.OK')]
       });
       await alert.present();
     }
