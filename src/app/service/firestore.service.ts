@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
+import { Observable, catchError, forkJoin, from, map, of, switchMap, tap } from 'rxjs';
 import { idToken } from '@angular/fire/auth';
 import { Cita, Tatuador } from '../model';
-import { getDownloadURL, getStorage, listAll, ref } from 'firebase/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -214,7 +213,7 @@ export class FirestoreService {
   }
  
   updateDocAvatar(userId: string, avatarUrl: string): Promise<void> {
-    const avatarDocRef = this.database.doc(`Tatuador/${userId}/avatar/avatar`);
+    const avatarDocRef = this.database.doc(`Usuarios/${userId}/avatar/avatar`);
 
     const data = {
       url: avatarUrl // 👈 solo una imagen
@@ -568,7 +567,18 @@ export class FirestoreService {
       .valueChanges({ idField: 'id' });
   }
 
-   isPremium(uid: string): Observable<boolean> {
+  obtenerTodosLosBocetos(): Observable<any[]> {
+    // collectionGroup busca en todas las subcolecciones llamadas 'bocetos'
+    return this.database.collectionGroup('bocetos').valueChanges({ idField: 'id' });
+  }
+
+  getEvento(): Observable<any[]> {
+    return this.database
+      .collection(`Eventos/`)
+      .valueChanges({ idField: 'id' });
+  }
+
+  isPremium(uid: string): Observable<boolean> {
     return this.database.collection('Usuarios').doc(uid).valueChanges().pipe(
       map((data: any) => {
         return data?.isPremium === true;

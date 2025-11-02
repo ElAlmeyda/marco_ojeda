@@ -75,6 +75,19 @@ export class CitaPage implements OnInit {
     }
   }
 
+  tipoKey(tipo: string): string {
+    const map: { [key: string]: string } = {
+      'Chico': 'SIZE_SMALL',
+      'Mediano': 'SIZE_MEDIUM',
+      'Grande': 'SIZE_LARGE',
+      'Proyecto': 'PROJECT',
+      'Retoque': 'TOUCH_UP',
+      'Sesion': 'SESSION',
+      'Piercing': 'PIERCING'
+    };
+    return map[tipo] || tipo;
+  }
+
   async eliminarCita(cita: Cita, uidCita: string) {
   console.log('Borrar cita:', cita);
 

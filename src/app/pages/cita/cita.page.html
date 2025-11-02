@@ -40,12 +40,15 @@
           <p *ngIf="cita.estado !== 'Editada'">{{ cita.dia | date:'dd/MM/yyyy' }} - {{ cita.hora }}</p>
           <p *ngIf="cita.estado === 'Editada'" style="color:red">{{ 'NEW_DATE' | translate }}: {{ cita.dia | date:'dd/MM/yyyy' }} - {{ cita.hora }}</p>
           <p *ngIf="cita.consulta" style="color:green">{{ cita.consulta }}</p>
-          <p>{{ cita.estilo }} - {{cita.tipo}}</p>
+          <p *ngIf="cita.tipo !== 'Piercing'">{{ 'STYLE.' + cita.estilo | translate }} - {{ 'APPOINTMENT.' + tipoKey(cita.tipo) | translate }}</p>
+          <p *ngIf="cita.tipo === 'Piercing'">
+            {{ cita.tipo }} - {{ 'APPOINTMENT.' + cita.zona | translate }}
+          </p>
           <p *ngIf="cita.direccion" (click)="abrirMaps(cita.direccion)" style="white-space: normal; word-break: break-word;">
             {{ cita.direccion }}
           </p>
           <p [ngStyle]="{'color': cita.estado === 'Pendiente' ? 'red' : (cita.estado === 'Aceptado' ? 'green' : 'black')}">
-            {{ cita.estado }}
+            {{ 'STATUS.' + cita.estado | translate }}
           </p>
         </ion-card-content>
 

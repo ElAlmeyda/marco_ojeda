@@ -1,42 +1,81 @@
-
-
 <ion-content [fullscreen]="true">
-  <div *ngIf="usuario.uid === ''" class="center-card">
-    <ion-card>
-      <ion-card-content>
-        <ion-label class="center-text">
-          {{ 'FAVS.LOGIN_REQUIRED' | translate }}
-        </ion-label>
-        <ion-button style="white-space: normal;" expand="block" fill="outline" [routerLink]="['/tabs/perfil']" >
-          {{ 'FAVS.WANT_TO_HAVE_FAVORITES' | translate }}
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
-  </div>
-  <ion-list>
-    <ion-list-header>
-      <ion-label>
-        <h2 style="font-weight: bold;">{{ 'FAVS.HEADER' | translate }}</h2>
-      </ion-label>
-    </ion-list-header>
-    <ion-item lines="none" *ngFor="let fav of favoritos" (click)="irAlTatuador(fav)">
-      <ion-avatar style="margin-right: 12px;">
-        <ion-img [src]="fav.avatar || 'assets/icon/sin_avatar.png'"></ion-img>
-      </ion-avatar>
-      <ion-label>{{fav.nombreTienda}}</ion-label>
-      <ion-icon slot="end" name="star" *ngIf="fav.fav" (click)="disfav(fav); $event.stopPropagation()"></ion-icon>
-      <ion-icon slot="end" name="star-outline" *ngIf="!fav.fav" (click)="like(fav); $event.stopPropagation()"></ion-icon>
-    </ion-item>
 
-    <ion-item lines="none" *ngIf="favoritos && favoritos.length === 0">
-      <ion-label style="display: flex; justify-content: center; margin-top: 20px;">
-          {{ 'FAVS.NO_FAVORITES' | translate }}
-        </ion-label>
-    </ion-item>
-    <div style="display: flex; justify-content: center; margin-top: 20px;" *ngIf="favoritos && favoritos.length === 0">
-      <ion-button fill="outline" [routerLink]="['/tabs/folder', usuario.uid]" style="display: flex; justify-content: center; margin-top: 20px; --border-radius: 12px;">
-           {{ 'FAVS.SEARCH_ARTISTS' | translate }}
-        </ion-button>
+  <!-- Segmentos -->
+  <ion-segment [(ngModel)]="segmentoSeleccionado" value="tatuadores" style="margin-top: 25%;">
+    <ion-segment-button value="tatuadores">
+      <ion-label>{{ 'FAVS.TATTOO_ARTISTS' | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="fotos">
+      <ion-label>{{ 'FAVS.PHOTOS' | translate }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- 🔹 SEGMENTO: TATUADORES -->
+  <ng-container *ngIf="segmentoSeleccionado === 'tatuadores'">
+    <div *ngIf="usuario.uid === ''" class="center-card">
+      <ion-card>
+        <ion-card-content>
+          <ion-label class="center-text">
+            {{ 'FAVS.LOGIN_REQUIRED' | translate }}
+          </ion-label>
+          <ion-button style="white-space: normal;" expand="block" fill="outline" [routerLink]="['/tabs/perfil']">
+            {{ 'FAVS.WANT_TO_HAVE_FAVORITES' | translate }}
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
     </div>
-  </ion-list>
+
+    <div *ngIf="favoritos && favoritos.length === 0 && usuario.uid !== ''" class="center-card">
+      <ion-card>
+        <ion-card-content>
+          <ion-label style="display: flex; justify-content: center; margin-top: 20px;">
+            {{ 'FAVS.NO_FAVORITES' | translate }}
+          </ion-label>
+          <ion-button fill="outline" [routerLink]="['/tabs/folder', usuario.uid]"
+            style="display: flex; justify-content: center; margin-top: 20px; --border-radius: 12px;">
+            {{ 'FAVS.SEARCH_ARTISTS' | translate }}
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <ion-list *ngIf="favoritos && favoritos.length !== 0">
+      <ion-list-header>
+        <ion-label>
+          <h2 style="font-weight: bold;">{{ 'FAVS.HEADER' | translate }}</h2>
+        </ion-label>
+      </ion-list-header>
+      <ion-item lines="none" *ngFor="let fav of favoritos" (click)="irAlTatuador(fav)">
+        <ion-avatar style="margin-right: 12px;">
+          <ion-img [src]="fav.avatar || 'assets/icon/sin_avatar.png'"></ion-img>
+        </ion-avatar>
+        <ion-label>{{ fav.nombreTienda }}</ion-label>
+        <ion-icon slot="end" name="star" *ngIf="fav.fav" (click)="disfav(fav); $event.stopPropagation()"></ion-icon>
+        <ion-icon slot="end" name="star-outline" *ngIf="!fav.fav"
+          (click)="like(fav); $event.stopPropagation()"></ion-icon>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <!-- 🔹 SEGMENTO: FOTOS -->
+  <ng-container *ngIf="segmentoSeleccionado === 'fotos'">
+    <div class="center-card" *ngIf="!fotosFavoritas || fotosFavoritas.length === 0">
+      <ion-card>
+        <ion-card-content>
+          <ion-label style="display: flex; justify-content: center; margin-top: 20px;">
+            {{ 'FAVS.NO_FAVORITE_PHOTOS' | translate }}
+          </ion-label>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <ion-grid *ngIf="fotosFavoritas && fotosFavoritas.length > 0">
+      <ion-row>
+        <ion-col size="6" *ngFor="let foto of fotosFavoritas">
+          <ion-img [src]="foto.url"></ion-img>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+
 </ion-content>

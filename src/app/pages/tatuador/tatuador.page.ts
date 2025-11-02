@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, NavController, Platform, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { Resena, Tatuador, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
+import { Clipboard } from '@capacitor/clipboard';
 
 @Component({
   selector: 'app-tatuador',
@@ -68,8 +70,12 @@ export class TatuadorPage implements OnInit {
   mensajeResena: string = '';
   resenaExistente: boolean = false;
 
+  resenaActual = 0;
+
+  segmentoSeleccionado: string = 'info';
+
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private route: ActivatedRoute, public tiendaTatuador: TiendaService, public toast: ToastController,
-    private router: Router, private alertController: AlertController, public translate: TranslateService
+    private router: Router, public navCtrl: NavController, private alertController: AlertController, public translate: TranslateService, private platform: Platform, public toastCtrl: ToastController
   ) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
@@ -86,6 +92,26 @@ export class TatuadorPage implements OnInit {
 
     this.obtenerTatuador();
   }
+
+
+  volver(){
+    this.navCtrl.back();
+  }
+
+
+  siguienteResena() {
+    if (this.resenas.length > 0) {
+      this.resenaActual = (this.resenaActual + 1) % this.resenas.length;
+    }
+  }
+
+  anteriorResena() {
+    if (this.resenas.length > 0) {
+      this.resenaActual =
+        (this.resenaActual - 1 + this.resenas.length) % this.resenas.length;
+    }
+  }
+  
 
    async obtenerUsuario() {
     await this.user.getUsuarios().subscribe(() => {
@@ -361,4 +387,15 @@ export class TatuadorPage implements OnInit {
     window.open(url, '_blank');
   }
 
+  async compartirPerfil() {
+    const enlace = `https://itattoo-9f978.web.app/tatuador/${this.usuario.uid}`;
+    await Clipboard.write({ string: enlace });
+    const toast = await this.toastCtrl.create({
+      message: '🔗 Enlace copiado al portapapeles',
+      duration: 2000,
+      position: 'bottom',
+      color: 'dark', // opcional: "primary", "light", "success", etc.
+    });
+    await toast.present();
+  }
 }

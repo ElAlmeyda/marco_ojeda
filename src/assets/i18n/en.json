@@ -62,6 +62,12 @@
     "EMAIL_LABEL": "Email Address",
     "SEND_LINK": "Send Reset Link"
   },
+  "PLACEHOLDER": "Search",
+  "STATUS": {
+    "Pendiente": "Pending",
+    "Aceptado": "Accepted",
+    "Editada": "Edited"
+  },
   "CLOSE": "Close",
   "PLAN": {
     "NO_ADS": "Ad-Free Plan"
@@ -117,6 +123,7 @@
     "Biomecánico": "Biomechanical",
     "Anime": "Anime"
   },
+  "COMMENT_PLACEHOLDER": "Write your opinion...",
   "APPOINTMENT": {
     "ACCEPT_CONDITIONS": "You must accept the terms and conditions",
     "SAVED_SUCCESS": "The appointment has been created, please wait for the tattoo artist to respond.",
@@ -144,12 +151,37 @@
     "ADD_COMMENTS": "Additional comments:",
     "UPLOAD_SKETCH": "Upload sketch (optional)",
     "ACCEPT_TERMS": "I accept the terms and conditions and the app usage policy.",
+    "ACCEPT_TATTOO_TERMS": "I have read and accept the tattoo artist's terms and conditions.",
     "BOOK": "Book Appointment",
     "NEXT": "Next",
     "NO_HOURS": "No available hours",
     "USER_NAME": "Your Name",
     "USER_PHONE": "Your Phone",
-    "USER_EMAIL": "Your Email"
+    "USER_EMAIL": "Your Email",
+    "PIERCING": "Piercing",
+    "SELECT_PIERCING": "Select a piercing",
+    "LOB": "Lobe",
+    "HELIX": "Helix",
+    "TRAGUS": "Tragus",
+    "ANTI_TRAGUS": "Anti-tragus",
+    "DAITH": "Daith",
+    "CONCH": "Conch",
+    "INDUSTRIAL": "Industrial",
+    "ROOK": "Rook",
+    "SNUG": "Snug",
+    "EYEBROW": "Eyebrow",
+    "NOSE": "Nose",
+    "SEPTUM": "Septum",
+    "LIP": "Lip",
+    "MONROE": "Monroe / Medusa",
+    "LABRET": "Labret",
+    "FRENUM": "Frenum",
+    "BELLY_BUTTON": "Belly button",
+    "NIPPLE": "Nipple",
+    "APPOINTMENT_TYPE": "Appointment type:",
+    "STYLES": "Styles:",
+    "ZONE": "Zone:",
+    "COMMENTS": "Additional comments:"
   },
   "TATTOOIST": {
     "EVENT_WARNING": "⚠️ The tattoo artist will be in {{ciudad}}"
@@ -218,7 +250,9 @@
     "HELP_CENTER": "Help Center",
     "HELP_CENTER_DESC": "Find answers to your questions.",
     "ABOUT_US": "About Us",
-    "ABOUT_US_DESC": "Learn more about our application."
+    "ABOUT_US_DESC": "Learn more about our application.",
+    "LANGUAGE": "Language",
+    "SELECT_LANGUAGE": "Select a language"
   },
   "EDIT_FIELD": "Edit {{field}}",
   "PLACEHOLDER_NAME": "Enter the new name",
@@ -437,6 +471,10 @@
       "TITLE": "Can I change my personal information?",
       "ANSWER": "Yes, you can update your personal information, including name, phone, and profile picture, from the 'Profile' section."
     }
-  }
+  },
+  "LOADING_TATTOO_ARTISTS": "Loading tattoo artists...",
+  "ERROR_LOADING_TATTOO_ARTISTS": "Error loading tattoo artists.",
+  "RETRY": "Retry",
+  "NOTICIA": "News"
 
 }

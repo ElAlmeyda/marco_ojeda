@@ -1,12 +1,22 @@
 <ion-header>
-
 </ion-header>
 
 <ion-content>
-  
-  
   <!-- Formulario de inicio de sesión centrado -->
   <div class="login-container" *ngIf="uid === ''" style="margin-top: 30%;">
+     <div class="language-wrapper">
+      <ion-item lines="none" class="language-selector">
+        <ion-select label="Language" labelPlacement="floating" [value]="translate.currentLang" (ionChange)="cambiarIdioma($event.detail.value)">
+          <ion-select-option value="es">🇪🇸</ion-select-option>
+          <ion-select-option value="en">🇬🇧</ion-select-option>
+          <ion-select-option value="ca">🏴 </ion-select-option> <!-- Bandera de Cataluña -->
+          <ion-select-option value="gl">🏴 </ion-select-option> <!-- Bandera de Galicia -->
+          <ion-select-option value="eu">🏳️ </ion-select-option> 
+          <ion-select-option value="pt">🇵🇹</ion-select-option>
+          <ion-select-option value="fr">🇫🇷</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
       <div class="center-container">
         <ion-img src="../../../assets/icon/icon.png" slot="start" class="app-logo" alt="App Logo"></ion-img>
       </div>
@@ -130,6 +140,29 @@
           </ion-label>
           <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
         </ion-item>
+
+        <ion-item>
+          <ion-label>{{ 'SETTINGS.LANGUAGE' | translate }}</ion-label>
+          <ion-select 
+            [value]="translate.currentLang" 
+            (ionChange)="cambiarIdioma($event.detail.value)" 
+            label="{{ 'SETTINGS.SELECT_LANGUAGE' | translate }}" 
+            labelPlacement="floating">
+
+            <ion-select-option value="es">🇪🇸</ion-select-option>
+            <ion-select-option value="en">🇬🇧</ion-select-option>
+            <ion-select-option value="pt">🇵🇹</ion-select-option>
+            <ion-select-option value="fr">🇫🇷</ion-select-option>
+            <ion-select-option value="de">🇩🇪</ion-select-option>
+            <ion-select-option value="it">🇮🇹</ion-select-option>
+            <ion-select-option value="ca">Català</ion-select-option> <!-- Cataluña -->
+            <ion-select-option value="gl">Galego</ion-select-option> <!-- Galicia -->
+            <ion-select-option value="eu">Euskara</ion-select-option> <!-- Euskadi -->
+            
+
+          </ion-select>
+        </ion-item>
+
 
         <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isAyuda: true }">
           <ion-label>

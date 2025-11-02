@@ -189,6 +189,14 @@ ion-content {
   transition: opacity 0.3s ease;
 }
 
+.language-wrapper {
+    position: absolute;
+    top: 30;      // ajusta según la altura que quieras
+    right: 0;    // esto lo mueve a la derecha
+    margin: 10px; // opcional, para separarlo de los bordes
+    width: 120px; // opcional, para controlar el ancho
+  }
+
 ion-list {
   background: transparent !important;
   margin-top: 25%;

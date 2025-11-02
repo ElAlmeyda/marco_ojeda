@@ -20,6 +20,9 @@ export class FavoritosPage implements OnInit {
     correo: '',
   };
 
+  segmentoSeleccionado: string = 'tatuadores';
+  fotosFavoritas: any[] = []; 
+
   constructor(public tiendaService: TiendaService, public firestroreAuth: FirestoreAuthService, private router: Router) {
     this.firestroreAuth.stateAuth().subscribe(async res => {
       if (res != null) {

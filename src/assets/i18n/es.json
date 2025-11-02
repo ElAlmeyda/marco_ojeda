@@ -144,13 +144,40 @@
     "ADD_COMMENTS": "Comentarios adicionales:",
     "UPLOAD_SKETCH": "Subir boceto (opcional)",
     "ACCEPT_TERMS": "Acepto los términos y condiciones y la política de uso de la app.",
+    "ACCEPT_TATTOO_TERMS": "He leído y acepto las condiciones del tatuador.",
     "BOOK": "Pedir cita",
     "NEXT": "Siguiente",
     "NO_HOURS": "No hay horas disponibles",
     "USER_NAME": "Su nombre",
     "USER_PHONE": "Su teléfono",
-    "USER_EMAIL": "Su correo"
+    "USER_EMAIL": "Su correo",
+    "PIERCING": "Piercing",
+    "SELECT_PIERCING": "Selecciona un piercing",
+    "LOB": "Lóbulo",
+    "HELIX": "Hélix",
+    "TRAGUS": "Trago",
+    "ANTI_TRAGUS": "Anti-trago",
+    "DAITH": "Daith",
+    "CONCH": "Conch",
+    "INDUSTRIAL": "Industrial",
+    "ROOK": "Rook",
+    "SNUG": "Snug",
+    "EYEBROW": "Ceja",
+    "NOSE": "Nariz",
+    "SEPTUM": "Septum",
+    "LIP": "Labio",
+    "MONROE": "Monroe / Medusa",
+    "LABRET": "Labret",
+    "FRENUM": "Frenum",
+    "BELLY_BUTTON": "Ombligo",
+    "NIPPLE": "Pezón",
+    "APPOINTMENT_TYPE": "Tipo de cita:",
+    "STYLES": "Estilos:",
+    "ZONE": "En qué zona:",
+    "COMMENTS": "Comentarios adicionales:"
   },
+  "NOTICIA": "Noticia",
+  "COMMENT_PLACEHOLDER": "Escribe tu opinión...",
   "TATTOOIST": {
     "EVENT_WARNING": "⚠️ El tatuador estará en {{ciudad}}"
   },
@@ -218,7 +245,9 @@
     "HELP_CENTER": "Centro de Ayuda",
     "HELP_CENTER_DESC": "Encuentra respuestas a tus preguntas.",
     "ABOUT_US": "Sobre Nosotros",
-    "ABOUT_US_DESC": "Conoce más acerca de nuestra aplicación."
+    "ABOUT_US_DESC": "Conoce más acerca de nuestra aplicación.",
+    "LANGUAGE": "Idioma",
+    "SELECT_LANGUAGE": "Selecciona un idioma"
   },
   "EDIT_FIELD": "Editar {{field}}",
   "PLACEHOLDER_NAME": "Ingrese el nuevo nombre",
@@ -435,5 +464,14 @@
       "TITLE": "¿Puedo cambiar mi información personal?",
       "ANSWER": "Sí, puedes actualizar tu información personal, incluyendo nombre, teléfono y foto de perfil, desde la sección 'Perfil'."
     }
+  },
+  "LOADING_TATTOO_ARTISTS": "Estamos cargando los tatuadores...",
+  "ERROR_LOADING_TATTOO_ARTISTS": "Error al cargar los tatuadores.",
+  "RETRY": "Reintentar",
+  "PLACEHOLDER": "Buscar",
+  "STATUS": {
+    "Pendiente": "Pendiente",
+    "Aceptado": "Aceptado",
+    "Editada": "Editada"
   }
 }

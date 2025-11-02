@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AdMob, InterstitialAdPluginEvents } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
 import { NavController, ToastController } from '@ionic/angular';
+import { Storage } from '@ionic/storage-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
@@ -32,7 +33,8 @@ export class PedirCitaPage implements OnInit {
     notas: '',
     tatuador: '',
     telefono: '',
-    correo: ''
+    correo: '',
+    predeterminado: ''
   };
 
   tatuador: Tatuador = {
@@ -48,8 +50,9 @@ export class PedirCitaPage implements OnInit {
   duracionCita = 0;
   uid=''
   cita: Cita = {} as Cita;consultaTrue: any;
-;
+  idiomaSeleccionado = '';
   horaSeleccionada: string = '';
+  aceptoTatuador = false;
 
   diasResumen: string = '';
   acepto= false;
@@ -73,9 +76,27 @@ export class PedirCitaPage implements OnInit {
   eventos: any[] = [];
   diasConEventos: { [fecha: string]: any } = {};
   isPremium=false;
+  piercings = [
+    "LOB","HELIX","TRAGUS","ANTI_TRAGUS","DAITH","CONCH","INDUSTRIAL",
+    "ROOK","SNUG","EYEBROW","NOSE","SEPTUM","LIP","MONROE","LABRET",
+    "FRENUM","BELLY_BUTTON","NIPPLE"
+  ];
+
+  mapLocaleIonic: { [key: string]: string } = {
+    it: 'it-IT',
+    de: 'de-DE',
+    en: 'en-US',
+    fr: 'fr-FR',
+    pt: 'pt-BR',
+    es: 'es-ES',
+    ca: 'ca-ES',       // Catalán
+    eu: 'eu-ES',       // Euskera / Vasco
+    gl: 'gl-ES'  
+  };
+preferiblemente: any;
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private route: ActivatedRoute, public tiendaTatuador: TiendaService, public toast: ToastController,
-      private router: Router, public navCtrl: NavController, public firestore: FirestoreService, public translate: TranslateService) {
+      private router: Router, public navCtrl: NavController, public firestore: FirestoreService, public translate: TranslateService, public storage: Storage) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         
@@ -99,7 +120,21 @@ export class PedirCitaPage implements OnInit {
     this.consultaTrue = params['consulta'];
     console.log('Query Params:', params);
   });
+  this.cargarIdioma();
 }
+
+
+  async cargarIdioma() {
+    const lang = await this.storage.get('app_language'); // 'it', 'de', 'en', etc.
+    if (lang) {
+      // Para ngx-translate
+      this.translate.use(lang);
+
+      // Para ion-datetime
+      this.idiomaSeleccionado = this.mapLocaleIonic[lang] || 'es-ES'; // fallback a español
+    }
+  }
+
 
   async obtenerUsuario() {
     await this.user.getUsuarios().subscribe(async () => {
@@ -257,7 +292,7 @@ export class PedirCitaPage implements OnInit {
       return;
     }
 
-    if(this.usuario.movil && this.horaSeleccionada && this.estilo && this.mensaje && this.tipo){
+    if(this.usuario.movil && this.horaSeleccionada && this.tipo){
       // Rellenar la cita
       this.cita.correo = this.usuario.correo;
       this.cita.nombreUser = this.usuario.nombre;
@@ -335,6 +370,7 @@ export class PedirCitaPage implements OnInit {
       this.datosConsulta.tamano = this.tipo
       this.datosConsulta.tatuador = this.tatuadorSeleccionado.nombre
       this.datosConsulta.ubicacion = this.zona
+      this.datosConsulta.predeterminado = this.preferiblemente
 
       try {
         // Subir boceto si existe
@@ -391,7 +427,7 @@ export class PedirCitaPage implements OnInit {
 
   volver(){
     if(this.primerPaso){
-      this.navCtrl.navigateForward(['/tatuador', this.tatuador.uid]);
+      this.navCtrl.back();
     } else {
       this.primerPaso = true;
       this.segundoPaso = false;
@@ -601,5 +637,9 @@ export class PedirCitaPage implements OnInit {
     }
   }
 
+  abrirPDF() {
+    console.log("Consentimiento", this.tatuador.consentimientoUrl);
+    window.open(this.tatuador.consentimientoUrl, '_blank');
+  }
   
 }

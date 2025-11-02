@@ -144,8 +144,8 @@ export class MapaPage implements OnInit {
               });
 
               // Cargar fotos
-              this.tiendaService.getFotosTatuador(tatuador.uid).subscribe(fotos => {
-                tatuador.foto = fotos;
+              this.tiendaService.getAvataresDeTatuador(tatuador.uid).subscribe(fotos => {
+                tatuador.avatar = fotos ?? ''; 
               });
             }
           }

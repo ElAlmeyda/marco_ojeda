@@ -8,6 +8,7 @@ import { FirestoreService } from 'src/app/service/firestore.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NotificacionService } from 'src/app/service/notificacion.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Storage } from '@ionic/storage-angular';
 
 
 @Component({
@@ -43,8 +44,9 @@ export class PerfilPage implements OnInit {
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private alertController: AlertController,
               public firestore: FirestoreService, private loadingCtrl: LoadingController, private afAuth: AngularFireAuth, public toast: ToastController,
-               public notificacion: NotificacionService, public translate: TranslateService
+               public notificacion: NotificacionService, public translate: TranslateService, public storage: Storage
   ) { 
+    this.translate.setDefaultLang('es');
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -55,6 +57,11 @@ export class PerfilPage implements OnInit {
         this.resetearEstado();
       }
     });
+  }
+
+  async cambiarIdioma(lang: string) {
+    this.translate.use(lang);
+    await this.storage.set('app_language', lang);
   }
 
   resetearEstado() {

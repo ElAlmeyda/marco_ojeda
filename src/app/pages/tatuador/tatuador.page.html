@@ -1,7 +1,8 @@
 <ion-header class="cabecera" [translucent]="true">
   <ion-toolbar style="background-color: white;">
-    <ion-icon class="toolbar-icon" name="arrow-back-outline" slot="start" [routerLink]="['/tabs/folder', usuario.uid]"></ion-icon>
+    <ion-icon class="toolbar-icon" name="arrow-back-outline" slot="start" (click)="volver()"></ion-icon>
     <h2 style="margin: 0; font-weight: bold;">{{tatuador.nombreTienda}}</h2>
+    <ion-icon class="toolbar-icon" name="share-social-outline" slot="end" (click)="compartirPerfil()"></ion-icon>
     <ion-icon class="toolbar-icon" name="star" slot="end" *ngIf="favorito" (click)="quitarFavorito()"></ion-icon>
     <ion-icon class="toolbar-icon" name="star-outline" slot="end" *ngIf="!favorito" (click)="ponerFavorito()"></ion-icon>
   </ion-toolbar>
@@ -9,22 +10,43 @@
 
 <ion-content [fullscreen]="true" class="content">
 
-  <!-- 🧑 Avatar + Ciudad + Biografía -->
+  <ion-segment [(ngModel)]="segmentoSeleccionado" value="info">
+    <ion-segment-button value="info">
+      <ion-label>{{ 'INFO' | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="fotos">
+      <ion-label>{{ 'PHOTOS' | translate }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <ng-container *ngIf="segmentoSeleccionado === 'info'">
+    <!-- 🧑 Avatar + Ciudad + Biografía -->
   <div style="display: flex; align-items: flex-start; padding: 20px;">
-    <ion-img  [src]="avatarUrl" alt="Avatar"
-      style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-right: 15px;" (click)="verImagen(avatarUrl)" />
-      
-    <div style="flex: 1; display: flex; flex-direction: column;">
-      <!-- Fila con ciudad a la izquierda y icono a la derecha -->
+    <!-- Contenedor circular del avatar -->
+    <div style="width: 70px; height: 70px; border-radius: 50%; overflow: hidden; margin-right: 15px; flex-shrink: 0;">
+      <ion-img 
+        [src]="avatarUrl" 
+        alt="Avatar" 
+        style="width: 100%; height: 100%; object-fit: cover; display: block;" 
+        (click)="verImagen(avatarUrl)">
+      </ion-img>
+    </div>
+    
+    <!-- Contenido -->
+    <div style="flex: 1; display: flex; flex-direction: column; min-width: 0;">
+      <!-- Ciudad -->
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <p style="margin: 0; font-size: 14px; color: gray;" *ngIf="tatuador.ciudad"(click)="abrirMaps(tatuador.ciudad)">{{ tatuador.ciudad }}</p>
+        <p style="margin: 0; font-size: 14px; color: gray; cursor: pointer;" *ngIf="tatuador.ciudad" (click)="abrirMaps(tatuador.ciudad)">
+          {{ tatuador.ciudad }}
+        </p>
       </div>
       
-      <!-- ion-text debajo -->
-      <ion-text style="margin-top: 5px;">{{ tatuador.biografia }}</ion-text>
+      <!-- Biografía -->
+      <ion-text style="margin-top: 5px; word-wrap: break-word; overflow-wrap: break-word;">
+        {{ tatuador.biografia }}
+      </ion-text>
     </div>
   </div>
-
+  
   <!-- 📱 Redes sociales (espaciadas) -->
   <div style="display: flex; justify-content: center; gap: 20px; margin: 10px 0 30px;">
     <ion-icon
@@ -75,7 +97,7 @@
   <!-- 🎨 Estilos (Chips alineados horizontalmente) -->
   <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 20px;">
     <ion-chip *ngFor="let estilo of tatuador.estilos">
-      <ion-label>{{ estilo }}</ion-label>
+      <ion-label>{{ 'STYLE.' + estilo | translate }}</ion-label>
     </ion-chip>
 
     <ng-container *ngIf="!tatuador.estilos || tatuador.estilos.length === 0">
@@ -105,75 +127,77 @@
 
 
 
-  <div style="display: flex; justify-content: center; padding: 20px;">
-    <ion-button (click)="consultaPrevia()">{{ 'PRE_CONSULTATION' | translate }}</ion-button>
-    <ion-button (click)="pedirCita()">{{ 'BOOK_APPOINTMENT' | translate }}</ion-button>
+  <div style="display: flex; justify-content: center; gap: 10px; padding: 20px;">
+    <ion-button size="small" (click)="consultaPrevia()">
+      {{ 'PRE_CONSULTATION' | translate }}
+    </ion-button>
+    <ion-button size="small" (click)="pedirCita()">
+      {{ 'BOOK_APPOINTMENT' | translate }}
+    </ion-button>
   </div>
-
-
-  <!-- 🖼️ Galería de fotos -->
- <ion-grid>
-    <ion-row *ngIf="tatuador.foto">
-      <!-- Mostrar todas las fotos existentes -->
-      <ion-col size="6" *ngFor="let foto of tatuador.foto; let i = index">
-        <ion-img 
-          [src]="foto" 
-          style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; cursor: pointer;" (click)="verImagen(foto)">
-        </ion-img>
-      </ion-col>
-    </ion-row>
-    <div *ngIf="!tatuador.foto" style="display: flex; justify-content: center; padding: 20px; color: gray;">
-      {{ 'NO_PHOTOS' | translate }}
-    </div>
-  </ion-grid>
 
   <!-- 📝 Bloque de reseñas -->
   <div style="padding: 20px;">
-    <h3 style="margin-bottom: 10px;"> {{ 'REVIEWS' | translate }}</h3>
+    <!-- 🔄 Carrusel de reseñas -->
+    <div *ngIf="resenas && resenas.length > 0;"
+        style="display: flex; justify-content: center; align-items: center; position: relative;">
 
-      <!-- 🔄 Lista de reseñas existentes -->
-      <ion-card *ngFor="let resena of resenas">
-    <ion-card-header>
-      <!-- Flex container para título y estrellas -->
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <!-- Nombre del usuario -->
-        <ion-card-title style="margin: 0;">{{ resena.nombreUsuario }}</ion-card-title>
+      <!-- ⬅️ Flecha izquierda -->
+      <ion-icon *ngIf="resenas.length > 1;"
+        name="chevron-back-outline"
+        size="large"
+        (click)="anteriorResena()"
+        style="cursor: pointer; position: absolute; left: -15px; top: 50%; transform: translateY(-50%); z-index: 10;">
+      </ion-icon>
 
-        <!-- Estrellas alineadas a la derecha -->
-        <ion-card-subtitle style="margin: 0;">
-          <ion-icon
-            *ngFor="let star of [1,2,3,4,5]"
-            [name]="(resena.estrella || 0) >= star ? 'star' : 'star-outline'"
-            style="font-size: 20px; cursor: pointer; color: gold;">
-          </ion-icon>
-        </ion-card-subtitle>
-      </div>
-    </ion-card-header>
+      <!-- 💬 Card centrado -->
+      <ion-card *ngIf="resenas[resenaActual] as resena"
+                style="width: 80%; max-width: 500px; transition: opacity 0.5s ease; border-radius: 12px;">
+        <ion-card-header>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <ion-card-title style="margin: 0;">{{ resena.nombreUsuario }}</ion-card-title>
+            <ion-card-subtitle style="margin: 0;">
+              <ion-icon
+                *ngFor="let star of [1,2,3,4,5]"
+                [name]="(resena.estrella || 0) >= star ? 'star' : 'star-outline'"
+                style="font-size: 20px; color: gold;">
+              </ion-icon>
+            </ion-card-subtitle>
+          </div>
+        </ion-card-header>
 
-    <ion-card-content>
-      <!-- Texto de la reseña -->
-      <p>{{ resena.mensaje }}</p>
+        <ion-card-content>
+          <p>{{ resena.mensaje }}</p>
 
-      <!-- 📷 Fotos de la reseña -->
-      <div *ngIf="resena.imagen && resena.imagen.length > 0" style="margin-top: 10px;">
-        <ion-grid>
-          <ion-row>
-            <ion-col size="6" *ngFor="let foto of resena.imagen">
-              <ion-img [src]="foto" style="border-radius: 8px; max-height: 150px; object-fit: cover;" (click)="verImagen(foto)"></ion-img>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </div>
-    </ion-card-content>
-  </ion-card>
+          <!-- 📷 Fotos dentro de la reseña -->
+          <div *ngIf="resena.imagen && resena.imagen.length > 0" style="margin-top: 10px;">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="6" *ngFor="let foto of resena.imagen">
+                  <ion-img
+                    [src]="foto"
+                    style="border-radius: 8px; max-height: 150px; object-fit: cover; cursor: pointer;"
+                    (click)="verImagen(foto)"
+                  ></ion-img>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-card-content>
+      </ion-card>
 
-  <ion-modal [isOpen]="imagenSeleccionada !== null">
-    <ng-template>
-      <div  (click)="cerrarImagen()" style="display: flex; justify-content: center; align-items: center; height: 100%; background: black;">
-        <img [src]="imagenSeleccionada" style="max-width: 100%; max-height: 100%;" />
-      </div>
-    </ng-template>
-  </ion-modal>
+      <!-- ➡️ Flecha derecha -->
+      <ion-icon *ngIf="resenas.length > 1;"
+        name="chevron-forward-outline"
+        size="large"
+        (click)="siguienteResena()"
+        style="cursor: pointer; position: absolute; right: -15px; top: 50%; transform: translateY(-50%); z-index: 10;">
+      </ion-icon>
+    </div>
+
+
+
+ 
 
     <!-- Si no hay reseñas -->
     <div *ngIf="!resenas || resenas.length === 0" style="color: gray; text-align: center;">
@@ -199,7 +223,7 @@
       <!-- Mensaje -->
       <ion-textarea
         [(ngModel)]="mensajeResena"
-        placeholder="Escribe tu opinión..."
+        placeholder="{{ 'COMMENT_PLACEHOLDER' | translate }}" 
         autoGrow="true">
       </ion-textarea>
 
@@ -230,5 +254,36 @@
       </ion-button>
     </div>
   </div>
+  </ng-container>
+
+  
+
+  <ng-container *ngIf="segmentoSeleccionado === 'fotos'">
+    <ion-grid>
+      <ion-row *ngIf="tatuador.foto && tatuador.foto.length > 0; else noFotos">
+        <ion-col size="6" *ngFor="let foto of tatuador.foto">
+          <ion-img 
+            [src]="foto" 
+            style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; cursor: pointer;"
+            (click)="verImagen(foto)">
+          </ion-img>
+        </ion-col>
+      </ion-row>
+
+      <ng-template #noFotos>
+        <div style="display: flex; justify-content: center; padding: 20px; color: gray;">
+          {{ 'NO_PHOTOS' | translate }}
+        </div>
+      </ng-template>
+    </ion-grid>
+
+      <ion-modal [isOpen]="imagenSeleccionada !== null">
+        <ng-template>
+          <div  (click)="cerrarImagen()" style="display: flex; justify-content: center; align-items: center; height: 100%; background: black;">
+            <img [src]="imagenSeleccionada" style="max-width: 100%; max-height: 100%;" />
+          </div>
+        </ng-template>
+      </ion-modal>
+  </ng-container>
 
 </ion-content>

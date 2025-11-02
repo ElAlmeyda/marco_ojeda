@@ -25,6 +25,7 @@ export class FolderPage implements OnInit {
   lonUsuario: number = 0;    // Longitud del usuario
   R = 6371;
   uid=''
+  isLoading =false;
   estiloSeleccionado: string | null = null;
   estilos = [
     { nombre: 'Realismo', imagen: 'assets/estilos/realismo.jpg' },
@@ -48,6 +49,7 @@ export class FolderPage implements OnInit {
   filtroValoracion: boolean = false;
   filtroCercania: boolean = false;
   mostrarFormulario=false;
+  isError=false;
 
   constructor(public tiendaService: TiendaService, public firestroreAuth: FirestoreAuthService, public ubicacion: UbicacionService, public firestore: FirestoreService) {
     this.firestroreAuth.stateAuth().subscribe(async res => {
@@ -68,6 +70,8 @@ export class FolderPage implements OnInit {
   
   async obtenerUbicacionYFiltrarTatuadores() {
     try {
+      this.isLoading = true;
+      this.isError = false;
       // 1. Obtener la ubicación del usuario
       const { latitude, longitude } = await this.ubicacion.obtenerUbicacionPrimero();
 
@@ -78,7 +82,14 @@ export class FolderPage implements OnInit {
       // Aquí puedes hacer lo que necesites con los tatuadores cercanos (mostrar en UI, etc.)
     } catch (error) {
       console.error('Error al obtener tatuadores cercanos:', error);
+      this.isError = true;
+    } finally {
+      this.isLoading = false;
     }
+  }
+
+  reintentarCarga() {
+   this.obtenerUbicacionYFiltrarTatuadores();
   }
 
   async cargarTatuadores() {
@@ -106,9 +117,9 @@ export class FolderPage implements OnInit {
           }
 
           // Obtener la primera foto como promesa
-          const fotos: any[] = await firstValueFrom(this.tiendaService.getFotosTatuador(tatuador.uid));
-          tatuador.foto = fotos.length > 0 ? [fotos[0]] : [];
-
+          this.tiendaService.getAvataresDeTatuador(tatuador.uid).subscribe(fotos => {
+            tatuador.avatar = fotos ?? ''; 
+          });
           return tatuador;
         })
       );
@@ -127,8 +138,6 @@ export class FolderPage implements OnInit {
       console.error('Error cargando tatuadores:', error);
     }
   }
-
-
 
   // Filtrar tatuadores cercanos por ubicación
   filtrarTatuadoresCercanos(tatuadores: any[]) {
@@ -222,8 +231,7 @@ export class FolderPage implements OnInit {
       );
 
     } else {
-      // Si no hay estilo seleccionado, mostrar todos
-      this.resultadosBusqueda = this.todosTatuadores;
+       this.cargarTatuadores();
     }
   }
 

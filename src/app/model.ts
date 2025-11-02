@@ -33,6 +33,7 @@ export interface Tatuador {
     twitter?: string;
     distancia?: string;
     web?: string;
+    consentimientoUrl?: string;
     trabajadores?: string[];
     fechaDisponibleDesde?: string;
     promedio?: number;

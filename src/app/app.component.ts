@@ -1,12 +1,12 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { UsuariosService } from './backend/usuarios.service';
 import { FirestoreAuthService } from './service/firestore-auth.service';
 import { FirestoreService } from './service/firestore.service';
 import { Cita, Usuario } from './model';
 import { NavigationEnd, Router } from '@angular/router';
 import { NotificacionService } from './service/notificacion.service';
-import { AlertController, MenuController, NavController, Platform } from '@ionic/angular';
-import { App } from '@capacitor/app';
+import { AlertController, MenuController, ModalController, NavController, Platform } from '@ionic/angular';
+import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { take } from 'rxjs';
 import { UbicacionService } from './service/ubicacion.service';
 import { AdMob, BannerAdOptions, BannerAdPosition, BannerAdSize } from '@capacitor-community/admob';
@@ -37,29 +37,16 @@ export class AppComponent {
   uid = "";
   progress = true;
   isPremiun: any;
+  deepLinkPath: string | null = null;
+  private deepLinkHandled = false;
   
-
   toggleList() {
     this.showList = !this.showList;
   }
 
   constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, public router: Router, public notificacion: NotificacionService,
-              private menu: MenuController, public storage: Storage, public translate:TranslateService, private platform: Platform, public ubicacion: UbicacionService, private navController: NavController,  public alertController: AlertController) {
-    this.auth.stateAuth().subscribe(async res => {
-      if (res != null) {
-        this.uid = res.uid;
-        await this.obtenerUsuario();
-        console.log("Uid",this.uid)
-        this.isPremiun = await this.user.isPremium(this.uid);
-        this.router.navigate(['/tabs/folder', this.uid]);
-      } else {
-        this.uid= '';
-        this.isPremiun = false;
-        this.user.changeUserLogin(false);
-        this.change = this.user.usuarioLogin;
-        this.router.navigate(['/tabs/folder', this.uid]);
-      }
-    });
+              private modalController: ModalController, private zone: NgZone, private menu: MenuController, public storage: Storage, public translate:TranslateService, private platform: Platform, public ubicacion: UbicacionService, private navController: NavController,  public alertController: AlertController) {
+    
     this.initializeApp();
 
   }
@@ -71,7 +58,7 @@ export class AppComponent {
 
       this.router.events.subscribe(event => {
         const currentRoute = this.router.url;
-        if(!this.isPremiun){
+        if (!this.isPremiun) {
           if (this.isInsideTabs(currentRoute)) {
             this.showBanner();
           } else {
@@ -79,10 +66,53 @@ export class AppComponent {
           }
         }
       });
-      this.handleBackButton();
-    });
 
-    
+      this.handleBackButton();
+
+      // Escucha deep links
+      App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
+        console.log('Deep link recibido:', event.url);
+        try {
+          const url = new URL(event.url);
+          this.deepLinkPath = url.pathname;
+        } catch (e) {
+          console.error('Error procesando deep link', e);
+        }
+      });
+
+      // Suscripción a Firebase Auth
+      this.auth.stateAuth().subscribe(async res => {
+        if (res) {
+          this.uid = res.uid;
+          await this.obtenerUsuario();
+          this.isPremiun = await this.user.isPremium(this.uid);
+
+          // Intentamos navegar a deep link si existe
+          this.tryNavigateDeepLink();
+
+          // Solo navegar al folder si no hay deep link
+          if (!this.deepLinkHandled) {
+            this.router.navigate(['/tabs/folder', this.uid]);
+          }
+        } else {
+          this.uid = '';
+          this.isPremiun = false;
+          this.user.changeUserLogin(false);
+          this.change = this.user.usuarioLogin;
+          if (!this.deepLinkHandled) {
+            this.router.navigate(['/tabs/folder', this.uid]);
+          }
+        }
+      });
+    });
+  }
+
+  private tryNavigateDeepLink() {
+    if (this.deepLinkPath && !this.deepLinkHandled) {
+      this.zone.run(() => this.router.navigateByUrl(this.deepLinkPath!));
+      this.deepLinkHandled = true;
+      this.deepLinkPath = null;
+    }
   }
 
   async showBanner() {
@@ -101,6 +131,7 @@ export class AppComponent {
   
 
   async ngOnInit() {
+   await this.storage.create();
     const savedLang = await this.storage.get('app_language');
     if (savedLang) {
       // Set default lang solo una vez
@@ -174,7 +205,24 @@ export class AppComponent {
   handleBackButton() {
     this.platform.backButton.subscribeWithPriority(10, async () => {
       const currentRoute = this.router.url; // Obtén la ruta actual
+      const modal = await this.modalController.getTop();
 
+      // Si hay un modal abierto, ciérralo
+      if (modal) {
+        modal.dismiss();
+        return; // Sal de la función para evitar que se ejecute el resto
+      }
+
+      if (currentRoute === '/inicio-sesion') {
+        App.exitApp(); // Cierra la aplicación sin mostrar alerta
+        return;
+      }
+
+      if (currentRoute.startsWith('/tatuador/')) {
+        this.navController.navigateForward(['/tabs/folder', this.uid]);
+        return
+      }
+      
       // Verifica si la ruta es una de las rutas de tabs
       if (this.isInsideTabs(currentRoute)) {
         const alert = await this.alertController.create({

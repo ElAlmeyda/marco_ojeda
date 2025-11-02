@@ -1,13 +1,56 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>eventos</ion-title>
+  <ion-toolbar style="background-color: white;">
+    <ion-icon class="toolbar-icon" name="arrow-back-outline" slot="start" (click)="volver()"></ion-icon>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">eventos</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="segment-container" *ngIf="!eventoSeleccionado">
+
+  <ion-card class="card-content" style="background-color: transparent; --background: transparent;">
+    <ion-card-header style="font-size: 25px; text-align: center;">
+        <ion-label> ¿Quieres ir a algun evento?</ion-label>
+    </ion-card-header>
+    <ion-grid>
+      <ion-row>
+        <ng-container *ngFor="let tipo of evento">
+          <ion-col size="6"> <!-- Define el tamaño de las columnas -->
+            <ion-card *ngIf="tipo.id" (click)="seleccionarEvento(tipo)">
+              <img [src]="tipo.avatar?.[0] || 'assets/icon/sin_avatar.png'" class="card-img">
+            </ion-card>
+          </ion-col>
+        </ng-container>
+      </ion-row>
+    </ion-grid>
+    <ion-label *ngIf="evento.length === 0"> No hay eventos cercanos </ion-label>
+  </ion-card>
+</ion-content>
+
+<ion-content [fullscreen]="true" class="segment-container" *ngIf="eventoSeleccionado">
+
+  <ion-card class="card-content" style="background-color: transparent; --background: transparent;">
+    <ion-card-header style="font-size: 22px; text-align: center;">
+        <ion-label>{{ eventoSeleccionado.nombre }}</ion-label>
+        <p style="font-size: 14px; margin: 2px;">{{ eventoSeleccionado.descripcion }}</p>
+        <p style="font-size: 13px; margin: 2px; padding: 2px;" (click)="abrirMaps(eventoSeleccionado.ubicacion)">
+          📍 {{ eventoSeleccionado.ubicacion }}
+        </p>
+        <p style="font-size: 13px; margin: 2px; padding: 2px;"> 🗓️ {{ eventoSeleccionado.fecha }} </p>
+      </ion-card-header>
+
+    <ion-grid>
+      <ion-row>
+        <ng-container *ngFor="let tipo of tatuadoresDelEvento">
+          <ion-col size="6"> <!-- Define el tamaño de las columnas -->
+            <ion-card *ngIf="tipo.uid">
+              <img [src]="tipo.avatar[0] || 'assets/icon/sin_avatar.png'" class="card-img">
+              <ion-card-title class="card-title">
+                {{ tipo.nombre }}
+              </ion-card-title>
+            </ion-card>
+          </ion-col>
+        </ng-container>
+      </ion-row>
+    </ion-grid>
+     <ion-label *ngIf="tatuadoresDelEvento.length === 0"> No hay tatuadores disponibles </ion-label>
+  </ion-card>
 </ion-content>
