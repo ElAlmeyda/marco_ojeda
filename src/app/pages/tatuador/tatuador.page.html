@@ -92,8 +92,6 @@
     </ion-icon>
   </div>
 
-
-
   <!-- 🎨 Estilos (Chips alineados horizontalmente) -->
   <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 20px;">
     <ion-chip *ngFor="let estilo of tatuador.estilos">
@@ -120,12 +118,10 @@
       <img *ngIf="objetivo.alcanzado" 
           [src]="objetivo.img" 
           style="width: 80px; height: 80px; margin-bottom: 5px;" 
-          alt="{{ objetivo.nombre }}">
+          alt="{{ objetivo.nombre }}"
+           (click)="mostrarToast(objetivo.nombre)">
     </div>
   </div>
-
-
-
 
   <div style="display: flex; justify-content: center; gap: 10px; padding: 20px;">
     <ion-button size="small" (click)="consultaPrevia()">
@@ -195,10 +191,6 @@
       </ion-icon>
     </div>
 
-
-
- 
-
     <!-- Si no hay reseñas -->
     <div *ngIf="!resenas || resenas.length === 0" style="color: gray; text-align: center;">
        {{ 'NO_REVIEWS' | translate }}
@@ -256,17 +248,32 @@
   </div>
   </ng-container>
 
-  
-
   <ng-container *ngIf="segmentoSeleccionado === 'fotos'">
     <ion-grid>
       <ion-row *ngIf="tatuador.foto && tatuador.foto.length > 0; else noFotos">
-        <ion-col size="6" *ngFor="let foto of tatuador.foto">
-          <ion-img 
-            [src]="foto" 
-            style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; cursor: pointer;"
-            (click)="verImagen(foto)">
-          </ion-img>
+        <ion-col size="6" *ngFor="let foto of fotosTatuador; let i = index">
+          <div style="position: relative; width: 100%; height: 150px; border-radius: 10px; overflow: hidden;">
+            <!-- Spinner mientras carga -->
+            <div *ngIf="!imagenCargada[i]" 
+                style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #f5f5f5;">
+              <ion-spinner name="crescent" color="medium"></ion-spinner>
+            </div>
+
+            <!-- Imagen -->
+            <ion-img
+              [src]="foto.url"
+              (ionImgWillLoad)="onImgWillLoad(i)"
+              (ionImgDidLoad)="onImgDidLoad(i)"
+              style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; cursor: pointer;"
+              (click)="verImagen(foto.url)">
+            </ion-img>
+          </div>
+         <ion-icon
+          [name]="foto.favorita ? 'heart' : 'heart-outline'"
+          color="danger"
+          style="position: absolute; top: 8px; right: 8px; font-size: 26px; background: rgba(255,255,255,0.7); border-radius: 50%; padding: 4px;"
+          (click)="toggleFavoritoFoto(foto, $event)">
+        </ion-icon>
         </ion-col>
       </ion-row>
 
@@ -277,13 +284,13 @@
       </ng-template>
     </ion-grid>
 
-      <ion-modal [isOpen]="imagenSeleccionada !== null">
-        <ng-template>
-          <div  (click)="cerrarImagen()" style="display: flex; justify-content: center; align-items: center; height: 100%; background: black;">
-            <img [src]="imagenSeleccionada" style="max-width: 100%; max-height: 100%;" />
-          </div>
-        </ng-template>
-      </ion-modal>
   </ng-container>
+  <ion-modal [isOpen]="imagenSeleccionada !== null">
+    <ng-template>
+      <div  (click)="cerrarImagen()" style="display: flex; justify-content: center; align-items: center; height: 100%; background: black;">
+        <img [src]="imagenSeleccionada" style="max-width: 100%; max-height: 100%;" />
+      </div>
+    </ng-template>
+  </ion-modal>
 
 </ion-content>

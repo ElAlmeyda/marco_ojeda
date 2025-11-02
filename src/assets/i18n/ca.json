@@ -56,7 +56,9 @@
     "WANT_TO_HAVE_FAVORITES": "Vols tenir tatuadors favorits?",
     "HEADER": "Tatuadors favorits",
     "NO_FAVORITES": "No tens cap tatuador favorit",
-    "SEARCH_ARTISTS": "Vols cercar-ne?"
+    "SEARCH_ARTISTS": "Vols cercar-ne?",
+    "TATTOO_ARTISTS": "Tatuadors preferits",
+    "PHOTOS": "Fotos preferides"
   },
   "RESET": {
     "EMAIL_LABEL": "Correu electrònic",

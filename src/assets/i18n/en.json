@@ -56,7 +56,9 @@
     "WANT_TO_HAVE_FAVORITES": "Want to save your favorite artists?",
     "HEADER": "Favorite Tattoo Artists",
     "NO_FAVORITES": "You don't have any favorite tattoo artists",
-    "SEARCH_ARTISTS": "Want to search?"
+    "SEARCH_ARTISTS": "Want to search?",
+    "TATTOO_ARTISTS": "Tattoo artists",
+    "PHOTOS": "Photos"
   },
   "RESET": {
     "EMAIL_LABEL": "Email Address",

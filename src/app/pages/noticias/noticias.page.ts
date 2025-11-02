@@ -44,6 +44,7 @@ export class NoticiasPage implements OnInit {
   bocetosCargados = false;
   bocetoSeleccionado: any = null;
   bocetosFiltrados: any[] = [];
+  bocetosFavoritos: any[] = [];
 
   tatuador: Tatuador = {
       nombre: '',
@@ -77,13 +78,76 @@ export class NoticiasPage implements OnInit {
     this.obtenerNoticias();
   }
 
+  cargarBocetosFavoritos() {
+    if (!this.usuario.uid) return;
+
+    this.tiendaTatuador.obtenerFavoritosFotos(this.usuario.uid).subscribe(favoritos => {
+      this.bocetosFavoritos = favoritos || [];
+
+      // Si ya tenemos bocetos cargados, los marcamos
+      if (this.bocetosFiltrados.length > 0) {
+        this.marcarBocetosFavoritos();
+      }
+    });
+  }
+
+
+
   onSegmentChange(event: any) {
     this.segmentoSeleccionado = event.detail.value;
 
     if (this.segmentoSeleccionado === 'antiguas' && !this.bocetosCargados) {
       this.obtenerBocetos();
+      this.cargarBocetosFavoritos();
     }
   }
+
+  marcarBocetosFavoritos() {
+    if (!this.bocetosFiltrados || !this.bocetosFavoritos) return;
+
+    console.log("Marcando favoritos...");
+    console.log("Bocetos:", JSON.stringify(this.bocetosFiltrados.slice(0, 5), null, 2));
+    console.log("Favoritos:", JSON.stringify(this.bocetosFavoritos.slice(0, 5), null, 2));
+
+    this.bocetosFiltrados = this.bocetosFiltrados.map(boceto => {
+      const favorito = this.bocetosFavoritos.find(fav => {
+        const favUrl = fav.url || fav.imagenUrl;
+        const bocetoUrl = boceto.imagenUrl;
+        return favUrl === bocetoUrl && fav.tatuadorId === boceto.uidTatuador;
+      });
+
+      console.log("Comparando:", boceto.imagenUrl, "→", favorito ? "ENCONTRADO ✅" : "no ❌");
+
+      return {
+        ...boceto,
+        favorito: !!favorito,
+        idFavorito: favorito ? favorito.id : null
+      };
+    });
+  }
+
+
+  async toggleFavoritoBoceto(boceto: any, event: Event) {
+    event.stopPropagation();
+
+    // 🔍 usa el tatuador del boceto si no hay this.tatuador
+    const tatuadorId = this.tatuador?.uid || boceto.uidTatuador;
+
+    if (!this.usuario?.uid) return;
+
+    if (boceto.favorito && boceto.idFavorito) {
+      // ❌ Eliminar de favoritos
+      await this.tiendaTatuador.eliminarFavoritoFoto(this.usuario.uid, boceto.idFavorito);
+      boceto.favorito = false;
+      boceto.idFavorito = null;
+    } else {
+      // ❤️ Guardar como favorito
+      const nuevoId = await this.tiendaTatuador.guardarFavoritoFoto(this.usuario.uid, tatuadorId, boceto.imagenUrl);
+      boceto.favorito = true;
+      boceto.idFavorito = nuevoId;
+    }
+  }
+
 
   async obtenerUsuario() {
     await this.user.getUsuarios().subscribe(() => {
@@ -101,24 +165,29 @@ export class NoticiasPage implements OnInit {
     })
   }
 
-   obtenerBocetos() {
-      if (this.bocetosCargados) return; // evita recarga innecesaria
-      this.cargando = true;
+  obtenerBocetos() {
+    if (this.bocetosCargados) return;
+    this.cargando = true;
 
-      this.firestore.obtenerTodosLosBocetos().subscribe({
-        next: (data) => {
-          console.log("Resultados de bocetos", JSON.stringify(this.bocetos, null, 2));
-          this.bocetos = data;
-          this.bocetosFiltrados = [...this.bocetos];
-          this.cargando = false;
-          this.bocetosCargados = true;
-        },
-        error: (err) => {
-          console.error('Error cargando bocetos', err);
-          this.cargando = false;
+    this.firestore.obtenerTodosLosBocetos().subscribe({
+      next: (data) => {
+        this.bocetos = data;
+        this.bocetosFiltrados = [...this.bocetos];
+        this.cargando = false;
+        this.bocetosCargados = true;
+
+        // Si ya tenemos favoritos cargados, los marcamos
+        if (this.bocetosFavoritos.length > 0) {
+          this.marcarBocetosFavoritos();
         }
-      });
-    }
+      },
+      error: (err) => {
+        console.error('Error cargando bocetos', err);
+        this.cargando = false;
+      }
+    });
+  }
+
 
   abrirModal(noticia: any) {
     this.noticiaSeleccionada = noticia;

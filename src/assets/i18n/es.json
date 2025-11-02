@@ -56,7 +56,9 @@
     "WANT_TO_HAVE_FAVORITES": "¿Quieres tener tatuadores favoritos?",
     "HEADER": "Tatuadores favoritos",
     "NO_FAVORITES": "No tienes ningún tatuador favorito",
-    "SEARCH_ARTISTS": "¿Quieres buscar?"
+    "SEARCH_ARTISTS": "¿Quieres buscar?",
+    "TATTOO_ARTISTS": "Tatuadores",
+    "PHOTOS": "Fotos"
   },
   "RESET": {
     "EMAIL_LABEL": "Correo Electrónico",

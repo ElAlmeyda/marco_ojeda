@@ -253,6 +253,45 @@ export class FirestoreService {
     );
   }
 
+  async guardarFavoritoFoto(uidUsuario: string, tatuadorId: string, fotoUrl: string): Promise<void> {
+    const docRef = this.database.doc(`Usuarios/${uidUsuario}/favoritosFotos/${this.database.createId()}`);
+    await docRef.set({
+      tatuadorId,
+      url: fotoUrl,
+      fecha: new Date()
+    });
+  }
+
+  async verificarFavoritoFoto(uidUsuario: string, fotoUrl: string): Promise<boolean> {
+    const idFoto = btoa(fotoUrl); // usar la misma clave que al guardar
+    const docRef = this.database.doc(`Usuarios/${uidUsuario}/favoritosFotos/${idFoto}`);
+    const docSnap = await docRef.get().toPromise();
+    return !!docSnap?.exists;
+  }
+
+  async eliminarFavoritoFoto(uidUsuario: string, idFavorito: string): Promise<void> {
+    const docRef = this.database.doc(`Usuarios/${uidUsuario}/favoritosFotos/${idFavorito}`);
+
+    return docRef.delete()
+      .then(() => console.log('✅ Favorito eliminado correctamente:', idFavorito))
+      .catch((err) => console.error('❌ Error al eliminar favorito:', err));
+  }
+
+   obtenerFavoritosFotos(uidUsuario: string) {
+    return this.database.collection(`Usuarios/${uidUsuario}/favoritosFotos`)
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data() as any;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        }))
+      );
+  }
+
+
+
+
 
   setDocument(path: string, data: any) {
     return this.database.doc(path).set(data);
@@ -609,4 +648,6 @@ export class FirestoreService {
       throw error;
     }
   }
+
+  
 }

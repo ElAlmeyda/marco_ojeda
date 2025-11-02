@@ -57,7 +57,9 @@
     "WANT_TO_HAVE_FAVORITES": "Tatuatzaile gogokoak izan nahi dituzu?",
     "HEADER": "Tatuatzaile gogokoak",
     "NO_FAVORITES": "Ez duzu tatuatzaile gogokirik",
-    "SEARCH_ARTISTS": "Bilatu nahi duzu?"
+    "SEARCH_ARTISTS": "Bilatu nahi duzu?",
+    "TATTOO_ARTISTS": "Tatuatzaile gogokoenak",
+    "PHOTOS": "Argazki gogokoenak"
   },
   "RESET": {
     "EMAIL_LABEL": "Posta elektronikoa",

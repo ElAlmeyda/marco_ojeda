@@ -47,6 +47,12 @@
             <ion-col size="6" size-md="4" size-lg="3" *ngFor="let boceto of bocetosFiltrados">
               <div class="boceto-card" (click)="seleccionarBoceto(boceto)">
                 <img [src]="boceto.imagenUrl" alt="boceto" />
+                <ion-icon
+                  [name]="boceto.favorito ? 'heart' : 'heart-outline'"
+                  color="danger"
+                  style="position: absolute; top: 8px; right: 8px; font-size: 26px; background: rgba(255,255,255,0.8); border-radius: 50%; padding: 4px;"
+                  (click)="toggleFavoritoBoceto(boceto, $event)">
+                </ion-icon>
               </div>
             </ion-col>
           </ion-row>

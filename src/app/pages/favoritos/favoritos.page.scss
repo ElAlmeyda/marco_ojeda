@@ -30,3 +30,24 @@ ion-card {
   font-size: 1.1rem;
   margin-bottom: 16px;
 }
+
+.segmento-favoritos {
+  margin-top: 25%;
+  display: flex;
+  flex-wrap: wrap; /* ✅ permite que bajen de línea si no caben */
+  justify-content: center; /* ✅ centra los botones */
+  gap: 8px; /* separación entre botones */
+
+  ion-segment-button {
+    flex: 1 1 auto; /* ✅ permite que crezcan o se ajusten */
+    min-width: 140px; /* ancho mínimo para que no se deformen */
+    max-width: 200px;
+    text-align: center;
+
+    ion-label {
+      white-space: normal; /* ✅ permite saltos de línea si el texto es largo */
+      font-size: 0.9rem;
+      line-height: 1.2;
+    }
+  }
+}
