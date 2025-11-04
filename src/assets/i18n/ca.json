@@ -91,6 +91,7 @@
   "WARNING": "Avís",
   "APPOINTMENT_WARNING": "El tatuador es pot negar a programar la cita si no s'ha fet una consulta prèvia. Vols continuar?",
   "CONTINUE": "Continuar",
+  "EVENTS": "Esdeveniments",
   "LOGIN_REQUIRED_APPOINTMENT": "Has d'iniciar sessió per demanar una cita",
   "REVIEW_REQUIRED": "Escriu un comentari o selecciona les estrelles",
   "SEARCH": "Cercar",

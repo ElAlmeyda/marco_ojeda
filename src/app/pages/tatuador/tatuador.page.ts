@@ -118,7 +118,7 @@ export class TatuadorPage implements OnInit {
   }
   
 
-   async obtenerUsuario() {
+  async obtenerUsuario() {
     await this.user.getUsuarios().subscribe(() => {
       const usuario = this.user.getUsuarioConcreto(this.usuario.uid);
       if (usuario) {

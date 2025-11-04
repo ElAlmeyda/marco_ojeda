@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable, catchError, forkJoin, from, map, of, switchMap, tap } from 'rxjs';
+import { Observable, catchError, combineLatest, forkJoin, from, map, of, switchMap, tap } from 'rxjs';
 import { idToken } from '@angular/fire/auth';
-import { Cita, Tatuador } from '../model';
+import { Cita, Evento, Tatuador } from '../model';
 
 @Injectable({
   providedIn: 'root'
@@ -649,5 +649,36 @@ export class FirestoreService {
     }
   }
 
-  
+
+  getEventoPorId(id: string) {
+    return this.database.doc<Evento>(`Eventos/${id}`).valueChanges({ idField: 'id' });
+  }
+
+  getTatuadoresPorUIDs(uids: string[]) {
+    return this.database.collection<Tatuador>(
+      'Tatuador',
+      ref => ref.where('uid', 'in', uids)
+    ).valueChanges({ idField: 'uid' });
+  }
+
+  getTatuadorPorTrabajadorId(trabajadorId: string) {
+    return this.database.collection('Tatuador').get().pipe(
+      switchMap(snapshot => {
+        const observables = snapshot.docs.map(doc =>
+          doc.ref.collection('trabajadores').doc(trabajadorId).get()
+        );
+
+        return from(Promise.all(observables)).pipe(
+          map(results => {
+            const match = results.find(r => r.exists);
+            if (!match) return null;
+
+            const tatuadorId = match.ref.parent.parent?.id;
+            return { id: tatuadorId };
+          })
+        );
+      })
+    );
+  }
+
 }

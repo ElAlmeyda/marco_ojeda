@@ -34,20 +34,21 @@ ion-card {
 .segmento-favoritos {
   margin-top: 25%;
   display: flex;
-  flex-wrap: wrap; /* ✅ permite que bajen de línea si no caben */
-  justify-content: center; /* ✅ centra los botones */
-  gap: 8px; /* separación entre botones */
+  justify-content: center;
 
   ion-segment-button {
-    flex: 1 1 auto; /* ✅ permite que crezcan o se ajusten */
-    min-width: 140px; /* ancho mínimo para que no se deformen */
-    max-width: 200px;
-    text-align: center;
+    flex: 1 1 auto;
+    min-width: 130px; /* Ajusta según el diseño */
+    max-width: 180px;
+    height: auto; /* ✅ permite crecer en altura si el texto ocupa dos líneas */
+    padding: 8px;
 
     ion-label {
-      white-space: normal; /* ✅ permite saltos de línea si el texto es largo */
+      white-space: normal; /* ✅ permite salto de línea */
+      text-align: center;
+      line-height: 1.1;
       font-size: 0.9rem;
-      line-height: 1.2;
+      word-break: break-word; /* ✅ evita que se desborde una palabra muy larga */
     }
   }
 }

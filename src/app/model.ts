@@ -101,8 +101,27 @@ export interface Noticia {
 }
 
 export interface Horario {
-  filter(arg0: (h: any) => any): unknown;
   dia: string;
+  turnos: Turno[];
+}
+
+export interface Turno {
   inicio: string;
   fin: string;
+}
+
+export interface Dia {
+  nombre: string;
+  activo: boolean;
+  turnos: Turno[];   // 👈 varios tramos horarios
+  horas?: string[];  // opcional, si la sigues usando para el select
+}
+
+export interface Evento {
+  id?: string;
+  titulo?: string;
+  descripcion?: string;
+  fecha?: any;
+  lugar?: string;
+  tatuadores?: string[]; // <<--- importante
 }

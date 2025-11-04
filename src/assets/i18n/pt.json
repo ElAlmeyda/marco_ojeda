@@ -92,6 +92,7 @@
   "WARNING": "Aviso",
   "APPOINTMENT_WARNING": "O tatuador pode se recusar a agendar o compromisso se não houver consulta prévia. Deseja continuar?",
   "CONTINUE": "Continuar",
+  "EVENTS": "Eventos",
   "LOGIN_REQUIRED_APPOINTMENT": "Você precisa estar logado para agendar um compromisso",
   "REVIEW_REQUIRED": "Escreva um comentário ou selecione as estrelas",
   "SEARCH": "Buscar",

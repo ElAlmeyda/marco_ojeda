@@ -199,7 +199,7 @@
     </ion-item>
 
     <!-- Tipo de cita -->
-    <ion-item fill="outline">
+    <ion-item fill="outline" *ngIf="!boceto">
       <ion-select label="{{ 'APPOINTMENT.TYPE' | translate }}" [(ngModel)]="tipo" [ngModelOptions]="{standalone: true}">
         <ion-select-option value="Chico">{{ 'APPOINTMENT.SIZE_SMALL' | translate }}</ion-select-option>
         <ion-select-option value="Mediano">{{ 'APPOINTMENT.SIZE_MEDIUM' | translate }}</ion-select-option>

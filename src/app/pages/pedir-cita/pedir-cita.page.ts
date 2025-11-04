@@ -93,14 +93,14 @@ export class PedirCitaPage implements OnInit {
     eu: 'eu-ES',       // Euskera / Vasco
     gl: 'gl-ES'  
   };
-preferiblemente: any;
+  preferiblemente: any;
+  boceto: any;
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private route: ActivatedRoute, public tiendaTatuador: TiendaService, public toast: ToastController,
       private router: Router, public navCtrl: NavController, public firestore: FirestoreService, public translate: TranslateService, public storage: Storage) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         
-        console.log(this.fechaMin);
         this.usuario.uid = res.uid;
         this.obtenerUsuario();
         
@@ -110,18 +110,30 @@ preferiblemente: any;
     });
    }
 
- ngOnInit() {
-  const hoy = new Date();
-  this.fechaMin = hoy.toISOString().split('T')[0];
-  this.fechaSeleccionada = this.fechaMin;       
-  this.uid = this.route.snapshot.paramMap.get('uid') || '';
-  this.obtenerTatuador();
-  this.route.queryParams.subscribe(params => {
-    this.consultaTrue = params['consulta'];
-    console.log('Query Params:', params);
-  });
-  this.cargarIdioma();
-}
+  ngOnInit() {
+    const hoy = new Date();
+    this.fechaMin = hoy.toISOString().split('T')[0];
+    this.fechaSeleccionada = this.fechaMin;       
+    this.uid = this.route.snapshot.paramMap.get('uid') || '';
+    this.obtenerTatuador();
+    this.route.queryParams.subscribe(params => {
+      this.consultaTrue = params['consulta'];
+      console.log('Query Params:', params);
+      if (params['boceto']) {
+        try {
+          this.boceto = JSON.parse(params['boceto']);
+          this.estilo = this.boceto.estilo || null;
+          this.mensaje = this.boceto.descripcion || null;
+          console.log('Boceto recibido:', this.boceto);
+          console.log('Boceto recibido:', this.estilo);
+          console.log('Boceto recibido:', this.mensaje);
+        } catch (error) {
+          console.error('Error al parsear el boceto:', error);
+        }
+      }
+    });
+    this.cargarIdioma();
+  }
 
 
   async cargarIdioma() {
@@ -209,7 +221,6 @@ preferiblemente: any;
     });
   }
 
-
   seleccionarTrabajador(trabajador: any) {
     this.tatuadorSeleccionado = trabajador;
     console.log('Trabajador seleccionado:', this.tatuadorSeleccionado);
@@ -229,10 +240,10 @@ preferiblemente: any;
 
     // Generar fechas disponibles según el trabajador
     if (this.tatuador.horario) {
-    this.fechasDisponibles =  this.fechasDisponibles = this.generarFechasDesdeHorario(
+    this.fechasDisponibles =  this.fechasDisponibles = this.generarFechasSegunHorario(
           this.tatuador.horario,   // el horario del tatuador
-          180,                     // número de días hacia adelante
-          this.tatuadorSeleccionado.diasLibres  // fechas bloqueadas
+          this.tatuadorSeleccionado.diasLibres,
+          180
         );
     }
 
@@ -241,29 +252,46 @@ preferiblemente: any;
     this.obtenerEventosDelTrabajador();
   }
 
-  generarFechasDesdeHorario(horario: Horario[], diasAdelante: number = 180, diasLibres: string[] = []): string[] {
-    const diasSemana = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
-    const hoy = new Date();
-    const fechasDisponibles: string[] = [];
-
-    // Filtrar solo los días con horario válido (inicio y fin)
-    const diasTrabaja = horario
-      .filter((h: Horario) => h.inicio && h.fin)
-      .map((h: Horario) => h.dia.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
-
-    for (let i = 0; i <= diasAdelante; i++) {
-      const fecha = new Date();
-      fecha.setDate(hoy.getDate() + i);
-      const nombreDia = diasSemana[fecha.getDay()];
-
-      const fechaStr = fecha.toISOString().split("T")[0];
-      if (diasTrabaja.includes(nombreDia) && !diasLibres.includes(fechaStr)) {
-        fechasDisponibles.push(fechaStr);
-      }
-    }
-
-    return fechasDisponibles;
+  // 🔧 Normaliza texto para quitar acentos y pasar a minúsculas
+  normalizarTexto(texto: string): string {
+    return texto
+      ? texto.toLowerCase()
+          .normalize("NFD") // separa letras y acentos
+          .replace(/[\u0300-\u036f]/g, "") // elimina acentos
+          .trim()
+      : '';
   }
+
+  generarFechasSegunHorario(
+      horarioEstudio: Horario[], // horario del estudio
+      diasLibresTatuador: string[], // días que el tatuador no trabaja
+      diasAdelante: number
+    ): string[] {
+      const diasSemanaArray = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
+      
+      // solo días del estudio que tengan inicio y fin
+      const diasTrabaja = horarioEstudio
+        .filter(h => h.turnos?.length > 0)  // <-- cambio aquí
+        .map(h => h.dia.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+
+  
+      const hoy = new Date();
+      const fechas: string[] = [];
+  
+      for (let i = 0; i <= diasAdelante; i++) {
+        const fecha = new Date();
+        fecha.setDate(hoy.getDate() + i);
+  
+        const nombreDia = diasSemanaArray[fecha.getDay()];
+        const fechaStr = `${fecha.getFullYear()}-${(fecha.getMonth()+1).toString().padStart(2,'0')}-${fecha.getDate().toString().padStart(2,'0')}`;
+  
+        if (diasTrabaja.includes(nombreDia) && !diasLibresTatuador.includes(fechaStr)) {
+          fechas.push(fechaStr);
+        }
+      }
+      console.log("Fechas",fechas);
+      return fechas;
+    }
 
 
   // Función para ion-datetime → habilitar solo las fechas en el array
@@ -435,11 +463,12 @@ preferiblemente: any;
   }
 
   async obtenerHoraDisponibles() {
+    
     if (!this.tatuadorSeleccionado?.uid || !this.duracionCita) return;
 
     const estudioId = this.tatuador.uid;
     const trabajadorId = this.tatuadorSeleccionado.uid;
-    const fecha = this.fechaSeleccionada.split('T')[0];;
+    const fecha = this.fechaSeleccionada.split('T')[0];
 
     // Revisar si hay eventos del día
     const evento = this.diasConEventos[fecha];
@@ -460,14 +489,14 @@ preferiblemente: any;
 
     // Obtener el horario de ese día
     const horarioDelDia = this.tatuador?.horario?.find(
-        h => h.dia.toLowerCase() === nombreDia
-      );
+      h => this.normalizarTexto(h.dia) === this.normalizarTexto(nombreDia)
+    );
 
+    let horarioBase: string[] = [];
 
-    // Generar horario base solo si existe
-    const horarioBase: string[] = horarioDelDia 
-      ? this.generarHorasEntre(horarioDelDia.inicio, horarioDelDia.fin)
-      : [];
+    (horarioDelDia?.turnos ?? []).forEach(turno => {
+      horarioBase = horarioBase.concat(this.generarHorasEntre(turno.inicio, turno.fin));
+    });
       
     // 1️⃣ Traer horas bloqueadas
     this.firestore.getHorasBloqueadas(estudioId, trabajadorId, fecha)

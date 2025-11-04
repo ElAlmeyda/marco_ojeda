@@ -72,11 +72,17 @@
 
   <!-- Detalle del boceto seleccionado -->
   <div *ngIf="bocetoSeleccionado" class="detalle-boceto" style="margin-top: 30%;">
-    <ion-button (click)="volverLista()" expand="block">
-      Volver
-    </ion-button>
+    <ion-toolbar>
+      <ion-icon class="toolbar-icon" name="arrow-back-outline" slot="start" (click)="volverLista()"></ion-icon>
+      <ion-icon
+        [name]="bocetoSeleccionado.favorito ? 'heart' : 'heart-outline'"
+        color="danger"
+        style="position: absolute; top: 8px; right: 8px; font-size: 26px; background: rgba(255,255,255,0.8); border-radius: 50%; padding: 4px;"
+        (click)="toggleFavoritoBoceto(bocetoSeleccionado, $event)">
+      </ion-icon>
+    </ion-toolbar>
 
-    <img [src]="bocetoSeleccionado.imagenUrl" alt="boceto" style="width: 100%; border-radius: 12px; margin-top: 10px;" />
+    <img [src]="bocetoSeleccionado.imagenUrl" alt="boceto" style="width: 100%; border-radius: 12px; margin-top: 10px; height: 300px; object-fit: cover;" />
     <div style="display: flex; flex-direction: column; gap: 15px; padding: 15px;">
 
       <!-- Header: Avatar + nombre y ciudad -->

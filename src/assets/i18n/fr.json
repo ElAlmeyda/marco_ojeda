@@ -89,6 +89,7 @@
   "NOT_SPECIFIED": "Non spécifié",
   "LOGIN_REQUIRED": "Vous devez vous connecter",
   "WARNING": "Avertissement",
+  "EVENTS": "Événements",
   "APPOINTMENT_WARNING": "Le tatoueur peut refuser de prendre rendez-vous si une consultation préalable n'a pas été effectuée. Voulez-vous continuer ?",
   "CONTINUE": "Continuer",
   "LOGIN_REQUIRED_APPOINTMENT": "Vous devez vous connecter pour prendre rendez-vous",

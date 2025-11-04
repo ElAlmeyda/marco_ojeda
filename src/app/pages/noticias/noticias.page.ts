@@ -261,9 +261,16 @@ export class NoticiasPage implements OnInit {
   async consultaPrevia() {
     if (this.usuario.uid) {
       const uidTatuador = this.tatuador.uid;
+
+      const boceto = {
+        descripcion: this.bocetoSeleccionado.descripcion,
+        estilo: this.bocetoSeleccionado.estilo,
+      };
+      
       await this.router.navigate(['/pedir-cita', uidTatuador], {
         queryParams: {
-          consulta: true
+          consulta: true,
+          boceto: JSON.stringify(boceto)
         }
       });
     } else {
