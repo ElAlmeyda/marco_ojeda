@@ -154,6 +154,7 @@ export class NoticiasPage implements OnInit {
       const usuario = this.user.getUsuarioConcreto(this.usuario.uid);
       if (usuario) {
         this.usuario = usuario;
+        
       }
     });
   }

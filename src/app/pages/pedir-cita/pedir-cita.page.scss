@@ -13,3 +13,68 @@ ion-datetime::part(today) {
   color: var(--ion-color-primary); /* texto azul (color primario) */
   font-weight: bold;
 }
+
+.tatuador-card {
+  margin-top:30%;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #1A1A1A;
+  border: 2px solid #333;
+  transition: 0.2s;
+}
+
+.tatuador-card:hover {
+  border-color: #C9A86A;
+  transform: scale(1.05);
+}
+
+/* Centrar tarjeta cuando solo hay 1 en la fila */
+.tatuador-col {
+  display: flex;
+  justify-content: center;
+}
+
+/* Border radius para la imagen */
+.tatuador-card ion-img {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  overflow: hidden;
+}
+
+.chips-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+
+  white-space: nowrap;
+
+  min-width: 0;       /* 🔥 Necesario con flex */
+  max-width: none;    /* 🔥 Necesario si hay MUCHOS hijos */
+  flex: 1 0 auto;     /* 🔥 Clave para Firefox */
+}
+
+
+.chips-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+ion-chip {
+  flex: 0 0 auto;
+  margin-right: 8px;
+  background-color: #C9A86A;
+  color: black;
+  display: inline-flex;
+}
+
+.chip-selected {
+  background-color: #1E78FF !important;
+  color: white !important;
+}
+
+

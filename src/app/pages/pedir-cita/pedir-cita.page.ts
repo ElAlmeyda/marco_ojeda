@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdMob, InterstitialAdPluginEvents } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
@@ -17,6 +17,7 @@ import { FirestoreService } from 'src/app/service/firestore.service';
   styleUrls: ['./pedir-cita.page.scss'],
 })
 export class PedirCitaPage implements OnInit {
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
   usuario: Usuario = {
     uid: '',
@@ -25,16 +26,22 @@ export class PedirCitaPage implements OnInit {
   };
   
   datosConsulta = {
-    nombre: '',
-    diseno: '',
-    ubicacion: '',
-    tamano: '',
+    nombreUser: '',
+    estilo: '',
+    zona: '',
+    tipo: '',
     color: '',
-    notas: '',
+    mensaje: '',
     tatuador: '',
-    telefono: '',
+    movil: '',
     correo: '',
-    predeterminado: ''
+    predeterminado: '',
+    consentimiento: {
+      firmado: false,
+      fecha: Date.now(),
+      fechaISO: '',
+      uidFirma: ''
+    }
   };
 
   tatuador: Tatuador = {
@@ -390,15 +397,22 @@ export class PedirCitaPage implements OnInit {
 
     if(this.usuario.movil){
       // Rellenar la cita
-      this.datosConsulta.nombre = this.usuario.nombre
-      this.datosConsulta.telefono = this.usuario.movil
+      this.datosConsulta.nombreUser = this.usuario.nombre
+      this.datosConsulta.movil = this.usuario.movil
       this.datosConsulta.correo = this.usuario.correo
-      this.datosConsulta.diseno = this.estilo
-      this.datosConsulta.notas = this.mensaje 
-      this.datosConsulta.tamano = this.tipo
+      this.datosConsulta.estilo = this.estilo
+      this.datosConsulta.mensaje = this.mensaje 
+      this.datosConsulta.tipo = this.tipo
       this.datosConsulta.tatuador = this.tatuadorSeleccionado.nombre
-      this.datosConsulta.ubicacion = this.zona
+      this.datosConsulta.zona = this.zona
       this.datosConsulta.predeterminado = this.preferiblemente
+
+      this.datosConsulta.consentimiento = {
+        firmado: true,
+        fecha: Date.now(),               // timestamp (ms)
+        fechaISO: new Date().toISOString(),
+        uidFirma: this.usuario.uid
+      };
 
       try {
         // Subir boceto si existe

@@ -92,12 +92,23 @@
   }
 
 
-  .horizontal-scroll {
+.horizontal-scroll {
   display: flex;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch; /* para scroll suave en iOS */
   padding-bottom: 10px; /* espacio debajo de las tarjetas */
 }
+
+.card {
+  display: flex;
+  flex-direction: column; /* Para que el texto quede arriba y el spinner abajo */
+  justify-content: center; /* Centrado vertical */
+  align-items: center;     /* Centrado horizontal */
+  height: 100%;            /* Ocupa todo el alto disponible */
+  text-align: center;
+  gap: 12px;               /* Separación entre texto y spinner (opcional) */
+}
+
 
 .cards-row {
   flex: 0 0 auto; /* no se encoge ni crece */
@@ -123,8 +134,8 @@
   overflow: hidden;
   box-shadow: 0 6px 12px rgba(0,0,0,0.15);
   transition: transform 0.2s ease;
-  min-width: 200px;
-  max-width: 200px;
+  width: 350px;     /* más ancho */
+  height: 260px;
 }
 
 .user-card:hover {

@@ -7,8 +7,8 @@
       style="position: absolute; top: 70px; right: 10px; z-index: 10;">
       {{ 'EVENTS' | translate }}
     </ion-button>
-    <ion-searchbar style="padding-top: 75px;" [placeholder]="'PLACEHOLDER' | translate" [(ngModel)]="searchTerm" (ionInput)="buscarTatuador()"></ion-searchbar>
-    <ion-card>
+    <ion-searchbar style="padding-top: 95px; border-radius: 12px;" [placeholder]="'PLACEHOLDER' | translate" [(ngModel)]="searchTerm" (ionInput)="buscarTatuador()"></ion-searchbar>
+    <ion-card style="border-radius: 12px;">
      <ion-card-header (click)="toggleFormulario()" style="cursor: pointer;">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <h2>{{ 'MORE_FILTERS' | translate }}</h2>
@@ -30,7 +30,7 @@
           <p style="font-size: 12px; margin-top: 5px; width: 80px; white-space: normal;">{{ ('STYLE.' + estilo.nombre) | translate }}</p>
         </div>
       </div>
-     <div *ngIf="resultadosBusqueda && resultadosBusqueda.length === 0 && estiloSeleccionado">
+     <div *ngIf="resultadosBusqueda && resultadosBusqueda.length === 0 && estiloSeleccionado" >
         <ion-item lines="none" style="text-align: center; color: gray; margin-top: 20px;">
            {{ 'NO_RESULTS_STYLE' | translate }}
         </ion-item>
@@ -80,13 +80,13 @@
       </div>
     </ion-card>
 
-    <div *ngIf="isLoading" class="center-card">
+    <div *ngIf="isLoading" class="card">
       <p class="loading-text">{{ 'LOADING_TATTOO_ARTISTS' | translate }}</p>
       <ion-spinner name="crescent"></ion-spinner>
     </div>
 
     <div *ngIf="isError && !isLoading" class="center-card">
-      <ion-card>
+      <ion-card style="border-radius: 12px;">
       <ion-card-content>
         <ion-label style="display: flex; justify-content: center; margin-top: 20px;">
             {{ 'ERROR_LOADING_TATTOO_ARTISTS' | translate }}
@@ -200,7 +200,7 @@
                   (!cerca || cerca.length == 0) &&
                   (!valoracion || valoracion.length == 0) &&
                   (!resultadosBusqueda || resultadosBusqueda.length == 0)">
-        <ion-card>
+        <ion-card style="border-radius: 12px;">
           <ion-card-header>
             <ion-card-title>{{ 'NO_TATTOO_ARTISTS_FOUND' | translate }}</ion-card-title>
           </ion-card-header>
@@ -211,10 +211,10 @@
       </div>
 
     </ion-card-content>
-    <ion-button class="floating-right big-button" shape="round" fill="solid" color="dark" routerLink="/mapa">
+    <ion-button class="floating-right big-button" shape="round" fill="solid" routerLink="/mapa">
       <ion-icon slot="icon-only" name="navigate-circle"></ion-icon>
     </ion-button>
-    <ion-button *ngIf="ofertas.length !== 0" class="floating-left big-button" shape="round" fill="solid" color="dark" routerLink="/ofertas">
+    <ion-button *ngIf="ofertas.length !== 0" class="floating-left big-button" shape="round" fill="solid" routerLink="/ofertas">
       <ion-icon slot="icon-only" name="pricetag-outline"></ion-icon>
     </ion-button>
 </ion-content>

@@ -1,28 +1,32 @@
 
 <ion-content *ngIf="!consultaTrue">
 
-   <ion-card style="margin-top: 10%;" >
-    <ion-card-header>
-      <ion-item> 
-      <ion-icon class="toolbar-icon" name="arrow-back-outline" slot="start" (click)="volver()" ></ion-icon>
-        <ion-card-title style="margin: auto;"> {{ 'APPOINTMENT.TITLE' | translate:{ tienda: tatuador.nombreTienda } }}</ion-card-title>
+  <!-- Si hay más de un trabajador: mostrar selección -->
+  <ion-grid *ngIf="trabajadores.length > 1 && !tatuadorSeleccionado">
+    <ion-row>
+      <ion-col *ngFor="let tatuador of trabajadores" [size]="trabajadores.length === 1 ? 6 : 6" class="tatuador-col">
+        <ion-card 
+          (click)="seleccionarTrabajador(tatuador)"
+          class="tatuador-card"
+        >
+          <ion-img [src]="tatuador.foto || 'assets/icon/sin_avatar.png'"></ion-img>
+          <p style="font-size: 24px; color:white">{{ tatuador.nombre }}</p>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+   <ion-card style="margin-top: 10%; border-radius: 12px;" *ngIf="tatuadorSeleccionado">
+    <ion-card-header style=" --background: transparent !important; background: transparent !important;">
+      <ion-item lines="none" style="--background: transparent !important; background: transparent !important;"> 
+        <ion-icon class="toolbar-icon" name="arrow-back-outline" slot="start" (click)="volver()" style="color:white"></ion-icon>
+        <ion-card-title style="margin: auto;"> {{ 'APPOINTMENT.TITLE' | translate:{ tienda: tatuadorSeleccionado.nombre } }}</ion-card-title>
       </ion-item>
     </ion-card-header>
     <ion-card-content>
 
       <form>
         <div *ngIf="primerPaso" style="display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 16px;">
-          <ion-select *ngIf="trabajadores.length > 1" (ionChange)="seleccionarTrabajador($event.detail.value)" [(ngModel)]="tatuadorSeleccionado" label="{{ 'APPOINTMENT.WORKER' | translate }}:" style="width: 100%;" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let trabajador of trabajadores" [value]="trabajador">{{trabajador.nombre}}</ion-select-option>
-          </ion-select>
-          <div *ngIf="trabajadores.length === 1">
-            <ion-input
-              [disabled]="true"
-              [value]="trabajadores[0].nombre"
-              label="{{ 'APPOINTMENT.WORKER' | translate }}:"
-              style="width: 100%;">
-            </ion-input>
-          </div>
           <ion-select label="{{ 'APPOINTMENT.APPOINTMENT_TYPE' | translate }}" [(ngModel)]="tipo" (ionChange)="actualizarDuracionHoras()" [ngModelOptions]="{standalone: true}">
            <ion-select-option value="Chico">{{ 'APPOINTMENT.SIZE_SMALL' | translate }}</ion-select-option>
             <ion-select-option value="Mediano">{{ 'APPOINTMENT.SIZE_MEDIUM' | translate }}</ion-select-option>
@@ -35,10 +39,10 @@
           <ion-datetime *ngIf="fechasDisponibles.length > 0 && tipo" presentation="date" [min]="fechaMin" [isDateEnabled]="habilitarFecha"
               [(ngModel)]="fechaSeleccionada" [ngModelOptions]="{standalone: true}" (ionChange)="obtenerHoraDisponibles()" [highlightedDates]="highlightedDates"
               style="width: 100%; margin-bottom: 10px;" [locale]="idiomaSeleccionado"></ion-datetime>
-          <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+          <div #scrollContainer class="chips-scroll">
             <ion-chip
               *ngFor="let hora of horasLibres"
-              [color]="horaSeleccionada === hora ? 'primary' : 'medium'"
+              [class.chip-selected]="horaSeleccionada === hora"
               (click)="horaSeleccionada = hora">
               {{ hora }}
             </ion-chip>
@@ -49,7 +53,7 @@
           <ion-button expand="full" (click)="siguiente()" [disabled]="!tatuadorSeleccionado || !fechaSeleccionada || !horaSeleccionada || !tipo"> {{ 'APPOINTMENT.NEXT' | translate }}</ion-button>
         </div>
         <div *ngIf="segundoPaso && tipo != 'Piercing' " style="display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 16px;">
-          <ion-select
+          <ion-select label-placement="floating" fill="outline"
               label="{{ 'APPOINTMENT.STYLES' | translate }}"
               [(ngModel)]="estilo"
               [ngModelOptions]="{ standalone: true }"
@@ -62,7 +66,7 @@
               </ion-select-option>
             </ion-select>
 
-          <ion-select label="{{ 'APPOINTMENT.ZONE' | translate }}" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}">
+          <ion-select label-placement="floating" fill="outline" label="{{ 'APPOINTMENT.ZONE' | translate }}" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}">
             <ion-select-option value="Brazo">{{ 'APPOINTMENT.ZONE_ARM' | translate }}</ion-select-option>
             <ion-select-option value="Pierna">{{ 'APPOINTMENT.ZONE_LEG' | translate }}</ion-select-option>
             <ion-select-option value="Espalda">{{ 'APPOINTMENT.ZONE_BACK' | translate }}</ion-select-option>
@@ -71,13 +75,13 @@
             <ion-select-option value="Costado">{{ 'APPOINTMENT.ZONE_SIDE' | translate }}</ion-select-option>
           </ion-select>
 
-          <ion-textarea 
+          <ion-textarea fill="outline"
             placeholder="{{ 'APPOINTMENT.ALLERGIES_PLACEHOLDER' | translate }}" 
             name="comentarios" 
             style="height: 100px;" 
             [(ngModel)]="alergias">
           </ion-textarea>
-          <ion-textarea placeholder="{{ 'APPOINTMENT.COMMENTS' | translate }}" name="comentarios" style="height: 100px;" [(ngModel)]="mensaje"></ion-textarea>
+          <ion-textarea fill="outline" placeholder="{{ 'APPOINTMENT.COMMENTS' | translate }}" name="comentarios" style="height: 100px;" [(ngModel)]="mensaje"></ion-textarea>
            <!-- Botón para subir imagen -->
           <input type="file" accept="image/*" hidden #fileInput (change)="onFileSelected($event)">
           <ion-button expand="block" fill="outline" (click)="fileInput.click()">
@@ -88,40 +92,46 @@
           <!-- Vista previa opcional -->
           <img *ngIf="bocetoPreview" [src]="bocetoPreview" style="max-width: 200px; margin-top: 10px; border-radius: 8px;">
 
-          <ion-checkbox [(ngModel)]="acepto" labelPlacement="end" style="white-space: normal; width: 100%;" [ngModelOptions]="{standalone: true}"><span style="white-space: normal; overflow: visible; text-overflow: clip;">
-            {{ 'APPOINTMENT.ACCEPT_TERMS' | translate }}
-          </span></ion-checkbox>
-          <ion-item>
+          <ion-item lines="none" style="--background: transparent !important; background: transparent !important;">
+            <ion-checkbox [(ngModel)]="acepto" labelPlacement="end" style="white-space: normal; width: 100%;" [ngModelOptions]="{standalone: true}"><span style="white-space: normal; overflow: visible; text-overflow: clip;">
+              {{ 'APPOINTMENT.ACCEPT_TERMS' | translate }}
+            </span></ion-checkbox>
+          </ion-item>
+          
+          <ion-item lines="none" style="--background: transparent !important; background: transparent !important;">
             <ion-checkbox slot="start" labelPlacement="end" [(ngModel)]="aceptoTatuador" [ngModelOptions]="{standalone: true}">  
             </ion-checkbox>
             <span (click)="abrirPDF()" style="color: var(--ion-color-primary); text-decoration: underline; cursor: pointer;">
                 {{ 'APPOINTMENT.ACCEPT_TATTOO_TERMS' | translate }}
             </span>
           </ion-item>
+
           <div style="display: flex; justify-content: center; margin-top: 20px;">
             <ion-button (click)="guardarCita()" [disabled]="!estilo  || !acepto || !aceptoTatuador || !zona">{{ 'APPOINTMENT.BOOK' | translate }}</ion-button>
           </div>
         </div>
 
         <div *ngIf="segundoPaso && tipo == 'Piercing' " style="display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 16px;">
-          <ion-select placeholder="{{ 'APPOINTMENT.SELECT_PIERCING' | translate }}" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}">
+          <ion-select label-placement="floating" fill="outline" placeholder="{{ 'APPOINTMENT.SELECT_PIERCING' | translate }}" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}">
             <ion-select-option *ngFor="let p of piercings" [value]="p">
               {{ 'APPOINTMENT.' + p | translate }}
             </ion-select-option>
           </ion-select>
 
-         <ion-textarea 
+         <ion-textarea fill="outline"
             placeholder="{{ 'APPOINTMENT.ALLERGIES_PLACEHOLDER' | translate }}" 
             name="comentarios" 
             style="height: 100px;" 
             [(ngModel)]="alergias">
           </ion-textarea>
-          <ion-textarea placeholder="{{ 'APPOINTMENT.COMMENTS' | translate }}" name="comentarios" style="height: 100px;" [(ngModel)]="mensaje"></ion-textarea>
+          <ion-textarea fill="outline" placeholder="{{ 'APPOINTMENT.COMMENTS' | translate }}" name="comentarios" style="height: 100px;" [(ngModel)]="mensaje"></ion-textarea>
 
-          <ion-checkbox [(ngModel)]="acepto" labelPlacement="end" style="white-space: normal; width: 100%;" [ngModelOptions]="{standalone: true}"><span style="white-space: normal; overflow: visible; text-overflow: clip;">
-            {{ 'APPOINTMENT.ACCEPT_TERMS' | translate }}
-          </span></ion-checkbox>
-          <ion-item>
+          <ion-item lines="none" style="--background: transparent !important; background: transparent !important;">
+            <ion-checkbox [(ngModel)]="acepto" labelPlacement="end" style="white-space: normal; width: 100%;" [ngModelOptions]="{standalone: true}"><span style="white-space: normal; overflow: visible; text-overflow: clip;">
+              {{ 'APPOINTMENT.ACCEPT_TERMS' | translate }}
+            </span></ion-checkbox>
+          </ion-item>
+          <ion-item lines="none" style="--background: transparent !important; background: transparent !important;">
             <ion-checkbox slot="start" labelPlacement="end" [(ngModel)]="aceptoTatuador" [ngModelOptions]="{standalone: true}">  
             </ion-checkbox>
             <span (click)="abrirPDF()" style="color: var(--ion-color-primary); text-decoration: underline; cursor: pointer;">
@@ -132,117 +142,137 @@
             <ion-button (click)="guardarCita()" [disabled]="!acepto || !zona">{{ 'APPOINTMENT.BOOK' | translate }}</ion-button>
           </div>
         </div>
-
       </form>
-    
     </ion-card-content>
   </ion-card>
 </ion-content>
 
 <ion-content *ngIf="consultaTrue" class="ion-padding">
-  <ion-card-header style="background-color: transparent;">
-      <ion-item> 
-      <ion-icon class="toolbar-icon" name="arrow-back-outline" slot="start" (click)="volver()" ></ion-icon>
-        <ion-card-title style="margin: auto;"> {{ 'APPOINTMENT.TITLE' | translate:{ tienda: tatuador.nombreTienda } }}</ion-card-title>
+   <!-- Si hay más de un trabajador: mostrar selección -->
+  <ion-grid *ngIf="trabajadores.length > 1 && !tatuadorSeleccionado">
+    <ion-row>
+      <ion-col *ngFor="let tatuador of trabajadores" [size]="trabajadores.length === 1 ? 6 : 6" class="tatuador-col">
+        <ion-card 
+          (click)="seleccionarTrabajador(tatuador)"
+          class="tatuador-card"
+        >
+          <ion-img [src]="tatuador.foto || 'assets/icon/sin_avatar.png'"></ion-img>
+          <p style="font-size: 24px; color:white">{{ tatuador.nombre }}</p>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-card style="margin-top: 10%; border-radius: 12px;" *ngIf="tatuadorSeleccionado">
+
+    <ion-card-header style="background-color: transparent;">
+      <ion-item lines="none" style="--background: transparent !important; background: transparent !important;"> 
+      <ion-icon class="toolbar-icon" name="arrow-back-outline" slot="start" (click)="volver()" style="color:white"></ion-icon>
+        <ion-card-title style="margin: auto;"> {{ 'APPOINTMENT.TITLE' | translate:{ tienda: tatuadorSeleccionado.nombre } }}</ion-card-title>
       </ion-item>
     </ion-card-header>
-  <form style="display: flex; flex-direction: column; gap: 16px; margin-top: 10%;">
+    <ion-card-content>
+      <form style="display: flex; flex-direction: column; gap: 16px;">
 
-    <!-- Nombre -->
-    <ion-item fill="outline">
-      <ion-label position="floating">{{ 'APPOINTMENT.USER_NAME' | translate }}</ion-label>
-      <ion-input [(ngModel)]="usuario.nombre" [ngModelOptions]="{standalone: true}"></ion-input>
-    </ion-item>
+        <!-- Nombre -->
+        <ion-item fill="outline">
+          <ion-label position="floating">{{ 'APPOINTMENT.USER_NAME' | translate }}</ion-label>
+          <ion-input [(ngModel)]="usuario.nombre" [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
 
-    <!-- Teléfono -->
-    <ion-item fill="outline">
-      <ion-label position="floating">{{ 'APPOINTMENT.USER_PHONE' | translate }}</ion-label>
-      <ion-input [(ngModel)]="usuario.movil" [ngModelOptions]="{standalone: true}"></ion-input>
-    </ion-item>
+        <!-- Teléfono -->
+        <ion-item fill="outline">
+          <ion-label position="floating">{{ 'APPOINTMENT.USER_PHONE' | translate }}</ion-label>
+          <ion-input [(ngModel)]="usuario.movil" [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
 
-    <!-- Correo -->
-    <ion-item fill="outline">
-      <ion-label position="floating">{{ 'APPOINTMENT.USER_EMAIL' | translate }}</ion-label>
-      <ion-input [(ngModel)]="usuario.correo" [ngModelOptions]="{standalone: true}"></ion-input>
-    </ion-item>
+        <!-- Correo -->
+        <ion-item fill="outline">
+          <ion-label position="floating">{{ 'APPOINTMENT.USER_EMAIL' | translate }}</ion-label>
+          <ion-input [(ngModel)]="usuario.correo" [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
 
-    <!-- Trabajador -->
-    <ion-item fill="outline" *ngIf="trabajadores.length > 1">
-      <ion-label>{{ 'APPOINTMENT.WORKER' | translate }}</ion-label>
-      <ion-select [(ngModel)]="tatuadorSeleccionado" (ionChange)="seleccionarTrabajador($event.detail.value)" [ngModelOptions]="{standalone: true}">
-        <ion-select-option *ngFor="let trabajador of trabajadores" [value]="trabajador">{{ trabajador.nombre }}</ion-select-option>
-      </ion-select>
-    </ion-item>
+        <!-- Trabajador -->
+        <ion-item fill="outline" *ngIf="trabajadores.length > 1">
+          <ion-label position="floating">{{ 'APPOINTMENT.WORKER' | translate }}</ion-label>
+          <ion-select [(ngModel)]="tatuadorSeleccionado" (ionChange)="seleccionarTrabajador($event.detail.value)" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let trabajador of trabajadores" [value]="trabajador">{{ trabajador.nombre }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        
+        <ion-item fill="outline" *ngIf="trabajadores.length === 1">
+          <ion-label position="floating">{{ 'APPOINTMENT.WORKER' | translate }}</ion-label>
+          <ion-input [value]="trabajadores[0].nombre" [disabled]="true"></ion-input>
+        </ion-item>
+
+        <!-- Estilo -->
+        <ion-item fill="outline">
+          <ion-select position="floating" label="{{ 'APPOINTMENT.STYLE' | translate }}" [(ngModel)]="estilo" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let estilos of tatuador.estilos">{{ estilos }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <!-- Zona del cuerpo -->
+        <ion-item fill="outline">
+          <ion-select position="floating" label="{{ 'APPOINTMENT.BODY_ZONE' | translate }}" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}">
+            <ion-select-option value="Brazo">{{ 'APPOINTMENT.ZONE_ARM' | translate }}</ion-select-option>
+            <ion-select-option value="Pierna">{{ 'APPOINTMENT.ZONE_LEG' | translate }}</ion-select-option>
+            <ion-select-option value="Espalda">{{ 'APPOINTMENT.ZONE_BACK' | translate }}</ion-select-option>
+            <ion-select-option value="Pecho">{{ 'APPOINTMENT.ZONE_CHEST' | translate }}</ion-select-option>
+            <ion-select-option value="Cabeza">{{ 'APPOINTMENT.ZONE_HEAD' | translate }}</ion-select-option>
+            <ion-select-option value="Costado">{{ 'APPOINTMENT.ZONE_SIDE' | translate }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <!-- Tipo de cita -->
+        <ion-item fill="outline">
+          <ion-select position="floating" label="{{ 'APPOINTMENT.TYPE' | translate }}" [(ngModel)]="tipo" [ngModelOptions]="{standalone: true}">
+            <ion-select-option value="Chico">{{ 'APPOINTMENT.SIZE_SMALL' | translate }}</ion-select-option>
+            <ion-select-option value="Mediano">{{ 'APPOINTMENT.SIZE_MEDIUM' | translate }}</ion-select-option>
+            <ion-select-option value="Grande">{{ 'APPOINTMENT.SIZE_LARGE' | translate }}</ion-select-option>
+            <ion-select-option value="Proyecto">{{ 'APPOINTMENT.PROJECT' | translate }}</ion-select-option>
+            <ion-select-option value="Retoque">{{ 'APPOINTMENT.TOUCH_UP' | translate }}</ion-select-option>
+            <ion-select-option value="Sesion">{{ 'APPOINTMENT.SESSION' | translate }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item fill="outline">
+          <ion-select position="floating" label="{{ 'PREFERIBLEMENTE' | translate }}" [(ngModel)]="preferiblemente" [ngModelOptions]="{standalone: true}">
+            <ion-select-option value="Mañana">{{ 'MANANA' | translate }}</ion-select-option>
+            <ion-select-option value="Tarde">{{ 'TARDE' | translate }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+
+        <!-- Comentarios -->
+        <ion-item fill="outline">
+          <ion-label position="floating">{{ 'APPOINTMENT.ADD_COMMENTS' | translate }}</ion-label>
+          <ion-textarea autoGrow="true" [(ngModel)]="mensaje" name="comentarios" [ngModelOptions]="{standalone: true}"></ion-textarea>
+        </ion-item>
+
+        <!-- Aceptar términos -->
+        <ion-item lines="none" style="--background: transparent !important; background: transparent !important;">
+          <ion-checkbox slot="start" [(ngModel)]="acepto" [ngModelOptions]="{standalone: true}"></ion-checkbox>
+          <ion-label style="white-space: normal;">
+            {{ 'APPOINTMENT.ACCEPT_TERMS' | translate }}
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none" style="--background: transparent !important; background: transparent !important;">
+          <ion-checkbox slot="start" labelPlacement="end" [(ngModel)]="aceptoTatuador" [ngModelOptions]="{standalone: true}"></ion-checkbox>
+          <span (click)="abrirPDF()" style="color: var(--ion-color-primary); text-decoration: underline; cursor: pointer;">
+            {{ 'APPOINTMENT.ACCEPT_TATTOO_TERMS' | translate }}
+          </span>
+        </ion-item>
+
+        <!-- Botón enviar -->
+        <div style="margin-top: 20px;">
+          <ion-button expand="block" (click)="guardarConsulta()" [disabled]="!estilo || !aceptoTatuador || !acepto || !zona || !tipo || !tatuadorSeleccionado">
+            {{ 'APPOINTMENT.BOOK' | translate }}
+          </ion-button>
+        </div>
+      </form>
+    </ion-card-content>
     
-    <ion-item fill="outline" *ngIf="trabajadores.length === 1">
-      <ion-label position="floating">{{ 'APPOINTMENT.WORKER' | translate }}</ion-label>
-      <ion-input [value]="trabajadores[0].nombre" [disabled]="true"></ion-input>
-    </ion-item>
+  </ion-card>
 
-    <!-- Estilo -->
-    <ion-item fill="outline">
-      <ion-select label="{{ 'APPOINTMENT.STYLE' | translate }}" [(ngModel)]="estilo" [ngModelOptions]="{standalone: true}">
-        <ion-select-option *ngFor="let estilos of tatuador.estilos">{{ estilos }}</ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <!-- Zona del cuerpo -->
-    <ion-item fill="outline">
-      <ion-select label="{{ 'APPOINTMENT.BODY_ZONE' | translate }}" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}">
-        <ion-select-option value="Brazo">{{ 'APPOINTMENT.ZONE_ARM' | translate }}</ion-select-option>
-        <ion-select-option value="Pierna">{{ 'APPOINTMENT.ZONE_LEG' | translate }}</ion-select-option>
-        <ion-select-option value="Espalda">{{ 'APPOINTMENT.ZONE_BACK' | translate }}</ion-select-option>
-        <ion-select-option value="Pecho">{{ 'APPOINTMENT.ZONE_CHEST' | translate }}</ion-select-option>
-        <ion-select-option value="Cabeza">{{ 'APPOINTMENT.ZONE_HEAD' | translate }}</ion-select-option>
-        <ion-select-option value="Costado">{{ 'APPOINTMENT.ZONE_SIDE' | translate }}</ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <!-- Tipo de cita -->
-    <ion-item fill="outline" *ngIf="!boceto">
-      <ion-select label="{{ 'APPOINTMENT.TYPE' | translate }}" [(ngModel)]="tipo" [ngModelOptions]="{standalone: true}">
-        <ion-select-option value="Chico">{{ 'APPOINTMENT.SIZE_SMALL' | translate }}</ion-select-option>
-        <ion-select-option value="Mediano">{{ 'APPOINTMENT.SIZE_MEDIUM' | translate }}</ion-select-option>
-        <ion-select-option value="Grande">{{ 'APPOINTMENT.SIZE_LARGE' | translate }}</ion-select-option>
-        <ion-select-option value="Proyecto">{{ 'APPOINTMENT.PROJECT' | translate }}</ion-select-option>
-        <ion-select-option value="Retoque">{{ 'APPOINTMENT.TOUCH_UP' | translate }}</ion-select-option>
-        <ion-select-option value="Sesion">{{ 'APPOINTMENT.SESSION' | translate }}</ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <ion-item fill="outline">
-      <ion-select label="Preferiblemente" [(ngModel)]="preferiblemente" [ngModelOptions]="{standalone: true}">
-        <ion-select-option value="Mañana">Mañana</ion-select-option>
-        <ion-select-option value="Tarde">Tarde</ion-select-option>
-      </ion-select>
-    </ion-item>
-
-
-    <!-- Comentarios -->
-   <ion-item fill="outline">
-      <ion-label position="floating">{{ 'APPOINTMENT.ADD_COMMENTS' | translate }}</ion-label>
-      <ion-textarea autoGrow="true" [(ngModel)]="mensaje" name="comentarios" [ngModelOptions]="{standalone: true}"></ion-textarea>
-    </ion-item>
-
-    <!-- Aceptar términos -->
-    <ion-item lines="none">
-      <ion-checkbox slot="start" [(ngModel)]="acepto" [ngModelOptions]="{standalone: true}"></ion-checkbox>
-      <ion-label style="white-space: normal;">
-        {{ 'APPOINTMENT.ACCEPT_TERMS' | translate }}
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-checkbox slot="start" labelPlacement="end" [(ngModel)]="aceptoTatuador" [ngModelOptions]="{standalone: true}"></ion-checkbox>
-      <span (click)="abrirPDF()" style="color: var(--ion-color-primary); text-decoration: underline; cursor: pointer;">
-        {{ 'APPOINTMENT.ACCEPT_TATTOO_TERMS' | translate }}
-      </span>
-    </ion-item>
-
-    <!-- Botón enviar -->
-    <div style="margin-top: 20px;">
-      <ion-button expand="block" (click)="guardarConsulta()" [disabled]="!estilo || !acepto || !zona || !tipo || !tatuadorSeleccionado">
-        {{ 'APPOINTMENT.BOOK' | translate }}
-      </ion-button>
-    </div>
-  </form>
 </ion-content>

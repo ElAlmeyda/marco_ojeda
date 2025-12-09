@@ -492,5 +492,24 @@
     "AND": "und unsere",
     "PRIVACY_POLICY": "Datenschutzerklärung"
   },
-  "NOTICIA": "Nachricht"
+  "NOTICIA": "Nachricht",
+  "PREFERIBLEMENTE": "Bevorzugt",
+  "MANANA": "Morgen",
+  "TARDE": "Nachmittag",
+  "EVENTS.TITLE": "Möchtest du zu einer Veranstaltung gehen?",
+  "EVENTS.NO_EVENTS": "Keine Veranstaltungen in der Nähe",
+  "EVENTS.NO_ARTISTS": "Keine tätowierer verfügbar",
+  "EVENTS.GOING_TO_EVENT": "Möchtest du zu einer Veranstaltung gehen?",
+  "EVENTS.LOCATION": "Standort",
+  "EVENTS.DATE": "Datum",
+
+  "TATTOO.SOCIAL_INSTAGRAM": "Instagram",
+  "TATTOO.SOCIAL_FACEBOOK": "Facebook",
+  "TATTOO.SOCIAL_WHATSAPP": "WhatsApp",
+  "TATTOO.SOCIAL_TIKTOK": "TikTok",
+  "TATTOO.SOCIAL_TWITTER": "Twitter",
+  "TATTOO.SOCIAL_WEB": "Webseite",
+  "SKETCHES.LOADING": "Skizzen werden geladen...",
+  "SKETCHES.NO_MATCHING": "Keine Skizzen für diesen Stil gefunden.",
+  "SKETCHES.NO_SKETCHES": "Keine Skizzen verfügbar"
 }

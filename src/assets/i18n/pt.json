@@ -440,5 +440,24 @@
     "TERMS_OF_USE": "Termos de Uso",
     "AND": "e nossa",
     "PRIVACY_POLICY": "Política de Privacidade"
-  }
+  },
+  "PREFERIBLEMENTE": "Preferencialmente",
+  "MANANA": "Manhã",
+  "TARDE": "Tarde",
+  "EVENTS.TITLE": "Você quer ir a algum evento?",
+  "EVENTS.NO_EVENTS": "Não há eventos próximos",
+  "EVENTS.NO_ARTISTS": "Não há tatuadores disponíveis",
+  "EVENTS.GOING_TO_EVENT": "Você quer ir a algum evento?",
+  "EVENTS.LOCATION": "Localização",
+  "EVENTS.DATE": "Data",
+
+  "TATTOO.SOCIAL_INSTAGRAM": "Instagram",
+  "TATTOO.SOCIAL_FACEBOOK": "Facebook",
+  "TATTOO.SOCIAL_WHATSAPP": "WhatsApp",
+  "TATTOO.SOCIAL_TIKTOK": "TikTok",
+  "TATTOO.SOCIAL_TWITTER": "Twitter",
+  "TATTOO.SOCIAL_WEB": "Website",
+  "SKETCHES.LOADING": "Carregando esboços...",
+  "SKETCHES.NO_MATCHING": "Nenhum esboço encontrado para este estilo.",
+  "SKETCHES.NO_SKETCHES": "Não há esboços disponíveis"
 }

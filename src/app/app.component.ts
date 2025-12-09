@@ -39,6 +39,7 @@ export class AppComponent {
   isPremiun: any;
   deepLinkPath: string | null = null;
   private deepLinkHandled = false;
+  bannerVisible=false;
   
   toggleList() {
     this.showList = !this.showList;
@@ -123,10 +124,12 @@ export class AppComponent {
       margin: 35 
     };
     await AdMob.showBanner(options);
+    this.bannerVisible = true;
   }
 
   async hideBanner() {
     await AdMob.removeBanner();
+    this.bannerVisible = false;
   }
   
 

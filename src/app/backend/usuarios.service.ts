@@ -201,10 +201,6 @@ export class UsuariosService {
     return urls;
   }
 
-
-
-  
-
   async actualizarAvatar(userId: string, data: string): Promise<void> {
     return this.firestoreService.updateDocAvatar(userId, data);
   }

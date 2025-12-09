@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { TiendaService } from 'src/app/backend/tienda.service';
@@ -46,7 +47,7 @@ export class EventosPage implements OnInit {
   acepto= false;
 
   constructor(public auth: FirestoreAuthService, public tiendaTatuador: TiendaService, public user: UsuariosService, public toast: ToastController, public firestore: FirestoreService, 
-              public translate: TranslateService, public navCtrl: NavController,) {
+              public translate: TranslateService, public navCtrl: NavController, public router: Router) {
      this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.usuario.uid = res.uid;
@@ -71,12 +72,13 @@ export class EventosPage implements OnInit {
   }
 
   volver(){
-    if(this.eventoSeleccionado){
-      this.eventoSeleccionado = null
+    if (this.eventoSeleccionado) {
+      this.eventoSeleccionado = null;
     } else {
-      this.navCtrl.back();
+      this.router.navigate(['/tabs/folder', ""]); // cualquier ruta válida
     }
   }
+
 
   volverEvento(){
     if(this.tatuadorSeleccionado){

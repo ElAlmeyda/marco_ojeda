@@ -478,6 +478,25 @@
   "LOADING_TATTOO_ARTISTS": "Loading tattoo artists...",
   "ERROR_LOADING_TATTOO_ARTISTS": "Error loading tattoo artists.",
   "RETRY": "Retry",
-  "NOTICIA": "News"
+  "NOTICIA": "News",
+  "PREFERIBLEMENTE": "Preferably",
+  "MANANA": "Morning",
+  "TARDE": "Afternoon",
+  "EVENTS.TITLE": "Do you want to go to an event?",
+  "EVENTS.NO_EVENTS": "No nearby events",
+  "EVENTS.NO_ARTISTS": "No tattoo artists available",
+  "EVENTS.GOING_TO_EVENT": "Do you want to go to an event?",
+  "EVENTS.LOCATION": "Location",
+  "EVENTS.DATE": "Date",
+
+  "TATTOO.SOCIAL_INSTAGRAM": "Instagram",
+  "TATTOO.SOCIAL_FACEBOOK": "Facebook",
+  "TATTOO.SOCIAL_WHATSAPP": "WhatsApp",
+  "TATTOO.SOCIAL_TIKTOK": "TikTok",
+  "TATTOO.SOCIAL_TWITTER": "Twitter",
+  "TATTOO.SOCIAL_WEB": "Website",
+  "SKETCHES.LOADING": "Loading sketches...",
+  "SKETCHES.NO_MATCHING": "No sketches found for this style.",
+  "SKETCHES.NO_SKETCHES": "No sketches available"
 
 }

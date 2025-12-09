@@ -81,6 +81,7 @@ export interface Trabajador {
     nombre: string;
     horario: string;
     diasLibres: string[];
+    foto?: string;
 }
 
 export interface Ofertas {

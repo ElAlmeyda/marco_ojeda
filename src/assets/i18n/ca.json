@@ -492,5 +492,24 @@
     "TERMS_OF_USE": "Termes d'Ús",
     "AND": "i la nostra",
     "PRIVACY_POLICY": "Política de Privacitat"
-  }
+  },
+  "PREFERIBLEMENTE": "Preferiblement",
+  "MANANA": "Matí",
+  "TARDE": "Tarda",
+  "EVENTS.TITLE": "Vols anar a algun esdeveniment?",
+  "EVENTS.NO_EVENTS": "No hi ha esdeveniments propers",
+  "EVENTS.NO_ARTISTS": "No hi ha tatuadors disponibles",
+  "EVENTS.GOING_TO_EVENT": "Vols anar a algun esdeveniment?",
+  "EVENTS.LOCATION": "Ubicació",
+  "EVENTS.DATE": "Data",
+
+  "TATTOO.SOCIAL_INSTAGRAM": "Instagram",
+  "TATTOO.SOCIAL_FACEBOOK": "Facebook",
+  "TATTOO.SOCIAL_WHATSAPP": "WhatsApp",
+  "TATTOO.SOCIAL_TIKTOK": "TikTok",
+  "TATTOO.SOCIAL_TWITTER": "Twitter",
+  "TATTOO.SOCIAL_WEB": "Lloc web",
+  "SKETCHES.LOADING": "Carregant esbossos...",
+  "SKETCHES.NO_MATCHING": "No s'ha trobat cap esbós d'aquest estil.",
+  "SKETCHES.NO_SKETCHES": "No hi ha esbossos disponibles"
 }

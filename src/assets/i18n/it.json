@@ -492,5 +492,24 @@
   "PASSWORD": "Password",
   "SIGN_IN": "Accedi",
   "FORGOT_PASSWORD": "Hai dimenticato la password?"
-}
+},
+"PREFERIBLEMENTE": "Preferibilmente",
+  "MANANA": "Mattina",
+  "TARDE": "Pomeriggio",
+  "EVENTS.TITLE": "Vuoi andare a un evento?",
+  "EVENTS.NO_EVENTS": "Nessun evento nelle vicinanze",
+  "EVENTS.NO_ARTISTS": "Nessun tatuatore disponibile",
+  "EVENTS.GOING_TO_EVENT": "Vuoi andare a un evento?",
+  "EVENTS.LOCATION": "Posizione",
+  "EVENTS.DATE": "Data",
+
+  "TATTOO.SOCIAL_INSTAGRAM": "Instagram",
+  "TATTOO.SOCIAL_FACEBOOK": "Facebook",
+  "TATTOO.SOCIAL_WHATSAPP": "WhatsApp",
+  "TATTOO.SOCIAL_TIKTOK": "TikTok",
+  "TATTOO.SOCIAL_TWITTER": "Twitter",
+  "TATTOO.SOCIAL_WEB": "Sito web",
+  "SKETCHES.LOADING": "Caricamento dei bozzetti...",
+  "SKETCHES.NO_MATCHING": "Nessun bozzetto trovato per questo stile.",
+  "SKETCHES.NO_SKETCHES": "Nessun bozzetto disponibile"
 }

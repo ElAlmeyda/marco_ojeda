@@ -9,7 +9,7 @@
 
   <ion-card class="card-content" style="background-color: transparent; --background: transparent;">
     <ion-card-header style="font-size: 25px; text-align: center;">
-        <ion-label> ¿Quieres ir a algun evento?</ion-label>
+        <ion-label> {{ 'EVENTS.TITLE' | translate }}</ion-label>
     </ion-card-header>
     <ion-grid>
       <ion-row>
@@ -22,7 +22,7 @@
         </ng-container>
       </ion-row>
     </ion-grid>
-    <ion-label *ngIf="evento.length === 0"> No hay eventos cercanos </ion-label>
+    <ion-label *ngIf="evento.length === 0">{{ 'EVENTS.NO_EVENTS' | translate }} </ion-label>
   </ion-card>
 </ion-content>
 
@@ -52,7 +52,7 @@
         </ng-container>
       </ion-row>
     </ion-grid>
-     <ion-label *ngIf="tatuadoresDelEvento.length === 0"> No hay tatuadores disponibles </ion-label>
+     <ion-label *ngIf="tatuadoresDelEvento.length === 0">{{ 'EVENTS.NO_ARTISTS' | translate }} </ion-label>
   </ion-card>
 </ion-content>
 

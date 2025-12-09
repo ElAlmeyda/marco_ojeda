@@ -16,6 +16,17 @@ const config: CapacitorConfig = {
       launchShowDuration: 0,
       backgroundColor: "transparent",
     },
+    Deeplinks: {
+      routes: [
+        {
+          scheme: "https",
+          host: "itattoo-9f978.web.app",          // <-- cambia aquí si usas otro dominio
+          path: "/tatuador/:id",
+          iosPath: "/tatuador/:id",
+          androidPath: "/tatuador/:id"
+        }
+      ]
+    }
   },
 };
 

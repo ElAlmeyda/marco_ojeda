@@ -480,6 +480,25 @@
   "EDIT_FIELD": "Modifier",
   "BUTTON_CANCEL": "Annuler",
   "BUTTON_EDIT": "Modifier",
-  "NOTICIA": "Actualité"
+  "NOTICIA": "Actualité",
+  "PREFERIBLEMENTE": "De préférence",
+  "MANANA": "Matin",
+  "TARDE": "Après-midi",
+  "EVENTS.TITLE": "Veux-tu aller à un événement ?",
+  "EVENTS.NO_EVENTS": "Aucun événement à proximité",
+  "EVENTS.NO_ARTISTS": "Aucun tatoueur disponible",
+  "EVENTS.GOING_TO_EVENT": "Veux-tu aller à un événement ?",
+  "EVENTS.LOCATION": "Emplacement",
+  "EVENTS.DATE": "Date",
+
+  "TATTOO.SOCIAL_INSTAGRAM": "Instagram",
+  "TATTOO.SOCIAL_FACEBOOK": "Facebook",
+  "TATTOO.SOCIAL_WHATSAPP": "WhatsApp",
+  "TATTOO.SOCIAL_TIKTOK": "TikTok",
+  "TATTOO.SOCIAL_TWITTER": "Twitter",
+  "TATTOO.SOCIAL_WEB": "Site web",
+  "SKETCHES.LOADING": "Chargement des croquis...",
+  "SKETCHES.NO_MATCHING": "Aucun croquis trouvé pour ce style.",
+  "SKETCHES.NO_SKETCHES": "Aucun croquis disponible"
 
 }
