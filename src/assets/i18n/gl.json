@@ -56,7 +56,9 @@
     "WANT_TO_HAVE_FAVORITES": "Queres ter tatuadores favoritos?",
     "HEADER": "Tatuadores favoritos",
     "NO_FAVORITES": "Non tes ningún tatuador favorito",
-    "SEARCH_ARTISTS": "Queres buscar?"
+    "SEARCH_ARTISTS": "Queres buscar?",
+    "TATTOO_ARTISTS": "Tatuadores favoritos",
+    "PHOTOS": "Fotos favoritas"
   },
   "RESET": {
     "EMAIL_LABEL": "Correo electrónico",
@@ -123,6 +125,7 @@
     "SAVED_SUCCESS": "A cita foi realizada, agarda a que o tatuador conteste.",
     "ERROR_SAVE": "Erro ao gardar a cita.",
     "MISSING_FIELDS": "Por favor completa todos os campos obrigatorios.",
+     "ACCEPT_TATTOO_TERMS": "Lin e aceptei os consentimentos do tatuador ao que lle vou pedir unha cita.",
     "TITLE": "Pedir cita a {{tienda}}",
     "WORKER": "Traballador",
     "TYPE": "Tipo de cita:",
@@ -176,6 +179,7 @@
     "ZONE": "En que zona:",
     "COMMENTS": "Comentarios adicionais:"
   },
+  "NOTICIA": "Noticias",
   "PLACEHOLDER": "Buscar",
   "TATTOOIST": {
     "EVENT_WARNING": "⚠️ O tatuador estará en {{ciudad}}"
@@ -487,5 +491,25 @@
     "TERMS_OF_USE": "Termos de Uso",
     "AND": "e a nosa",
     "PRIVACY_POLICY": "Política de Privacidade"
-  }
+  },
+  "EVENTS": "Eventos",
+  "PREFERIBLEMENTE": "Preferiblemente",
+  "MANANA": "Mañá",
+  "TARDE": "Tarde",
+  "EVENTS.TITLE": "Queres ir a algún evento?",
+  "EVENTS.NO_EVENTS": "Non hai eventos próximos",
+  "EVENTS.NO_ARTISTS": "Non hai tatuadores dispoñibles",
+  "EVENTS.GOING_TO_EVENT": "Queres ir a algún evento?",
+  "EVENTS.LOCATION": "Ubicación",
+  "EVENTS.DATE": "Data",
+
+  "TATTOO.SOCIAL_INSTAGRAM": "Instagram",
+  "TATTOO.SOCIAL_FACEBOOK": "Facebook",
+  "TATTOO.SOCIAL_WHATSAPP": "WhatsApp",
+  "TATTOO.SOCIAL_TIKTOK": "TikTok",
+  "TATTOO.SOCIAL_TWITTER": "Twitter",
+  "TATTOO.SOCIAL_WEB": "Sitio web",
+  "SKETCHES.LOADING": "Cargando bosquexos...",
+  "SKETCHES.NO_MATCHING": "Non se atopou ningún bosquexo deste estilo.",
+  "SKETCHES.NO_SKETCHES": "Non hai bosquexos dispoñibles"
 }

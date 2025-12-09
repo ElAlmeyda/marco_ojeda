@@ -24,7 +24,7 @@
     </ion-skeleton-text>
 
     <ion-img 
-      [src]="tatuadorSeleccionado.foto?.[0] || 'assets/icon/sin_avatar.png'" 
+      [src]="tatuadorSeleccionado.avatar || 'assets/icon/sin_avatar.png'" 
       style="height: 130px; width: 100%; object-fit: cover;" 
       [routerLink]="['/tatuador', tatuadorSeleccionado.uid]" 
       (ionImgDidLoad)="imagenCargada = true">

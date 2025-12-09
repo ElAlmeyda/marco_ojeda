@@ -56,7 +56,9 @@
     "WANT_TO_HAVE_FAVORITES": "Tatuatzaile gogokoak izan nahi dituzu?",
     "HEADER": "Tatuatzaile gogokoak",
     "NO_FAVORITES": "Ez duzu tatuatzaile gogokirik",
-    "SEARCH_ARTISTS": "Bilatu nahi duzu?"
+    "SEARCH_ARTISTS": "Bilatu nahi duzu?",
+    "TATTOO_ARTISTS": "Tatuatzaile gogokoenak",
+    "PHOTOS": "Argazki gogokoenak"
   },
   "RESET": {
     "EMAIL_LABEL": "Posta elektronikoa",
@@ -125,6 +127,7 @@
     "ERROR_SAVE": "Errorea hitzordua gordetzean.",
     "MISSING_FIELDS": "Mesedez, bete derrigorrezko eremu guztiak.",
     "TITLE": "{{tienda}}-ra hitzordua eskatu",
+     "ACCEPT_TATTOO_TERMS": "Irakurri eta onartu dut hitzordua eskatu nahi diodan tatuatzailearen baimenak.",
     "WORKER": "Langilea",
     "TYPE": "Hitzordu mota:",
     "SIZE_SMALL": "Txikia (5-7cm)",
@@ -177,6 +180,7 @@
     "ZONE": "Zein zonatan:",
     "COMMENTS": "Iruzkin osagarriak:"
   },
+  "NOTICIA": "Berriak",
   "TATTOOIST": {
     "EVENT_WARNING": "⚠️ Tatuatzailea {{ciudad}}-n egongo da"
   },
@@ -487,5 +491,25 @@
     "TERMS_OF_USE": "Erabilera Baldintzak",
     "AND": "eta gure",
     "PRIVACY_POLICY": "Pribatutasun Politika"
-  }
+  },
+  "EVENTS": "Ekitaldiak",
+  "PREFERIBLEMENTE": "Hobe",
+  "MANANA": "Goiza",
+  "TARDE": "Arratsaldea",
+  "EVENTS.TITLE": "Ekitaldi batera joan nahi duzu?",
+  "EVENTS.NO_EVENTS": "Ez dago inguruko ekitaldirik",
+  "EVENTS.NO_ARTISTS": "Ez dago tatuatzailerik eskuragarri",
+  "EVENTS.GOING_TO_EVENT": "Ekitaldi batera joan nahi duzu?",
+  "EVENTS.LOCATION": "Kokapena",
+  "EVENTS.DATE": "Data",
+
+  "TATTOO.SOCIAL_INSTAGRAM": "Instagram",
+  "TATTOO.SOCIAL_FACEBOOK": "Facebook",
+  "TATTOO.SOCIAL_WHATSAPP": "WhatsApp",
+  "TATTOO.SOCIAL_TIKTOK": "TikTok",
+  "TATTOO.SOCIAL_TWITTER": "Twitter",
+  "TATTOO.SOCIAL_WEB": "Webgunea",
+  "SKETCHES.LOADING": "Marrazkiak kargatzen...",
+  "SKETCHES.NO_MATCHING": "Ez da estilo honetako marrazkirik aurkitu.",
+  "SKETCHES.NO_SKETCHES": "Ez dago marrazkirik eskuragarri"
 }

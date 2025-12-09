@@ -195,7 +195,7 @@
     <ng-container *ngFor="let pregunta of preguntas">
       <ion-item (click)="toggleRespuesta(pregunta)">
         <ion-label>{{ pregunta.titulo }}</ion-label>
-        <ion-icon slot="end" name="{{ pregunta.abierto ? 'chevron-up' : 'chevron-down' }}"></ion-icon>
+        <ion-icon slot="end" name="{{ pregunta.abierto ? 'chevron-up' : 'chevron-down' }}" style="color:white;"></ion-icon>
       </ion-item>
       <ion-item *ngIf="pregunta.abierto">
         <ion-label style="white-space: normal; word-break: break-word;">
@@ -342,14 +342,14 @@
           {{ 'INFO_NAME_LABEL' | translate }}
         </ion-label>
         <ion-label class="info-label" slot="end"> {{usuarioActual.nombre}}</ion-label>
-        <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        <ion-icon name="chevron-forward-outline" slot="end" style="color:white;"></ion-icon>
       </ion-item>
       <ion-item (click)="showActionSheetMovil('movil')">
         <ion-label >
           {{ 'INFO_PHONE_LABEL' | translate }}
         </ion-label>
         <ion-label class="info-label" slot="end"> {{usuarioActual.movil}}</ion-label>
-        <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        <ion-icon name="chevron-forward-outline" slot="end" style="color:white;"></ion-icon>
       </ion-item>
   </ion-list>
 </ion-content>
@@ -367,7 +367,7 @@
       </ion-card-header>
       <ion-card-content>
          <p>{{ 'PAY_GO_PREMIUM_DESC' | translate }}</p>
-        <ion-button expand="block" color="dark" (click)="goToPago()">
+        <ion-button expand="block" (click)="goToPago()">
           {{ 'PAY_GO_PREMIUM_BTN' | translate }}
         </ion-button>
       </ion-card-content>

@@ -86,6 +86,8 @@
   flex: 0 0 auto; /* no se encoge ni crece */
   margin-right: 16px;
   cursor: pointer;
+  width: 350px;     /* más ancho */
+  height: 260px;
 }
 
 .filtros-estilos::-webkit-scrollbar {
@@ -118,6 +120,16 @@
   font-size: 0.9rem;
   font-weight: bold;
   margin-top: 5px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column; /* Para que el texto quede arriba y el spinner abajo */
+  justify-content: center; /* Centrado vertical */
+  align-items: center;     /* Centrado horizontal */
+  height: 100%;            /* Ocupa todo el alto disponible */
+  text-align: center;
+  gap: 12px;               /* Separación entre texto y spinner (opcional) */
 }
 
 .sub-info {

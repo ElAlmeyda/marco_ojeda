@@ -120,4 +120,20 @@ export class TiendaService {
   getFotosTatuador(estudioId: string){
     return this.firestrore.getFotosTatuador(estudioId);
   }
+
+  verificarFavoritoFoto(uid: string, fotoUrl: string){
+    return this.firestrore.verificarFavoritoFoto(uid, fotoUrl);
+  }
+
+  eliminarFavoritoFoto(uid: string, fotoUrl: string){
+    return this.firestrore.eliminarFavoritoFoto(uid, fotoUrl);
+  }
+
+  guardarFavoritoFoto(uid: string, uidTatuador: string, fotoUrl: string){
+    return this.firestrore.guardarFavoritoFoto(uid, uidTatuador, fotoUrl);
+  }
+
+  obtenerFavoritosFotos(uid: string){
+    return this.firestrore.obtenerFavoritosFotos(uid);
+  }
 }

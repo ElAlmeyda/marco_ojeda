@@ -56,7 +56,9 @@
     "WANT_TO_HAVE_FAVORITES": "Want to save your favorite artists?",
     "HEADER": "Favorite Tattoo Artists",
     "NO_FAVORITES": "You don't have any favorite tattoo artists",
-    "SEARCH_ARTISTS": "Want to search?"
+    "SEARCH_ARTISTS": "Want to search?",
+    "TATTOO_ARTISTS": "Tattoo artists",
+    "PHOTOS": "Photos"
   },
   "RESET": {
     "EMAIL_LABEL": "Email Address",
@@ -125,6 +127,7 @@
     "Biomecánico": "Biomechanical",
     "Anime": "Anime"
   },
+  "NOTICIA": "News",
   "APPOINTMENT": {
     "ACCEPT_CONDITIONS": "You must accept the terms and conditions",
     "SAVED_SUCCESS": "The appointment has been created, please wait for the tattoo artist to respond.",
@@ -179,6 +182,7 @@
     "BELLY_BUTTON": "Belly button",
     "NIPPLE": "Nipple",
     "APPOINTMENT_TYPE": "Appointment type:",
+    "ACCEPT_TATTOO_TERMS": "I have read and accepted the consents of the tattoo artist I am requesting an appointment with.",
     "STYLES": "Styles:",
     "ZONE": "Zone:",
     "COMMENTS": "Additional comments:"
@@ -478,6 +482,26 @@
       "TITLE": "Can I change my personal information?",
       "ANSWER": "Yes, you can update your personal information, including name, phone, and profile picture, from the 'Profile' section."
     }
-  }
+  },
+  "EVENTS": "Events",
+  "PREFERIBLEMENTE": "Preferably",
+  "MANANA": "Morning",
+  "TARDE": "Afternoon",
+  "EVENTS.TITLE": "Do you want to go to an event?",
+  "EVENTS.NO_EVENTS": "No nearby events",
+  "EVENTS.NO_ARTISTS": "No tattoo artists available",
+  "EVENTS.GOING_TO_EVENT": "Do you want to go to an event?",
+  "EVENTS.LOCATION": "Location",
+  "EVENTS.DATE": "Date",
+
+  "TATTOO.SOCIAL_INSTAGRAM": "Instagram",
+  "TATTOO.SOCIAL_FACEBOOK": "Facebook",
+  "TATTOO.SOCIAL_WHATSAPP": "WhatsApp",
+  "TATTOO.SOCIAL_TIKTOK": "TikTok",
+  "TATTOO.SOCIAL_TWITTER": "Twitter",
+  "TATTOO.SOCIAL_WEB": "Website",
+  "SKETCHES.LOADING": "Loading sketches...",
+  "SKETCHES.NO_MATCHING": "No sketches found for this style.",
+  "SKETCHES.NO_SKETCHES": "No sketches available"
 
 }

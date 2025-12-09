@@ -56,7 +56,9 @@
     "WANT_TO_HAVE_FAVORITES": "Vuoi avere tatuatori preferiti?",
     "HEADER": "Tatuatori preferiti",
     "NO_FAVORITES": "Non hai tatuatori preferiti",
-    "SEARCH_ARTISTS": "Vuoi cercare?"
+    "SEARCH_ARTISTS": "Vuoi cercare?",
+     "TATTOO_ARTISTS": "Tatuatori preferiti",
+    "PHOTOS": "Foto preferite"
   },
   "RESET": {
     "EMAIL_LABEL": "Email",
@@ -397,6 +399,7 @@
     "TITLE": "Prenota un appuntamento presso {{tienda}}",
     "WORKER": "Tatuatore",
     "TYPE": "Tipo di appuntamento:",
+    "ACCEPT_TATTOO_TERMS": "Ho letto e accettato i consensi del tatuatore con cui desidero fissare un appuntamento.",
     "SIZE_SMALL": "Piccolo (5-7 cm)",
     "SIZE_MEDIUM": "Medio (10-13 cm)",
     "SIZE_LARGE": "Grande (+15 cm)",
@@ -447,6 +450,7 @@
     "ZONE": "In quale zona:",
     "COMMENTS": "Commenti aggiuntivi:"
   },
+  "NOTICIA": "Notizie",
   "STYLE": {
     "Realismo": "Realismo",
     "Tradicional": "Tradizionale",
@@ -487,7 +491,27 @@
   "PASSWORD": "Password",
   "SIGN_IN": "Accedi",
   "FORGOT_PASSWORD": "Hai dimenticato la password?"
-}
+},
+"EVENTS": "Eventi",
+"PREFERIBLEMENTE": "Preferibilmente",
+  "MANANA": "Mattina",
+  "TARDE": "Pomeriggio",
+  "EVENTS.TITLE": "Vuoi andare a un evento?",
+  "EVENTS.NO_EVENTS": "Nessun evento nelle vicinanze",
+  "EVENTS.NO_ARTISTS": "Nessun tatuatore disponibile",
+  "EVENTS.GOING_TO_EVENT": "Vuoi andare a un evento?",
+  "EVENTS.LOCATION": "Posizione",
+  "EVENTS.DATE": "Data",
+
+  "TATTOO.SOCIAL_INSTAGRAM": "Instagram",
+  "TATTOO.SOCIAL_FACEBOOK": "Facebook",
+  "TATTOO.SOCIAL_WHATSAPP": "WhatsApp",
+  "TATTOO.SOCIAL_TIKTOK": "TikTok",
+  "TATTOO.SOCIAL_TWITTER": "Twitter",
+  "TATTOO.SOCIAL_WEB": "Sito web",
+  "SKETCHES.LOADING": "Caricamento dei bozzetti...",
+  "SKETCHES.NO_MATCHING": "Nessun bozzetto trovato per questo stile.",
+  "SKETCHES.NO_SKETCHES": "Nessun bozzetto disponibile"
 
 
 

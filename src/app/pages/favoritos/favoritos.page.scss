@@ -1,6 +1,5 @@
 ion-list {
   background: transparent !important;
-  margin-top: 25%;
 }
 
 ion-item {
@@ -30,4 +29,26 @@ ion-card {
   display: block;
   font-size: 1.1rem;
   margin-bottom: 16px;
+}
+
+.segmento-favoritos {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+
+  ion-segment-button {
+    flex: 1 1 auto;
+    min-width: 130px; /* Ajusta según el diseño */
+    max-width: 180px;
+    height: auto; /* ✅ permite crecer en altura si el texto ocupa dos líneas */
+    padding: 8px;
+
+    ion-label {
+      white-space: normal; /* ✅ permite salto de línea */
+      text-align: center;
+      line-height: 1.1;
+      font-size: 0.9rem;
+      word-break: break-word; /* ✅ evita que se desborde una palabra muy larga */
+    }
+  }
 }

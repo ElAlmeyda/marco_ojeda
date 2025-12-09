@@ -56,7 +56,9 @@
     "WANT_TO_HAVE_FAVORITES": "Möchtest du Lieblings-Tätowierer haben?",
     "HEADER": "Lieblings-Tätowierer",
     "NO_FAVORITES": "Du hast keinen Lieblings-Tätowierer",
-    "SEARCH_ARTISTS": "Möchtest du suchen?"
+    "SEARCH_ARTISTS": "Möchtest du suchen?",
+    "TATTOO_ARTISTS": "Lieblingstätowierer",
+    "PHOTOS": "Lieblingsfotos"
   },
   "RESET": {
     "EMAIL_LABEL": "E-Mail",
@@ -124,6 +126,7 @@
     "ERROR_SAVE": "Fehler beim Speichern des Termins.",
     "MISSING_FIELDS": "Bitte fülle alle Pflichtfelder aus.",
     "TITLE": "Termin buchen bei {{tienda}}",
+    "ACCEPT_TATTOO_TERMS": "Ich habe die Einverständniserklärungen des Tätowierers gelesen und akzeptiert, bei dem ich einen Termin vereinbaren möchte.",
     "WORKER": "Mitarbeiter",
     "TYPE": "Terminart:",
     "SIZE_SMALL": "Klein (5-7cm)",
@@ -176,6 +179,7 @@
     "ZONE": "In welcher Zone:",
     "COMMENTS": "Zusätzliche Kommentare:"
   },
+  "NOTICIA": "Nachrichten",
   "PLACEHOLDER": "Suchen",
   "TATTOOIST": {
     "EVENT_WARNING": "⚠️ Der Tätowierer wird in {{ciudad}} sein"
@@ -487,5 +491,25 @@
     "TERMS_OF_USE": "Nutzungsbedingungen",
     "AND": "und unsere",
     "PRIVACY_POLICY": "Datenschutzerklärung"
-  }
+  },
+  "EVENTS": "Veranstaltungen",
+  "PREFERIBLEMENTE": "Bevorzugt",
+  "MANANA": "Morgen",
+  "TARDE": "Nachmittag",
+  "EVENTS.TITLE": "Möchtest du zu einer Veranstaltung gehen?",
+  "EVENTS.NO_EVENTS": "Keine Veranstaltungen in der Nähe",
+  "EVENTS.NO_ARTISTS": "Keine tätowierer verfügbar",
+  "EVENTS.GOING_TO_EVENT": "Möchtest du zu einer Veranstaltung gehen?",
+  "EVENTS.LOCATION": "Standort",
+  "EVENTS.DATE": "Datum",
+
+  "TATTOO.SOCIAL_INSTAGRAM": "Instagram",
+  "TATTOO.SOCIAL_FACEBOOK": "Facebook",
+  "TATTOO.SOCIAL_WHATSAPP": "WhatsApp",
+  "TATTOO.SOCIAL_TIKTOK": "TikTok",
+  "TATTOO.SOCIAL_TWITTER": "Twitter",
+  "TATTOO.SOCIAL_WEB": "Webseite",
+  "SKETCHES.LOADING": "Skizzen werden geladen...",
+  "SKETCHES.NO_MATCHING": "Keine Skizzen für diesen Stil gefunden.",
+  "SKETCHES.NO_SKETCHES": "Keine Skizzen verfügbar"
 }

@@ -5,37 +5,42 @@
 
 <ion-content>
   <!-- Formulario de inicio de sesión centrado -->
+   
   <div class="login-container" *ngIf="uid === ''" style="margin-top: 30%;">
+     <ion-card class="tipo-card" *ngIf="uid === ''" >
+      <div class="language-wrapper">
+      <ion-item lines="none" class="language-selector">
+        <ion-select label="Language" labelPlacement="floating" [value]="translate.currentLang" (ionChange)="cambiarIdioma($event.detail.value)">
+          <ion-select-option value="es">🇪🇸</ion-select-option>
+          <ion-select-option value="en">🇬🇧</ion-select-option>
+          <ion-select-option value="pt">🇵🇹</ion-select-option>
+          <ion-select-option value="fr">🇫🇷</ion-select-option>
+          <ion-select-option value="de">🇩🇪</ion-select-option>
+          <ion-select-option value="it">🇮🇹</ion-select-option>
+          <ion-select-option value="ca">Català</ion-select-option> <!-- Cataluña -->
+          <ion-select-option value="gl">Galego</ion-select-option> <!-- Galicia -->
+          <ion-select-option value="eu">Euskara</ion-select-option> <!-- Euskadi -->
+        </ion-select>
+      </ion-item>
+    </div>
       <div class="center-container">
-         <div class="language-wrapper">
-          <ion-item lines="none" class="language-selector">
-            <ion-select label="Language" labelPlacement="floating" [value]="translate.currentLang" (ionChange)="cambiarIdioma($event.detail.value)">
-              <ion-select-option value="es">🇪🇸</ion-select-option>
-              <ion-select-option value="en">🇬🇧</ion-select-option>
-              <ion-select-option value="pt">🇵🇹</ion-select-option>
-              <ion-select-option value="fr">🇫🇷</ion-select-option>
-              <ion-select-option value="ca">Catalan</ion-select-option> <!-- Bandera de Cataluña -->
-              <ion-select-option value="gl">Gallego</ion-select-option> <!-- Bandera de Galicia -->
-              <ion-select-option value="eu">Euskera</ion-select-option> 
-            </ion-select>
-          </ion-item>
-        </div>
         <ion-img src="../../../assets/icon/icon.png" slot="start" class="app-logo" alt="App Logo"></ion-img>
       </div>
-      <ion-input [(ngModel)]="correo" type="email" name="email" [placeholder]=" 'LOGIN.VERIFY_EMAIL' | translate " required (ngModelChange)="comprobarCorreo()" *ngIf="!registro && !correoExistente"></ion-input>
+      <ion-input [(ngModel)]="correo" type="email" label-placement="floating" name="email" fill="outline" [label]=" 'LOGIN.VERIFY_EMAIL' | translate " required (ngModelChange)="comprobarCorreo()" *ngIf="!registro && !correoExistente"></ion-input>
       <ion-button type="submit" (click)="formatCorreo()" style="border-radius: 20px;" *ngIf="!registro && !correoExistente">{{ 'LOGIN.VERIFY_EMAIL_BTN' | translate }}</ion-button>
       <ion-label class="error-label" style="margin:5px;" *ngIf="correoInvalido"><span>{{ 'LOGIN.INVALID_EMAIL' | translate }}</span></ion-label>
 
       <div class="login-container" *ngIf="correoExistente">
         <form method="POST">
-          <ion-input [(ngModel)]="correo" type="email" name="email" label="{{ 'LOGIN.EMAIL' | translate }}" required></ion-input>
+          <ion-input [(ngModel)]="correo" label-placement="floating" fill="outline" type="email" name="email" label="{{ 'LOGIN.EMAIL' | translate }}" required></ion-input>
           <div style="display: flex; align-items: center; padding-right: 10px;">
             <ion-input
+              label-placement="floating" fill="outline"
               style="flex: 1;"
               [(ngModel)]="password"
               [type]="showPassword ? 'text' : 'password'"
               name="password"
-              placeholder="{{ 'LOGIN.PASSWORD' | translate }}"
+              label="{{ 'LOGIN.PASSWORD' | translate }}"
               required>
             </ion-input>
 
@@ -56,22 +61,24 @@
 
       <div class="login-container" *ngIf="registro">
         <form method="POST">
-          <ion-input *ngIf="registro" label="{{ 'REGISTER.NAME' | translate }}" [(ngModel)]="nombre" (ngModelChange)="comprobarNombre()" [ngModelOptions]="{standalone: true}" name="nombre" required autocapitalize></ion-input>
-          <ion-label class="error-label" style="margin:5px;" *ngIf="nombreInvcalido && registro"><span>{{ 'REGISTER.INVALID_NAME' | translate }}.</span></ion-label>
-          <ion-input *ngIf="registro" label="Nª Telefono:" placeholder="{{ 'REGISTER.PHONE_PLACEHOLDER' | translate }}" type="tel" [(ngModel)]="phone" (ngModelChange)="comprobarNumero()" [ngModelOptions]="{standalone: true}" name="correo" required></ion-input>
+          <ion-input *ngIf="registro" label-placement="floating" fill="outline" label="{{ 'REGISTER.NAME' | translate }}" [(ngModel)]="nombre" (ngModelChange)="comprobarNombre()" [ngModelOptions]="{standalone: true}" name="nombre" required autocapitalize></ion-input>
+          <ion-label class="error-label" style="margin:5px;" *ngIf="nombreInvcalido && registro"><span>{{ 'REGISTER.INVALID_NAME' | translate }}</span></ion-label>
+          
+          <ion-input *ngIf="registro" label-placement="floating" fill="outline" label="{{ 'REGISTER.PHONE' | translate }}" placeholder="{{ 'REGISTER.PHONE_PLACEHOLDER' | translate }}" type="tel" [(ngModel)]="phone" (ngModelChange)="comprobarNumero()" [ngModelOptions]="{standalone: true}" name="correo" required></ion-input>
           <ion-label class="error-label" style="margin:5px;" *ngIf="numeroIncorrecto && registro"><span>{{ 'REGISTER.INVALID_PHONE' | translate }}</span></ion-label>
-          <ion-input *ngIf="registro" type="email" label="{{ 'REGISTER.EMAIL' | translate }}" [(ngModel)]="correo" (ngModelChange)="comprobarCorreo()" [ngModelOptions]="{standalone: true}" name="correo" required></ion-input>
+          
+          <ion-input *ngIf="registro" label-placement="floating" fill="outline" type="email" label="{{ 'REGISTER.EMAIL' | translate }}" [(ngModel)]="correo" (ngModelChange)="comprobarCorreo()" [ngModelOptions]="{standalone: true}" name="correo" required></ion-input>
           <ion-label class="error-label" style="margin:5px;" *ngIf="correoInvalido && registro"><span>{{ 'REGISTER.INVALID_EMAIL' | translate }}</span></ion-label>
+          
           <div style="display: flex; align-items: center; padding-right: 10px;">
-            <ion-input
+            <ion-input label-placement="floating" fill="outline"
               style="flex: 1;"
               [(ngModel)]="password"
               [type]="showPassword ? 'text' : 'password'"
               name="password"
-              placeholder="{{ 'REGISTER.PASSWORD' | translate }}"
+              label="{{ 'REGISTER.PASSWORD' | translate }}"
               required>
             </ion-input>
-
             <ion-icon
               name="{{ showPassword ? 'eye-off' : 'eye' }}"
               style="cursor: pointer; margin-left: 12px; margin-top: -6px; font-size: 28px;"
@@ -79,12 +86,11 @@
             </ion-icon>
           </div>
           <ion-label class="error-label" *ngIf="!isValidPassword() && registro"><span>{{ 'REGISTER.INVALID_PASSWORD' | translate }}</span></ion-label>
-          <ion-button type="submit" (click)="crearUsuario()" [disabled]="!registro || nombreInvcalido ||
-              numeroIncorrecto || correoInvalido || !isValidPassword() ||!nombre || !phone ||!correo ||!password" style="border-radius: 20px;">{{ 'REGISTER.SIGN_UP' | translate }}</ion-button>
+          <ion-button type="submit" (click)="crearUsuario()" [disabled]="!registro || nombreInvcalido || numeroIncorrecto || correoInvalido || !isValidPassword() || !nombre || !phone || !correo || !password" style="border-radius: 20px;">{{ 'REGISTER.SIGN_UP' | translate }}</ion-button>
         </form>
         <div class="privacy-container" *ngIf="registro">
           <ion-item lines="none" class="privacy-item">
-            <ion-label> {{ 'REGISTER.PRIVACY_INFO1' | translate }}. </ion-label>
+            <ion-label>{{ 'REGISTER.PRIVACY_INFO1' | translate }}</ion-label>
           </ion-item>
           <ion-item lines="none" class="privacy-item">
             <ion-label>
@@ -96,93 +102,102 @@
           </ion-item>
         </div>
       </div>
-    </div>
+    </ion-card>
+  </div>
 
     <div *ngIf="usuario.uid">
-        <ion-list style="padding: 10px; background:transparent;">
-            <div style="display: flex; align-items: center; justify-content: flex-start; padding: 20px;">
-              <img [src]="usuario.avatar || 'assets/icon/sin_avatar.png'" alt="Avatar" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;" (click)="actualizarAvatar()" />
-              <input type="file" #fileInput accept="image/*" style="display:none" (change)="onFileSelectedAvatar($event)" />
-              <div style="display: flex; flex-direction: column; align-items: flex-start;" [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isInformacion: true }">
-                <h2 style="margin: 0; font-weight: bold;">{{usuario.nombre}}</h2>
-                <p style="margin: 0; font-size: 14px; color: gray;">{{usuario.movil}}</p>
-              </div>
-              <ion-icon name="chevron-forward-outline" slot="end" style="margin-left: auto; font-size: 20px;" [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isInformacion: true }"></ion-icon>
-            </div>
-            
-            <ion-item routerLink="/cuenta">
-              <ion-label>
-                 <h2>{{ 'SETTINGS.ACCOUNT' | translate }}</h2>
-            <p class="small-description">{{ 'SETTINGS.ACCOUNT_DESC' | translate }}</p>
-              </ion-label>
-            </ion-item>
+      <ion-list style="padding: 10px; background:transparent;">
+        <div style="display: flex; align-items: center; justify-content: flex-start; padding: 20px;">
+          <img [src]="usuario.avatar || 'assets/icon/sin_avatar.png'" alt="Avatar" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;" (click)="actualizarAvatar()" />
+          <input type="file" #fileInput accept="image/*" style="display:none" (change)="onFileSelectedAvatar($event)" />
+          <div style="display: flex; flex-direction: column; align-items: flex-start;" [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isInformacion: true }">
+            <h2 style="margin: 0; font-weight: bold;">{{usuario.nombre}}</h2>
+            <p style="margin: 0; font-size: 14px; color: gray;">{{usuario.movil}}</p>
+          </div>
+          <ion-icon name="chevron-forward-outline" slot="end" style="margin-left: auto; font-size: 20px;" [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isInformacion: true }"></ion-icon>
+        </div>
 
-            <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isResena: true }">
-            <ion-label>
-                <h2>{{ 'SETTINGS.REVIEWS' | translate }}</h2>
-            <p class="small-description">{{ 'SETTINGS.REVIEWS_DESC' | translate }}</p>
-            </ion-label>
-            </ion-item>
+        <ion-item routerLink="/cuenta" detail="false">
+          <ion-label>
+            <h2>{{ 'SETTINGS.ACCOUNT' | translate }}</h2>
+            <p style="color:white" class="small-description">{{ 'SETTINGS.ACCOUNT_DESC' | translate }}</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" style="margin-left: auto; font-size: 20px;"></ion-icon>
+        </ion-item>
 
-            <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isHistorial: true }">
+        <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isResena: true }" detail="false">
+          <ion-label>
+            <h2>{{ 'SETTINGS.REVIEWS' | translate }}</h2>
+            <p style="color:white" class="small-description">{{ 'SETTINGS.REVIEWS_DESC' | translate }}</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" style="margin-left: auto; font-size: 20px;"></ion-icon>
+        </ion-item>
+
+        <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isHistorial: true }" detail="false">
           <ion-label>
             <h2>{{ 'SETTINGS.HISTORY' | translate }}</h2>
-            <p class="small-description">{{ 'SETTINGS.HISTORY_DESC' | translate }}</p>
+            <p style="color:white" class="small-description">{{ 'SETTINGS.HISTORY_DESC' | translate }}</p>
           </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" style="margin-left: auto; font-size: 20px;"></ion-icon>
         </ion-item>
 
-        <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isPago: true }">
+        <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isPago: true }" detail="false">
           <ion-label>
             <h2>{{ 'SETTINGS.SUBSCRIPTIONS' | translate }}</h2>
-            <p class="small-description">{{ 'SETTINGS.SUBSCRIPTIONS_DESC' | translate }}</p>
+            <p style="color:white" class="small-description">{{ 'SETTINGS.SUBSCRIPTIONS_DESC' | translate }}</p>
           </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" style="margin-left: auto; font-size: 20px;"></ion-icon>
         </ion-item>
 
-       <ion-item>
+        <ion-item>
           <ion-label>{{ 'SETTINGS.LANGUAGE' | translate }}</ion-label>
+          <ion-select 
+            [value]="translate.currentLang" 
+            (ionChange)="cambiarIdioma($event.detail.value)" 
+            label="{{ 'SETTINGS.SELECT_LANGUAGE' | translate }}" 
+            labelPlacement="floating">
 
-          <ion-select
-            [value]="translate.currentLang"
-            (ionChange)="cambiarIdioma($event.detail.value)"
-            label="{{ 'SETTINGS.SELECT_LANGUAGE' | translate }}"
-            labelPlacement="floating"
-          >
-            <ion-select-option value="es">🇪🇸 </ion-select-option>
-            <ion-select-option value="en">🇬🇧 </ion-select-option>
-            <ion-select-option value="pt">🇵🇹 </ion-select-option>
-            <ion-select-option value="fr">🇫🇷 </ion-select-option>
-            <ion-select-option value="de">🇩🇪 </ion-select-option>
-            <ion-select-option value="it">🇮🇹 </ion-select-option>
+            <ion-select-option value="es">🇪🇸</ion-select-option>
+            <ion-select-option value="en">🇬🇧</ion-select-option>
+            <ion-select-option value="pt">🇵🇹</ion-select-option>
+            <ion-select-option value="fr">🇫🇷</ion-select-option>
+            <ion-select-option value="de">🇩🇪</ion-select-option>
+            <ion-select-option value="it">🇮🇹</ion-select-option>
             <ion-select-option value="ca">Català</ion-select-option> <!-- Cataluña -->
             <ion-select-option value="gl">Galego</ion-select-option> <!-- Galicia -->
             <ion-select-option value="eu">Euskara</ion-select-option> <!-- Euskadi -->
+            
+
           </ion-select>
         </ion-item>
 
-        <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isAyuda: true }">
+
+        <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isAyuda: true }" detail="false">
           <ion-label>
             <h2>{{ 'SETTINGS.HELP_CENTER' | translate }}</h2>
-            <p class="small-description">{{ 'SETTINGS.HELP_CENTER_DESC' | translate }}</p>
+            <p style="color:white" class="small-description">{{ 'SETTINGS.HELP_CENTER_DESC' | translate }}</p>
           </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" style="margin-left: auto; font-size: 20px;"></ion-icon>
         </ion-item>
 
-        <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isUSo: true }">
+        <ion-item [routerLink]="['/ajustes', usuario.uid]" [queryParams]="{ isUSo: true }" detail="false">
           <ion-label>
             <h2>{{ 'SETTINGS.ABOUT_US' | translate }}</h2>
-            <p class="small-description">{{ 'SETTINGS.ABOUT_US_DESC' | translate }}</p>
+            <p style="color:white" class="small-description">{{ 'SETTINGS.ABOUT_US_DESC' | translate }}</p>
           </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" style="margin-left: auto; font-size: 20px;"></ion-icon>
         </ion-item>
-            <ion-item lines="none">
-            <ion-grid>
-                <ion-row class="ion-justify-content-center ion-align-items-center">
-                <ion-col size="auto">
-                    <img style="height: 100px;" src="../../../assets/icon/icon.png" class="logo" alt="App Logo">
-                </ion-col>
-                </ion-row>
-            </ion-grid>
-            </ion-item>
-        </ion-list>
 
+        <ion-item lines="none">
+          <ion-grid>
+            <ion-row class="ion-justify-content-center ion-align-items-center">
+              <ion-col size="auto">
+                <img style="height: 100px;" src="../../../assets/icon/icon.png" class="logo" alt="App Logo">
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
     </div>
   
  

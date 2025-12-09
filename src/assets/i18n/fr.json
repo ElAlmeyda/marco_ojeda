@@ -56,7 +56,9 @@
     "WANT_TO_HAVE_FAVORITES": "Voulez-vous avoir des tatoueurs favoris ?",
     "HEADER": "Tatoueurs favoris",
     "NO_FAVORITES": "Vous n'avez aucun tatoueur favori",
-    "SEARCH_ARTISTS": "Voulez-vous chercher ?"
+    "SEARCH_ARTISTS": "Voulez-vous chercher ?",
+    "TATTOO_ARTISTS": "Tatoueurs favoris",
+    "PHOTOS": "Photos favorites"
   },
   "RESET": {
     "EMAIL_LABEL": "Adresse e-mail",
@@ -124,6 +126,7 @@
     "ERROR_SAVE": "Erreur lors de l'enregistrement du rendez-vous.",
     "MISSING_FIELDS": "Veuillez remplir tous les champs obligatoires.",
     "TITLE": "Prendre rendez-vous chez {{tienda}}",
+    "ACCEPT_TATTOO_TERMS": "J’ai lu et accepté les consentements du tatoueur auprès duquel je souhaite prendre rendez-vous.",
     "WORKER": "Travailleur",
     "TYPE": "Type de rendez-vous :",
     "SIZE_SMALL": "Petit (5-7cm)",
@@ -176,6 +179,7 @@
     "ZONE": "Dans quelle zone :",
     "COMMENTS": "Commentaires supplémentaires :"
   },
+  "NOTICIA": "Nouvelles",
   "PLACEHOLDER": "Rechercher",
   "TATTOOIST": {
     "EVENT_WARNING": "⚠️ Le tatoueur sera à {{ciudad}}"
@@ -475,5 +479,25 @@
   "PAY_GO_PREMIUM_BTN": "Aller au paiement",
   "EDIT_FIELD": "Modifier",
   "BUTTON_CANCEL": "Annuler",
-  "BUTTON_EDIT": "Modifier"
+  "BUTTON_EDIT": "Modifier",
+  "EVENTS": "Événements",
+  "PREFERIBLEMENTE": "De préférence",
+  "MANANA": "Matin",
+  "TARDE": "Après-midi",
+  "EVENTS.TITLE": "Veux-tu aller à un événement ?",
+  "EVENTS.NO_EVENTS": "Aucun événement à proximité",
+  "EVENTS.NO_ARTISTS": "Aucun tatoueur disponible",
+  "EVENTS.GOING_TO_EVENT": "Veux-tu aller à un événement ?",
+  "EVENTS.LOCATION": "Emplacement",
+  "EVENTS.DATE": "Date",
+
+  "TATTOO.SOCIAL_INSTAGRAM": "Instagram",
+  "TATTOO.SOCIAL_FACEBOOK": "Facebook",
+  "TATTOO.SOCIAL_WHATSAPP": "WhatsApp",
+  "TATTOO.SOCIAL_TIKTOK": "TikTok",
+  "TATTOO.SOCIAL_TWITTER": "Twitter",
+  "TATTOO.SOCIAL_WEB": "Site web",
+  "SKETCHES.LOADING": "Chargement des croquis...",
+  "SKETCHES.NO_MATCHING": "Aucun croquis trouvé pour ce style.",
+  "SKETCHES.NO_SKETCHES": "Aucun croquis disponible"
 }

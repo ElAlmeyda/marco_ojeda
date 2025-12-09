@@ -17,6 +17,20 @@ ion-content {
     margin: 10px 20px; 
   }
 
+  .tipo-card {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 20px;
+    background: linear-gradient(145deg, #1A1A1A, #121212);
+    color: #EDEDED;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+
+    /* Espacio interno */
+    padding: 20px; /* relleno dentro del card */
+    margin: 20px 0; /* margen arriba y abajo del card */
+    box-sizing: border-box;
+  }
+
   .language-wrapper {
     position: absolute;
     top: 0;      // ajusta según la altura que quieras
@@ -157,7 +171,6 @@ ion-content {
 
   ion-input {
     font-size: 18px;
-    border: 1px solid #ccc;
     --padding-start: 20px;
     --padding-end: 20px;
     border-radius: 20px;

@@ -38,6 +38,7 @@ export class AppComponent {
   uid = "";
   progress = true;
   isPremiun: any;
+  bannerVisible=false;
   
 
   toggleList() {
@@ -118,11 +119,13 @@ export class AppComponent {
     };
 
     await AdMob.showBanner(options);
+    this.bannerVisible = true;
   }
 
 
   async hideBanner() {
     await AdMob.removeBanner();
+    this.bannerVisible = false;
   }
 
   async ngOnInit() {

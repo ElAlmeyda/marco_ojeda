@@ -56,7 +56,9 @@
     "WANT_TO_HAVE_FAVORITES": "¿Quieres tener tatuadores favoritos?",
     "HEADER": "Tatuadores favoritos",
     "NO_FAVORITES": "No tienes ningún tatuador favorito",
-    "SEARCH_ARTISTS": "¿Quieres buscar?"
+    "SEARCH_ARTISTS": "¿Quieres buscar?",
+    "TATTOO_ARTISTS": "Tatuadores",
+    "PHOTOS": "Fotos"
   },
   "RESET": {
     "EMAIL_LABEL": "Correo Electrónico",
@@ -126,6 +128,7 @@
     "TITLE": "Pedir Cita a {{tienda}}",
     "WORKER": "Trabajador",
     "TYPE": "Tipo de cita:",
+    "ACCEPT_TATTOO_TERMS": "He leído y aceptado los consentimientos del tatuador al que le voy a pedir una cita.",
     "SIZE_SMALL": "Pequeño (5-7cm)",
     "SIZE_MEDIUM": "Mediano (10-13cm)",
     "SIZE_LARGE": "Grande (+15cm)",
@@ -488,5 +491,26 @@
     "TERMS_OF_USE": "Términos de Uso",
     "AND": "y nuestra",
     "PRIVACY_POLICY": "Política de Privacidad"
-  }
+  },
+  "NOTICIA":"Noticias",
+  "EVENTS": "Eventos",
+  "PREFERIBLEMENTE": "Preferiblemente",
+  "MANANA": "Mañana",
+  "TARDE": "Tarde",
+  "EVENTS.TITLE": "¿Quieres ir a algún evento?",
+  "EVENTS.NO_EVENTS": "No hay eventos cercanos",
+  "EVENTS.NO_ARTISTS": "No hay tatuadores disponibles",
+  "EVENTS.GOING_TO_EVENT": "¿Quieres ir a algún evento?",
+  "EVENTS.LOCATION": "Ubicación",
+  "EVENTS.DATE": "Fecha",
+
+  "TATTOO.SOCIAL_INSTAGRAM": "Instagram",
+  "TATTOO.SOCIAL_FACEBOOK": "Facebook",
+  "TATTOO.SOCIAL_WHATSAPP": "WhatsApp",
+  "TATTOO.SOCIAL_TIKTOK": "TikTok",
+  "TATTOO.SOCIAL_TWITTER": "Twitter",
+  "TATTOO.SOCIAL_WEB": "Sitio web",
+  "SKETCHES.LOADING": "Cargando bocetos...",
+  "SKETCHES.NO_MATCHING": "No se encontró ningún boceto de este estilo.",
+  "SKETCHES.NO_SKETCHES": "No hay bocetos"
 }

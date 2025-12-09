@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdMob, InterstitialAdPluginEvents } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
@@ -10,12 +10,14 @@ import { Cita, Horario, Tatuador, Trabajador, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
 
+
 @Component({
   selector: 'app-pedir-cita',
   templateUrl: './pedir-cita.page.html',
   styleUrls: ['./pedir-cita.page.scss'],
 })
 export class PedirCitaPage implements OnInit {
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
   usuario: Usuario = {
     uid: '',
@@ -24,15 +26,22 @@ export class PedirCitaPage implements OnInit {
   };
   
   datosConsulta = {
-    nombre: '',
-    diseno: '',
-    ubicacion: '',
-    tamano: '',
+    nombreUser: '',
+    estilo: '',
+    zona: '',
+    tipo: '',
     color: '',
-    notas: '',
+    mensaje: '',
     tatuador: '',
-    telefono: '',
-    correo: ''
+    movil: '',
+    correo: '',
+    predeterminado: '',
+    consentimiento: {
+      firmado: false,
+      fecha: Date.now(),
+      fechaISO: '',
+      uidFirma: ''
+    }
   };
 
   tatuador: Tatuador = {
@@ -48,6 +57,7 @@ export class PedirCitaPage implements OnInit {
   duracionCita = 0;
   uid=''
   cita: Cita = {} as Cita;consultaTrue: any;
+  preferiblemente: any;
 ;
   horaSeleccionada: string = '';
 
@@ -73,12 +83,15 @@ export class PedirCitaPage implements OnInit {
   eventos: any[] = [];
   diasConEventos: { [fecha: string]: any } = {};
   isPremium=false;
+  aceptoTatuador:any;
 
   piercings = [
     "LOB","HELIX","TRAGUS","ANTI_TRAGUS","DAITH","CONCH","INDUSTRIAL",
     "ROOK","SNUG","EYEBROW","NOSE","SEPTUM","LIP","MONROE","LABRET",
     "FRENUM","BELLY_BUTTON","NIPPLE"
   ];
+
+  boceto: any;
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private route: ActivatedRoute, public tiendaTatuador: TiendaService, public toast: ToastController,
       private router: Router, public navCtrl: NavController, public firestore: FirestoreService, public translate: TranslateService) {
@@ -104,6 +117,18 @@ export class PedirCitaPage implements OnInit {
   this.route.queryParams.subscribe(params => {
     this.consultaTrue = params['consulta'];
     console.log('Query Params:', params);
+    if (params['boceto']) {
+      try {
+        this.boceto = JSON.parse(params['boceto']);
+        this.estilo = this.boceto.estilo || null;
+        this.mensaje = this.boceto.descripcion || null;
+        console.log('Boceto recibido:', this.boceto);
+        console.log('Boceto recibido:', this.estilo);
+        console.log('Boceto recibido:', this.mensaje);
+      } catch (error) {
+        console.error('Error al parsear el boceto:', error);
+      }
+    }
   });
 }
 
@@ -200,11 +225,11 @@ export class PedirCitaPage implements OnInit {
 
     // Generar fechas disponibles según el trabajador
     if (this.tatuador.horario) {
-    this.fechasDisponibles =  this.fechasDisponibles = this.generarFechasDesdeHorario(
-          this.tatuador.horario,   // el horario del tatuador
-          180,                     // número de días hacia adelante
-          this.tatuadorSeleccionado.diasLibres  // fechas bloqueadas
-        );
+    this.fechasDisponibles =  this.fechasDisponibles = this.generarFechasSegunHorario(
+      this.tatuador.horario,   // el horario del tatuador
+      this.tatuadorSeleccionado.diasLibres,
+      180
+    );
     }
 
     // Recalcular horas disponibles del trabajador
@@ -212,28 +237,43 @@ export class PedirCitaPage implements OnInit {
     this.obtenerEventosDelTrabajador();
   }
 
-  generarFechasDesdeHorario(horario: Horario[], diasAdelante: number = 180, diasLibres: string[] = []): string[] {
-    const diasSemana = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
-    const hoy = new Date();
-    const fechasDisponibles: string[] = [];
+  normalizarTexto(texto: string): string {
+    return texto
+      ? texto.toLowerCase()
+          .normalize("NFD") // separa letras y acentos
+          .replace(/[\u0300-\u036f]/g, "") // elimina acentos
+          .trim()
+      : '';
+  }
 
-    // Filtrar solo los días con horario válido (inicio y fin)
-    const diasTrabaja = horario
-      .filter((h: Horario) => h.inicio && h.fin)
-      .map((h: Horario) => h.dia.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+  generarFechasSegunHorario(
+    horarioEstudio: Horario[], // horario del estudio
+    diasLibresTatuador: string[], // días que el tatuador no trabaja
+    diasAdelante: number
+  ): string[] {
+    const diasSemanaArray = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
+    
+    // solo días del estudio que tengan inicio y fin
+    const diasTrabaja = horarioEstudio
+      .filter(h => h.turnos?.length > 0)  // <-- cambio aquí
+      .map(h => h.dia.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+
+    const hoy = new Date();
+    const fechas: string[] = [];
 
     for (let i = 0; i <= diasAdelante; i++) {
       const fecha = new Date();
       fecha.setDate(hoy.getDate() + i);
-      const nombreDia = diasSemana[fecha.getDay()];
 
-      const fechaStr = fecha.toISOString().split("T")[0];
-      if (diasTrabaja.includes(nombreDia) && !diasLibres.includes(fechaStr)) {
-        fechasDisponibles.push(fechaStr);
+      const nombreDia = diasSemanaArray[fecha.getDay()];
+      const fechaStr = `${fecha.getFullYear()}-${(fecha.getMonth()+1).toString().padStart(2,'0')}-${fecha.getDate().toString().padStart(2,'0')}`;
+
+      if (diasTrabaja.includes(nombreDia) && !diasLibresTatuador.includes(fechaStr)) {
+        fechas.push(fechaStr);
       }
     }
-
-    return fechasDisponibles;
+    console.log("Fechas",fechas);
+    return fechas;
   }
 
 
@@ -321,14 +361,21 @@ export class PedirCitaPage implements OnInit {
 
     if(this.usuario.movil){
       // Rellenar la cita
-      this.datosConsulta.nombre = this.usuario.nombre
-      this.datosConsulta.telefono = this.usuario.movil
+      this.datosConsulta.nombreUser = this.usuario.nombre
+      this.datosConsulta.movil = this.usuario.movil
       this.datosConsulta.correo = this.usuario.correo
-      this.datosConsulta.diseno = this.estilo
-      this.datosConsulta.notas = this.mensaje 
-      this.datosConsulta.tamano = this.tipo
+      this.datosConsulta.estilo = this.estilo
+      this.datosConsulta.mensaje = this.mensaje 
+      this.datosConsulta.tipo = this.tipo
       this.datosConsulta.tatuador = this.tatuadorSeleccionado.nombre
-      this.datosConsulta.ubicacion = this.zona
+      this.datosConsulta.zona = this.zona
+      this.datosConsulta.predeterminado = this.preferiblemente;
+      this.datosConsulta.consentimiento = {
+        firmado: true,
+        fecha: Date.now(),               // timestamp (ms)
+        fechaISO: new Date().toISOString(),
+        uidFirma: this.usuario.uid
+      };
 
       try {
         // Subir boceto si existe
@@ -385,7 +432,7 @@ export class PedirCitaPage implements OnInit {
 
   volver(){
     if(this.primerPaso){
-      this.navCtrl.navigateForward(['/tatuador', this.tatuador.uid]);
+      this.navCtrl.back();
     } else {
       this.primerPaso = true;
       this.segundoPaso = false;
@@ -418,14 +465,14 @@ export class PedirCitaPage implements OnInit {
 
     // Obtener el horario de ese día
     const horarioDelDia = this.tatuador?.horario?.find(
-        h => h.dia.toLowerCase() === nombreDia
-      );
+      h => this.normalizarTexto(h.dia) === this.normalizarTexto(nombreDia)
+    );
 
+    let horarioBase: string[] = [];
 
-    // Generar horario base solo si existe
-    const horarioBase: string[] = horarioDelDia 
-      ? this.generarHorasEntre(horarioDelDia.inicio, horarioDelDia.fin)
-      : [];
+    (horarioDelDia?.turnos ?? []).forEach(turno => {
+      horarioBase = horarioBase.concat(this.generarHorasEntre(turno.inicio, turno.fin));
+    });
       
     // 1️⃣ Traer horas bloqueadas
     this.firestore.getHorasBloqueadas(estudioId, trabajadorId, fecha)
@@ -592,6 +639,14 @@ export class PedirCitaPage implements OnInit {
     // Recalcular horas disponibles solo si hay fecha y trabajador seleccionados
     if (this.fechaSeleccionada && this.tatuadorSeleccionado?.uid) {
       this.obtenerHoraDisponibles();
+    }
+  }
+
+  abrirPDF() {
+    if (this.tatuador?.consentimientoUrl) {
+      window.open(this.tatuador.consentimientoUrl, '_blank');
+    } else {
+      console.warn('No hay URL de consentimiento disponible.');
     }
   }
 

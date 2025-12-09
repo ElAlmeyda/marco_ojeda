@@ -31,6 +31,7 @@ export interface Tatuador {
     twitter?: string;
     distancia?: string;
     web?: string;
+    consentimientoUrl?: string;
     trabajadores?: string[];
     fechaDisponibleDesde?: string;
     promedio?: number;
@@ -78,6 +79,7 @@ export interface Trabajador {
     nombre: string;
     horario: string;
     diasLibres: string[];
+    foto?: string;
 }
 
 export interface Ofertas {
@@ -98,8 +100,27 @@ export interface Noticia {
 }
 
 export interface Horario {
-  filter(arg0: (h: any) => any): unknown;
   dia: string;
-  inicio: string;
-  fin: string;
+  turnos: Turno [];
+}
+
+export interface Dia {
+    nombre: string;
+    activo: boolean;
+    turnos: Turno[];
+    horas?: string[];
+}
+
+export interface Turno {
+    inicio: string;
+    fin: string;
+}
+
+export interface Evento{
+    id?:string;
+    titulo?: string;
+    descripcion?: string;
+    fecha?: any;
+    lugar?: string;
+    tatuadores?: string[];
 }

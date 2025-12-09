@@ -1,0 +1,42 @@
+.card-title {
+    position: absolute; /* El nombre se coloca encima de la imagen */
+    font-size: 14px;
+    bottom: 10px; /* Coloca el nombre cerca de la parte inferior de la imagen */
+    left: 0; /* Centra el nombre horizontalmente */
+    font-size: 18px; /* Tamaño del texto del nombre */
+    color: white; /* Color blanco para que resalte sobre la imagen */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente para mejorar la legibilidad */
+    padding: 5px; /* Añade un poco de espaciado alrededor del texto */
+    border-radius: 5px; /* Bordes redondeados del fondo del nombre */
+    z-index:2;
+  }
+
+  ion-col {
+    --ion-grid-column-padding: 3px; /* Establece un margen entre las columnas */
+  }
+  
+  .toolbar-icon {
+    margin: 10px 8px;
+    font-size: 24px;
+  }
+
+
+  /* Estilos globales para las imágenes dentro de los cards */
+.card-img {
+  width: 100%; /* Ancho máximo de la imagen */
+  height: 200px; /* Alto fijo para la imagen */
+  object-fit: cover; /* Asegura que la imagen cubra el espacio sin distorsión */
+  border-radius: 10px; /* Bordes redondeados para las imágenes */
+}
+
+/* Configuración de las columnas para mostrar dos elementos por fila */
+.user-col {
+  padding: 0; /* Eliminar padding extra en las columnas */
+}
+
+/* Estilo para los ion-card que contienen las imágenes */
+.user-card {
+  background-color: transparent; /* Fondo transparente */
+  box-shadow: none; /* Eliminar sombras para un diseño limpio */
+  border-radius: 15px; /* Bordes redondeados para los cards */
+}

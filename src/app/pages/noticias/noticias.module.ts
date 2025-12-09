@@ -15,6 +15,7 @@ import { TranslateModule } from '@ngx-translate/core';
     FormsModule,
     IonicModule,
     TranslateModule,
+    TranslateModule,
     NoticiasPageRoutingModule
   ],
   declarations: [NoticiasPage]

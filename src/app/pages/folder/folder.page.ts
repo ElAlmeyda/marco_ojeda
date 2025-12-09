@@ -110,11 +110,9 @@ export class FolderPage implements OnInit {
           }
 
           // Obtener la primera foto
-          this.tiendaService.getFotosTatuador(tatuador.uid).subscribe(fotos => {
-            tatuador.foto = fotos.length > 0 ? [fotos[0]] : [];
-            console.log('Foto principal para', tatuador.nombreTienda, tatuador.foto);
+           this.tiendaService.getAvataresDeTatuador(tatuador.uid).subscribe(fotos => {
+            tatuador.avatar = fotos ?? ''; 
           });
-
           return tatuador;
         });
 

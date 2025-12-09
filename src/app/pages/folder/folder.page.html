@@ -5,8 +5,15 @@
 
 <ion-content [fullscreen]="true">
   <ion-card-content class="card-content">
-    <ion-searchbar style="padding-top: 60px;" placeholder="{{ 'PLACEHOLDER' | translate }}" [(ngModel)]="searchTerm" (ionInput)="buscarTatuador()"></ion-searchbar>
-    <ion-card>
+     <ion-button 
+        size="small" 
+        fill="outline" 
+        color="primary" routerLink="/eventos"
+        style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+        {{ 'EVENTS' | translate }}
+      </ion-button>
+    <ion-searchbar style="padding-top: 95px;" placeholder="{{ 'PLACEHOLDER' | translate }}" [(ngModel)]="searchTerm" (ionInput)="buscarTatuador()"></ion-searchbar>
+    <ion-card style="border-radius: 12px;">
      <ion-card-header (click)="toggleFormulario()" style="cursor: pointer;">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <h2>{{ "MORE_FILTERS" | translate }}</h2>
@@ -42,7 +49,7 @@
             
             <ion-card class="user-card">
               <!-- Imagen del tatuador -->
-              <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png'" class="user-card-img"></ion-img>
+              <ion-img [src]="tipo.avatar || 'assets/icon/sin_avatar.png'" class="user-card-img"></ion-img>
               
               <!-- Info -->
               <ion-card-header>
@@ -78,8 +85,8 @@
       </div>
     </ion-card>
     <!-- Spinner de carga -->
-    <div *ngIf="isLoading" class="loading-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 20px;">
-      <p class="loading-text" style="margin-top: 10px; text-align: center;">
+    <div *ngIf="isLoading" class="card">
+      <p class="loading-text">
         {{ 'LOADING_TATTOO_ARTISTS' | translate }}
       </p>
       <ion-spinner name="crescent"></ion-spinner>
@@ -87,7 +94,7 @@
 
     <!-- Mensaje de error -->
     <div *ngIf="isError && !isLoading" class="center-card">
-      <ion-card>
+      <ion-card style="border-radius: 12px;">
         <ion-card-content class="error-content">
           <ion-label class="error-label">
             {{ 'ERROR_LOADING_TATTOO_ARTISTS' | translate }}
@@ -109,7 +116,7 @@
         <div class="horizontal-scroll">
           <div class="cards-row" *ngFor="let tipo of recomendado" [routerLink]="['/tatuador', tipo.uid]">
             <ion-card class="user-card">
-              <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png'" class="user-card-img"></ion-img>
+              <ion-img [src]="tipo.avatar || 'assets/icon/sin_avatar.png'" class="user-card-img"></ion-img>
 
               <ion-card-header>
                 <ion-row class="ion-align-items-center ion-justify-content-between">
@@ -142,7 +149,7 @@
         <div class="horizontal-scroll">
           <div class="cards-row" *ngFor="let tipo of cerca" [routerLink]="['/tatuador', tipo.uid]">
             <ion-card class="user-card">
-              <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png'" class="user-card-img"></ion-img>
+              <ion-img [src]="tipo.avatar || 'assets/icon/sin_avatar.png'" class="user-card-img"></ion-img>
 
               <ion-card-header>
                 <ion-row class="ion-align-items-center ion-justify-content-between">
@@ -175,7 +182,7 @@
         <div class="horizontal-scroll">
           <div class="cards-row" *ngFor="let tipo of valoracion" [routerLink]="['/tatuador', tipo.uid]">
             <ion-card class="user-card">
-              <ion-img [src]="tipo.foto?.[0] || 'assets/icon/sin_avatar.png'" class="user-card-img"></ion-img>
+              <ion-img [src]="tipo.avatar || 'assets/icon/sin_avatar.png'" class="user-card-img"></ion-img>
 
               <ion-card-header>
                 <ion-row class="ion-align-items-center ion-justify-content-between">
@@ -209,7 +216,7 @@
         (!valoracion || valoracion.length === 0) &&
         (!resultadosBusqueda || resultadosBusqueda.length === 0)
       " class="no-result-container">
-        <ion-card class="no-result-message">
+        <ion-card class="no-result-message" style="border-radius: 12px;">
           <ion-card-header>
             <ion-card-title>{{ "NO_TATTOO_ARTISTS_FOUND" | translate }}</ion-card-title>
           </ion-card-header>
@@ -220,10 +227,10 @@
       </div>
 
     </ion-card-content>
-    <ion-button class="floating-right big-button" shape="round" fill="solid" color="dark" routerLink="/mapa">
+    <ion-button class="floating-right big-button" shape="round" fill="solid" routerLink="/mapa">
       <ion-icon slot="icon-only" name="navigate-circle"></ion-icon>
     </ion-button>
-    <ion-button *ngIf="ofertas.length !== 0" class="floating-left big-button" shape="round" fill="solid" color="dark" routerLink="/ofertas">
+    <ion-button *ngIf="ofertas.length !== 0" class="floating-left big-button" shape="round" fill="solid" routerLink="/ofertas">
       <ion-icon slot="icon-only" name="pricetag-outline"></ion-icon>
     </ion-button>
 </ion-content>

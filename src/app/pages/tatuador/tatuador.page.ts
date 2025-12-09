@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController, ToastController } from '@ionic/angular';
+import { ActionSheetController, AlertController, NavController, Platform, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { Resena, Tatuador, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
+import { Clipboard } from '@capacitor/clipboard';
 
 @Component({
   selector: 'app-tatuador',
@@ -19,7 +20,13 @@ export class TatuadorPage implements OnInit {
     nombre: '',
     correo: '',
   };
+  segmentoActivo: any;
+  segmentoSeleccionado: string = 'info';
   imagenSeleccionada: string | null = null;
+  favoritos: string[] = [];
+  imagenCargada: boolean[] = [];
+  favoritosUsuario: any[] = [];
+  fotosTatuador: { url: string; favorita: boolean }[] = [];
   datosConsulta = {
     nombre: '',
     diseno: '',
@@ -68,8 +75,12 @@ export class TatuadorPage implements OnInit {
   mensajeResena: string = '';
   resenaExistente: boolean = false;
 
+  fotoActual = 0;
+  intervalo?: any
+  resenaActual = 0;
+
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private route: ActivatedRoute, public tiendaTatuador: TiendaService, public toast: ToastController,
-    private router: Router, private alertController: AlertController, public translate: TranslateService
+    private router: Router, private platform: Platform,  private actionSheetCtrl: ActionSheetController, private alertController: AlertController, public translate: TranslateService,  public navCtrl: NavController,
   ) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
@@ -79,12 +90,65 @@ export class TatuadorPage implements OnInit {
         this.usuario.uid= '';
       }
     });
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      if (this.imagenSeleccionada !== null) {
+        this.cerrarImagen(); // 👈 Cierra manualmente el modal
+      }
+    });
    }
+
+
+  async abrirMenu() {
+    const actionSheet = await this.actionSheetCtrl.create({
+      buttons: [
+        {
+          text: 'Compartir',
+          icon: 'share-social-outline',
+          handler: () => this.compartirPerfil()
+        },
+        {
+          text: this.favorito ? 'Quitar de favoritos' : 'Añadir a favoritos',
+          icon: this.favorito ? 'star' : 'star-outline',
+          handler: () => {
+            if (this.favorito) {
+              this.quitarFavorito();
+            } else {
+              this.ponerFavorito();
+            }
+          }
+        },
+
+        // --- OPCIONES DE ABAJO ---
+        {
+          text: 'Ver consentimientos',
+          icon: 'reader-outline',
+          handler: () => {
+            window.open(this.tatuador.consentimientoUrl, '_blank');
+          }
+        }
+      ]
+    });
+
+    await actionSheet.present();
+  }
 
   ngOnInit() {
     this.uid = this.route.snapshot.paramMap.get('uid') || '';
 
     this.obtenerTatuador();
+
+  }
+
+  siguienteResena() {
+    if (this.resenas?.length) {
+      this.resenaActual = (this.resenaActual + 1) % this.resenas.length;
+    }
+  }
+
+  anteriorResena() {
+    if (this.resenas?.length) {
+      this.resenaActual = (this.resenaActual - 1 + this.resenas.length) % this.resenas.length;
+    }
   }
 
    async obtenerUsuario() {
@@ -106,11 +170,30 @@ export class TatuadorPage implements OnInit {
         });
         this.tiendaTatuador.getFotosTatuador(this.uid).subscribe(fotos => {
           this.tatuador.foto = fotos;
+          this.fotosTatuador = (fotos || []).map(fotoUrl => ({
+            url: fotoUrl,  // La URL de la foto
+            favorita: false  // Inicializamos el campo 'favorita' en 'false' por defecto
+          }));
+          console.log(this.tatuador.foto);
         });
 
        if (this.usuario.uid) {
           this.tiendaTatuador.verificarFavorito(this.usuario.uid, this.uid).then(esFavorito => {
             this.favorito = esFavorito;
+          });
+        }
+        if (this.usuario?.uid) {
+          this.tiendaTatuador.obtenerFavoritosFotos(this.usuario.uid).subscribe(favoritos => {
+            console.log('Favoritos del usuario:', favoritos);
+            this.favoritosUsuario = favoritos || [];
+            this.fotosTatuador = (this.tatuador.foto || []).map(fotoUrl => {
+              const favoritoExistente = this.favoritosUsuario.find(f => f.url === fotoUrl);
+              return {
+                url: fotoUrl,
+                favorita: !!favoritoExistente,
+                idFavorito: favoritoExistente ? favoritoExistente.id : null
+              };
+            });
           });
         }
         await this.cargarResenas();
@@ -121,6 +204,39 @@ export class TatuadorPage implements OnInit {
       }
     });
   }
+
+  async toggleFavoritoFoto(foto: any, event: Event) {
+    event.stopPropagation();
+
+     if (!this.usuario || !this.usuario.uid) {
+      const mensaje = this.translate.instant('LOGIN_REQUIRED_APPOINTMENT');
+      this.presentToast(mensaje, 'warning');
+      return;
+    }
+
+    if (foto.favorita && foto.idFavorito) {
+      // 🔻 Eliminar
+      await this.tiendaTatuador.eliminarFavoritoFoto(this.usuario.uid, foto.idFavorito);
+      foto.favorita = false;
+      foto.idFavorito = null;
+    } else {
+      // ❤️ Guardar
+      const nuevoId = await this.tiendaTatuador.guardarFavoritoFoto(this.usuario.uid, this.tatuador.uid, foto.url);
+      foto.favorita = true;
+      foto.idFavorito = nuevoId;
+    }
+
+    console.log('Favoritos actuales:', this.favoritosUsuario);
+  }
+
+  onImgWillLoad(index: number) {
+    this.imagenCargada[index] = false;
+  }
+
+  onImgDidLoad(index: number) {
+    this.imagenCargada[index] = true;
+  }
+
 
   async ponerFavorito() {
     if(this.usuario.uid){
@@ -339,21 +455,30 @@ export class TatuadorPage implements OnInit {
     this.imagenSeleccionada = null;
   }
 
-  actualizarObjetivos() {
-    // Si es un array lo convertimos en objeto vacío
-    console.log(this.tatuador.objetivos);
-    const objetivosUsuario: Record<string, boolean> = 
-      (this.tatuador.objetivos && !Array.isArray(this.tatuador.objetivos)) 
-        ? this.tatuador.objetivos 
-        : {};
+  async actualizarObjetivos() {
+    try {
+      console.log('Objetivos del tatuador:', this.tatuador.objetivos);
 
-    this.objetivos = this.objetivos.map(obj => {
-      const key = obj.nombre.replace(/\s+/g, '_').toLowerCase(); // "100 citas" → "100_citas"
-      return {
-        ...obj,
-        alcanzado: objetivosUsuario[key] === true
-      };
-    });
+      const objetivosUsuario: Record<string, boolean> = 
+        (this.tatuador.objetivos && !Array.isArray(this.tatuador.objetivos)) 
+          ? this.tatuador.objetivos 
+          : {};
+
+      console.log('Objetivos del usuario:', objetivosUsuario);
+
+      // Actualizar los objetivos y filtrar los alcanzados
+      this.objetivos = this.objetivos.map(obj => {
+        const key = obj.nombre.replace(/\s+/g, '_').toLowerCase(); // Generamos la clave
+        return {
+          ...obj,
+          alcanzado: objetivosUsuario[key] === true // Comprobamos si está alcanzado
+        };
+      }).filter(obj => obj.alcanzado); // Filtramos solo los alcanzados
+
+      console.log('Objetivos alcanzados:', this.objetivos); // Ver los objetivos alcanzados
+    } catch (error) {
+      console.error('Error al actualizar los objetivos: ', error);
+    }
   }
   
   abrirMaps(direccion: string) {
@@ -363,6 +488,33 @@ export class TatuadorPage implements OnInit {
 
   compartir(){
     
+  }
+
+  volver(){
+    this.navCtrl.back();
+  }
+
+  async mostrarToast(nombre: string) {
+    const toast = await this.toast.create({
+      message: `${nombre}`,
+      duration: 2000, // ⏱ 2 segundos
+      position: 'bottom', // 'top' | 'middle' | 'bottom'
+      color: 'primary', // opcional: 'success', 'warning', 'danger', etc.
+      cssClass: 'toast-objetivo' // opcional, por si quieres personalizarlo en CSS
+    });
+    await toast.present();
+  }
+
+  async compartirPerfil() {
+    const enlace = `https://itattoo-9f978.web.app/tatuador/${this.usuario.uid}`;
+    await Clipboard.write({ string: enlace });
+    const toast = await this.toast.create({
+      message: '🔗 Enlace copiado al portapapeles',
+      duration: 2000,
+      position: 'bottom',
+      color: 'dark', // opcional: "primary", "light", "success", etc.
+    });
+    await toast.present();
   }
 
 }

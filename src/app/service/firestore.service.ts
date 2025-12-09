@@ -3,7 +3,7 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
 import { idToken } from '@angular/fire/auth';
-import { Cita, Tatuador } from '../model';
+import { Cita, Evento, Tatuador } from '../model';
 import { getDownloadURL, getStorage, listAll, ref } from 'firebase/storage';
 
 @Injectable({
@@ -553,6 +553,54 @@ export class FirestoreService {
     });
   }
 
+  obtenerTodosLosBocetos(): Observable<any[]> {
+    // collectionGroup busca en todas las subcolecciones llamadas 'bocetos'
+    return this.database.collectionGroup('bocetos').valueChanges({ idField: 'id' });
+  }
+
+  getEvento(): Observable<any[]> {
+    return this.database
+      .collection(`Eventos/`)
+      .valueChanges({ idField: 'id' });
+  }
+
+  async guardarFavoritoFoto(uidUsuario: string, tatuadorId: string, fotoUrl: string): Promise<void> {
+    const docRef = this.database.doc(`Usuarios/${uidUsuario}/favoritosFotos/${this.database.createId()}`);
+    await docRef.set({
+      tatuadorId,
+      url: fotoUrl,
+      fecha: new Date()
+    });
+  }
+
+  async verificarFavoritoFoto(uidUsuario: string, fotoUrl: string): Promise<boolean> {
+    const idFoto = btoa(fotoUrl); // usar la misma clave que al guardar
+    const docRef = this.database.doc(`Usuarios/${uidUsuario}/favoritosFotos/${idFoto}`);
+    const docSnap = await docRef.get().toPromise();
+    return !!docSnap?.exists;
+  }
+
+  async eliminarFavoritoFoto(uidUsuario: string, idFavorito: string): Promise<void> {
+    const docRef = this.database.doc(`Usuarios/${uidUsuario}/favoritosFotos/${idFavorito}`);
+
+    return docRef.delete()
+      .then(() => console.log('✅ Favorito eliminado correctamente:', idFavorito))
+      .catch((err) => console.error('❌ Error al eliminar favorito:', err));
+  }
+
+   obtenerFavoritosFotos(uidUsuario: string) {
+    return this.database.collection(`Usuarios/${uidUsuario}/favoritosFotos`)
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data() as any;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        }))
+      );
+  }
+
+
   getCitasDelDia(estudioId: string, trabajadorId: string, fecha: string) {
     // fecha en formato 'YYYY-MM-DD'
     return this.database.collection(`Tatuador/${estudioId}/citas`, ref =>
@@ -599,4 +647,16 @@ export class FirestoreService {
       throw error;
     }
   }
+
+  getEventoPorId(id: string) {
+    return this.database.doc<Evento>(`Eventos/${id}`).valueChanges({ idField: 'id' });
+  }
+
+  getTatuadoresPorUIDs(uids: string[]) {
+    return this.database.collection<Tatuador>(
+      'Tatuador',
+      ref => ref.where('uid', 'in', uids)
+    ).valueChanges({ idField: 'uid' });
+  }
+
 }
