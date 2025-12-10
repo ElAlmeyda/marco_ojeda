@@ -19,10 +19,15 @@ ion-datetime::part(today) {
   text-align: center;
   cursor: pointer;
   border-radius: 12px;
+  width: 100%;
+  aspect-ratio: 1 / 1.2; /* 👈 MISMO TAMAÑO PARA TODAS LAS TARJETAS */
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   background: #1A1A1A;
   border: 2px solid #333;
   transition: 0.2s;
+  overflow: hidden;
 }
 
 .tatuador-card:hover {
@@ -42,6 +47,10 @@ ion-datetime::part(today) {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   overflow: hidden;
+  width: 100%;
+  height: 100%;        /* 👈 llena todo el alto */
+  object-fit: cover;   /* 👈 hace que recorte bien */
+  flex: 1;         
 }
 
 .chips-scroll {

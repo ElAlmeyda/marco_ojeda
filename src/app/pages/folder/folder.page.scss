@@ -152,33 +152,7 @@ ion-chip {
   font-size: 0.8rem;
 }
 
-.no-result-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 
-  height: 100%; /* ocupa toda la pestaña */
-  width: 100%;
-  text-align: center;
-
-  color: var(--ion-color-medium); /* gris por defecto de Ionic */
-}
-
-.no-result-message {
-  max-width: 80%;
-}
-
-.no-result-message h2 {
-  font-size: 1.4rem;
-  margin-top: 12px;
-  font-weight: bold;
-}
-
-.no-result-message p {
-  font-size: 1rem;
-  margin-top: 6px;
-}
 
 
 

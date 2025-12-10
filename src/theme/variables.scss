@@ -159,3 +159,107 @@ ion-header {
   --padding-top: var(--ion-safe-area-top);
 }
 
+
+
+/* Contenedor que se posiciona en la parte inferior y al centro */
+.privacy-container {
+    bottom: 0px; /* Espacio desde el borde inferior */
+    width: 100%;
+    text-align: center; /* Centrar el bloque de texto */
+    color: grey; /* Color gris */
+    font-size: 0.8rem; /* Fuente más pequeña */
+    display: block;
+  }
+  
+  /* Estilo para los elementos dentro del contenedor de privacidad */
+  .privacy-item {
+  --inner-padding-bottom: 0;
+  --inner-padding-top: 0;
+  white-space: normal !important;
+  overflow: visible !important;
+}
+
+/* Evita que el label recorte y ponga tres puntos */
+.privacy-item ion-label {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  line-height: 1.4;
+  color: grey;
+  font-size: 0.8rem;
+  margin: 0 auto;
+}
+
+/* Enlaces */
+.privacy-item a {
+  color: grey;
+  text-decoration: none;
+}
+
+.privacy-item a:hover {
+  text-decoration: underline;
+}
+
+   .privacy-item {
+    --ion-item-background: transparent; /* Fondo transparente */
+    --ion-item-padding-start: 0;
+    --ion-item-padding-end: 0;
+    text-align: center; /* Centra el bloque de texto dentro del item */
+    color: grey;
+    font-size: 0.8rem;
+    display: block; /* Bloque completo en vez de palabra por palabra */
+    text-align: center;
+    white-space: normal; /* Evita el centrado palabra por palabra */
+    max-width: 90%; /* Evita que el texto se salga del borde en pantallas pequeñas */
+    margin: 0 auto; /* Asegura que esté centrado en pantallas pequeñas */
+    margin-bottom: 5px;
+  }
+
+  ion-input {
+    font-size: 20px;
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para ambos elementos */
+    margin-bottom: 15px; /* Espacio entre los campos */
+    box-sizing: border-box; /* Incluir padding y border en el tamaño del elemento */
+    padding: 10px; /* Opcional: ajusta el padding para que luzcan uniformes */
+  }
+
+/* Estilo para mensajes de error */
+.error-label {
+  height: 20px; /* Reservar espacio fijo */
+  font-size: 12px;
+  color: red;
+  padding-left: 8px;
+  transition: opacity 0.3s ease;
+}
+
+.no-result-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%; /* ocupa toda la pestaña */
+  width: 100%;
+  text-align: center;
+
+  color: var(--ion-color-medium); /* gris por defecto de Ionic */
+}
+
+.no-result-message {
+  max-width: 80%;
+}
+
+.no-result-message h2 {
+  font-size: 1.4rem;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+.no-result-message p {
+  font-size: 1rem;
+  margin-top: 6px;
+}
