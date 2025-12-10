@@ -156,7 +156,7 @@
           (click)="seleccionarTrabajador(tatuador)"
           class="tatuador-card"
         >
-          <ion-img [src]="tatuador.foto || 'assets/icon/sin_avatar.png'"></ion-img>
+          <ion-img class="foto-wrapper" [src]="tatuador.foto || 'assets/icon/sin_avatar.png'"></ion-img>
           <p style="font-size: 24px; color:white">{{ tatuador.nombre }}</p>
         </ion-card>
       </ion-col>

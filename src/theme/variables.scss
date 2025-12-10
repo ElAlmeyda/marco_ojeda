@@ -156,3 +156,93 @@ ion-header {
   color: white;
   font-size: 1.5rem;
 }
+
+/* Estilo para mensajes de error */
+.error-label {
+  height: 20px; /* Reservar espacio fijo */
+  font-size: 12px;
+  color: red;
+  padding-left: 8px;
+  transition: opacity 0.3s ease;
+}
+
+.language-wrapper {
+    position: absolute;
+    top: 30;      // ajusta según la altura que quieras
+    right: 0;    // esto lo mueve a la derecha
+    margin: 10px; // opcional, para separarlo de los bordes
+    width: 120px; // opcional, para controlar el ancho
+  }
+
+    /* Card principal */
+  .tipo-card {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 20px;
+    background: linear-gradient(145deg, #1A1A1A, #121212);
+    color: #EDEDED;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+
+    /* Espacio interno */
+    padding: 20px; /* relleno dentro del card */
+    margin: 20px 0; /* margen arriba y abajo del card */
+    box-sizing: border-box;
+  }
+
+  .privacy-item {
+    --ion-item-background: transparent; /* Fondo transparente */
+    --ion-item-padding-start: 0;
+    --ion-item-padding-end: 0;
+    text-align: center; /* Centra el bloque de texto dentro del item */
+    color: grey;
+    font-size: 0.8rem;
+    display: block; /* Bloque completo en vez de palabra por palabra */
+    text-align: center;
+    white-space: normal; /* Evita el centrado palabra por palabra */
+    max-width: 90%; /* Evita que el texto se salga del borde en pantallas pequeñas */
+    margin: 0 auto; /* Asegura que esté centrado en pantallas pequeñas */
+    margin-bottom: 5px;
+  }
+
+  /* Contenedor que se posiciona en la parte inferior y al centro */
+.privacy-container {
+    bottom: 0px; /* Espacio desde el borde inferior */
+    width: 100%;
+    text-align: center; /* Centrar el bloque de texto */
+    color: grey; /* Color gris */
+    font-size: 0.8rem; /* Fuente más pequeña */
+    display: block;
+  }
+  
+ /* Evita que Ionic recorte el texto del item */
+.privacy-item {
+  --inner-padding-bottom: 0;
+  --inner-padding-top: 0;
+  white-space: normal !important;
+  overflow: visible !important;
+}
+
+/* Evita que el label recorte y ponga tres puntos */
+.privacy-item ion-label {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  line-height: 1.4;
+  color: grey;
+  font-size: 0.8rem;
+  margin: 0 auto;
+}
+
+/* Enlaces */
+.privacy-item a {
+  color: grey;
+  text-decoration: none;
+}
+
+.privacy-item a:hover {
+  text-decoration: underline;
+}
+
