@@ -119,7 +119,11 @@
     "Tribal": "Tribal",
     "Surrealismo": "Surrealismo",
     "Biomecánico": "Biomecánico",
-    "Anime": "Anime"
+    "Anime": "Anime",
+    "Oriental": "Oriental",
+    "Microrealismo": "Microrealismo",
+    "Mahori": "Mahori",
+    "Chicano": "Chicano"
   },
   "COMMENT_PLACEHOLDER": "Escribe a túa opinión...",
   "APPOINTMENT": {
@@ -511,5 +515,13 @@
   "TATTOO.SOCIAL_WEB": "Sitio web",
   "SKETCHES.LOADING": "Cargando bosquexos...",
   "SKETCHES.NO_MATCHING": "Non se atopou ningún bosquexo deste estilo.",
-  "SKETCHES.NO_SKETCHES": "Non hai bosquexos dispoñibles"
+  "SKETCHES.NO_SKETCHES": "Non hai bosquexos dispoñibles",
+  "ACTIONSHEET": {
+  "SHARE": "Compartir",
+  "ADD_FAVORITE": "Engadir aos favoritos",
+  "REMOVE_FAVORITE": "Quitar dos favoritos",
+  "VIEW_CONSENTS": "Ver consentimentos"
+}
+
+
 }

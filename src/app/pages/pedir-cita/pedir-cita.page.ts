@@ -32,7 +32,7 @@ export class PedirCitaPage implements OnInit {
     tipo: '',
     color: '',
     mensaje: '',
-    tatuador: '',
+    nombreTatuador: '',
     movil: '',
     correo: '',
     predeterminado: '',
@@ -403,7 +403,7 @@ export class PedirCitaPage implements OnInit {
       this.datosConsulta.estilo = this.estilo
       this.datosConsulta.mensaje = this.mensaje 
       this.datosConsulta.tipo = this.tipo
-      this.datosConsulta.tatuador = this.tatuadorSeleccionado.nombre
+      this.datosConsulta.nombreTatuador = this.tatuadorSeleccionado.nombre
       this.datosConsulta.zona = this.zona
       this.datosConsulta.predeterminado = this.preferiblemente
 

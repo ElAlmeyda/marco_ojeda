@@ -136,4 +136,9 @@ export class TiendaService {
   obtenerFavoritosFotos(uid: string){
     return this.firestrore.obtenerFavoritosFotos(uid);
   }
+
+  async puedeRecibirCitas(uidTatuador: string): Promise<boolean> {
+    return this.firestrore.puedeRecibirCitas(uidTatuador);
+  }
+
 }

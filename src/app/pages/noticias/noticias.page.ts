@@ -37,7 +37,11 @@ export class NoticiasPage implements OnInit {
     { nombre: 'Tribal', imagen: 'assets/estilos/tribal.jpg' },
     { nombre: 'Surrealismo', imagen: 'assets/estilos/surrealismo.jpg' },
     { nombre: 'Biomecánico', imagen: 'assets/estilos/biomecanico.jpg' },
-    { nombre: 'Anime', imagen: 'assets/estilos/anime.jpg' }
+    { nombre: 'Anime', imagen: 'assets/estilos/anime.jpg' },
+    { nombre: 'Oriental', imagen: 'assets/estilos/oriental.jpg' },
+    { nombre: 'Microrealismo', imagen: 'assets/estilos/microrealismo.jpg' },
+    { nombre: 'Mahori', imagen: 'assets/estilos/mahori.jpg' },
+    { nombre: 'Chicano', imagen: 'assets/estilos/chicano.jpg' },
   ];
   cargando: any;
   bocetos: any[] = [];

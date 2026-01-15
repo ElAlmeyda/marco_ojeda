@@ -104,10 +104,7 @@ export class MapaPage implements OnInit {
       // Obtener y mostrar los tatuadores
       this.tiendaService.getTatuadores().subscribe(tatuadores => {
 
-        // Filtrar solo los tatuadores premium
-        const tatuadoresPremium = tatuadores.filter(t => t.isPremium === true);
-
-        tatuadoresPremium.forEach(async tatuador => {
+        tatuadores.forEach(async tatuador => {
           if (tatuador.ciudad) {
             const coords = await this.geocodeDireccion(tatuador.ciudad);
             if (coords) {

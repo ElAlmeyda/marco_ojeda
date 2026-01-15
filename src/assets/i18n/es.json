@@ -118,7 +118,11 @@
     "Tribal": "Tribal",
     "Surrealismo": "Surrealismo",
     "Biomecánico": "Biomecánico",
-    "Anime": "Anime"
+    "Anime": "Anime",
+    "Oriental": "Oriental",
+    "Microrealismo": "Microrealismo",
+    "Mahori": "Mahori",
+    "Chicano": "Chicano"
   },
   "APPOINTMENT": {
     "ACCEPT_CONDITIONS": "Debes aceptar las condiciones",
@@ -495,5 +499,12 @@
   "TATTOO.SOCIAL_WEB": "Sitio web",
   "SKETCHES.LOADING": "Cargando bocetos...",
   "SKETCHES.NO_MATCHING": "No se encontró ningún boceto de este estilo.",
-  "SKETCHES.NO_SKETCHES": "No hay bocetos"
+  "SKETCHES.NO_SKETCHES": "No hay bocetos",
+  "ACTIONSHEET": {
+  "SHARE": "Compartir",
+  "ADD_FAVORITE": "Añadir a favoritos",
+  "REMOVE_FAVORITE": "Quitar de favoritos",
+  "VIEW_CONSENTS": "Ver consentimientos"
+}
+
 }
