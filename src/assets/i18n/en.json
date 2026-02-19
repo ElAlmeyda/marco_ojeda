@@ -125,7 +125,11 @@
     "Tribal": "Tribal",
     "Surrealismo": "Surrealism",
     "Biomecánico": "Biomechanical",
-    "Anime": "Anime"
+    "Anime": "Anime",
+    "Oriental": "Oriental",
+    "Microrealismo": "Microrealism",
+    "Mahori": "Mahori",
+    "Chicano": "Chicano"
   },
   "NOTICIA": "News",
   "APPOINTMENT": {
@@ -502,6 +506,12 @@
   "TATTOO.SOCIAL_WEB": "Website",
   "SKETCHES.LOADING": "Loading sketches...",
   "SKETCHES.NO_MATCHING": "No sketches found for this style.",
-  "SKETCHES.NO_SKETCHES": "No sketches available"
+  "SKETCHES.NO_SKETCHES": "No sketches available",
+  "ACTIONSHEET": {
+    "SHARE": "Share",
+    "ADD_FAVORITE": "Add to favorites",
+    "REMOVE_FAVORITE": "Remove from favorites",
+    "VIEW_CONSENTS": "View consents"
+  }
 
 }

@@ -5,6 +5,7 @@ import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
 import { idToken } from '@angular/fire/auth';
 import { Cita, Evento, Tatuador } from '../model';
 import { getDownloadURL, getStorage, listAll, ref } from 'firebase/storage';
+import firebase from 'firebase/compat/app';
 
 @Injectable({
   providedIn: 'root'
@@ -657,6 +658,73 @@ export class FirestoreService {
       'Tatuador',
       ref => ref.where('uid', 'in', uids)
     ).valueChanges({ idField: 'uid' });
+  }
+
+  async puedeRecibirCitas(uidTatuador: string): Promise<boolean> {
+    console.log("uidTatuador", uidTatuador)
+    try {
+      // 1️⃣ Obtener tatuador
+      const tatuadorSnap = await this.database
+        .collection('Tatuador')
+        .doc(uidTatuador)
+        .ref
+        .get();
+
+      if (!tatuadorSnap.exists) {
+        // Si no existe el tatuador, por seguridad no permitir
+        return false;
+      }
+
+      const tatuadorData = tatuadorSnap.data() as Tatuador;
+      console.log('isPremium:', tatuadorData.isPremium);
+
+      // 2️⃣ Premium → ilimitado
+      if (tatuadorData.isPremium === true) {
+        return true;
+      }
+
+      // 3️⃣ Rango del mes actual en UTC
+      const now = new Date();
+
+      const inicioMesUTC = new Date(Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        1,
+        0, 0, 0
+      ));
+
+      const finMesUTC = new Date(Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth() + 1,
+        0,
+        23, 59, 59
+      ));
+
+      const inicioTimestamp = firebase.firestore.Timestamp.fromDate(inicioMesUTC);
+      const finTimestamp = firebase.firestore.Timestamp.fromDate(finMesUTC);
+
+      // 4️⃣ Contar citas del tatuador este mes
+      const citasSnap = await this.database.collection('Tatuador')
+      .doc(uidTatuador)
+      .collection('citas', ref =>
+        ref
+          .where('uidTatuador', '==', uidTatuador)
+          .where('fechaCreacion', '>=', inicioTimestamp)
+          .where('fechaCreacion', '<=', finTimestamp)
+      ).get().toPromise();
+
+      console.log('Citas este mes:', citasSnap?.size);
+
+      const LIMITE_DEMO = 10;
+
+      // 5️⃣ Devuelve true solo si NO ha llegado al límite
+      return (citasSnap?.size ?? 0) <  LIMITE_DEMO;
+
+    } catch (error) {
+      console.error('Error en puedeRecibirCitas:', error);
+      // En caso de error, bloqueamos por seguridad
+      return false;
+    }
   }
 
 }

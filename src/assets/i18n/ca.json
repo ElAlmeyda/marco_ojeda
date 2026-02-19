@@ -117,7 +117,11 @@
     "Tribal": "Tribal",
     "Surrealismo": "Surrealisme",
     "Biomecánico": "Biomecànic",
-    "Anime": "Anime"
+    "Anime": "Anime",
+    "Oriental": "Oriental",
+    "Microrealismo": "Microrealisme",
+    "Mahori": "Mahori",
+    "Chicano": "Chicano"
   },
   "COMMENT_PLACEHOLDER": "Escriu la teva opinió...",
   "APPOINTMENT": {
@@ -511,5 +515,11 @@
   "TATTOO.SOCIAL_WEB": "Lloc web",
   "SKETCHES.LOADING": "Carregant esbossos...",
   "SKETCHES.NO_MATCHING": "No s'ha trobat cap esbós d'aquest estil.",
-  "SKETCHES.NO_SKETCHES": "No hi ha esbossos disponibles"
+  "SKETCHES.NO_SKETCHES": "No hi ha esbossos disponibles",
+  "ACTIONSHEET": {
+    "SHARE": "Compartir",
+    "ADD_FAVORITE": "Afegir als favorits",
+    "REMOVE_FAVORITE": "Treure dels favorits",
+    "VIEW_CONSENTS": "Veure consentiments"
+  }
 }

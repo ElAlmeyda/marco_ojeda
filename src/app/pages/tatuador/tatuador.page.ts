@@ -102,25 +102,22 @@ export class TatuadorPage implements OnInit {
     const actionSheet = await this.actionSheetCtrl.create({
       buttons: [
         {
-          text: 'Compartir',
+          text: this.translate.instant('ACTIONSHEET.SHARE'),
           icon: 'share-social-outline',
           handler: () => this.compartirPerfil()
         },
         {
-          text: this.favorito ? 'Quitar de favoritos' : 'Añadir a favoritos',
+          text: this.favorito ? this.translate.instant('ACTIONSHEET.REMOVE_FAVORITE')
+            : this.translate.instant('ACTIONSHEET.ADD_FAVORITE'),
           icon: this.favorito ? 'star' : 'star-outline',
           handler: () => {
-            if (this.favorito) {
-              this.quitarFavorito();
-            } else {
-              this.ponerFavorito();
-            }
+            this.favorito ? this.quitarFavorito() : this.ponerFavorito();
           }
         },
 
         // --- OPCIONES DE ABAJO ---
         {
-          text: 'Ver consentimientos',
+          text: this.translate.instant('ACTIONSHEET.VIEW_CONSENTS'),
           icon: 'reader-outline',
           handler: () => {
             window.open(this.tatuador.consentimientoUrl, '_blank');
@@ -272,7 +269,7 @@ export class TatuadorPage implements OnInit {
     if (this.usuario.uid) {
       const alert = await this.alertController.create({
         header: this.translate.instant('WARNING'),
-        message: this.translate.instant('APPOINTMENT_WARNING'), 
+        message: this.translate.instant('APPOINTMENT_WARNING'),
         buttons: [
           {
             text: this.translate.instant('CANCEL'),
@@ -281,10 +278,22 @@ export class TatuadorPage implements OnInit {
           {
             text: this.translate.instant('CONTINUE'),
             handler: async () => {
+
+              // 🔒 BLOQUEO PREVENTIVO (AQUÍ)
+              const puede = await this.tiendaTatuador.puedeRecibirCitas(this.tatuador.uid);
+
+              if (!puede) {
+                this.presentToast(
+                  'Este profesional ha alcanzado el límite de citas este mes.',
+                  'danger'
+                );
+                return;
+              }
+
+              // ✅ Si pasa, entra al formulario
               const uidTatuador = this.tatuador.uid;
-              // Navegar a la página 'pedir-cita' pasando el uid como parámetro
               await this.router.navigate(['/pedir-cita', uidTatuador]);
-            }
+             }
           }
         ]
       });
@@ -295,7 +304,6 @@ export class TatuadorPage implements OnInit {
       this.presentToast(mensaje, 'warning');
     }
   }
-
 
   async enviarResena() {
     if (this.estrellaSeleccionada === 0 || !this.mensajeResena.trim()) {
@@ -435,16 +443,25 @@ export class TatuadorPage implements OnInit {
   }
 
   async consultaPrevia() {
-    if (this.usuario.uid) {
-      const uidTatuador = this.tatuador.uid;
-      await this.router.navigate(['/pedir-cita', uidTatuador], {
-        queryParams: {
-          consulta: true
-        }
-      });
-    } else {
+    if (!this.usuario.uid) {
       this.presentToast(this.translate.instant('LOGIN_REQUIRED'), 'warning');
+      return;
     }
+    const puede = await this.tiendaTatuador.puedeRecibirCitas(this.tatuador.uid);
+
+    if (!puede) {
+      this.presentToast(
+        'Este profesional ha alcanzado el límite de citas este mes.',
+        'danger'
+      );
+      return;
+    }
+    const uidTatuador = this.tatuador.uid;
+    await this.router.navigate(['/pedir-cita', uidTatuador], {
+      queryParams: {
+        consulta: true
+      }
+    });
   }
 
   verImagen(foto: string) {

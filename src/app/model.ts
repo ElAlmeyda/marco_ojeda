@@ -37,6 +37,7 @@ export interface Tatuador {
     promedio?: number;
     objetivos?: boolean [];    
     isPremium?: boolean;
+    isTest?: boolean;
 }
 
 

@@ -466,7 +466,11 @@
     "Tribal": "Tribale",
     "Surrealismo": "Surrealismo",
     "Biomecánico": "Biomeccanico",
-    "Anime": "Anime"
+    "Anime": "Anime",
+    "Oriental": "Orientale",
+    "Microrealismo": "Microrealismo",
+    "Mahori": "Mahori",
+    "Chicano": "Chicano"
   },
 "COMMENT_PLACEHOLDER": "Scrivi la tua opinione...",
 "TATTOOIST": {
@@ -511,7 +515,13 @@
   "TATTOO.SOCIAL_WEB": "Sito web",
   "SKETCHES.LOADING": "Caricamento dei bozzetti...",
   "SKETCHES.NO_MATCHING": "Nessun bozzetto trovato per questo stile.",
-  "SKETCHES.NO_SKETCHES": "Nessun bozzetto disponibile"
+  "SKETCHES.NO_SKETCHES": "Nessun bozzetto disponibile",
+  "ACTIONSHEET": {
+    "SHARE": "Condividi",
+    "ADD_FAVORITE": "Aggiungi ai preferiti",
+    "REMOVE_FAVORITE": "Rimuovi dai preferiti",
+    "VIEW_CONSENTS": "Visualizza consensi"
+  }
 
 
 

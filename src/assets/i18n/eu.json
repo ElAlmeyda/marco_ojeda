@@ -117,7 +117,11 @@
     "Tribal": "Tribala",
     "Surrealismo": "Surrealismoa",
     "Biomecánico": "Biomekanikoa",
-    "Anime": "Animea"
+    "Anime": "Animea",
+    "Oriental": "Orientala",
+    "Microrealismo": "Mikroerrealismoa",
+    "Mahori": "Mahori",
+    "Chicano": "Chicano"
   },
   "COMMENT_PLACEHOLDER": "Idatzi zure iritzia...",
   "PLACEHOLDER": "Bilatu",
@@ -511,5 +515,11 @@
   "TATTOO.SOCIAL_WEB": "Webgunea",
   "SKETCHES.LOADING": "Marrazkiak kargatzen...",
   "SKETCHES.NO_MATCHING": "Ez da estilo honetako marrazkirik aurkitu.",
-  "SKETCHES.NO_SKETCHES": "Ez dago marrazkirik eskuragarri"
+  "SKETCHES.NO_SKETCHES": "Ez dago marrazkirik eskuragarri",
+  "ACTIONSHEET": {
+    "SHARE": "Partekatu",
+    "ADD_FAVORITE": "Gogokoetara gehitu",
+    "REMOVE_FAVORITE": "Gogokoetatik kendu",
+    "VIEW_CONSENTS": "Baimenak ikusi"
+  }
 }

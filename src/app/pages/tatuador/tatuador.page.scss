@@ -13,3 +13,16 @@
     50% { transform: translateY(-10px); }
     100% { transform: translateY(0); }
   }
+
+  .btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    flex-wrap: wrap; /* Permite que los botones bajen si no caben */
+
+    ion-button {
+      flex: 1 1 auto; /* Ocupa espacio disponible pero respeta tamaño */
+      min-width: 150px; /* Evita que se hagan demasiado pequeños */
+    }
+  }
