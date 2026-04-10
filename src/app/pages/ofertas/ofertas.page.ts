@@ -16,7 +16,7 @@ export class OfertasPage implements OnInit {
   usuario: Usuario = {
       uid: '',
       nombre: '',
-      correo: '',
+      email: '',
     };
 
   constructor(public firestore: FirestoreService, public user: UsuariosService, public auth: FirestoreAuthService) {

@@ -7,6 +7,8 @@ import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { Resena, Tatuador, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { Clipboard } from '@capacitor/clipboard';
+import { FirebaseCrashlytics } from '@capacitor-firebase/crashlytics';
+
 
 @Component({
   selector: 'app-tatuador',
@@ -18,7 +20,7 @@ export class TatuadorPage implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: '',
-    correo: '',
+    email: '',
   };
   segmentoActivo: any;
   segmentoSeleccionado: string = 'info';
@@ -495,6 +497,16 @@ export class TatuadorPage implements OnInit {
       console.log('Objetivos alcanzados:', this.objetivos); // Ver los objetivos alcanzados
     } catch (error) {
       console.error('Error al actualizar los objetivos: ', error);
+      FirebaseCrashlytics.log({
+        message: 'Error al mostrar los objetivos'
+      });
+
+      FirebaseCrashlytics.setUserId({ userId: this.uid });
+      FirebaseCrashlytics.setCustomKey({
+        key: 'pantalla cliente',
+        value: 'perfil_usuario',
+        type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+      });
     }
   }
   

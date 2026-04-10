@@ -1,50 +1,95 @@
-  .toolbar-label {
-    font-size: 24px;
-    text-align: center;
-    width: 100%;
-  }
+// ── Toolbar ───────────────────────────────────────────────
+.main-toolbar {
+  --background: #121212;
+  --border-width: 0;
+  padding-top: var(--ion-safe-area-top);
+  padding-inline: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-  .centered-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Espacio entre el contenido y el botón */
-    height: calc(100% - 56px); /* Ajusta el alto, restando el alto del menú */
-    text-align: center; /* Centra el texto */
-    margin-top: 20px; /* Separación con el menú */
-  }
-  
-  .top-content {
-    margin-top:25%;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centra horizontalmente */
-    gap: 10px; /* Espacio entre los elementos */
-  }
-  
-  .button-container {
-    display: flex;
-    justify-content: center; /* Centra el botón horizontalmente */
-    margin-top: 20px; /* Espacio adicional arriba del botón */
-  }
+.back-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  color: #C9A86A;
+  font-size: 20px;
+  transition: background 0.2s;
 
-  .delete-button {
-    margin-top: 20px; /* Espacio adicional arriba del botón */
-    width: auto; /* Botón no ocupa todo el ancho */
-    max-width: 200px; /* Ajusta el ancho máximo del botón */
-  }
+  &:hover { background: rgba(201, 168, 106, 0.1); }
+}
 
-  /* Contenedor del enlace "Olvidaste la contraseña" */
-.forgot-password {
-    text-align: center; /* Centra el enlace dentro del contenedor */
-  }
-  
-  .forgot-password a {
-    font-size: 0.8rem; /* Tamaño de fuente más pequeño */
-    color: #007bff; /* Color del enlace, ajusta según sea necesario */
-    text-decoration: none; /* Sin subrayado por defecto */
-  }
-  
-  .forgot-password a:hover {
-    text-decoration: underline; /* Subrayado al pasar el ratón */
-  }
-  
+.toolbar-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #C9A86A;
+}
+
+// ── Content ───────────────────────────────────────────────
+.account-content {
+  --background: #121212;
+}
+
+.account-wrapper {
+  padding: 28px 20px 48px;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// ── Sección principal ─────────────────────────────────────
+.account-section {
+  background: #1A1A1A;
+  border-radius: 14px;
+  border: 1px solid #2E2E2E;
+  overflow: hidden;
+}
+
+.section-block {
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid #2E2E2E;
+}
+
+.section-label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #C9A86A;
+  margin-bottom: 10px;
+}
+
+.email-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #121212;
+  border: 1px solid #2E2E2E;
+  border-radius: 10px;
+  padding: 11px 14px;
+}
+
+.email-icon {
+  font-size: 16px;
+  color: #808080;
+  flex-shrink: 0;
+}
+
+.email-text {
+  font-size: 0.9rem;
+  color: #EDEDED;
+  word-break: break-all;
+}
+

@@ -1,51 +1,75 @@
-
 <ion-header [translucent]="true">
-  <ion-toolbar class="toolbar-sin-fondo" style="margin: 10px; padding-top: var(--ion-safe-area-top); padding-inline: 10px;">
-    <ion-icon style="font-size: 30px;" class="toolbar-icon" slot="start" name="close-circle-outline" (click)="volver()"></ion-icon>
+  <ion-toolbar class="pay-toolbar">
+    <button class="pay-close-btn" slot="start" (click)="volver()">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-card-content class="card-content">
-    <div class="horizontal-scroll">
-      <ion-card class="user-card" 
-          *ngFor="let producto of productos" 
-          [class.selected]="selectedPlanId === producto.id"
-          (click)="selectPlan(producto)">
+  <div class="pay-wrapper">
 
-        <ion-label style="color: black; font-weight: bold; margin-top:10px; text-align: center;">
-         {{ 'PLAN.NO_ADS' | translate }}
-        </ion-label>
-
-        <ion-list *ngIf="producto.id === 'sinanuncios'">
-          <ion-item>
-            <ion-label>{{ 'PLAN.NO_ADS' | translate }}</ion-label>
-            <ion-icon slot="end" name="checkmark-outline" color="success"></ion-icon>
-          </ion-item>
-        </ion-list>
-
-        <!-- Precio + duración -->
-        <ion-item class="price-item" lines="none">
-          {{ producto.precio }} / mes (1 mes de duración)
-        </ion-item>
-      </ion-card>
+    <!-- ── Hero ─────────────────────────────────────────── -->
+    <div class="pay-hero">
+      <div class="pay-hero-icon">
+        <ion-icon name="diamond-outline"></ion-icon>
+      </div>
+      <span class="explore-eyebrow">PREMIUM</span>
+      <h1 class="pay-title">{{ 'PAY_GO_PREMIUM_TITLE' | translate }}</h1>
+      <p class="pay-subtitle">{{ 'PAY_GO_PREMIUM_DESC' | translate }}</p>
     </div>
-  </ion-card-content>
 
-  <ion-footer>
-    <ion-label class="privacy-item">
-        • {{ 'PLANS.RENEWAL_POLICY' | translate }}<br/>
-        • {{ 'PLANS.MANAGE_SUBSCRIPTION' | translate }}<br/><br/>
-        {{ 'PLANS.ACCEPT_TERMS' | translate }}
-      <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank">
-          {{ 'PLANS.TERMS_OF_USE' | translate }}
-      </a> {{ 'PLANS.AND' | translate }}
-      <a href="https://doc-hosting.flycricket.io/privacy-policy/c513bb80-96fb-498d-b73d-860d530bda0a/privacy" target="_blank">
-          {{ 'PLANS.PRIVACY_POLICY' | translate }}
+    <!-- ── Plan cards ────────────────────────────────────── -->
+    <div class="plans-list">
+      <div
+        class="plan-card"
+        *ngFor="let producto of productos"
+        [class.plan-card-active]="selectedPlanId === producto.id"
+        (click)="selectPlan(producto)">
+
+        <!-- Selected indicator -->
+        <div class="plan-check" [class.plan-check-active]="selectedPlanId === producto.id">
+          <ion-icon name="checkmark-outline"></ion-icon>
+        </div>
+
+        <div class="plan-info">
+          <h3 class="plan-name">{{ ('PLAN.NO_ADS') | translate }}</h3>
+
+          <!-- Features -->
+          <div class="plan-features" *ngIf="producto.id === 'sinanuncios'">
+            <div class="plan-feature-row">
+              <ion-icon name="ban-outline" class="feature-icon"></ion-icon>
+              <span>{{ 'PLAN.NO_ADS' | translate }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="plan-price-block">
+          <span class="plan-price">{{ producto.precio }}</span>
+          <span class="plan-period">/ mes</span>
+          <span class="plan-duration">1 mes</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Footer ───────────────────────────────────────────── -->
+  <div class="pay-footer">
+    <p class="pay-legal">
+      • {{ 'PLANS.RENEWAL_POLICY' | translate }}<br/>
+      • {{ 'PLANS.MANAGE_SUBSCRIPTION' | translate }}<br/><br/>
+      {{ 'PLANS.ACCEPT_TERMS' | translate }}
+      <a class="pay-legal-link" href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank">
+        {{ 'PLANS.TERMS_OF_USE' | translate }}
+      </a>
+      {{ 'PLANS.AND' | translate }}
+      <a class="pay-legal-link" href="https://doc-hosting.flycricket.io/privacy-policy/c513bb80-96fb-498d-b73d-860d530bda0a/privacy" target="_blank">
+        {{ 'PLANS.PRIVACY_POLICY' | translate }}
       </a>.
-    </ion-label>
-    <ion-button expand="full" (click)="pagar()">{{ buyText }}</ion-button>
-  </ion-footer>
+    </p>
+    <button class="pay-cta-btn" (click)="pagar()">{{ buyText }}</button>
+  </div>
 
 </ion-content>
-

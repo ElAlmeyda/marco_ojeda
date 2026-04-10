@@ -9,6 +9,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NotificacionService } from 'src/app/service/notificacion.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage-angular';
+import { FirebaseCrashlytics } from '@capacitor-firebase/crashlytics';
+
 
 
 @Component({
@@ -26,7 +28,7 @@ export class PerfilPage implements OnInit {
   usuario: Usuario = {
     nombre: '',
     uid: '',
-    correo: '',
+    email: '',
     movil: '',
   };
 
@@ -50,10 +52,11 @@ export class PerfilPage implements OnInit {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
+        console.log("Uid del usuario", this.uid)
         this.obtenerUsuario();
       } else {
         this.uid= '';
-        this.usuario = { nombre: '', uid: '', correo: '', movil: '', avatar: '' };
+        this.usuario = { nombre: '', uid: '', email: '', movil: '', avatar: '' };
         this.resetearEstado();
       }
     });
@@ -66,7 +69,7 @@ export class PerfilPage implements OnInit {
 
   resetearEstado() {
     this.uid = '';
-    this.usuario = { nombre: '', uid: '', correo: '', movil: '', avatar: '' };
+    this.usuario = { nombre: '', uid: '', email: '', movil: '', avatar: '' };
     this.correo = '';
     this.password = '';
     this.nombre = '';
@@ -89,7 +92,7 @@ export class PerfilPage implements OnInit {
       const usuario = this.user.getUsuarioConcreto(this.uid);
       if (usuario) {
         this.usuario = usuario;
-        console.log(usuario.movil);
+        console.log(usuario);
       } else {
         console.log('Usuario no encontrado');
       }
@@ -181,11 +184,31 @@ export class PerfilPage implements OnInit {
         await user.sendEmailVerification();
       } catch (error) {
         console.error('Error enviando correo de verificación:', error);
+        FirebaseCrashlytics.log({
+          message: 'Error al enviar el correo de verificacion'
+        });
+
+        FirebaseCrashlytics.setUserId({ userId: this.uid });
+        FirebaseCrashlytics.setCustomKey({
+          key: 'pantalla cliente',
+          value: 'perfil_usuario',
+          type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+        });
       }
       // ✅ 8. Ocultar carga después de subir todo correctamente
       await loading.dismiss();
     } catch (error) {
       console.error('Error en el registro:', error);
+      FirebaseCrashlytics.log({
+        message: 'Error al con el registro'
+      });
+
+      FirebaseCrashlytics.setUserId({ userId: this.uid });
+      FirebaseCrashlytics.setCustomKey({
+        key: 'pantalla cliente',
+        value: 'perfil_usuario',
+        type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+      });
       // ⚠️ Ocultar carga en caso de error también
       await loading.dismiss();
       // Puedes mostrar aquí un toast o alerta si quieres notificar el fallo

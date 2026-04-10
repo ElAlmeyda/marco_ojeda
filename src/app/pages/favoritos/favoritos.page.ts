@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { Tatuador, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
+import { FirebaseCrashlytics } from '@capacitor-firebase/crashlytics';
+
 
 @Component({
   selector: 'app-favoritos',
@@ -17,7 +19,7 @@ export class FavoritosPage implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: '',
-    correo: '',
+    email: '',
   };
   imagenSeleccionada: string | null = null;
   segmentoSeleccionado: string = 'tatuadores';

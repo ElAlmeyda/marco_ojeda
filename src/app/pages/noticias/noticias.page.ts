@@ -64,7 +64,7 @@ export class NoticiasPage implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: '',
-    correo: '',
+    email: '',
   };
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private alertController: AlertController,

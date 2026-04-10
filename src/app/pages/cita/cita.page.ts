@@ -4,6 +4,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { Cita, Tatuador, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
+import { FirebaseCrashlytics } from '@capacitor-firebase/crashlytics';
+
 
 @Component({
   selector: 'app-cita',
@@ -15,7 +17,7 @@ export class CitaPage implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: '',
-    correo: '',
+    email: '',
   };
 
   citas: Cita [] = [];

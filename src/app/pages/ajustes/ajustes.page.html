@@ -1,377 +1,460 @@
-
 <ion-header [translucent]="true">
-  <ion-toolbar style="padding-top: var(--ion-safe-area-top); padding-inline: 10px;">
-    <ion-icon *ngIf="isAjustes" class="toolbar-icon" slot="start" name="chevron-back-outline" [routerLink]="['/tabs/perfil', usuarioActual.uid]"></ion-icon>
-    <ion-icon *ngIf="!isAjustes" class="toolbar-icon" slot="start" name="chevron-back-outline" (click)="volver()"></ion-icon>
+  <ion-toolbar class="settings-toolbar">
+    <ion-icon
+      *ngIf="isAjustes"
+      class="toolbar-back-btn"
+      slot="start"
+      name="chevron-back-outline"
+      [routerLink]="['/tabs/perfil', usuarioActual.uid]">
+    </ion-icon>
+    <ion-icon
+      *ngIf="!isAjustes"
+      class="toolbar-back-btn"
+      slot="start"
+      name="chevron-back-outline"
+      (click)="volver()">
+    </ion-icon>
+
     <ion-label *ngIf="isCondicionUso" class="toolbar-label">{{ 'TERMS_OF_USE' | translate }}</ion-label>
-    <ion-label *ngIf="isAyuda" class="toolbar-label">{{ 'HELP_CENTER' | translate }}</ion-label>
-    <ion-label *ngIf="isCondicion" class="toolbar-label">{{ 'TERMS_OF_USE' | translate }}</ion-label>
-    <ion-label *ngIf="isPrivacidad" class="toolbar-label">{{ 'PRIVACY' | translate }}</ion-label> 
-    <ion-label *ngIf="isUSo" class="toolbar-label">{{ 'ABOUT_US' | translate }}</ion-label>
-    <ion-label *ngIf="isInformacion" class="toolbar-label">{{ 'BASIC_INFO' | translate }}</ion-label>
-    <ion-label *ngIf="isAjustes" class="toolbar-label">{{ 'SETTINGS' | translate }}</ion-label>
-    <ion-label *ngIf="isResena" class="toolbar-label">{{ 'REVIEWS' | translate }}</ion-label>
-    <ion-label *ngIf="isHistorial" class="toolbar-label">{{ 'APPOINTMENT_HISTORY' | translate }}</ion-label>
-    <ion-label *ngIf="isPago" class="toolbar-label">{{ 'SUBSCRIPTIONS' | translate }}</ion-label>
+    <ion-label *ngIf="isAyuda"        class="toolbar-label">{{ 'HELP_CENTER' | translate }}</ion-label>
+    <ion-label *ngIf="isCondicion"    class="toolbar-label">{{ 'TERMS_OF_USE' | translate }}</ion-label>
+    <ion-label *ngIf="isPrivacidad"   class="toolbar-label">{{ 'PRIVACY' | translate }}</ion-label>
+    <ion-label *ngIf="isUSo"          class="toolbar-label">{{ 'ABOUT_US' | translate }}</ion-label>
+    <ion-label *ngIf="isInformacion"  class="toolbar-label">{{ 'BASIC_INFO' | translate }}</ion-label>
+    <ion-label *ngIf="isAjustes"      class="toolbar-label">{{ 'SETTINGS' | translate }}</ion-label>
+    <ion-label *ngIf="isResena"       class="toolbar-label">{{ 'REVIEWS' | translate }}</ion-label>
+    <ion-label *ngIf="isHistorial"    class="toolbar-label">{{ 'APPOINTMENT_HISTORY' | translate }}</ion-label>
+    <ion-label *ngIf="isPago"         class="toolbar-label">{{ 'SUBSCRIPTIONS' | translate }}</ion-label>
   </ion-toolbar>
 </ion-header>
 
+
+<!-- ── CONDICIONES DE USO ─────────────────────────────── -->
 <ion-content [fullscreen]="true" *ngIf="isCondicionUso">
-  <div class="container" style="margin: 5px;">
-   <p><strong>{{ 'LEGAL_OWNER' | translate }}</strong>, {{ 'LEGAL_INFO' | translate }}</p>
-    <p>{{ 'LEGAL_RESIDENCE' | translate }}</p>
-    <h2>{{ 'SUMMARY' | translate }}</h2>
-    <ul>
-       <li>{{ 'SUMMARY_AGE' | translate }}</li>
+  <div class="legal-wrapper">
+    <p class="legal-intro"><strong>{{ 'LEGAL_OWNER' | translate }}</strong>, {{ 'LEGAL_INFO' | translate }}</p>
+    <p class="legal-intro">{{ 'LEGAL_RESIDENCE' | translate }}</p>
+
+    <h2 class="legal-h2">{{ 'SUMMARY' | translate }}</h2>
+    <ul class="legal-list">
+      <li>{{ 'SUMMARY_AGE' | translate }}</li>
       <li>{{ 'SUMMARY_CONTENT_RESPONSIBILITY' | translate }}</li>
       <li>{{ 'SUMMARY_USER_RESPONSIBILITY' | translate }}</li>
       <li>{{ 'SUMMARY_COMMUNITY_RULES' | translate }}</li>
       <li>{{ 'SUMMARY_PRIVACY_POLICY' | translate }}</li>
     </ul>
-    
-   <h2>{{ 'LEGAL_SECTION' | translate }}</h2>
-    <p>{{ 'LEGAL_APP_DESC' | translate }}</p>
 
-     <h2>{{ 'APP_USE_RULES' | translate }}</h2>
-    <h3>{{ 'WHO_CAN_USE' | translate }}</h3>
-    <p>{{ 'WHO_CAN_USE_DESC' | translate }}</p>
-    <p>{{ 'USER_GUARANTEE' | translate }}</p>
+    <h2 class="legal-h2">{{ 'LEGAL_SECTION' | translate }}</h2>
+    <p class="legal-text">{{ 'LEGAL_APP_DESC' | translate }}</p>
 
-    <h3>{{ 'ALLOWED_CONTENT' | translate }}</h3>
-    <ul>
-     <li>{{ 'ALLOWED_CONTENT_1' | translate }}</li>
+    <h2 class="legal-h2">{{ 'APP_USE_RULES' | translate }}</h2>
+    <h3 class="legal-h3">{{ 'WHO_CAN_USE' | translate }}</h3>
+    <p class="legal-text">{{ 'WHO_CAN_USE_DESC' | translate }}</p>
+    <p class="legal-text">{{ 'USER_GUARANTEE' | translate }}</p>
+
+    <h3 class="legal-h3">{{ 'ALLOWED_CONTENT' | translate }}</h3>
+    <ul class="legal-list">
+      <li>{{ 'ALLOWED_CONTENT_1' | translate }}</li>
       <li>{{ 'ALLOWED_CONTENT_2' | translate }}</li>
       <li>{{ 'ALLOWED_CONTENT_3' | translate }}</li>
     </ul>
-    
-   <h2>{{ 'PAID_SERVICES' | translate }}</h2>
-    <h3>{{ 'WHAT_CAN_I_BUY' | translate }}</h3>
-    <p>{{ 'WHAT_CAN_I_BUY_DESC' | translate }}</p>
-    
-    <h3>{{ 'PAYMENT_METHODS' | translate }}</h3>
-    <ul>
-       <li>{{ 'PAYMENT_METHOD_1' | translate }}</li>
+
+    <h2 class="legal-h2">{{ 'PAID_SERVICES' | translate }}</h2>
+    <h3 class="legal-h3">{{ 'WHAT_CAN_I_BUY' | translate }}</h3>
+    <p class="legal-text">{{ 'WHAT_CAN_I_BUY_DESC' | translate }}</p>
+
+    <h3 class="legal-h3">{{ 'PAYMENT_METHODS' | translate }}</h3>
+    <ul class="legal-list">
+      <li>{{ 'PAYMENT_METHOD_1' | translate }}</li>
       <li>{{ 'PAYMENT_METHOD_2' | translate }}</li>
       <li>{{ 'PAYMENT_METHOD_3' | translate }}</li>
     </ul>
-    
-    <h3>{{ 'CANCELLATION_REFUNDS' | translate }}</h3>
-    <p>{{ 'CANCELLATION_REFUNDS_DESC_1' | translate }}</p>
-    <p>{{ 'CANCELLATION_REFUNDS_DESC_2' | translate }}</p>
 
-   <h2>{{ 'APP_ACCESS' | translate }}</h2>
-    <p>{{ 'APP_ACCESS_DESC' | translate }}</p>
+    <h3 class="legal-h3">{{ 'CANCELLATION_REFUNDS' | translate }}</h3>
+    <p class="legal-text">{{ 'CANCELLATION_REFUNDS_DESC_1' | translate }}</p>
+    <p class="legal-text">{{ 'CANCELLATION_REFUNDS_DESC_2' | translate }}</p>
 
-     <h2>{{ 'SERVICE_TERMINATION' | translate }}</h2>
-    <p>{{ 'SERVICE_TERMINATION_DESC' | translate }}</p>
+    <h2 class="legal-h2">{{ 'APP_ACCESS' | translate }}</h2>
+    <p class="legal-text">{{ 'APP_ACCESS_DESC' | translate }}</p>
 
-    <h2>{{ 'ABUSE_COMPLAINTS' | translate }}</h2>
-    <ul>
-       <li>{{ 'ABUSE_1' | translate }}</li>
+    <h2 class="legal-h2">{{ 'SERVICE_TERMINATION' | translate }}</h2>
+    <p class="legal-text">{{ 'SERVICE_TERMINATION_DESC' | translate }}</p>
+
+    <h2 class="legal-h2">{{ 'ABUSE_COMPLAINTS' | translate }}</h2>
+    <ul class="legal-list">
+      <li>{{ 'ABUSE_1' | translate }}</li>
       <li>{{ 'ABUSE_2' | translate }}</li>
     </ul>
-    
-   <h2>{{ 'DISCLAIMER' | translate }}</h2>
-    <p>{{ 'DISCLAIMER_DESC' | translate }}</p>
 
-    <h2>{{ 'MODIFICATION_TERMS' | translate }}</h2>
-    <p>{{ 'MODIFICATION_TERMS_DESC' | translate }}</p>
+    <h2 class="legal-h2">{{ 'DISCLAIMER' | translate }}</h2>
+    <p class="legal-text">{{ 'DISCLAIMER_DESC' | translate }}</p>
 
-    <h2>{{ 'EFFECTIVE_DATE' | translate }}</h2>
-    <p><strong>{{ 'LAST_UPDATE' | translate }}</strong> 28/02/2025</p>
+    <h2 class="legal-h2">{{ 'MODIFICATION_TERMS' | translate }}</h2>
+    <p class="legal-text">{{ 'MODIFICATION_TERMS_DESC' | translate }}</p>
+
+    <h2 class="legal-h2">{{ 'EFFECTIVE_DATE' | translate }}</h2>
+    <p class="legal-date"><strong>{{ 'LAST_UPDATE' | translate }}</strong> 28/02/2025</p>
   </div>
 </ion-content>
 
-<ion-content *ngIf="isHistorial" style="margin-top: 20px; padding: 10px;">
 
-  <!-- Mensaje si no hay citas -->
-  <ion-item *ngIf="citas.length === 0"> 
-     <ion-label> {{ 'HISTORY_NO_APPOINTMENTS' | translate }}</ion-label>
-  </ion-item>
+<!-- ── HISTORIAL ──────────────────────────────────────── -->
+<ion-content [fullscreen]="true" *ngIf="isHistorial">
+  <div class="page-wrapper">
 
-  <!-- Lista de citas -->
-  <ion-card *ngFor="let cita of citas" style="margin-bottom: 10px;">
-    <ion-card-header>
-      <ion-card-title>{{ cita.nombreTatuador }}</ion-card-title>
-      <ion-card-subtitle>
-        {{ cita.dia| date:'fullDate' }} - {{ cita.hora }}
-      </ion-card-subtitle>
-    </ion-card-header>
+    <div class="empty-state" *ngIf="citas.length === 0">
+      <div class="empty-icon-wrap">
+        <ion-icon name="calendar-outline"></ion-icon>
+      </div>
+      <p class="empty-text">{{ 'HISTORY_NO_APPOINTMENTS' | translate }}</p>
+    </div>
 
-    <ion-card-content>
-      <p><strong>{{ 'HISTORY_LOCATION' | translate }}:</strong> {{ cita.direccion }}</p>
-      <p *ngIf="cita.estilo"><strong>{{ 'HISTORY_STYLE' | translate }}:</strong> {{ cita.estilo }}</p>
-    </ion-card-content>
+    <div class="history-list" *ngIf="citas.length > 0">
+      <div class="history-card" *ngFor="let cita of citas">
+        <div class="history-card-top">
+          <div class="history-card-info">
+            <span class="section-label">TATTOO ARTIST</span>
+            <h3 class="history-artist">{{ cita.nombreTatuador }}</h3>
+            <div class="history-meta">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span>{{ cita.dia | date:'fullDate' }} · {{ cita.hora }}</span>
+            </div>
+            <div class="history-meta" *ngIf="cita.estilo">
+              <ion-icon name="color-palette-outline"></ion-icon>
+              <span>{{ cita.estilo }}</span>
+            </div>
+            <div class="history-meta">
+              <ion-icon name="location-outline"></ion-icon>
+              <span>{{ cita.direccion }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  </ion-card>
-  
+  </div>
 </ion-content>
 
 
-
+<!-- ── RESEÑAS ────────────────────────────────────────── -->
 <ion-content [fullscreen]="true" *ngIf="isResena">
- <ion-list>
-    <ion-item *ngFor="let resena of resenas">
-      <ion-label>
-        <h2>{{ resena.nombreTatuador }}</h2>
-         <p>{{ resena.mensaje }}</p>
-       <div>
-          <ion-icon
-            *ngFor="let star of [1,2,3,4,5]"
-            [name]="resena.estrella >= star ? 'star' : 'star-outline'"
-            style="font-size: 20px; cursor: pointer; color: gold;">
-          </ion-icon>
+  <div class="page-wrapper">
+
+    <div class="empty-state" *ngIf="resenas.length === 0">
+      <div class="empty-icon-wrap">
+        <ion-icon name="star-outline"></ion-icon>
+      </div>
+      <p class="empty-text">{{ 'REVIEW_NO_REVIEWS' | translate }}</p>
+    </div>
+
+    <div class="reviews-list" *ngIf="resenas.length > 0">
+      <div class="review-item" *ngFor="let resena of resenas">
+
+        <div class="review-item-header">
+          <div>
+            <span class="section-label">TATTOO ARTIST</span>
+            <h3 class="review-artist">{{ resena.nombreTatuador }}</h3>
+            <div class="review-stars">
+              <ion-icon
+                *ngFor="let star of [1,2,3,4,5]"
+                [name]="resena.estrella >= star ? 'star' : 'star-outline'"
+                class="star-icon">
+              </ion-icon>
+            </div>
+          </div>
+          <div class="review-actions">
+            <button class="review-action-btn" (click)="setOpen(true, resena)">
+              <ion-icon name="create-outline"></ion-icon>
+            </button>
+            <button class="review-action-btn review-action-delete" (click)="eliminarResena(resena)">
+              <ion-icon name="trash-outline"></ion-icon>
+            </button>
+          </div>
         </div>
-        <div style="margin-top: 8px;">
-          <ion-button size="small" *ngIf="resena.imagen" (click)="verImagen(resena.imagen)">
-            {{ 'REVIEW_VIEW_IMAGE' | translate }}
-          </ion-button>
-        </div>
-        
+
+        <p class="review-msg">{{ resena.mensaje }}</p>
+
+        <button class="review-img-btn" *ngIf="resena.imagen" (click)="verImagen(resena.imagen)">
+          <ion-icon name="image-outline"></ion-icon>
+          {{ 'REVIEW_VIEW_IMAGE' | translate }}
+        </button>
+
+        <!-- Modal imagen -->
         <ion-modal [isOpen]="imagenSeleccionada !== null">
           <ng-template>
-            <div  (click)="cerrarImagen()" style="display: flex; justify-content: center; align-items: center; height: 100%; background: black;">
-              <img [src]="imagenSeleccionada" style="max-width: 100%; max-height: 100%;" />
+            <div class="img-modal-bg" (click)="cerrarImagen()">
+              <img [src]="imagenSeleccionada" class="img-modal-img" />
             </div>
           </ng-template>
         </ion-modal>
-      </ion-label>
 
+        <!-- Modal editar -->
+        <ion-modal [isOpen]="isModalOpen">
+          <ng-template>
+            <ion-header>
+              <ion-toolbar class="settings-toolbar">
+                <ion-label class="toolbar-label">{{ 'REVIEW_EDIT_TITLE' | translate }}</ion-label>
+                <ion-buttons slot="end">
+                  <button class="modal-close-btn" (click)="setOpen(false)">
+                    <ion-icon name="close-outline"></ion-icon>
+                  </button>
+                </ion-buttons>
+              </ion-toolbar>
+            </ion-header>
+            <ion-content class="ion-padding">
+              <div class="edit-review-form">
+                <div class="star-picker">
+                  <ion-icon
+                    *ngFor="let star of [1,2,3,4,5]"
+                    [name]="estrellaSeleccionada >= star ? 'star' : 'star-outline'"
+                    class="star-pick-icon"
+                    (click)="seleccionarEstrella(star)">
+                  </ion-icon>
+                </div>
+                <ion-textarea
+                  [(ngModel)]="mensajeResena"
+                  class="review-textarea"
+                  [placeholder]="'REVIEW_WRITE_PLACEHOLDER' | translate"
+                  autoGrow="true">
+                </ion-textarea>
+                <ion-button expand="block" class="submit-btn" (click)="editarResena(resena)">
+                  {{ 'REVIEW_EDIT_BUTTON' | translate }}
+                </ion-button>
+              </div>
+            </ion-content>
+          </ng-template>
+        </ion-modal>
 
-      <ion-button fill="clear" color="primary" (click)="setOpen(true, resena)">
-        <ion-icon slot="icon-only" name="create-outline"></ion-icon>
-      </ion-button>
-
-      <ion-modal [isOpen]="isModalOpen">
-        <ng-template>
-          <ion-header>
-            <ion-toolbar>
-              <ion-title>{{ 'REVIEW_EDIT_TITLE' | translate }}</ion-title>
-              <ion-buttons slot="end">
-                <ion-button (click)="setOpen(false)"><ion-icon name="close-outline"></ion-icon></ion-button>
-              </ion-buttons>
-            </ion-toolbar>
-          </ion-header>
-          <ion-content class="ion-padding">
-             <div style="display: flex; gap: 5px; margin-bottom: 10px;">
-              <ion-icon
-                *ngFor="let star of [1,2,3,4,5]"
-                [name]="estrellaSeleccionada >= star ? 'star' : 'star-outline'"
-                style="font-size: 30px; cursor: pointer; color: gold;"
-                (click)="seleccionarEstrella(star)">
-              </ion-icon>
-            </div>
-
-            <!-- Mensaje -->
-            <ion-textarea
-              [(ngModel)]="mensajeResena"
-               placeholder="'REVIEW_WRITE_PLACEHOLDER' | translate"
-              autoGrow="true">
-            </ion-textarea>
-
-            <!-- Botón -->
-            <ion-button expand="block" (click)="editarResena(resena)">
-              {{ 'REVIEW_EDIT_BUTTON' | translate }}
-            </ion-button>
-          </ion-content>
-        </ng-template>
-      </ion-modal>
-
-      <ion-button fill="clear" color="danger" (click)="eliminarResena(resena)">
-        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-list>
-
-  <ng-template *ngIf="resenas.length === 0">
-    <ion-text color="medium">
-      <p class="ion-padding">{{ 'REVIEW_NO_REVIEWS' | translate }}</p>
-    </ion-text>
-  </ng-template>
+      </div>
+    </div>
+  </div>
 </ion-content>
 
+
+<!-- ── AYUDA ──────────────────────────────────────────── -->
 <ion-content [fullscreen]="true" *ngIf="isAyuda">
-  <ion-list >
-    <ng-container *ngFor="let pregunta of preguntas">
-      <ion-item (click)="toggleRespuesta(pregunta)">
-        <ion-label>{{ pregunta.titulo }}</ion-label>
-        <ion-icon slot="end" name="{{ pregunta.abierto ? 'chevron-up' : 'chevron-down' }}" style="color:white;"></ion-icon>
-      </ion-item>
-      <ion-item *ngIf="pregunta.abierto">
-        <ion-label style="white-space: normal; word-break: break-word;">
-          {{ pregunta.respuesta }}
-        </ion-label>
-      </ion-item>
-    </ng-container>
-  </ion-list>
+  <div class="page-wrapper">
+    <div class="faq-list">
+      <div class="faq-item" *ngFor="let pregunta of preguntas" (click)="toggleRespuesta(pregunta)">
+        <div class="faq-row">
+          <span class="faq-question">{{ pregunta.titulo }}</span>
+          <ion-icon
+            [name]="pregunta.abierto ? 'chevron-up-outline' : 'chevron-down-outline'"
+            class="faq-chevron">
+          </ion-icon>
+        </div>
+        <div class="faq-answer" *ngIf="pregunta.abierto">
+          <p>{{ pregunta.respuesta }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>
 
-<ion-content [fullscreen]="true" class="content" *ngIf="isCondicion">
-  
-  <h1 class="title" style="margin: 5px; font-weight: bold;">{{ 'TERMS_TITLE' | translate }}</h1>
-  <p class="intro-text" style="margin: 5px;">{{ 'TERMS_INTRO' | translate }}</p>
-  <p class="subheading" style="margin: 5px;">{{ 'TERMS_KEY_POINTS' | translate }}</p>
-  <ul class="points-list" style="margin: 5px;">
-     <li>{{ 'TERMS_POINT_1' | translate }}</li>
-    <li>{{ 'TERMS_POINT_2' | translate }}</li>
-    <li>
-      {{ 'TERMS_POINT_3' | translate }}
-      <ol> 
-        <li>{{ 'TERMS_POINT_3A' | translate }}</li>
-        <li>{{ 'TERMS_POINT_3B' | translate }}</li>
-        <li>{{ 'TERMS_POINT_3C' | translate }}</li>
-        <li>{{ 'TERMS_POINT_3D' | translate }}</li>
-        <li>{{ 'TERMS_POINT_3E' | translate }}</li>
-        <li>{{ 'TERMS_POINT_3F' | translate }}</li>
-      </ol>
-    </li>
-    <li>{{ 'TERMS_POINT_4' | translate }}</li>
-    <li>{{ 'TERMS_POINT_5' | translate }}</li>
-  </ul>
+
+<!-- ── CONDICIONES RESUMEN ────────────────────────────── -->
+<ion-content [fullscreen]="true" *ngIf="isCondicion">
+  <div class="legal-wrapper">
+    <h1 class="legal-title">{{ 'TERMS_TITLE' | translate }}</h1>
+    <p class="legal-intro">{{ 'TERMS_INTRO' | translate }}</p>
+    <p class="legal-text">{{ 'TERMS_KEY_POINTS' | translate }}</p>
+    <ul class="legal-list">
+      <li>{{ 'TERMS_POINT_1' | translate }}</li>
+      <li>{{ 'TERMS_POINT_2' | translate }}</li>
+      <li>
+        {{ 'TERMS_POINT_3' | translate }}
+        <ol class="legal-ordered">
+          <li>{{ 'TERMS_POINT_3A' | translate }}</li>
+          <li>{{ 'TERMS_POINT_3B' | translate }}</li>
+          <li>{{ 'TERMS_POINT_3C' | translate }}</li>
+          <li>{{ 'TERMS_POINT_3D' | translate }}</li>
+          <li>{{ 'TERMS_POINT_3E' | translate }}</li>
+          <li>{{ 'TERMS_POINT_3F' | translate }}</li>
+        </ol>
+      </li>
+      <li>{{ 'TERMS_POINT_4' | translate }}</li>
+      <li>{{ 'TERMS_POINT_5' | translate }}</li>
+    </ul>
+  </div>
 </ion-content>
 
+
+<!-- ── PRIVACIDAD ─────────────────────────────────────── -->
 <ion-content [fullscreen]="true" *ngIf="isPrivacidad">
-  <div class="container" style="margin: 5px;">
-    <p>{{ 'PRIVACY_INTRO' | translate }}</p>
+  <div class="legal-wrapper">
+    <p class="legal-intro">{{ 'PRIVACY_INTRO' | translate }}</p>
 
-    <div class="section">
-      <h2>{{ 'PRIVACY_SECTION_1_TITLE' | translate }}</h2>
-      <p>{{ 'PRIVACY_SECTION_1_TEXT' | translate }}</p>
-    </div>
-    
-    <div class="section">
-      <h2>{{ 'PRIVACY_SECTION_2_TITLE' | translate }}</h2>
-      <p>{{ 'PRIVACY_SECTION_2_TEXT' | translate }}</p>
-      <ul>
-        <li>{{ 'PRIVACY_SECTION_2_POINT_1' | translate }}</li>
-        <li>{{ 'PRIVACY_SECTION_2_POINT_2' | translate }}</li>
-        <li>{{ 'PRIVACY_SECTION_2_POINT_3' | translate }}</li>
-        <li>{{ 'PRIVACY_SECTION_2_POINT_4' | translate }}</li>
-        <li>{{ 'PRIVACY_SECTION_2_POINT_5' | translate }}</li>
-        <li>{{ 'PRIVACY_SECTION_2_POINT_6' | translate }}</li>
-        <li>{{ 'PRIVACY_SECTION_2_POINT_7' | translate }}</li>
-        <li>{{ 'PRIVACY_SECTION_2_POINT_8' | translate }}</li>
+    <ng-container *ngFor="let section of [
+      { title: 'PRIVACY_SECTION_1_TITLE',  text: 'PRIVACY_SECTION_1_TEXT'  },
+      { title: 'PRIVACY_SECTION_2_TITLE',  text: 'PRIVACY_SECTION_2_TEXT'  },
+      { title: 'PRIVACY_SECTION_3_TITLE',  text: 'PRIVACY_SECTION_3_TEXT'  },
+      { title: 'PRIVACY_SECTION_4_TITLE',  text: 'PRIVACY_SECTION_4_TEXT'  },
+      { title: 'PRIVACY_SECTION_5_TITLE',  text: 'PRIVACY_SECTION_5_TEXT'  },
+      { title: 'PRIVACY_SECTION_8_TITLE',  text: 'PRIVACY_SECTION_8_TEXT'  },
+      { title: 'PRIVACY_SECTION_9_TITLE',  text: 'PRIVACY_SECTION_9_TEXT'  },
+      { title: 'PRIVACY_SECTION_10_TITLE', text: 'PRIVACY_SECTION_10_TEXT' },
+      { title: 'PRIVACY_SECTION_12_TITLE', text: 'PRIVACY_SECTION_12_TEXT' }
+    ]">
+      <div class="legal-section">
+        <h2 class="legal-h2">{{ section.title | translate }}</h2>
+        <p class="legal-text">{{ section.text | translate }}</p>
+      </div>
+    </ng-container>
+
+    <!-- Section 2 list -->
+    <div class="legal-section">
+      <h2 class="legal-h2">{{ 'PRIVACY_SECTION_2_TITLE' | translate }}</h2>
+      <p class="legal-text">{{ 'PRIVACY_SECTION_2_TEXT' | translate }}</p>
+      <ul class="legal-list">
+        <li *ngFor="let i of [1,2,3,4,5,6,7,8]">{{ ('PRIVACY_SECTION_2_POINT_' + i) | translate }}</li>
       </ul>
     </div>
 
-    <div class="section">
-     <h2>{{ 'PRIVACY_SECTION_3_TITLE' | translate }}</h2>
-      <p>{{ 'PRIVACY_SECTION_3_TEXT' | translate }}</p>
-    </div>
-
-    <div class="section">
-      <h2>{{ 'PRIVACY_SECTION_4_TITLE' | translate }}</h2>
-      <p>{{ 'PRIVACY_SECTION_4_TEXT' | translate }}</p>
-    </div>
-    
-    <div class="section">
-     <h2>{{ 'PRIVACY_SECTION_5_TITLE' | translate }}</h2>
-      <p>{{ 'PRIVACY_SECTION_5_TEXT' | translate }}</p>
-    </div>
-
-    <div class="section">
-      <h2>{{ 'PRIVACY_SECTION_6_TITLE' | translate }}</h2>
-      <p>{{ 'PRIVACY_SECTION_6_TEXT' | translate }}</p>
-      <ul>
-        <li>{{ 'PRIVACY_SECTION_6_POINT_1' | translate }}</li>
-        <li>{{ 'PRIVACY_SECTION_6_POINT_2' | translate }}</li>
-        <li>{{ 'PRIVACY_SECTION_6_POINT_3' | translate }}</li>
-        <li>{{ 'PRIVACY_SECTION_6_POINT_4' | translate }}</li>
-      </ul>
-    </div>
-    
-    <div class="section">
-    <h2>{{ 'PRIVACY_SECTION_8_TITLE' | translate }}</h2>
-      <p>{{ 'PRIVACY_SECTION_8_TEXT' | translate }}</p>
-    </div>
-    
-    <div class="section">
-     <h2>{{ 'PRIVACY_SECTION_9_TITLE' | translate }}</h2>
-      <p>{{ 'PRIVACY_SECTION_9_TEXT' | translate }}</p>
-    </div>
-    
-    <div class="section">
-     <h2>{{ 'PRIVACY_SECTION_10_TITLE' | translate }}</h2>
-      <p>{{ 'PRIVACY_SECTION_10_TEXT' | translate }}</p>
-    </div>
-
-    <div class="section">
-      <h2>{{ 'PRIVACY_SECTION_11_TITLE' | translate }}</h2>
-      <p>{{ 'PRIVACY_SECTION_11_TEXT_1' | translate }}</p>
-      <p>{{ 'PRIVACY_SECTION_11_TEXT_2' | translate }}</p>
-      <p>{{ 'PRIVACY_SECTION_11_TEXT_3' | translate }}</p>
-      <ul>
-        <li>{{ 'PRIVACY_SECTION_11_POINT_1' | translate }}</li>
-        <li>{{ 'PRIVACY_SECTION_11_POINT_2' | translate }}</li>
-        <li>{{ 'PRIVACY_SECTION_11_POINT_3' | translate }}</li>
+    <!-- Section 6 list -->
+    <div class="legal-section">
+      <h2 class="legal-h2">{{ 'PRIVACY_SECTION_6_TITLE' | translate }}</h2>
+      <p class="legal-text">{{ 'PRIVACY_SECTION_6_TEXT' | translate }}</p>
+      <ul class="legal-list">
+        <li *ngFor="let i of [1,2,3,4]">{{ ('PRIVACY_SECTION_6_POINT_' + i) | translate }}</li>
       </ul>
     </div>
 
-    <div class="section">
-     <h2>{{ 'PRIVACY_SECTION_12_TITLE' | translate }}</h2>
-      <p>{{ 'PRIVACY_SECTION_12_TEXT' | translate }}</p>
+    <!-- Section 11 -->
+    <div class="legal-section">
+      <h2 class="legal-h2">{{ 'PRIVACY_SECTION_11_TITLE' | translate }}</h2>
+      <p class="legal-text">{{ 'PRIVACY_SECTION_11_TEXT_1' | translate }}</p>
+      <p class="legal-text">{{ 'PRIVACY_SECTION_11_TEXT_2' | translate }}</p>
+      <p class="legal-text">{{ 'PRIVACY_SECTION_11_TEXT_3' | translate }}</p>
+      <ul class="legal-list">
+        <li *ngFor="let i of [1,2,3]">{{ ('PRIVACY_SECTION_11_POINT_' + i) | translate }}</li>
+      </ul>
     </div>
 
-    <p><strong>{{ 'PRIVACY_LAST_UPDATED' | translate }}</strong></p>
+    <p class="legal-date"><strong>{{ 'PRIVACY_LAST_UPDATED' | translate }}</strong></p>
   </div>
 </ion-content>
 
-<ion-content *ngIf="isUSo">
-  <ion-list style="padding: 10px;">
-    <ion-item [routerLink]="['/ajustes', usuarioActual.uid]" [queryParams]="{ isCondicion: true }">
-      {{ 'ABOUT_US_TERMS_SUMMARY' | translate }}
-    </ion-item>
-    <ion-item [routerLink]="['/ajustes', usuarioActual.uid]" [queryParams]="{ isCondicionUso: true }">
-      {{ 'ABOUT_US_TERMS' | translate }}
-    </ion-item>
-    <ion-item [routerLink]="['/ajustes', usuarioActual.uid]" [queryParams]="{ isPrivacidad: true }">
-      {{ 'ABOUT_US_PRIVACY' | translate }}
-    </ion-item>
-    <ion-item> 
-      <ion-label>{{ 'ABOUT_US_VERSION_LABEL' | translate }}</ion-label>
-      <ion-label> 1.2.0 </ion-label>
-    </ion-item>
-    
-  </ion-list>
-</ion-content>
 
-<ion-content *ngIf="isInformacion">
-  <ion-list style="padding: 10px;">
-      <ion-item (click)="showActionSheet('nombre')">
-        <ion-label >
-          {{ 'INFO_NAME_LABEL' | translate }}
-        </ion-label>
-        <ion-label class="info-label" slot="end"> {{usuarioActual.nombre}}</ion-label>
-        <ion-icon name="chevron-forward-outline" slot="end" style="color:white;"></ion-icon>
-      </ion-item>
-      <ion-item (click)="showActionSheetMovil('movil')">
-        <ion-label >
-          {{ 'INFO_PHONE_LABEL' | translate }}
-        </ion-label>
-        <ion-label class="info-label" slot="end"> {{usuarioActual.movil}}</ion-label>
-        <ion-icon name="chevron-forward-outline" slot="end" style="color:white;"></ion-icon>
-      </ion-item>
-  </ion-list>
-</ion-content>
+<!-- ── SOBRE NOSOTROS ─────────────────────────────────── -->
+<ion-content [fullscreen]="true" *ngIf="isUSo">
+  <div class="page-wrapper">
+    <div class="nav-list">
 
-<ion-content *ngIf="isPago">
-  <div *ngIf="isPremium; else noPago">
-    <h2>{{ 'PAY_PREMIUM_MESSAGE' | translate }}</h2>
+      <a class="nav-row" [routerLink]="['/ajustes', usuarioActual.uid]" [queryParams]="{ isCondicion: true }">
+        <div class="nav-row-left">
+          <div class="nav-icon-wrap">
+            <ion-icon name="document-text-outline"></ion-icon>
+          </div>
+          <span>{{ 'ABOUT_US_TERMS_SUMMARY' | translate }}</span>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="nav-chevron"></ion-icon>
+      </a>
+
+      <div class="row-divider"></div>
+
+      <a class="nav-row" [routerLink]="['/ajustes', usuarioActual.uid]" [queryParams]="{ isCondicionUso: true }">
+        <div class="nav-row-left">
+          <div class="nav-icon-wrap">
+            <ion-icon name="shield-checkmark-outline"></ion-icon>
+          </div>
+          <span>{{ 'ABOUT_US_TERMS' | translate }}</span>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="nav-chevron"></ion-icon>
+      </a>
+
+      <div class="row-divider"></div>
+
+      <a class="nav-row" [routerLink]="['/ajustes', usuarioActual.uid]" [queryParams]="{ isPrivacidad: true }">
+        <div class="nav-row-left">
+          <div class="nav-icon-wrap">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+          </div>
+          <span>{{ 'ABOUT_US_PRIVACY' | translate }}</span>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="nav-chevron"></ion-icon>
+      </a>
+
+      <div class="row-divider"></div>
+
+      <div class="nav-row nav-row-static">
+        <div class="nav-row-left">
+          <div class="nav-icon-wrap">
+            <ion-icon name="information-circle-outline"></ion-icon>
+          </div>
+          <span>{{ 'ABOUT_US_VERSION_LABEL' | translate }}</span>
+        </div>
+        <span class="nav-value">1.2.0</span>
+      </div>
+
+    </div>
   </div>
-
-  <!-- Si NO es premium -->
-  <ng-template #noPago>
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>{{ 'PAY_GO_PREMIUM_TITLE' | translate }}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-         <p>{{ 'PAY_GO_PREMIUM_DESC' | translate }}</p>
-        <ion-button expand="block" (click)="goToPago()">
-          {{ 'PAY_GO_PREMIUM_BTN' | translate }}
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
-  </ng-template>
 </ion-content>
 
+
+<!-- ── INFORMACIÓN BÁSICA ─────────────────────────────── -->
+<ion-content [fullscreen]="true" *ngIf="isInformacion">
+  <div class="page-wrapper">
+    <div class="nav-list">
+
+      <div class="nav-row" (click)="showActionSheet('nombre')">
+        <div class="nav-row-left">
+          <div class="nav-icon-wrap">
+            <ion-icon name="person-outline"></ion-icon>
+          </div>
+          <span>{{ 'INFO_NAME_LABEL' | translate }}</span>
+        </div>
+        <div class="nav-row-right">
+          <span class="nav-value">{{ usuarioActual.nombre }}</span>
+          <ion-icon name="chevron-forward-outline" class="nav-chevron"></ion-icon>
+        </div>
+      </div>
+
+      <div class="row-divider"></div>
+
+      <div class="nav-row" (click)="showActionSheetMovil('movil')">
+        <div class="nav-row-left">
+          <div class="nav-icon-wrap">
+            <ion-icon name="call-outline"></ion-icon>
+          </div>
+          <span>{{ 'INFO_PHONE_LABEL' | translate }}</span>
+        </div>
+        <div class="nav-row-right">
+          <span class="nav-value">{{ usuarioActual.movil }}</span>
+          <ion-icon name="chevron-forward-outline" class="nav-chevron"></ion-icon>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ion-content>
+
+
+<!-- ── SUSCRIPCIONES ──────────────────────────────────── -->
+<ion-content [fullscreen]="true" *ngIf="isPago">
+  <div class="page-wrapper">
+
+    <!-- Ya es premium -->
+    <div class="premium-active" *ngIf="isPremium">
+      <div class="premium-icon-wrap">
+        <ion-icon name="diamond-outline"></ion-icon>
+      </div>
+      <h2 class="premium-title">{{ 'PAY_PREMIUM_MESSAGE' | translate }}</h2>
+    </div>
+
+    <!-- No es premium -->
+    <div class="premium-card" *ngIf="!isPremium">
+      <div class="premium-card-top">
+        <div class="premium-icon-wrap">
+          <ion-icon name="diamond-outline"></ion-icon>
+        </div>
+        <span class="section-label">PREMIUM</span>
+        <h2 class="premium-title">{{ 'PAY_GO_PREMIUM_TITLE' | translate }}</h2>
+        <p class="premium-desc">{{ 'PAY_GO_PREMIUM_DESC' | translate }}</p>
+      </div>
+      <ion-button expand="block" class="submit-btn" (click)="goToPago()">
+        {{ 'PAY_GO_PREMIUM_BTN' | translate }}
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

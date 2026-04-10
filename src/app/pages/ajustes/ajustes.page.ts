@@ -9,6 +9,8 @@ import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage-angular';
+import { FirebaseCrashlytics } from '@capacitor-firebase/crashlytics';
+
 
 @Component({
   selector: 'app-ajustes',
@@ -21,7 +23,7 @@ export class AjustesPage implements OnInit {
   usuarioActual: Usuario = {
     uid: '',
     nombre: '',
-    correo: '',
+    email: '',
     token: ''
   };
   isDarkMode: boolean = false;
@@ -217,6 +219,16 @@ export class AjustesPage implements OnInit {
               })
               .catch(err => {
                 console.error('Error eliminando la reseña:', err);
+                FirebaseCrashlytics.log({
+                  message: 'Error al elimknar una reseña'
+                });
+
+                FirebaseCrashlytics.setUserId({ userId: this.usuarioActual.uid });
+                FirebaseCrashlytics.setCustomKey({
+                  key: 'pantalla cliente',
+                  value: 'perfil_usuario',
+                  type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+                });
               });
           }
         }

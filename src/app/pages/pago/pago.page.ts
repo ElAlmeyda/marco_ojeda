@@ -5,6 +5,8 @@ import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
 import { CustomerInfo, LOG_LEVEL, Purchases } from '@revenuecat/purchases-capacitor';
 import { TranslateService } from '@ngx-translate/core';
+import { FirebaseCrashlytics } from '@capacitor-firebase/crashlytics';
+
 
 @Component({
   selector: 'app-pago',
@@ -17,7 +19,7 @@ export class PagoPage implements OnInit {
   usuarioActual: Usuario = {
     uid: '',
     nombre: '',
-    correo: '',
+    email: '',
     token: ''
   };
   selectedPlan: any = null;
@@ -74,6 +76,16 @@ export class PagoPage implements OnInit {
         }
       } catch (error) {
         console.error('Error inicializando compras o cargando offerings:', error);
+        FirebaseCrashlytics.log({
+        message: 'Error al inicializar las compras'
+      });
+
+      FirebaseCrashlytics.setUserId({ userId: this.usuarioActual.uid });
+      FirebaseCrashlytics.setCustomKey({
+        key: 'pantalla cliente',
+        value: 'perfil_usuario',
+        type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+      });
       }
   }
 

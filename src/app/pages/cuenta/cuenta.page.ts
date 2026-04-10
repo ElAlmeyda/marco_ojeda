@@ -8,6 +8,8 @@ import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
+import { FirebaseCrashlytics } from '@capacitor-firebase/crashlytics';
+
 
 @Component({
   selector: 'app-cuenta',
@@ -18,7 +20,7 @@ export class CuentaPage implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: '',
-    correo: '',
+    email: '',
     avatar: '',
   };
 
@@ -75,7 +77,7 @@ export class CuentaPage implements OnInit {
               {
                 text: acceptText,
                 handler: async () => {
-                    await this.auth.resetPassword(this.usuario.correo);
+                    await this.auth.resetPassword(this.usuario.email);
                     const successMsg = await this.translate.get('PASSWORD_CHANGE_SUCCESS').toPromise();
                     this.presentToast(successMsg, 'success');
                   }
@@ -105,10 +107,10 @@ export class CuentaPage implements OnInit {
       if (user.emailVerified) {
         try {
           // Verificar si el correo ha cambiado
-          if (user.email !== this.usuario.correo) {
-            let correo = this.usuario.correo;
+          if (user.email !== this.usuario.email) {
+            let correo = this.usuario.email;
             await this.reautenticarUsuario(user);
-            await user.updateEmail(this.usuario.correo);
+            await user.updateEmail(this.usuario.email);
             const check = await this.user.updateCorreo(this.nuevoCorreo, this.usuario.uid);
             if (check) {
               const successMsg = await this.translate.get('EMAIL_UPDATE_SUCCESS').toPromise();
@@ -120,7 +122,7 @@ export class CuentaPage implements OnInit {
           }
           
           // Enviar correo de verificación si se cambió el correo
-          if (user.email !== this.usuario.correo) {
+          if (user.email !== this.usuario.email) {
             await user.sendEmailVerification();
           }
           
@@ -128,6 +130,16 @@ export class CuentaPage implements OnInit {
           console.error("Error al actualizar el correo:", error);
           const errorMsg = await this.translate.get('EMAIL_UPDATE_ERROR').toPromise();
           this.presentToast(errorMsg, 'danger');
+          FirebaseCrashlytics.log({
+            message: 'Error al actualizar el correo'
+          });
+
+          FirebaseCrashlytics.setUserId({ userId: this.usuario.uid });
+          FirebaseCrashlytics.setCustomKey({
+            key: 'pantalla cliente',
+            value: 'perfil_usuario',
+            type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+          });
         }
       } else {
         const warningMsg = await this.translate.get('EMAIL_NOT_VERIFIED').toPromise();
@@ -185,6 +197,16 @@ export class CuentaPage implements OnInit {
       await alert.present();
     } catch (error) {
       console.error("Error al solicitar reautenticación:", error);
+      FirebaseCrashlytics.log({
+        message: 'Error al solicitar reautenticacion'
+      });
+
+      FirebaseCrashlytics.setUserId({ userId: this.usuario.uid });
+      FirebaseCrashlytics.setCustomKey({
+        key: 'pantalla cliente',
+        value: 'perfil_usuario',
+        type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+      });
     }  
   }
 
@@ -266,6 +288,16 @@ export class CuentaPage implements OnInit {
                           this.logout();
                         } catch (reauthError) {
                           console.error('Error al reautenticar o eliminar:', reauthError);
+                          FirebaseCrashlytics.log({
+                            message: 'Error al reatuenticar la cuenta'
+                          });
+
+                          FirebaseCrashlytics.setUserId({ userId: this.usuario.uid });
+                          FirebaseCrashlytics.setCustomKey({
+                            key: 'pantalla cliente',
+                            value: 'perfil_usuario',
+                            type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+                          });
                           
                           await loading.dismiss(); // ⚠️ También ocultar en caso de error
                           const errorAlert = await this.alertController.create({
@@ -286,6 +318,16 @@ export class CuentaPage implements OnInit {
               }
             } catch (error) {
               console.error('Error al eliminar la cuenta:', error);
+              FirebaseCrashlytics.log({
+                message: 'Error al eliminar la cuenta'
+              });
+
+              FirebaseCrashlytics.setUserId({ userId: this.usuario.uid });
+              FirebaseCrashlytics.setCustomKey({
+                key: 'pantalla cliente',
+                value: 'perfil_usuario',
+                type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+              });
               const errorAlert = await this.alertController.create({
                 header: errorHeader,
                 message: deleteFailMsg,
@@ -316,6 +358,16 @@ export class CuentaPage implements OnInit {
       }
     } catch (error) {
       console.error('Error al reenviar el correo de verificación:', error);
+      FirebaseCrashlytics.log({
+        message: 'Error al reenviar el correo'
+     });
+
+      FirebaseCrashlytics.setUserId({ userId: this.usuario.uid });
+      FirebaseCrashlytics.setCustomKey({
+        key: 'pantalla cliente',
+        value: 'perfil_usuario',
+        type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+      });
       const errorMsg = await this.translate.get('EMAIL_VERIFICATION_RESEND_ERROR').toPromise();
       this.presentToast(errorMsg, 'danger');
     }
@@ -335,6 +387,16 @@ export class CuentaPage implements OnInit {
       }
     } catch (error) {
       console.error('Error al verificar el estado del correo:', error);
+      FirebaseCrashlytics.log({
+        message: 'Error al verificar el estado del correo'
+      });
+
+      FirebaseCrashlytics.setUserId({ userId: this.usuario.uid });
+      FirebaseCrashlytics.setCustomKey({
+        key: 'pantalla cliente',
+        value: 'perfil_usuario',
+        type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+      });
     }
   }
 
@@ -343,12 +405,22 @@ export class CuentaPage implements OnInit {
     await this.authFire.signOut();   // Cierra sesión en Firebase
     
     // Limpia el objeto usuario para que no muestre nada
-    this.usuario = { uid: '', nombre: '', movil: '', avatar: '', correo: '' };
+    this.usuario = { uid: '', nombre: '', movil: '', avatar: '', email: '' };
     
     // Opcional: redirige a login o inicio
     this.router.navigate(['/tabs/folder', this.usuario.uid], { replaceUrl: true });
   } catch (err) {
     console.error("❌ Error al cerrar sesión:", err);
+    FirebaseCrashlytics.log({
+      message: 'Error al cerrar sesion'
+    });
+
+    FirebaseCrashlytics.setUserId({ userId: this.usuario.uid });
+    FirebaseCrashlytics.setCustomKey({
+      key: 'pantalla cliente',
+      value: 'perfil_usuario',
+      type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+    });
   }
 }
 

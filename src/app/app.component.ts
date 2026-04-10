@@ -30,7 +30,7 @@ export class AppComponent {
   usuario: Usuario = {
     nombre: '',
     uid: '',
-    correo: '',
+    email: '',
     movil: '',
     avatar: ''
   };

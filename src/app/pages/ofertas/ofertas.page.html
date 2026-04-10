@@ -1,25 +1,44 @@
-
 <ion-header [translucent]="true">
-  <ion-toolbar style="padding-top: var(--ion-safe-area-top); padding-inline: 10px;">
-    <ion-icon name="close-outline" slot="start" [routerLink]="['/tabs/folder', usuario.uid]" style="margin-left: 10px; font-size: 24px;"></ion-icon>
-    <ion-title size="large" style="text-align: center;">Ofertas</ion-title>
+  <ion-toolbar class="main-toolbar">
+    <button class="close-btn" slot="start" [routerLink]="['/tabs/folder', usuario.uid]">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+    <span class="toolbar-title">Ofertas</span>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-grid>
-    <ion-row>
-      <ion-col size="6" *ngFor="let oferta of ofertas">
-        <ion-card class="card-uniforme" [routerLink]="['/tatuador', oferta.uidTatuador]">
-          <ion-img [src]="oferta.imagenUrl"></ion-img>
-          <ion-card-header>
-            <ion-card-title>{{ oferta.titulo }}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            {{ oferta.descripcion }}
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+<ion-content [fullscreen]="true" class="offers-content">
+  <div class="offers-wrapper">
+
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="!ofertas || ofertas.length === 0">
+      <div class="empty-icon-wrap">
+        <ion-icon name="pricetag-outline"></ion-icon>
+      </div>
+      <p class="empty-text">No hay ofertas disponibles</p>
+    </div>
+
+    <!-- Grid -->
+    <div class="offers-grid" *ngIf="ofertas && ofertas.length > 0">
+      <div class="offer-card" *ngFor="let oferta of ofertas"
+        [routerLink]="['/tatuador', oferta.uidTatuador]">
+
+        <div class="offer-img-wrap">
+          <ion-img [src]="oferta.imagenUrl" class="offer-img"></ion-img>
+          <div class="offer-img-overlay"></div>
+          <div class="offer-badge">
+            <ion-icon name="pricetag-outline"></ion-icon>
+            Oferta
+          </div>
+        </div>
+
+        <div class="offer-body">
+          <h3 class="offer-title">{{ oferta.titulo }}</h3>
+          <p class="offer-desc">{{ oferta.descripcion }}</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 </ion-content>

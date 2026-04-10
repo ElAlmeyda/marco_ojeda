@@ -9,6 +9,8 @@ import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { Cita, Horario, Tatuador, Trabajador, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
+import { FirebaseCrashlytics } from '@capacitor-firebase/crashlytics';
+
 
 
 @Component({
@@ -22,7 +24,7 @@ export class PedirCitaPage implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: '',
-    correo: '',
+    email: '',
   };
   
   datosConsulta = {
@@ -299,7 +301,7 @@ export class PedirCitaPage implements OnInit {
 
     if(this.usuario.movil && this.horaSeleccionada && this.estilo && this.mensaje && this.tipo){
       // Rellenar la cita
-      this.cita.correo = this.usuario.correo;
+      this.cita.email = this.usuario.email;
       this.cita.nombreUser = this.usuario.nombre;
       this.cita.movil = this.usuario.movil;
       this.cita.dia = this.fechaSeleccionada.split('T')[0];
@@ -320,6 +322,13 @@ export class PedirCitaPage implements OnInit {
 
         // Guardar cita
         await this.tiendaTatuador.guardarCita(this.cita, this.usuario.uid, this.tatuador.uid);
+        // Obtener token del tatuador
+        const googleToken = this.tatuador.googleCalendar?.accessToken;
+
+        if (googleToken) {
+          await this.crearEventoTatuadorGoogleCalendar(this.cita, googleToken);
+        }
+
         await this.presentToast(this.translate.instant('APPOINTMENT.SAVED_SUCCESS'), "success");
 
         try {
@@ -328,6 +337,16 @@ export class PedirCitaPage implements OnInit {
           }
         } catch (err) {
           console.warn("Interstitial no se pudo mostrar:", err);
+          FirebaseCrashlytics.log({
+            message: 'Error al mostrar el anuncio'
+          });
+
+          FirebaseCrashlytics.setUserId({ userId: this.uid });
+          FirebaseCrashlytics.setCustomKey({
+            key: 'pantalla cliente',
+            value: 'perfil_usuario',
+            type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+          });
         }
 
 
@@ -350,6 +369,40 @@ export class PedirCitaPage implements OnInit {
     }
   }
 
+  async crearEventoTatuadorGoogleCalendar(cita: Cita, token: string) {
+    const start = new Date(`${cita.dia}T${cita.hora}`);
+    const end = new Date(start.getTime() + (cita.duracion || 60) * 60000); // duración en minutos
+
+    const evento = {
+      summary: `Cita con ${cita.nombreUser}`,
+      description: cita.mensaje,
+      start: { dateTime: start.toISOString() },
+      end: { dateTime: end.toISOString() },
+      location: cita.zona || '',
+      attendees: [
+        { email: cita.email } // cliente como invitado
+      ]
+    };
+
+    const response = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(evento)
+    });
+
+    if (!response.ok) {
+      console.error('Error creando evento en Google Calendar del tatuador', await response.text());
+      return null;
+    }
+
+    const data = await response.json();
+    console.log('Evento creado en Google Calendar del tatuador:', data);
+    return data.id; // <-- guardar eventId en Firestore
+  }
+
   async guardarConsulta() {
     console.log(this.acepto);
     if (!this.cita) this.cita = {} as Cita;
@@ -363,7 +416,7 @@ export class PedirCitaPage implements OnInit {
       // Rellenar la cita
       this.datosConsulta.nombreUser = this.usuario.nombre
       this.datosConsulta.movil = this.usuario.movil
-      this.datosConsulta.correo = this.usuario.correo
+      this.datosConsulta.correo = this.usuario.email
       this.datosConsulta.estilo = this.estilo
       this.datosConsulta.mensaje = this.mensaje 
       this.datosConsulta.tipo = this.tipo
@@ -559,7 +612,6 @@ export class PedirCitaPage implements OnInit {
         hInicio++;
       }
     }
-
     return horas;
   }
 

@@ -1,45 +1,91 @@
-
 <ion-header [translucent]="true">
-  <ion-toolbar style="padding: 10px; padding-top: var(--ion-safe-area-top); padding-inline: 10px;">
-    <ion-icon class="toolbar-icon" slot="start" name="chevron-back-outline" (click)="volver()"></ion-icon>
-    <ion-label class="toolbar-label"> {{ 'ACCOUNT.TITLE' | translate }} </ion-label>
+  <ion-toolbar class="main-toolbar">
+    <button class="back-btn" slot="start" (click)="volver()">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </button>
+    <span class="toolbar-title">{{ 'ACCOUNT.TITLE' | translate }}</span>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="centered-content" style="margin-top:25%;">
-  <div class="top-content">
-    <ion-label>{{ 'ACCOUNT.REMEMBER_PASSWORD' | translate }}</ion-label>
-    <ion-item>{{ usuario.correo }}</ion-item>
-    <div class="button-container">
-      <ion-button class="delete-button" shape="round" (click)="showActionSheet('correo')">
-        {{ 'ACCOUNT.UPDATE_EMAIL' | translate }}</ion-button>
+<ion-content class="account-content">
+  <div class="account-wrapper">
+
+    <!-- Sección principal de cuenta -->
+    <div class="account-section">
+
+      <!-- Email actual -->
+      <div class="section-block">
+        <span class="section-label">{{ 'ACCOUNT.REMEMBER_PASSWORD' | translate }}</span>
+        <div class="email-display">
+          <ion-icon name="mail-outline" class="email-icon"></ion-icon>
+          <span class="email-text">{{ usuario.email }}</span>
+        </div>
+      </div>
+
+      <!-- Acciones de cuenta -->
+      <div class="actions-block">
+        <button class="action-row" (click)="showActionSheet('email')">
+          <div class="action-left">
+            <ion-icon name="pencil-outline" class="action-icon"></ion-icon>
+            <span>{{ 'ACCOUNT.UPDATE_EMAIL' | translate }}</span>
+          </div>
+          <ion-icon name="chevron-forward-outline" class="chevron"></ion-icon>
+        </button>
+
+        <div class="row-divider"></div>
+
+        <button class="action-row" (click)="cambioContrasena()">
+          <div class="action-left">
+            <ion-icon name="lock-closed-outline" class="action-icon"></ion-icon>
+            <span>{{ 'ACCOUNT.FORGOT_PASSWORD' | translate }}</span>
+          </div>
+          <ion-icon name="chevron-forward-outline" class="chevron"></ion-icon>
+        </button>
+      </div>
     </div>
-    
-    <ion-label class="forgot-password">
-      <a (click)="cambioContrasena()">{{ 'ACCOUNT.FORGOT_PASSWORD' | translate }}</a>
-    </ion-label>
-  </div>
-  <div class="button-container">
-    <ion-button class="delete-button" shape="round"  (click)="eliminar()">
-      {{ 'ACCOUNT.DELETE_ACCOUNT' | translate }}</ion-button>
-  </div>
-  <div class="button-container">
-    <ion-button shape="round" (click)="logout()" routerLink="/inicio-sesion">
-      {{ 'ACCOUNT.LOGOUT' | translate }}
-    </ion-button>
-  </div>
 
+    <!-- Acciones de sesión -->
+    <div class="session-block">
+      <ion-button expand="block" class="logout-btn" (click)="logout()" routerLink="/inicio-sesion">
+        <ion-icon slot="start" name="log-out-outline"></ion-icon>
+        {{ 'ACCOUNT.LOGOUT' | translate }}
+      </ion-button>
+    </div>
 
+    <!-- Zona peligrosa -->
+    <div class="danger-block">
+      <span class="danger-label">{{ 'ACCOUNT.DANGER_ZONE' | translate }}</span>
+      <button class="danger-row" (click)="eliminar()">
+        <div class="action-left">
+          <ion-icon name="trash-outline" class="danger-icon"></ion-icon>
+          <span>{{ 'ACCOUNT.DELETE_ACCOUNT' | translate }}</span>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="chevron danger-chevron"></ion-icon>
+      </button>
+    </div>
 
-  <div class="verification-container" *ngIf="enviado">
-    <ion-icon name="mail-outline" class="verification-icon"></ion-icon>
-    <h2>{{ 'ACCOUNT.VERIFICATION_SENT_TITLE' | translate }}</h2>
-    <p>{{ 'ACCOUNT.VERIFICATION_SENT_MESSAGE' | translate }}
-      <strong>{{ usuario.correo }}</strong>.</p>
+    <!-- Verificación enviada -->
+    <div class="verification-card" *ngIf="enviado">
+      <div class="verification-icon-wrap">
+        <ion-icon name="mail-outline"></ion-icon>
+      </div>
+      <h2 class="verification-title">{{ 'ACCOUNT.VERIFICATION_SENT_TITLE' | translate }}</h2>
+      <p class="verification-text">
+        {{ 'ACCOUNT.VERIFICATION_SENT_MESSAGE' | translate }}
+        <strong class="email-highlight">{{ usuario.email }}</strong>
+      </p>
+      <p class="verification-sub">{{ 'ACCOUNT.NOT_RECEIVED' | translate }}</p>
+      <div class="verification-actions">
+        <ion-button expand="block" fill="outline" class="resend-btn" (click)="reenviarCorreo()">
+          <ion-icon slot="start" name="refresh-outline"></ion-icon>
+          {{ 'ACCOUNT.RESEND_EMAIL' | translate }}
+        </ion-button>
+        <ion-button expand="block" class="verified-btn" (click)="verificarEstado()">
+          <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
+          {{ 'ACCOUNT.ALREADY_VERIFIED' | translate }}
+        </ion-button>
+      </div>
+    </div>
 
-    <p>{{ 'ACCOUNT.NOT_RECEIVED' | translate }}</p>
-    <ion-button expand="block" (click)="reenviarCorreo()">{{ 'ACCOUNT.RESEND_EMAIL' | translate }}</ion-button>
-    
-    <ion-button color="primary" expand="block" (click)="verificarEstado()">>{{ 'ACCOUNT.ALREADY_VERIFIED' | translate }}</ion-button>
   </div>
 </ion-content>

@@ -7,6 +7,8 @@ import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { Cita, Tatuador, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
+import { FirebaseCrashlytics } from '@capacitor-firebase/crashlytics';
+
 
 @Component({
   selector: 'app-eventos',
@@ -22,7 +24,7 @@ export class EventosPage implements OnInit {
    usuario: Usuario = {
       uid: '',
       nombre: '',
-      correo: '',
+      email: '',
     };
   cita: Cita = {} as Cita;consultaTrue: any;
   datosConsulta = {
@@ -34,7 +36,7 @@ export class EventosPage implements OnInit {
     notas: '',
     tatuador: '',
     telefono: '',
-    correo: '',
+    email: '',
     predeterminado: ''
   };
 
@@ -196,7 +198,7 @@ export class EventosPage implements OnInit {
         // Rellenar la cita
       this.datosConsulta.nombre = this.usuario.nombre
       this.datosConsulta.telefono = this.usuario.movil
-      this.datosConsulta.correo = this.usuario.correo
+      this.datosConsulta.email = this.usuario.email
       this.datosConsulta.diseno = this.estilo
       this.datosConsulta.notas = this.mensaje 
       this.datosConsulta.tatuador = this.tatuadorSeleccionado.nombre
@@ -207,6 +209,16 @@ export class EventosPage implements OnInit {
         await this.presentToast(this.translate.instant('APPOINTMENT.SAVED_SUCCESS'), "success");
       } catch (err) {
         console.error(err);
+        FirebaseCrashlytics.log({
+          message: 'Error al guardar consulta de evento'
+        });
+
+        FirebaseCrashlytics.setUserId({ userId: this.usuario.uid });
+        FirebaseCrashlytics.setCustomKey({
+          key: 'pantalla cliente',
+          value: 'perfil_usuario',
+          type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+        });
         this.presentToast(this.translate.instant('APPOINTMENT.MISSING_FIELDS'), "danger");
       }
     }

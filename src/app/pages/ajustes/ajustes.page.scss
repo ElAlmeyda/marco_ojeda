@@ -1,10 +1,122 @@
- .custom-toolbar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+// ── Toolbar ───────────────────────────────────────────────
+.settings-toolbar {
+  --background: #121212;
+  --border-color: transparent;
+  padding-top: var(--ion-safe-area-top);
+  padding-inline: 10px;
+}
+
+.toolbar-back-btn {
+  font-size: 22px;
+  color: #C9A86A;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: 4px;
+  transition: color 0.2s;
+
+  &:hover { color: #d2b27a; }
+}
+
+.toolbar-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #EDEDED;
+  letter-spacing: 0.03em;
+}
+
+// ── Page wrapper ──────────────────────────────────────────
+.page-wrapper {
+  padding: 16px 16px 48px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+// ── Legal content ─────────────────────────────────────────
+.legal-wrapper {
+  padding: 20px 20px 48px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.legal-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #EDEDED;
+  margin: 0 0 16px;
+  letter-spacing: 0.01em;
+}
+
+.legal-intro {
+  font-size: 0.9rem;
+  color: #AAAAAA;
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+
+.legal-text {
+  font-size: 0.88rem;
+  color: #AAAAAA;
+  line-height: 1.7;
+  margin: 0 0 12px;
+}
+
+.legal-h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #C9A86A;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 28px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #2E2E2E;
+}
+
+.legal-h3 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #EDEDED;
+  margin: 16px 0 8px;
+  letter-spacing: 0.02em;
+}
+
+.legal-section {
+  margin-bottom: 4px;
+}
+
+.legal-list {
+  padding-left: 18px;
+  margin: 8px 0 12px;
+
+  li {
+    font-size: 0.87rem;
+    color: #AAAAAA;
+    line-height: 1.7;
+    margin-bottom: 6px;
+    padding-left: 4px;
+
+    &::marker { color: #C9A86A; }
   }
-  .toolbar-label {
-    font-size: 24px;
-    text-align: center;
-    width: 100%;
+}
+
+.legal-ordered {
+  padding-left: 18px;
+  margin: 8px 0;
+
+  li {
+    font-size: 0.85rem;
+    color: #808080;
+    line-height: 1.6;
+    margin-bottom: 4px;
+
+    &::marker { color: #C9A86A; }
   }
+}
+
+.legal-date {
+  font-size: 0.82rem;
+  color: #808080;
+  margin-top: 24px;
+
+  strong { color: #C9A86A; }
+}
+

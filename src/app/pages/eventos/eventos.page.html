@@ -1,188 +1,187 @@
 <ion-header [translucent]="true">
-  <ion-toolbar style="padding-top: var(--ion-safe-area-top); padding-inline: 10px;">
-    <ion-icon *ngIf="!tatuadorSeleccionado"
-      class="toolbar-icon" 
-      name="arrow-back-outline" 
-      slot="start" 
-      (click)="volver()">
-    </ion-icon>
-     <ion-icon *ngIf="tatuadorSeleccionado"
-      class="toolbar-icon" 
-      name="arrow-back-outline" 
-      slot="start" 
-      (click)="volverEvento()">
-    </ion-icon>
-    <ion-title *ngIf="!eventoSeleccionado">{{ 'EVENTS.TITLE' | translate }}</ion-title>
-    <ion-title *ngIf="eventoSeleccionado">{{ eventoSeleccionado.nombre }}</ion-title>
+  <ion-toolbar class="main-toolbar">
+    <button class="back-btn" slot="start"
+      (click)="tatuadorSeleccionado ? volverEvento() : volver()">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </button>
+    <span class="toolbar-title">
+      <ng-container *ngIf="!eventoSeleccionado">{{ 'EVENTS.TITLE' | translate }}</ng-container>
+      <ng-container *ngIf="eventoSeleccionado">{{ eventoSeleccionado.nombre }}</ng-container>
+    </span>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="segment-container" *ngIf="!eventoSeleccionado">
+<!-- ── Vista: Lista de eventos ── -->
+<ion-content [fullscreen]="true" class="events-content" *ngIf="!eventoSeleccionado">
+  <div class="events-wrapper">
 
-  <ion-card class="card-content" style="background-color: transparent; --background: transparent;">
-    <ion-card-header style="font-size: 25px; text-align: center;">
-        <ion-label> </ion-label>
-    </ion-card-header>
-    <ion-grid>
-      <ion-row>
-        <ng-container *ngFor="let tipo of evento">
-          <ion-col size="6"> <!-- Define el tamaño de las columnas -->
-            <ion-card *ngIf="tipo.id" (click)="seleccionarEvento(tipo)">
-              <img [src]="tipo.avatar?.[0] || 'assets/icon/sin_avatar.png'" class="card-img">
-            </ion-card>
-          </ion-col>
-        </ng-container>
-      </ion-row>
-    </ion-grid>
-    <ion-label *ngIf="evento.length === 0"> {{ 'EVENTS.NO_EVENTS' | translate }} </ion-label>
-  </ion-card>
-</ion-content>
+    <div *ngIf="evento.length === 0" class="empty-state">
+      <div class="empty-icon-wrap">
+        <ion-icon name="calendar-outline"></ion-icon>
+      </div>
+      <p class="empty-text">{{ 'EVENTS.NO_EVENTS' | translate }}</p>
+    </div>
 
-<ion-content [fullscreen]="true" class="segment-container" *ngIf="eventoSeleccionado && !tatuadorSeleccionado">
-
-  <ion-card class="card-content" style="background-color: transparent; --background: transparent;">
-    <ion-card-header style="font-size: 22px; text-align: center;">
-        <p style="font-size: 14px; margin: 2px;">{{ eventoSeleccionado.descripcion }}</p>
-        <p style="font-size: 13px; margin: 2px; padding: 2px;" (click)="abrirMaps(eventoSeleccionado.ubicacion)">
-          📍 {{ eventoSeleccionado.ubicacion }}
-        </p>
-        <p style="font-size: 13px; margin: 2px; padding: 2px;"> 🗓️ {{ eventoSeleccionado.fecha }} </p>
-      </ion-card-header>
-
-    <ion-grid>
-      <ion-row>
-        <ng-container *ngFor="let tipo of tatuadoresDelEvento">
-          <ion-col size="6"> <!-- Define el tamaño de las columnas -->
-            <ion-card *ngIf="tipo.uid" (click)="seleccionarTatuador(tipo)">
-              <img [src]="tipo.avatar || 'assets/icon/sin_avatar.png'" class="card-img">
-              <ion-card-title class="card-title">
-                {{ tipo.nombreTienda }}
-              </ion-card-title>
-            </ion-card>
-          </ion-col>
-        </ng-container>
-      </ion-row>
-    </ion-grid>
-     <ion-label *ngIf="tatuadoresDelEvento.length === 0"> {{ 'EVENTS.NO_ARTISTS' | translate }} </ion-label>
-  </ion-card>
-</ion-content>
-
-<ion-content [fullscreen]="true" *ngIf="tatuadorSeleccionado">
-
-  <ion-card style="background-color: transparent; --background: transparent;">
-    <ion-card-header style="font-size: 22px; text-align: center;">
-        <ion-label>{{ tatuadorSeleccionado.nombreTienda }}</ion-label>
-        <div style="display: flex; justify-content: center; gap: 20px; margin: 10px 0 30px;">
-          <ion-icon
-            name="logo-instagram"
-            style="font-size: 24px; cursor: pointer;"
-            *ngIf="tatuadorSeleccionado.instagram"
-            (click)="abrirRedSocial('instagram', tatuadorSeleccionado.instagram)">
-          </ion-icon>
-
-          <ion-icon
-            name="logo-facebook"
-            style="font-size: 24px; cursor: pointer;"
-            *ngIf="tatuadorSeleccionado.facebook"
-            (click)="abrirRedSocial('facebook', tatuadorSeleccionado.facebook)">
-          </ion-icon>
-
-          <ion-icon
-            name="logo-whatsapp"
-            style="font-size: 24px; cursor: pointer;"
-            *ngIf="tatuadorSeleccionado.telefono"
-            (click)="abrirWhatsapp(tatuadorSeleccionado.telefono)">
-          </ion-icon>
-
-          <ion-icon
-            name="logo-tiktok"
-            style="font-size: 24px; cursor: pointer;"
-            *ngIf="tatuadorSeleccionado.tiktok"
-            (click)="abrirRedSocial('tiktok', tatuadorSeleccionado.tiktok)">
-          </ion-icon>
-
-          <ion-icon
-            name="logo-twitter"
-            style="font-size: 24px; cursor: pointer;"
-            *ngIf="tatuadorSeleccionado.twitter"
-            (click)="abrirRedSocial('twitter', tatuadorSeleccionado.twitter)">
-          </ion-icon>
-
-          <ion-icon
-            name="globe-outline"
-            style="font-size: 24px; cursor: pointer;"
-            *ngIf="tatuadorSeleccionado.web"
-            (click)="abrirSitioWeb(tatuadorSeleccionado.web)">
-          </ion-icon>
+    <div class="grid-2col" *ngIf="evento.length > 0">
+      <div class="event-card" *ngFor="let tipo of evento" (click)="seleccionarEvento(tipo)">
+        <div class="card-img-wrap">
+          <img [src]="tipo.avatar?.[0] || 'assets/icon/sin_avatar.png'" class="card-img" />
+          <div class="card-img-overlay"></div>
         </div>
-      </ion-card-header>
-    <ion-card-content>
-      <form style="display: flex; flex-direction: column; gap: 16px;">
+      </div>
+    </div>
 
-      <!-- Nombre -->
-      <ion-item fill="outline">
-        <ion-label position="floating">{{ 'APPOINTMENT.USER_NAME' | translate }}</ion-label>
-        <ion-input [(ngModel)]="usuario.nombre" [ngModelOptions]="{standalone: true}"></ion-input>
-      </ion-item>
+  </div>
+</ion-content>
 
-      <!-- Teléfono -->
-      <ion-item fill="outline">
-        <ion-label position="floating">{{ 'APPOINTMENT.USER_PHONE' | translate }}</ion-label>
-        <ion-input [(ngModel)]="usuario.movil" [ngModelOptions]="{standalone: true}"></ion-input>
-      </ion-item>
+<!-- ── Vista: Detalle de evento (artistas) ── -->
+<ion-content [fullscreen]="true" class="events-content" *ngIf="eventoSeleccionado && !tatuadorSeleccionado">
+  <div class="events-wrapper">
 
-      <!-- Correo -->
-      <ion-item fill="outline">
-        <ion-label position="floating">{{ 'APPOINTMENT.USER_EMAIL' | translate }}</ion-label>
-        <ion-input [(ngModel)]="usuario.correo" [ngModelOptions]="{standalone: true}"></ion-input>
-      </ion-item>
+    <!-- Info del evento -->
+    <div class="event-info-card">
+      <p class="event-desc">{{ eventoSeleccionado.descripcion }}</p>
+      <div class="event-meta-row" (click)="abrirMaps(eventoSeleccionado.ubicacion)">
+        <ion-icon name="location-outline" class="meta-icon"></ion-icon>
+        <span class="meta-text location-link">{{ eventoSeleccionado.ubicacion }}</span>
+      </div>
+      <div class="event-meta-row">
+        <ion-icon name="calendar-outline" class="meta-icon"></ion-icon>
+        <span class="meta-text">{{ eventoSeleccionado.fecha }}</span>
+      </div>
+    </div>
 
-      <!-- Estilo -->
-      <ion-item fill="outline">
-        <ion-select label="{{ 'APPOINTMENT.STYLE' | translate }}" [(ngModel)]="estilo" [ngModelOptions]="{standalone: true}">
-          <ion-select-option *ngFor="let estilos of tatuadorSeleccionado.estilos">{{ estilos }}</ion-select-option>
-        </ion-select>
-      </ion-item>
+    <!-- Artistas -->
+    <div *ngIf="tatuadoresDelEvento.length === 0" class="empty-state">
+      <div class="empty-icon-wrap">
+        <ion-icon name="people-outline"></ion-icon>
+      </div>
+      <p class="empty-text">{{ 'EVENTS.NO_ARTISTS' | translate }}</p>
+    </div>
 
-      <!-- Zona del cuerpo -->
-      <ion-item fill="outline">
-        <ion-select label="{{ 'APPOINTMENT.BODY_ZONE' | translate }}" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}">
-          <ion-select-option value="Brazo">{{ 'APPOINTMENT.ZONE_ARM' | translate }}</ion-select-option>
-          <ion-select-option value="Pierna">{{ 'APPOINTMENT.ZONE_LEG' | translate }}</ion-select-option>
-          <ion-select-option value="Espalda">{{ 'APPOINTMENT.ZONE_BACK' | translate }}</ion-select-option>
-          <ion-select-option value="Pecho">{{ 'APPOINTMENT.ZONE_CHEST' | translate }}</ion-select-option>
-          <ion-select-option value="Cabeza">{{ 'APPOINTMENT.ZONE_HEAD' | translate }}</ion-select-option>
-          <ion-select-option value="Costado">{{ 'APPOINTMENT.ZONE_SIDE' | translate }}</ion-select-option>
-        </ion-select>
-      </ion-item>
+    <div class="grid-2col" *ngIf="tatuadoresDelEvento.length > 0">
+      <div class="event-card artist-card" *ngFor="let tipo of tatuadoresDelEvento" (click)="seleccionarTatuador(tipo)">
+        <div class="card-img-wrap">
+          <img [src]="tipo.avatar || 'assets/icon/sin_avatar.png'" class="card-img" />
+          <div class="card-img-overlay"></div>
+          <span class="artist-name-tag">{{ tipo.nombreTienda }}</span>
+        </div>
+      </div>
+    </div>
 
-      <!-- Comentarios -->
-      <ion-item fill="outline">
-        <ion-label position="floating">{{ 'APPOINTMENT.ADD_COMMENTS' | translate }}</ion-label>
-        <ion-textarea autoGrow="true" [(ngModel)]="mensaje" name="comentarios" [ngModelOptions]="{standalone: true}"></ion-textarea>
-      </ion-item>
+  </div>
+</ion-content>
 
-      <!-- Aceptar términos -->
-      <ion-item lines="none">
-        <ion-checkbox slot="start" [(ngModel)]="acepto" [ngModelOptions]="{standalone: true}"></ion-checkbox>
-        <ion-label style="white-space: normal;">
-          {{ 'APPOINTMENT.ACCEPT_TERMS' | translate }}
-        </ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-checkbox slot="start" labelPlacement="end" [(ngModel)]="aceptoTatuador" [ngModelOptions]="{standalone: true}"></ion-checkbox>
-        <span (click)="abrirPDF()" style="color: var(--ion-color-primary); text-decoration: underline; cursor: pointer;">
-          {{ 'APPOINTMENT.ACCEPT_TATTOO_TERMS' | translate }}
-        </span>
-      </ion-item>
+<!-- ── Vista: Formulario de cita ── -->
+<ion-content [fullscreen]="true" class="events-content" *ngIf="tatuadorSeleccionado">
+  <div class="events-wrapper form-wrapper">
 
-      <!-- Botón enviar -->
-      <div style="margin-top: 20px;">
-        <ion-button expand="block" (click)="guardarConsulta()" [disabled]="!estilo || !acepto || !aceptoTatuador || !zona ">
+    <!-- Header artista -->
+    <div class="artist-header">
+      <span class="section-label">{{ 'EVENTS.TITLE' | translate }}</span>
+      <h2 class="artist-shop-name">{{ tatuadorSeleccionado.nombreTienda }}</h2>
+
+      <!-- Redes sociales -->
+      <div class="social-row">
+        <button class="social-btn" *ngIf="tatuadorSeleccionado.instagram"
+          (click)="abrirRedSocial('instagram', tatuadorSeleccionado.instagram)">
+          <ion-icon name="logo-instagram"></ion-icon>
+        </button>
+        <button class="social-btn" *ngIf="tatuadorSeleccionado.facebook"
+          (click)="abrirRedSocial('facebook', tatuadorSeleccionado.facebook)">
+          <ion-icon name="logo-facebook"></ion-icon>
+        </button>
+        <button class="social-btn whatsapp-btn" *ngIf="tatuadorSeleccionado.telefono"
+          (click)="abrirWhatsapp(tatuadorSeleccionado.telefono)">
+          <ion-icon name="logo-whatsapp"></ion-icon>
+        </button>
+        <button class="social-btn" *ngIf="tatuadorSeleccionado.tiktok"
+          (click)="abrirRedSocial('tiktok', tatuadorSeleccionado.tiktok)">
+          <ion-icon name="logo-tiktok"></ion-icon>
+        </button>
+        <button class="social-btn" *ngIf="tatuadorSeleccionado.twitter"
+          (click)="abrirRedSocial('twitter', tatuadorSeleccionado.twitter)">
+          <ion-icon name="logo-twitter"></ion-icon>
+        </button>
+        <button class="social-btn" *ngIf="tatuadorSeleccionado.web"
+          (click)="abrirSitioWeb(tatuadorSeleccionado.web)">
+          <ion-icon name="globe-outline"></ion-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="section-divider"></div>
+
+    <!-- Formulario -->
+    <div class="form-block">
+      <span class="section-label">{{ 'APPOINTMENT.BOOK' | translate }}</span>
+
+      <div class="form-fields">
+
+        <div class="field-group">
+          <ion-item fill="outline" class="form-item">
+            <ion-label position="floating">{{ 'APPOINTMENT.USER_NAME' | translate }}</ion-label>
+            <ion-input [(ngModel)]="usuario.nombre" [ngModelOptions]="{standalone: true}"></ion-input>
+          </ion-item>
+
+          <ion-item fill="outline" class="form-item">
+            <ion-label position="floating">{{ 'APPOINTMENT.USER_PHONE' | translate }}</ion-label>
+            <ion-input [(ngModel)]="usuario.movil" [ngModelOptions]="{standalone: true}"></ion-input>
+          </ion-item>
+
+          <ion-item fill="outline" class="form-item">
+            <ion-label position="floating">{{ 'APPOINTMENT.USER_EMAIL' | translate }}</ion-label>
+            <ion-input [(ngModel)]="usuario.email" [ngModelOptions]="{standalone: true}"></ion-input>
+          </ion-item>
+
+          <ion-item fill="outline" class="form-item">
+            <ion-select label="{{ 'APPOINTMENT.STYLE' | translate }}" [(ngModel)]="estilo" [ngModelOptions]="{standalone: true}">
+              <ion-select-option *ngFor="let estilos of tatuadorSeleccionado.estilos">{{ estilos }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item fill="outline" class="form-item">
+            <ion-select label="{{ 'APPOINTMENT.BODY_ZONE' | translate }}" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}">
+              <ion-select-option value="Brazo">{{ 'APPOINTMENT.ZONE_ARM' | translate }}</ion-select-option>
+              <ion-select-option value="Pierna">{{ 'APPOINTMENT.ZONE_LEG' | translate }}</ion-select-option>
+              <ion-select-option value="Espalda">{{ 'APPOINTMENT.ZONE_BACK' | translate }}</ion-select-option>
+              <ion-select-option value="Pecho">{{ 'APPOINTMENT.ZONE_CHEST' | translate }}</ion-select-option>
+              <ion-select-option value="Cabeza">{{ 'APPOINTMENT.ZONE_HEAD' | translate }}</ion-select-option>
+              <ion-select-option value="Costado">{{ 'APPOINTMENT.ZONE_SIDE' | translate }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item fill="outline" class="form-item">
+            <ion-label position="floating">{{ 'APPOINTMENT.ADD_COMMENTS' | translate }}</ion-label>
+            <ion-textarea autoGrow="true" [(ngModel)]="mensaje" name="comentarios" [ngModelOptions]="{standalone: true}"></ion-textarea>
+          </ion-item>
+        </div>
+
+        <!-- Términos -->
+        <div class="terms-block">
+          <div class="terms-row">
+            <ion-checkbox [(ngModel)]="acepto" [ngModelOptions]="{standalone: true}" class="custom-check"></ion-checkbox>
+            <span class="terms-text">{{ 'APPOINTMENT.ACCEPT_TERMS' | translate }}</span>
+          </div>
+          <div class="terms-row">
+            <ion-checkbox [(ngModel)]="aceptoTatuador" [ngModelOptions]="{standalone: true}" class="custom-check"></ion-checkbox>
+            <span class="terms-text terms-link" (click)="abrirPDF()">
+              {{ 'APPOINTMENT.ACCEPT_TATTOO_TERMS' | translate }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Botón -->
+        <ion-button expand="block" class="submit-btn"
+          (click)="guardarConsulta()"
+          [disabled]="!estilo || !acepto || !aceptoTatuador || !zona">
+          <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
           {{ 'APPOINTMENT.BOOK' | translate }}
         </ion-button>
+
       </div>
-    </form>
-    </ion-card-content>
-  </ion-card>
+    </div>
+
+  </div>
 </ion-content>

@@ -38,10 +38,10 @@ export class UsuariosService {
     );
   }
 
-  async createUser(nombre:string, correo:string, password:string, movil:string){
-    const data = {nombre, correo, movil, uid:'',};
+  async createUser(nombre:string, email:string, password:string, movil:string){
+    const data = {nombre, email, movil, uid:'', role: 'user'};
       try{
-        await this.firestroreAuth.registrarse(correo, password);
+        await this.firestroreAuth.registrarse(email, password);
         const uid: string | null = await this.firestroreAuth.getUid();
         if(uid){
           const uidString = uid;
@@ -58,9 +58,9 @@ export class UsuariosService {
       }
     }
 
-  inicioSesion(correo: string, password: string){
+  inicioSesion(email: string, password: string){
     this.changeUserLogin(true);
-    return this.firestroreAuth.login(correo, password);
+    return this.firestroreAuth.login(email, password);
   }
 
   async logout(){
@@ -75,8 +75,8 @@ export class UsuariosService {
     );
   }
 
-  verificarCorreoExiste(correo: string){
-    const usuarioExistente = this.usuario.find(usuario => usuario.correo === correo);
+  verificarCorreoExiste(email: string){
+    const usuarioExistente = this.usuario.find(usuario => usuario.email === email);
     if(usuarioExistente){
       return false;
     } else {
@@ -88,8 +88,8 @@ export class UsuariosService {
     return this.usuario.find(usuario => usuario.uid === id);
   }
 
-  async actualizarInfo(nombre: string, correo: string, movil: string, password:string, uid:string){
-    const data = {nombre, correo, movil, password, uid};
+  async actualizarInfo(nombre: string, email: string, movil: string, password:string, uid:string){
+    const data = {nombre, email, movil, password, uid};
     try {
       await this.firestoreService.updateDoc(data, this.path, uid);
       await this.firestroreAuth.updatePassword(password);
@@ -100,8 +100,8 @@ export class UsuariosService {
     }
   }
 
-  verificarCorreoExistente(correo: string): Observable<boolean> {
-    return this.firestoreService.verificarCorreoExistente(correo);
+  verificarCorreoExistente(email: string): Observable<boolean> {
+    return this.firestoreService.verificarCorreoExistente(email);
   }
 
   marcarUsuarioComoEliminado(usuario: any, uid: string): Promise<void> {

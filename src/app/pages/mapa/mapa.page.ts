@@ -4,6 +4,8 @@ import { TiendaService } from 'src/app/backend/tienda.service';
 import { Tatuador, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { Geolocation } from '@capacitor/geolocation';
+import { FirebaseCrashlytics } from '@capacitor-firebase/crashlytics';
+
 
 @Component({
   selector: 'app-mapa',
@@ -17,7 +19,7 @@ export class MapaPage implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: '',
-    correo: '',
+    email: '',
   };
   map: any;
   tatuadores !: Tatuador[]
@@ -150,6 +152,16 @@ export class MapaPage implements OnInit {
       });
     } catch (error) {
       console.error('Error al inicializar el mapa:', error);
+      FirebaseCrashlytics.log({
+        message: 'Error al iniciar el mapa'
+      });
+
+      FirebaseCrashlytics.setUserId({ userId: this.uid });
+      FirebaseCrashlytics.setCustomKey({
+        key: 'pantalla cliente',
+        value: 'perfil_usuario',
+        type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+      });
     }
   }
 

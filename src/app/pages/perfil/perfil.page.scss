@@ -1,151 +1,54 @@
-/* Contenedor general para el contenido principal */
-ion-content {
-    padding-top: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Espacio entre el contenido principal y el final */
-    height: 100%;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Contenedor para centrar el texto y el ion-select */
-  .center-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centra horizontalmente */
-    margin: 10px 20px; 
-  }
-
-  .tipo-card {
-    width: 100%;
-    max-width: 400px;
-    border-radius: 20px;
-    background: linear-gradient(145deg, #1A1A1A, #121212);
-    color: #EDEDED;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-
-    /* Espacio interno */
-    padding: 20px; /* relleno dentro del card */
-    margin: 20px 0; /* margen arriba y abajo del card */
-    box-sizing: border-box;
-  }
-
-  .language-wrapper {
-    position: absolute;
-    top: 0;      // ajusta según la altura que quieras
-    right: 0;    // esto lo mueve a la derecha
-    margin: 10px; // opcional, para separarlo de los bordes
-    width: 120px; // opcional, para controlar el ancho
-  }
-  
-  /* Estilo para los elementos dentro del contenedor */
-  .center-item {
-    margin-top: 10px; /* Espacio entre los elementos */
-    width: 100%;
-    max-width: 400px; /* Ancho máximo para ambos elementos */
-    box-sizing: border-box; /* Incluir padding y border en el tamaño del elemento */
-    padding: 10px; /* Opcional: ajusta el padding para que luzcan uniformes */
-  }
-
-  
-
-  .login-container ion-input {
-    font-size: 20px;
-    width: 100%;
-    max-width: 400px; /* Ancho máximo para ambos elementos */
-    margin-bottom: 15px; /* Espacio entre los campos */
-    box-sizing: border-box; /* Incluir padding y border en el tamaño del elemento */
-    padding: 10px; /* Opcional: ajusta el padding para que luzcan uniformes */
-  }
-  
-  .center-item ion-select::part(native) {
-    height: auto; 
-    line-height: normal;
-  }
-  
-  .or-divider {
-    margin-bottom: 10px; 
-    font-size: 1.5rem;
-    text-align: center;
-  }
-  
-  .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    margin: 20px 20px; 
-  }
-
-  .login-container input {
-    font-size: 20px;
-    width: 100%;
-    max-width: 400px; /* Ancho máximo para los campos de entrada y el botón */
-    margin-bottom: 15px; /* Espacio entre los campos */
-    box-sizing: border-box; /* Asegura que el padding y el border no afecten el tamaño del elemento */
-    }
-    
-.login-container ion-button {
-    width: 100%;
-    max-width: 400px; /* Ancho máximo para los campos de entrada y el botón */
-    margin-bottom: 15px; /* Espacio entre los campos */
-    box-sizing: border-box; /* Asegura que el padding y el border no afecten el tamaño del elemento */
+// ── Content ───────────────────────────────────────────────
+.main-toolbar {
+  --background: #121212;
+  --border-width: 0;
+  padding-top: var(--ion-safe-area-top);
 }
 
-.login-container ion-button:hover {
-    background-color: #0056b3;
+.main-content {
+  --background: #121212;
 }
 
-.social-buttons {
-    display: flex; /* Usa Flexbox para alinear los botones en una línea */
-    gap: 10px; /* Espacio entre los botones */
-    justify-content: center; /* Centra los botones horizontalmente */
-    margin-top: 15px; /* Espacio superior para separar de otros elementos */
-  }
-  
+// ════════════════════════════════════════
+// AUTH
+// ════════════════════════════════════════
 
-  .forgot-password-container {
-    display: flex;
-    justify-content: center; /* Centra horizontalmente el contenido */
-    margin-top: 15px; /* Espacio superior para separar del botón de inicio de sesión */
-  }
-/* Contenedor del enlace "Olvidaste la contraseña" */
-.forgot-password {
-    text-align: center; /* Centra el enlace dentro del contenedor */
-  }
-  
-  .forgot-password a {
-    font-size: 0.8rem; /* Tamaño de fuente más pequeño */
-    color: #007bff; /* Color del enlace, ajusta según sea necesario */
-    text-decoration: none; /* Sin subrayado por defecto */
-  }
-  
-  .forgot-password a:hover {
-    text-decoration: underline; /* Subrayado al pasar el ratón */
-  }
-
-  .app-logo {
-    width: 125px; /* Ajusta el tamaño que desees */
-    height: 125px; /* Asegúrate de que el alto sea igual al ancho para mantener el círculo */
-  }
-
-  ion-input {
-    font-size: 18px;
-    --padding-start: 20px;
-    --padding-end: 20px;
-    border-radius: 20px;
-  
-  }
-
-ion-list {
-  background: transparent !important;
-  margin-top: 25%;
+.auth-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: calc(var(--ion-safe-area-top) + 32px) 24px 48px;
+  max-width: 400px;
+  margin: 0 auto;
+  min-height: 100%;
 }
 
-ion-item {
-  --background: transparent !important;
-  background: transparent !important;
-  --ion-item-background: transparent;
-  --ion-background-color: transparent;
+// ── Idioma ────────────────────────────────────────────────
+.lang-row {
+  align-self: flex-end;
+  margin-bottom: 12px;
 }
-  
+
+.lang-select {
+  --background: #1A1A1A;
+  --color: #AAAAAA;
+  --border-color: #2E2E2E;
+  --border-radius: 8px;
+  --padding-start: 10px;
+  --padding-end: 10px;
+  border: 1px solid #2E2E2E;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  min-width: 90px;
+}
+
+// ── Logo ──────────────────────────────────────────────────
+.auth-logo-wrap {
+  margin-bottom: 36px;
+}
+
+.auth-logo {
+  width: 90px;
+  height: 90px;
+  border-radius: 20px;
+}

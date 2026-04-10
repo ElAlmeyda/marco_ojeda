@@ -14,7 +14,7 @@ export class TabsPagePage implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: '',
-    correo: '',
+    email: '',
   };
   imagen: string = '';
 

@@ -2,6 +2,65 @@
   height: 100%;
   width: 100%;
 }
+
 ion-content {
   --background: transparent;
+}
+
+// ── Back button ───────────────────────────────────────────
+.map-back-btn {
+  position: absolute;
+  top: calc(var(--ion-safe-area-top) + 14px);
+  left: 14px;
+  z-index: 1000;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(18, 18, 18, 0.75);
+  border: 1px solid rgba(201, 168, 106, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #C9A86A;
+  font-size: 18px;
+  transition: background 0.2s, border-color 0.2s;
+
+  &:hover {
+    background: rgba(201, 168, 106, 0.15);
+    border-color: #C9A86A;
+  }
+}
+
+// ── Artist card ───────────────────────────────────────────
+.map-artist-card {
+  position: fixed;
+  bottom: calc(var(--ion-safe-area-bottom) + 16px);
+  left: 14px;
+  right: 14px;
+  z-index: 9999;
+  background: rgba(18, 18, 18, 0.92);
+  border: 1px solid #2E2E2E;
+  border-radius: 16px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  animation: cardSlideUp 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes cardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -7,6 +7,8 @@ import { Ofertas, Tatuador } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
 import { UbicacionService } from 'src/app/service/ubicacion.service';
+import { FirebaseCrashlytics } from '@capacitor-firebase/crashlytics';
+
 
 @Component({
   selector: 'app-folder',
@@ -143,6 +145,16 @@ export class FolderPage implements OnInit {
 
     } catch (error) {
       console.error('Error cargando tatuadores:', error);
+      FirebaseCrashlytics.log({
+        message: 'Error al obtener tatuadores'
+      });
+
+      FirebaseCrashlytics.setUserId({ userId: this.uid });
+      FirebaseCrashlytics.setCustomKey({
+        key: 'pantalla cliente',
+        value: 'perfil_usuario',
+        type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
+      });
     }
   }
 

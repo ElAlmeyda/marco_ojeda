@@ -166,7 +166,7 @@ export class FirestoreService {
   }
 
   verificarCorreoExistente(correo: string): Observable<boolean> {
-    return this.database.collection('Usuarios', ref => ref.where('correo', '==', correo))
+    return this.database.collection('Usuarios', ref => ref.where('email', '==', correo))
       .valueChanges()
       .pipe(map(usuarios => usuarios.length > 0));
   }
@@ -205,7 +205,7 @@ export class FirestoreService {
     docRef.get().toPromise().then((docSnapshot) => {
       if (docSnapshot && docSnapshot.exists) {
         // El documento existe, procedemos a actualizar
-        return docRef.update({ correo: nuevoCorreo });
+        return docRef.update({ email: nuevoCorreo });
       } else {
         // El documento no existe, maneja el caso
         return Promise.reject('El documento no existe');

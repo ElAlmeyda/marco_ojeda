@@ -1,4 +1,10 @@
 PODS:
+  - AppAuth (1.7.6):
+    - AppAuth/Core (= 1.7.6)
+    - AppAuth/ExternalUserAgent (= 1.7.6)
+  - AppAuth/Core (1.7.6)
+  - AppAuth/ExternalUserAgent (1.7.6):
+    - AppAuth/Core
   - Capacitor (6.0.0):
     - CapacitorCordova
   - CapacitorApp (6.0.2):
@@ -12,9 +18,12 @@ PODS:
     - Google-Mobile-Ads-SDK (= 11.3.0)
     - GoogleUserMessagingPlatform (< 3.0.0, >= 2.7.0)
   - CapacitorCordova (6.0.0)
-  - CapacitorFirebaseMessaging (6.2.0):
+  - CapacitorFirebaseCrashlytics (8.1.0):
     - Capacitor
-    - FirebaseMessaging (~> 11.0)
+    - FirebaseCrashlytics (~> 12.7.0)
+  - CapacitorFirebaseMessaging (8.0.0):
+    - Capacitor
+    - FirebaseMessaging (~> 12.7.0)
   - CapacitorGeolocation (7.1.4):
     - Capacitor
     - IONGeolocationLib (~> 1.0)
@@ -24,36 +33,64 @@ PODS:
     - Capacitor
   - CapacitorSplashScreen (6.0.3):
     - Capacitor
-  - Firebase/CoreOnly (11.15.0):
-    - FirebaseCore (~> 11.15.0)
-  - Firebase/Messaging (11.15.0):
+  - CodetrixStudioCapacitorGoogleAuth (0.0.1):
+    - Capacitor
+    - GoogleSignIn (~> 6.2.4)
+  - Firebase/CoreOnly (12.7.0):
+    - FirebaseCore (~> 12.7.0)
+  - Firebase/Messaging (12.7.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 11.15.0)
-  - FirebaseCore (11.15.0):
-    - FirebaseCoreInternal (~> 11.15.0)
+    - FirebaseMessaging (~> 12.7.0)
+  - FirebaseCore (12.7.0):
+    - FirebaseCoreInternal (~> 12.7.0)
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/Logger (~> 8.1)
-  - FirebaseCoreInternal (11.15.0):
+  - FirebaseCoreExtension (12.7.0):
+    - FirebaseCore (~> 12.7.0)
+  - FirebaseCoreInternal (12.7.0):
     - "GoogleUtilities/NSData+zlib (~> 8.1)"
-  - FirebaseInstallations (11.15.0):
-    - FirebaseCore (~> 11.15.0)
+  - FirebaseCrashlytics (12.7.0):
+    - FirebaseCore (~> 12.7.0)
+    - FirebaseInstallations (~> 12.7.0)
+    - FirebaseRemoteConfigInterop (~> 12.7.0)
+    - FirebaseSessions (~> 12.7.0)
+    - GoogleDataTransport (~> 10.1)
+    - GoogleUtilities/Environment (~> 8.1)
+    - nanopb (~> 3.30910.0)
+    - PromisesObjC (~> 2.4)
+  - FirebaseInstallations (12.7.0):
+    - FirebaseCore (~> 12.7.0)
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/UserDefaults (~> 8.1)
     - PromisesObjC (~> 2.4)
-  - FirebaseMessaging (11.15.0):
-    - FirebaseCore (~> 11.15.0)
-    - FirebaseInstallations (~> 11.0)
-    - GoogleDataTransport (~> 10.0)
+  - FirebaseMessaging (12.7.0):
+    - FirebaseCore (~> 12.7.0)
+    - FirebaseInstallations (~> 12.7.0)
+    - GoogleDataTransport (~> 10.1)
     - GoogleUtilities/AppDelegateSwizzler (~> 8.1)
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/Reachability (~> 8.1)
     - GoogleUtilities/UserDefaults (~> 8.1)
     - nanopb (~> 3.30910.0)
+  - FirebaseRemoteConfigInterop (12.7.0)
+  - FirebaseSessions (12.7.0):
+    - FirebaseCore (~> 12.7.0)
+    - FirebaseCoreExtension (~> 12.7.0)
+    - FirebaseInstallations (~> 12.7.0)
+    - GoogleDataTransport (~> 10.1)
+    - GoogleUtilities/Environment (~> 8.1)
+    - GoogleUtilities/UserDefaults (~> 8.1)
+    - nanopb (~> 3.30910.0)
+    - PromisesSwift (~> 2.1)
   - Google-Mobile-Ads-SDK (11.3.0):
     - GoogleUserMessagingPlatform (>= 1.1)
   - GoogleDataTransport (10.1.0):
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
+  - GoogleSignIn (6.2.4):
+    - AppAuth (~> 1.5)
+    - GTMAppAuth (~> 1.3)
+    - GTMSessionFetcher/Core (< 3.0, >= 1.1)
   - GoogleUserMessagingPlatform (2.7.0)
   - GoogleUtilities/AppDelegateSwizzler (8.1.0):
     - GoogleUtilities/Environment
@@ -79,13 +116,19 @@ PODS:
   - GoogleUtilities/UserDefaults (8.1.0):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - IONGeolocationLib (1.0.1)
+  - GTMAppAuth (1.3.1):
+    - AppAuth/Core (~> 1.6)
+    - GTMSessionFetcher/Core (< 3.0, >= 1.5)
+  - GTMSessionFetcher/Core (2.3.0)
+  - IONGeolocationLib (1.0.2)
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
     - nanopb/encode (= 3.30910.0)
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
   - PromisesObjC (2.4.0)
+  - PromisesSwift (2.4.0):
+    - PromisesObjC (= 2.4.0)
   - PurchasesHybridCommon (13.32.0):
     - RevenueCat (= 5.24.0)
   - RevenueCat (5.24.0)
@@ -100,28 +143,39 @@ DEPENDENCIES:
   - "CapacitorClipboard (from `../../node_modules/@capacitor/clipboard`)"
   - "CapacitorCommunityAdmob (from `../../node_modules/@capacitor-community/admob`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorFirebaseCrashlytics (from `../../node_modules/@capacitor-firebase/crashlytics`)"
   - "CapacitorFirebaseMessaging (from `../../node_modules/@capacitor-firebase/messaging`)"
   - "CapacitorGeolocation (from `../../node_modules/@capacitor/geolocation`)"
   - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
   - "CapacitorPushNotifications (from `../../node_modules/@capacitor/push-notifications`)"
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
+  - "CodetrixStudioCapacitorGoogleAuth (from `../../node_modules/@codetrix-studio/capacitor-google-auth`)"
   - Firebase/Messaging
   - "RevenuecatPurchasesCapacitor (from `../../node_modules/@revenuecat/purchases-capacitor`)"
 
 SPEC REPOS:
   trunk:
+    - AppAuth
     - Firebase
     - FirebaseCore
+    - FirebaseCoreExtension
     - FirebaseCoreInternal
+    - FirebaseCrashlytics
     - FirebaseInstallations
     - FirebaseMessaging
+    - FirebaseRemoteConfigInterop
+    - FirebaseSessions
     - Google-Mobile-Ads-SDK
     - GoogleDataTransport
+    - GoogleSignIn
     - GoogleUserMessagingPlatform
     - GoogleUtilities
+    - GTMAppAuth
+    - GTMSessionFetcher
     - IONGeolocationLib
     - nanopb
     - PromisesObjC
+    - PromisesSwift
     - PurchasesHybridCommon
     - RevenueCat
 
@@ -138,6 +192,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor-community/admob"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorFirebaseCrashlytics:
+    :path: "../../node_modules/@capacitor-firebase/crashlytics"
   CapacitorFirebaseMessaging:
     :path: "../../node_modules/@capacitor-firebase/messaging"
   CapacitorGeolocation:
@@ -148,37 +204,50 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/push-notifications"
   CapacitorSplashScreen:
     :path: "../../node_modules/@capacitor/splash-screen"
+  CodetrixStudioCapacitorGoogleAuth:
+    :path: "../../node_modules/@codetrix-studio/capacitor-google-auth"
   RevenuecatPurchasesCapacitor:
     :path: "../../node_modules/@revenuecat/purchases-capacitor"
 
 SPEC CHECKSUMS:
+  AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
   Capacitor: c527d208447590a004f0a4a2c42a5f361848fa8a
   CapacitorApp: e1e6b7d05e444d593ca16fd6d76f2b7c48b5aea7
   CapacitorCamera: 9bc7b005d0e6f1d5f525b8137045b60cffffce79
   CapacitorClipboard: 6479f3d5c20e5f985cb72e620e11f20a351777e2
   CapacitorCommunityAdmob: 310beff216a3470b2c85b1fccd99d2a6815e1ef7
   CapacitorCordova: 8c4bfdf69368512e85b1d8b724dd7546abeb30af
-  CapacitorFirebaseMessaging: 4aad37add1730f4c9ce069666a9550ea4a08abaf
+  CapacitorFirebaseCrashlytics: 1fe3e2d4f0d0a1d91f548fbf46ab38bc5fd2abb9
+  CapacitorFirebaseMessaging: cd18e49885a34360561372c5bdb093cab4177ce2
   CapacitorGeolocation: 32a1f849c38c72b5071de36a28ebc548ef3bb611
   CapacitorLocalNotifications: 6003db784d552d39055b4401c138e2971c2d831b
   CapacitorPushNotifications: 88f40c5f06dfe54f2c0619173e11ecbff8661a2f
   CapacitorSplashScreen: fd8bf1bf9081d9aa8817b7cd37d740d1bdaf2fb2
-  Firebase: d99ac19b909cd2c548339c2241ecd0d1599ab02e
-  FirebaseCore: efb3893e5b94f32b86e331e3bd6dadf18b66568e
-  FirebaseCoreInternal: 9afa45b1159304c963da48addb78275ef701c6b4
-  FirebaseInstallations: 317270fec08a5d418fdbc8429282238cab3ac843
-  FirebaseMessaging: 3b26e2cee503815e01c3701236b020aa9b576f09
+  CodetrixStudioCapacitorGoogleAuth: 9dcfabfb7dd804ad6231a1513bc6e81e620cbec6
+  Firebase: 2d19a10c9a2e48ac532a4303115d3fc9b2798396
+  FirebaseCore: c7b57863ce0859281a66d16ca36d665c45d332b5
+  FirebaseCoreExtension: 731a5744970bcd73ad95ab2a2b8a1f46353e86dd
+  FirebaseCoreInternal: 571a2dd8c975410966199623351db3a3265c874d
+  FirebaseCrashlytics: 9ce9ce4bb179e31ab91a937d0a73d302a9752d1b
+  FirebaseInstallations: 6d05424a046b68ca146b4de4376f05b4e9262fc3
+  FirebaseMessaging: b5f7bdc62b91b6102015991fb7bc6fa75f643908
+  FirebaseRemoteConfigInterop: 0bae7d21510b3a0a79af727961c4973aac585add
+  FirebaseSessions: bc59e7d0ba90f96f40325fd1defbdec86ba26f20
   Google-Mobile-Ads-SDK: 301a16c461c331ba34ff4dab40a22ab7c147af61
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
+  GoogleSignIn: 5651ce3a61e56ca864160e79b484cd9ed3f49b7a
   GoogleUserMessagingPlatform: a8b56893477f67212fbc8411c139e61d463349f5
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
-  IONGeolocationLib: 20f9d0248a0b5264511fb57a37e25dd2badf797a
+  GTMAppAuth: 0ff230db599948a9ad7470ca667337803b3fc4dd
+  GTMSessionFetcher: 3a63d75eecd6aa32c2fc79f578064e1214dfdec2
+  IONGeolocationLib: adbb2a739b0ccda686d4a66f9bc05f8c4fd3d3c0
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
+  PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   PurchasesHybridCommon: 662aa1f4769ff4ef594e35adf1a5d0ad7b3d08b7
   RevenueCat: 2d3639d30b8a71cbfe3d99cef8243c602793e0ec
   RevenuecatPurchasesCapacitor: 67b42c928e6b91e16792c43ac12545791772cfb2
 
-PODFILE CHECKSUM: 8632d63744b3ab5be97c6e0b2d6bd5fa673ddcfc
+PODFILE CHECKSUM: a432c5b36d7b6cc52d4f0bece3a767064bfe4bca
 
 COCOAPODS: 1.16.2

@@ -3,7 +3,7 @@
 export interface Usuario {
     uid: string;
     nombre:string;
-    correo:string;
+    email:string;
     movil?:string;
     avatar?:string;
     token?:string;
@@ -38,6 +38,11 @@ export interface Tatuador {
     objetivos?: boolean [];    
     isPremium?: boolean;
     isTest?: boolean;
+    googleCalendar?: {
+        accessToken: string;     // Token para usar la API
+        refreshToken?: string;   // Para renovar el accessToken si caduca
+        expiry?: string;         // Fecha/hora de expiración del accessToken
+    };
 }
 
 
@@ -50,7 +55,7 @@ export interface Cita {
     estilo: string;
     tipo:string;
     mensaje:string;
-    correo:string;
+    email:string;
     uidCita:string;
     estado?:string;
     uidTatuador?:string;
