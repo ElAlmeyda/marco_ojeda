@@ -30,7 +30,7 @@
 
     <!-- Logo -->
     <div class="auth-logo-wrap">
-      <ion-img src="../../../assets/icon/icon.png" class="auth-logo" alt="App Logo"></ion-img>
+      <img [src]="temaActual === 'light' ? 'assets/icon/icon_ligt.png' : 'assets/icon/icon.png'" alt="App Logo"  class="auth-logo" />
     </div>
 
     <!-- ── Paso 1: verificar correo ── -->

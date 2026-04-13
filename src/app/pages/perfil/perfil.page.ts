@@ -46,7 +46,7 @@ export class PerfilPage implements OnInit {
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private alertController: AlertController,
               private themeService: ThemeService, public firestore: FirestoreService, private loadingCtrl: LoadingController, private afAuth: AngularFireAuth, public toast: ToastController,
-               public notificacion: NotificacionService, public translate: TranslateService, public storage: Storage
+              public notificacion: NotificacionService, public translate: TranslateService, public storage: Storage
   ) { 
     this.translate.setDefaultLang('es');
     this.temaActual = this.themeService.getTemaActual();
