@@ -1,95 +1,85 @@
-/* Estilo para solo el borde en el día seleccionado */
-ion-datetime::part(active) {
-  background: transparent;       /* sin relleno */
-  border: 2px solid var(--ion-color-primary); /* borde en color principal */
-  border-radius: 50%;            /* redondo */
-  color: var(--ion-color-primary); /* color del texto */
-}
-
-ion-datetime::part(today) {
-  background: transparent; /* sin fondo */
-  border: none;            /* sin borde */
-  border-radius: 0;        /* sin redondeo */
-  color: var(--ion-color-primary); /* texto azul (color primario) */
-  font-weight: bold;
-}
-
-.tatuador-card {
-  margin-top:30%;
-  width: 100%;
-  aspect-ratio: 1 / 1.2; /* 👈 MISMO TAMAÑO PARA TODAS LAS TARJETAS */
+// ── Worker select screen ──────────────────────────────────
+.worker-select-screen {
+  padding: calc(var(--ion-safe-area-top) + 24px) 20px 40px;
+  max-width: 480px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  border-radius: 12px;
+  gap: 24px;
+}
+
+.worker-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.worker-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #EDEDED;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.worker-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.worker-card {
   background: #1A1A1A;
-  border: 2px solid #333;
-  transition: 0.2s;
-  text-align: center;
+  border-radius: 14px;
+  border: 1px solid #2E2E2E;
+  overflow: hidden;
   cursor: pointer;
-  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+
+  &:hover {
+    border-color: #C9A86A;
+    transform: translateY(-2px);
+  }
 }
 
-.tatuador-card ion-img {
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;        /* 👈 llena todo el alto */
-  object-fit: cover;   /* 👈 hace que recorte bien */
-  flex: 1;         
-}
-
-.tatuador-card:hover {
-  border-color: #C9A86A;
-  transform: scale(1.05);
-}
-
-/* Centrar tarjeta cuando solo hay 1 en la fila */
-.tatuador-col {
-  display: flex;
-  justify-content: center;
-}
-
-.foto-wrapper {
+.worker-img-wrap {
   position: relative;
-  flex: 1;  /* 👈 ocupa todo el alto disponible encima del nombre */
-  width: 100%;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
 }
 
-.chips-scroll {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  overflow-y: hidden;
+.worker-img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s;
 
-  white-space: nowrap;
-
-  min-width: 0;       /* 🔥 Necesario con flex */
-  max-width: none;    /* 🔥 Necesario si hay MUCHOS hijos */
-  flex: 1 0 auto;     /* 🔥 Clave para Firefox */
+  .worker-card:hover & { transform: scale(1.04); }
 }
 
-
-.chips-scroll::-webkit-scrollbar {
-  display: none;
+.worker-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(18,18,18,0.7) 0%, transparent 55%);
 }
 
-ion-chip {
-  flex: 0 0 auto;
-  margin-right: 8px;
-  background-color: #C9A86A;
-  color: black;
-  display: inline-flex;
+.worker-card-body {
+  padding: 10px 12px 12px;
 }
 
-.chip-selected {
-  background-color: #1E78FF !important;
-  color: white !important;
+.worker-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #EDEDED;
 }
 
+// ── Appt screen ───────────────────────────────────────────
+.appt-screen {
+  padding: calc(var(--ion-safe-area-top) + 8px) 0 40px;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
 

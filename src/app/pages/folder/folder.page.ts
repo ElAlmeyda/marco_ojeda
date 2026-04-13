@@ -43,7 +43,6 @@ export class FolderPage implements OnInit {
     { nombre: 'Surrealismo', imagen: 'assets/estilos/surrealismo.jpg' },
     { nombre: 'Biomecánico', imagen: 'assets/estilos/biomecanico.jpg' },
     { nombre: 'Anime', imagen: 'assets/estilos/anime.jpg' },
-    { nombre: 'Oriental', imagen: 'assets/estilos/oriental.jpg' },
     { nombre: 'Microrealismo', imagen: 'assets/estilos/microrealismo.jpg' },
     { nombre: 'Mahori', imagen: 'assets/estilos/mahori.jpg' },
     { nombre: 'Chicano', imagen: 'assets/estilos/chicano.jpg' },
@@ -100,10 +99,11 @@ export class FolderPage implements OnInit {
   async cargarTatuadores() {
     try {
       const data: any[] = await firstValueFrom(this.tiendaService.getTatuadores());
+      const tatuadoresValidos = data.filter(t => !t.isTest);
 
       // Procesar cada tatuador
       const tatuadoresConDistancia = await Promise.all(
-        data.map(async (tatuador) => {
+        tatuadoresValidos.map(async (tatuador) => {
           // Calcular distancia
           if (tatuador.latitude && tatuador.longitude && this.latUsuario && this.lonUsuario) {
             tatuador.distancia = this.calcularDistancia(

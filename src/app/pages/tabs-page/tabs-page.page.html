@@ -1,27 +1,22 @@
 <ion-tabs>
-  <ion-tab-bar slot="bottom" style="border-radius: 20px; overflow: hidden; background-color: #333; margin:5px;">
-    <ion-tab-button [routerLink]="['/tabs/folder', usuario.uid]" style="color:white; padding: 6px;">
-      <img src="assets/icon/icon.png" style="width: 30px; height: 30px; border-radius: 12px;"/>
+  <ion-tab-bar slot="bottom" class="custom-tab-bar">
+    <ion-tab-button [routerLink]="['/tabs/folder', usuario.uid]" class="custom-tab-btn">
+      <img src="assets/icon/icon_ligt.png" style="width: 30px; height: 30px; border-radius: 12px;"/>
     </ion-tab-button>
-
-    <ion-tab-button routerLink="/tabs/cita" style="color:white; padding: 6px;">
-      <ion-icon name="calendar-outline" style="font-size: 24px;"></ion-icon>
+    <ion-tab-button routerLink="/tabs/cita" class="custom-tab-btn">
+      <ion-icon name="calendar-outline"></ion-icon>
     </ion-tab-button>
-
-    <ion-tab-button routerLink="/tabs/noticias" style="color:white; padding: 6px;">
-      <ion-icon name="globe-outline" style="font-size: 24px;"></ion-icon>
+    <ion-tab-button routerLink="/tabs/noticias" class="custom-tab-btn">
+      <ion-icon name="globe-outline"></ion-icon>
     </ion-tab-button>
-
-    <ion-tab-button routerLink="/tabs/favoritos" style="color:white; padding: 6px;">
-      <ion-icon name="bookmark-outline" style="font-size: 24px;"></ion-icon>
+    <ion-tab-button routerLink="/tabs/favoritos" class="custom-tab-btn">
+      <ion-icon name="bookmark-outline"></ion-icon>
     </ion-tab-button>
-
-    <ion-tab-button routerLink="/tabs/perfil" style="color:white; padding: 6px;">
-      <ion-icon name="person-outline" *ngIf="!usuario.avatar" style="font-size: 24px;"></ion-icon>
-      <ion-avatar *ngIf="usuario.avatar" style="width: 28px; height: 28px; border-radius: 50%;">
+    <ion-tab-button routerLink="/tabs/perfil" class="custom-tab-btn">
+      <ion-icon name="person-outline" *ngIf="!usuario.avatar"></ion-icon>
+      <ion-avatar *ngIf="usuario.avatar" style="width: 28px; height: 28px;">
         <ion-img [src]="usuario.avatar[0]"></ion-img>
       </ion-avatar>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>
-

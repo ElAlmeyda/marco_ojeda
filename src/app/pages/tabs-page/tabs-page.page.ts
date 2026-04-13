@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ThemeService } from 'src/app/backend/theme.service';
 import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
@@ -17,8 +18,10 @@ export class TabsPagePage implements OnInit {
     correo: '',
   };
   imagen: string = '';
+  temaActual: 'dark' | 'light' = 'dark';
 
-  constructor(public firestroreAuth: FirestoreAuthService, public user: UsuariosService) {
+  constructor(private themeService: ThemeService, public firestroreAuth: FirestoreAuthService, public user: UsuariosService) {
+    this.temaActual = this.themeService.getTemaActual();
     this.firestroreAuth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.usuario.uid = res.uid;
@@ -31,6 +34,8 @@ export class TabsPagePage implements OnInit {
 
   ngOnInit() {
   }
+
+  
 
   obtenerUsuario() {
     this.user.getUsuarios().subscribe(() => {

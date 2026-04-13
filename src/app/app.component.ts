@@ -12,6 +12,7 @@ import { UbicacionService } from './service/ubicacion.service';
 import { AdMob, BannerAdOptions, BannerAdPosition, BannerAdSize } from '@capacitor-community/admob';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage-angular';
+import { ThemeService } from './backend/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -45,10 +46,11 @@ export class AppComponent {
     this.showList = !this.showList;
   }
 
-  constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, public router: Router, public notificacion: NotificacionService,
+  constructor(private user: UsuariosService, private themeService: ThemeService, public auth: FirestoreAuthService, public firestore: FirestoreService, public router: Router, public notificacion: NotificacionService,
               private modalController: ModalController, private zone: NgZone, private menu: MenuController, public storage: Storage, public translate:TranslateService, private platform: Platform, public ubicacion: UbicacionService, private navController: NavController,  public alertController: AlertController) {
     
     this.initializeApp();
+    this.themeService.init();
 
   }
 

@@ -150,7 +150,9 @@
     "ABOUT_US": "Chi siamo",
     "ABOUT_US_DESC": "Scopri di più sulla nostra app.",
     "LANGUAGE": "Lingua",
-    "SELECT_LANGUAGE": "Seleziona una lingua"
+    "SELECT_LANGUAGE": "Seleziona una lingua",
+    "DANGER_ZONE":"Azioni irreversibili",
+    "THEME": "Tema"
   },
   "APPOINTMENT_STATUS": {
     "Pendiente": "In sospeso",
@@ -458,6 +460,7 @@
     "Neotradicional": "Neotradizionale",
     "Blackwork": "Blackwork",
     "Fineline": "Linea fine",
+    "Sketch": "Sketch / Bozzetto",
     "Geométrico": "Geometrico",
     "Dotwork": "Dotwork",
     "Lettering": "Lettering",

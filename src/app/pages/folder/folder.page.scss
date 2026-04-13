@@ -1,171 +1,158 @@
-/* Clase para contenedor del avatar */
-.center-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .center-title ion-avatar {
-    width: 110px; /* Ajusta el tamaño del avatar según lo necesario */
-    height: 110px;
-  }
-  
-  ion-toolbar {
-    --padding-start: 0px;
-    --padding-end: 0px;
-  }
+// ── Toolbar ───────────────────────────────────────────────
+.explore-toolbar {
+  --background: #121212;
+  --border-color: transparent;
+  padding-top: var(--ion-safe-area-top);
+}
 
-  .titulo-grande {
-    margin-left:10px;
-    padding: 10px;
-    font-size: 1rem; /* Puedes ajustar el tamaño como desees */
-    font-weight: bold; /* Para hacerlo más destacado */
-    margin-bottom: 16px; /* Espacio entre el título y las tarjetas */
-  }
-
-  .floating-right {
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    z-index: 10;
-    position: fixed;
-    bottom: 20px;
-    right: 20px; /* Mueve el botón a la derecha */
-    z-index: 10000;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-  }
-
-  .floating-left {
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    z-index: 10;
-    position: fixed;
-    bottom: 20px;
-    left: 20px; /* Mueve el botón a la derecha */
-    z-index: 10000;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-  }
-
-  .big-button {
-    width: 64px;
-    height: 64px;
-    --padding-start: 0;
-    --padding-end: 0;
-    ion-icon {
-      font-size: 32px;
-      color:black;
-    }
-  }
-  
-  ion-img {
-    width: 100%;
-    height: auto;
-  }
-
-  .loading-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    text-align: center;
-    color: white;
-  }
-
-  .loading-text {
-    margin-top: 12px;
-    font-size: 16px;
-    font-weight: 500;
-  }
-
-
-.horizontal-scroll {
+// ── Hero ──────────────────────────────────────────────────
+.explore-hero {
+  padding: 16px 16px 12px;
+  background: #121212;
   display: flex;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch; /* para scroll suave en iOS */
-  padding-bottom: 10px; /* espacio debajo de las tarjetas */
+  flex-direction: column;
+  gap: 14px;
 }
 
-.card {
+.explore-hero-top {
   display: flex;
-  flex-direction: column; /* Para que el texto quede arriba y el spinner abajo */
-  justify-content: center; /* Centrado vertical */
-  align-items: center;     /* Centrado horizontal */
-  height: 100%;            /* Ocupa todo el alto disponible */
-  text-align: center;
-  gap: 12px;               /* Separación entre texto y spinner (opcional) */
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-
-.cards-row {
-  flex: 0 0 auto; /* no se encoge ni crece */
-  margin-right: 16px;
-  cursor: pointer;
+.explore-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
-.filtros-estilos::-webkit-scrollbar {
-  display: none;             /* Chrome, Safari y Opera */
-  -ms-overflow-style: none;  /* IE y Edge */
-  scrollbar-width: none;
+.explore-eyebrow {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #C9A86A;
 }
 
-.user-card-img {
-  width: 100%;        /* que ocupe todo el ancho de la card */
-  height: 150px;      /* altura fija igual para todas */
-  object-fit: cover;  /* recorta la imagen para llenar el contenedor sin deformar */
-  border-radius: 8px; /* opcional, bordes redondeados */
+.explore-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #EDEDED;
+  margin: 0;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
 }
 
-.user-card {
+// ── Events button ─────────────────────────────────────────
+.events-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(201, 168, 106, 0.1);
+  border: 1px solid rgba(201, 168, 106, 0.35);
   border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-  transition: transform 0.2s ease;
-  min-width: 200px;
-  max-width: 200px;
+  padding: 7px 13px;
+  color: #C9A86A;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.2s;
+
+  ion-icon { font-size: 14px; }
+  &:hover { background: rgba(201, 168, 106, 0.2); }
 }
 
-.user-card:hover {
-  transform: scale(1.03);
+// ── Search ────────────────────────────────────────────────
+.explore-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-.titulo-tienda {
+.search-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 17px;
+  color: #C9A86A;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.explore-search-input {
+  width: 100%;
+  background: #1A1A1A;
+  border: 1px solid #2E2E2E;
+  border-radius: 12px;
+  padding: 12px 14px 12px 42px;
+  color: #EDEDED;
   font-size: 0.9rem;
-  font-weight: bold;
-  margin-top: 5px;
+  font-family: 'Montserrat', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+
+  &::placeholder { color: #808080; }
+  &:focus { border-color: rgba(201, 168, 106, 0.5); }
 }
 
-.sub-info {
+// ── Filters block ─────────────────────────────────────────
+.filters-block {
+  padding: 4px 16px 8px;
+  border-bottom: 1px solid #1E1E1E;
+}
+
+.filters-toggle {
+  width: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  transition: opacity 0.2s;
+
+  &:hover { opacity: 0.8; }
+}
+
+.filters-chevron {
+  font-size: 15px;
+  color: #C9A86A;
+}
+
+.explore-toolbar {
+  --background: var(--ion-background-color);
+  --border-color: transparent;
+  padding-top: var(--ion-safe-area-top);
+}
+
+.explore-hero {
+  padding: 16px 16px 12px;
+  background: var(--ion-background-color);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.explore-search-input {
+  width: 100%;
+  background: var(--ion-card-background);
+  border: 1px solid var(--ion-border-color);
+  border-radius: 12px;
+  padding: 12px 14px 12px 42px;
+  color: var(--ion-text-color);
   font-size: 0.9rem;
-  color: #666;
-  margin-top: 3px;
+  outline: none;
+  transition: border-color 0.2s;
+  &::placeholder { color: #808080; }
+  &:focus { border-color: rgba(201, 168, 106, 0.5); }
 }
 
-.valoracion-row {
-  margin-top: 5px;
+.filters-block {
+  padding: 4px 16px 8px;
+  border-bottom: 1px solid var(--ion-border-color);
 }
-
-.valoracion-row ion-icon {
-  font-size: 18px;
-  margin-right: 2px;
-}
-
-ion-chip {
-  margin: 3px;
-  font-size: 0.8rem;
-}
-
 

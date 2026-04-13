@@ -1,291 +1,230 @@
-<ion-header class="cabecera" [translucent]="true">
-  <ion-toolbar style="background-color: white;">
-    <ion-icon class="toolbar-icon" name="arrow-back-outline" slot="start" (click)="volver()"></ion-icon>
-    <h2 style="margin: 0; font-weight: bold;">{{tatuador.nombreTienda}}</h2>
-    <ion-icon class="toolbar-icon" slot="end" name="ellipsis-vertical-outline" (click)="abrirMenu()"></ion-icon>
+<ion-header [translucent]="true">
+  <ion-toolbar class="main-toolbar">
+    <button class="back-btn" slot="start" (click)="volver()">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </button>
+    <span class="toolbar-title">{{ tatuador.nombreTienda }}</span>
+    <button class="menu-btn" slot="end" (click)="abrirMenu()">
+      <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+    </button>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="content">
+<ion-content [fullscreen]="true" class="profile-content">
 
-  <ion-segment [(ngModel)]="segmentoSeleccionado" value="info">
-    <ion-segment-button value="info">
-      <ion-label style="color:white;">{{ 'INFO' | translate }}</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="fotos">
-      <ion-label style="color:white;">{{ 'PHOTOS' | translate }}</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-  <ng-container *ngIf="segmentoSeleccionado === 'info'">
-    <!-- 🧑 Avatar + Ciudad + Biografía -->
-  <div style="display: flex; align-items: flex-start; padding: 20px;">
-    <!-- Contenedor circular del avatar -->
-    <div style="width: 70px; height: 70px; border-radius: 50%; overflow: hidden; margin-right: 15px; flex-shrink: 0;">
-      <ion-img 
-        [src]="avatarUrl" 
-        alt="Avatar" 
-        style="width: 100%; height: 100%; object-fit: cover; display: block;" 
-        (click)="verImagen(avatarUrl)">
-      </ion-img>
-    </div>
-    
-    <!-- Contenido -->
-    <div style="flex: 1; display: flex; flex-direction: column; min-width: 0;">
-      <!-- Ciudad -->
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <p style="margin: 0; font-size: 14px; color: gray; cursor: pointer;" *ngIf="tatuador.ciudad" (click)="abrirMaps(tatuador.ciudad)">
-          {{ tatuador.ciudad }}
-        </p>
+  <!-- Segmento -->
+  <div class="segment-wrapper">
+    <ion-segment [(ngModel)]="segmentoSeleccionado" value="info" class="custom-segment">
+      <ion-segment-button value="info" class="custom-segment-btn">
+        <ion-label>{{ 'INFO' | translate }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="fotos" class="custom-segment-btn">
+        <ion-label>{{ 'PHOTOS' | translate }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <!-- ── Info ── -->
+  <div *ngIf="segmentoSeleccionado === 'info'" class="info-wrapper">
+
+    <!-- Avatar + bio -->
+    <div class="artist-hero">
+      <div class="hero-avatar" (click)="verImagen(avatarUrl)">
+        <ion-img [src]="avatarUrl" alt="Avatar"></ion-img>
       </div>
-      
-      <!-- Biografía -->
-      <ion-text style="margin-top: 5px; word-wrap: break-word; overflow-wrap: break-word;">
-        {{ tatuador.biografia }}
-      </ion-text>
-    </div>
-  </div>
-  
-  <!-- 📱 Redes sociales (espaciadas) -->
-  <div class="floating-icon" style="display: flex; justify-content: center; gap: 20px; margin: 10px 0 30px;">
-    <ion-icon
-      name="logo-instagram"
-      style="color:#e1306c"
-      *ngIf="tatuador.instagram"
-      (click)="abrirRedSocial('instagram', tatuador.instagram)">
-    </ion-icon>
-
-    <ion-icon
-      name="logo-facebook"
-      style="color:#1877f2"
-      *ngIf="tatuador.facebook"
-      (click)="abrirRedSocial('facebook', tatuador.facebook)">
-    </ion-icon>
-
-    <ion-icon
-      name="logo-whatsapp"
-      color="success"
-      *ngIf="tatuador.telefono"
-      (click)="abrirWhatsapp(tatuador.telefono)">
-    </ion-icon>
-
-    <ion-icon
-      name="logo-tiktok"
-      style="font-size: 24px; cursor: pointer;"
-      *ngIf="tatuador.tiktok"
-      (click)="abrirRedSocial('tiktok', tatuador.tiktok)">
-    </ion-icon>
-
-    <ion-icon
-      name="logo-twitter"
-      style="color:#1877f2"
-      *ngIf="tatuador.twitter"
-      (click)="abrirRedSocial('twitter', tatuador.twitter)">
-    </ion-icon>
-
-    <ion-icon
-      name="globe-outline"
-      style="font-size: 24px; cursor: pointer;"
-      *ngIf="tatuador.web"
-      (click)="abrirSitioWeb(tatuador.web)">
-    </ion-icon>
-  </div>
-
-  <!-- 🎨 Estilos (Chips alineados horizontalmente) -->
-  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 20px;">
-    <ion-chip *ngFor="let estilo of tatuador.estilos" style="color:white;">
-      <ion-label>{{ 'STYLE.' + estilo | translate }}</ion-label>
-    </ion-chip>
-
-    <ng-container *ngIf="!tatuador.estilos || tatuador.estilos.length === 0">
-      <ion-chip color="medium">
-        <ion-label>{{ 'NOT_SPECIFIED' | translate }}</ion-label>
-      </ion-chip>
-    </ng-container>
-  </div>
-
-  <div *ngIf="objetivos.length > 0; else noObjetivos" 
-      style="display: flex; overflow-x: auto; gap: 8px; padding: 20px; justify-content: center;">
-    <div *ngFor="let objetivo of objetivos" 
-        style="flex: 0 0 auto; display: flex; flex-direction: column; align-items: center;">
-      <img *ngIf="objetivo.alcanzado" 
-          [src]="objetivo.img" 
-          style="width: 80px; height: 80px; margin-bottom: 5px;" 
-          alt="{{ objetivo.nombre }}"
-          (click)="mostrarToast(objetivo.nombre)">
-    </div>
-  </div>
-
-  <ng-template #noObjetivos>
-    <!-- Si no hay objetivos alcanzados, no mostramos nada -->
-  </ng-template>
-
-  <div class="btn-container">
-    <ion-button size="small" (click)="consultaPrevia()">
-      {{ 'PRE_CONSULTATION' | translate }}
-    </ion-button>
-    <ion-button size="small" (click)="pedirCita()">
-      {{ 'BOOK_APPOINTMENT' | translate }}
-    </ion-button>
-  </div>
-
-
-  <!-- 📝 Bloque de reseñas -->
-  <div style="padding: 20px;">
-    <!-- 🔄 Carrusel de reseñas -->
-    <div *ngIf="resenas && resenas.length > 0;"
-        style="display: flex; justify-content: center; align-items: center; position: relative;">
-
-      <!-- ⬅️ Flecha izquierda -->
-      <ion-icon *ngIf="resenas.length > 1;"
-        name="chevron-back-outline"
-        size="large"
-        (click)="anteriorResena()"
-        style="cursor: pointer; position: absolute; left: -15px; top: 50%; transform: translateY(-50%); z-index: 10;">
-      </ion-icon>
-
-      <!-- 💬 Card centrado -->
-      <ion-card *ngIf="resenas[resenaActual] as resena"
-                style="width: 80%; max-width: 500px; transition: opacity 0.5s ease; border-radius: 12px;">
-        <ion-card-header>
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <ion-card-title style="margin: 0;">{{ resena.nombreUsuario }}</ion-card-title>
-            <ion-card-subtitle style="margin: 0;">
-              <ion-icon
-                *ngFor="let star of [1,2,3,4,5]"
-                [name]="(resena.estrella || 0) >= star ? 'star' : 'star-outline'"
-                style="font-size: 20px; color: gold;">
-              </ion-icon>
-            </ion-card-subtitle>
-          </div>
-        </ion-card-header>
-
-        <ion-card-content>
-          <p>{{ resena.mensaje }}</p>
-
-          <!-- 📷 Fotos dentro de la reseña -->
-          <div *ngIf="resena.imagen && resena.imagen.length > 0" style="margin-top: 10px;">
-            <ion-grid>
-              <ion-row>
-                <ion-col size="6" *ngFor="let foto of resena.imagen">
-                  <ion-img
-                    [src]="foto"
-                    style="border-radius: 8px; max-height: 150px; object-fit: cover; cursor: pointer;"
-                    (click)="verImagen(foto)"
-                  ></ion-img>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </div>
-        </ion-card-content>
-      </ion-card>
-
-      <!-- ➡️ Flecha derecha -->
-      <ion-icon *ngIf="resenas.length > 1;"
-        name="chevron-forward-outline"
-        size="large"
-        (click)="siguienteResena()"
-        style="cursor: pointer; position: absolute; right: -15px; top: 50%; transform: translateY(-50%); z-index: 10;">
-      </ion-icon>
-    </div>
-
-    <!-- Si no hay reseñas -->
-    <div *ngIf="!resenas || resenas.length === 0" style="color: gray; text-align: center;">
-       {{ 'NO_REVIEWS' | translate }}
-    </div>
-
-    <hr style="margin: 30px 0;" />
-
-    <!-- ✏️ Formulario para dejar una reseña -->
-    <div *ngIf="!resenaExistente && usuario.uid">
-      <h4>{{ 'LEAVE_REVIEW' | translate }}</h4>
-
-      <!-- Estrellas -->
-      <div style="display: flex; gap: 5px; margin-bottom: 10px;">
-        <ion-icon
-          *ngFor="let star of [1,2,3,4,5]"
-          [name]="estrellaSeleccionada >= star ? 'star' : 'star-outline'"
-          style="font-size: 30px; cursor: pointer; color: gold;"
-          (click)="seleccionarEstrella(star)">
-        </ion-icon>
-      </div>
-
-      <!-- Mensaje -->
-      <ion-textarea
-        [(ngModel)]="mensajeResena"
-        placeholder="{{ 'COMMENT_PLACEHOLDER' | translate }}" 
-        autoGrow="true">
-      </ion-textarea>
-
-      <ion-item lines="none">
-        <!-- Botón estilizado para subir -->
-        <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
-          <ion-button expand="block" fill="outline" (click)="fileInput.click()">
-            <ion-icon name="image-outline" slot="start"></ion-icon>
-            {{ 'SELECT_PHOTO' | translate }}
-          </ion-button>
-
-          <!-- Vista previa si hay imagen -->
-          <ion-avatar *ngIf="previewImage" style="width: 60px; height: 60px; border: 2px solid #3880ff;">
-            <img [src]="previewImage" />
-          </ion-avatar>
+      <div class="hero-info">
+        <div class="hero-city" *ngIf="tatuador.ciudad" (click)="abrirMaps(tatuador.ciudad)">
+          <ion-icon name="location-outline"></ion-icon>
+          <span>{{ tatuador.ciudad }}</span>
         </div>
+        <p class="hero-bio">{{ tatuador.biografia }}</p>
+      </div>
+    </div>
 
-        <!-- Input real oculto -->
-        <input #fileInput type="file" accept="image/*" hidden (change)="onImagenSeleccionada($event)" />
-      </ion-item>
+    <!-- Redes sociales -->
+    <div class="social-row">
+      <button class="social-btn" *ngIf="tatuador.instagram"
+        (click)="abrirRedSocial('instagram', tatuador.instagram)">
+        <ion-icon name="logo-instagram"></ion-icon>
+      </button>
+      <button class="social-btn" *ngIf="tatuador.facebook"
+        (click)="abrirRedSocial('facebook', tatuador.facebook)">
+        <ion-icon name="logo-facebook"></ion-icon>
+      </button>
+      <button class="social-btn whatsapp-btn" *ngIf="tatuador.telefono"
+        (click)="abrirWhatsapp(tatuador.telefono)">
+        <ion-icon name="logo-whatsapp"></ion-icon>
+      </button>
+      <button class="social-btn" *ngIf="tatuador.tiktok"
+        (click)="abrirRedSocial('tiktok', tatuador.tiktok)">
+        <ion-icon name="logo-tiktok"></ion-icon>
+      </button>
+      <button class="social-btn" *ngIf="tatuador.twitter"
+        (click)="abrirRedSocial('twitter', tatuador.twitter)">
+        <ion-icon name="logo-twitter"></ion-icon>
+      </button>
+      <button class="social-btn" *ngIf="tatuador.web"
+        (click)="abrirSitioWeb(tatuador.web)">
+        <ion-icon name="globe-outline"></ion-icon>
+      </button>
+    </div>
 
-      <!-- Previsualización -->
-      <img *ngIf="imagenResena" [src]="imagenResena" style="width: 100px; height: auto; margin-top: 5px;" />
+    <!-- Estilos -->
+    <div class="styles-section" *ngIf="tatuador.estilos?.length">
+      <span class="section-label">Estilos</span>
+      <div class="styles-chips">
+        <span class="style-chip" *ngFor="let estilo of tatuador.estilos">
+          {{ ('STYLE.' + estilo) | translate }}
+        </span>
+        <span class="style-chip style-chip-empty"
+          *ngIf="!tatuador.estilos || tatuador.estilos.length === 0">
+          {{ 'NOT_SPECIFIED' | translate }}
+        </span>
+      </div>
+    </div>
 
-      <!-- Botón -->
-      <ion-button expand="block" (click)="enviarResena()">
-        {{ 'SEND_REVIEW' | translate }}
+    <!-- Objetivos / Badges -->
+    <div class="badges-row" *ngIf="objetivos.length > 0">
+      <ng-container *ngFor="let objetivo of objetivos">
+        <img *ngIf="objetivo.alcanzado"
+          [src]="objetivo.img"
+          class="badge-img"
+          [alt]="objetivo.nombre"
+          (click)="mostrarToast(objetivo.nombre)" />
+      </ng-container>
+    </div>
+
+    <!-- CTAs -->
+    <div class="cta-row">
+      <ion-button class="cta-btn cta-outline" fill="outline" (click)="consultaPrevia()">
+        <ion-icon slot="start" name="chatbubble-outline"></ion-icon>
+        {{ 'PRE_CONSULTATION' | translate }}
+      </ion-button>
+      <ion-button class="cta-btn cta-solid" (click)="pedirCita()">
+        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        {{ 'BOOK_APPOINTMENT' | translate }}
       </ion-button>
     </div>
-  </div>
-  </ng-container>
 
-  <ng-container *ngIf="segmentoSeleccionado === 'fotos'">
-    <ion-grid>
-      <ion-row *ngIf="tatuador.foto && tatuador.foto.length > 0; else noFotos">
-        <ion-col size="6" *ngFor="let foto of fotosTatuador; let i = index">
-          <div style="position: relative; width: 100%; height: 150px; border-radius: 10px; overflow: hidden;">
-            <!-- Spinner mientras carga -->
-            <div *ngIf="!imagenCargada[i]" 
-                style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #f5f5f5;">
-              <ion-spinner name="crescent" color="medium"></ion-spinner>
+    <div class="section-divider"></div>
+
+    <!-- Reseñas -->
+    <div class="reviews-section">
+      <span class="section-label">Reseñas</span>
+
+      <!-- Carrusel -->
+      <div class="review-carousel" *ngIf="resenas && resenas.length > 0">
+        <button class="carousel-arrow" (click)="anteriorResena()" *ngIf="resenas.length > 1">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </button>
+
+        <div class="review-card" *ngIf="resenas[resenaActual] as resena">
+          <div class="review-header">
+            <span class="review-author">{{ resena.nombreUsuario }}</span>
+            <div class="review-stars">
+              <ion-icon *ngFor="let star of [1,2,3,4,5]"
+                [name]="(resena.estrella || 0) >= star ? 'star' : 'star-outline'"
+                class="star-icon">
+              </ion-icon>
             </div>
-
-            <!-- Imagen -->
-            <ion-img
-              [src]="foto.url"
-              (ionImgWillLoad)="onImgWillLoad(i)"
-              (ionImgDidLoad)="onImgDidLoad(i)"
-              style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; cursor: pointer;"
-              (click)="verImagen(foto.url)">
-            </ion-img>
           </div>
-         <ion-icon
-          [name]="foto.favorita ? 'heart' : 'heart-outline'"
-          color="danger"
-          style="position: absolute; top: 8px; right: 8px; font-size: 26px; background: rgba(255,255,255,0.7); border-radius: 50%; padding: 4px;"
-          (click)="toggleFavoritoFoto(foto, $event)">
-        </ion-icon>
-        </ion-col>
-      </ion-row>
-
-      <ng-template #noFotos>
-        <div style="display: flex; justify-content: center; padding: 20px; color: gray;">
-          {{ 'NO_PHOTOS' | translate }}
+          <p class="review-msg">{{ resena.mensaje }}</p>
+          <div class="review-photos" *ngIf="resena.imagen.length">
+            <div class="review-photo-tile" *ngFor="let foto of resena.imagen"
+              (click)="verImagen(foto)">
+              <ion-img [src]="foto"></ion-img>
+            </div>
+          </div>
         </div>
-      </ng-template>
-    </ion-grid>
+
+        <button class="carousel-arrow" (click)="siguienteResena()" *ngIf="resenas.length > 1">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+      </div>
+
+      <!-- Sin reseñas -->
+      <div class="no-reviews" *ngIf="!resenas || resenas.length === 0">
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+        <span>{{ 'NO_REVIEWS' | translate }}</span>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Formulario reseña -->
+      <div class="review-form" *ngIf="!resenaExistente && usuario.uid">
+        <span class="section-label">{{ 'LEAVE_REVIEW' | translate }}</span>
+
+        <div class="star-picker">
+          <ion-icon *ngFor="let star of [1,2,3,4,5]"
+            [name]="estrellaSeleccionada >= star ? 'star' : 'star-outline'"
+            class="star-pick-icon"
+            (click)="seleccionarEstrella(star)">
+          </ion-icon>
+        </div>
+
+        <ion-textarea
+          [(ngModel)]="mensajeResena"
+          placeholder="{{ 'COMMENT_PLACEHOLDER' | translate }}"
+          autoGrow="true"
+          class="review-textarea">
+        </ion-textarea>
+
+        <div class="photo-picker-row">
+          <button class="photo-pick-btn" (click)="fileInput.click()">
+            <ion-icon name="image-outline"></ion-icon>
+            {{ 'SELECT_PHOTO' | translate }}
+          </button>
+          <div class="preview-thumb" *ngIf="previewImage">
+            <img [src]="previewImage" />
+          </div>
+          <input #fileInput type="file" accept="image/*" hidden (change)="onImagenSeleccionada($event)" />
+        </div>
+
+        <ion-button expand="block" class="send-review-btn" (click)="enviarResena()">
+          <ion-icon slot="start" name="send-outline"></ion-icon>
+          {{ 'SEND_REVIEW' | translate }}
+        </ion-button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Fotos ── -->
+  <ng-container *ngIf="segmentoSeleccionado === 'fotos'">
+
+    <div class="empty-state" *ngIf="!fotosTatuador || fotosTatuador.length === 0">
+      <div class="empty-icon-wrap">
+        <ion-icon name="images-outline"></ion-icon>
+      </div>
+      <p class="empty-text">{{ 'NO_PHOTOS' | translate }}</p>
+    </div>
+
+    <div class="photos-grid" *ngIf="fotosTatuador && fotosTatuador.length > 0">
+      <div class="photo-tile" *ngFor="let foto of fotosTatuador; let i = index">
+        <div class="photo-skeleton" *ngIf="!imagenCargada[i]">
+          <ion-spinner name="crescent"></ion-spinner>
+        </div>
+        <ion-img
+          [src]="foto.url"
+          (ionImgWillLoad)="onImgWillLoad(i)"
+          (ionImgDidLoad)="onImgDidLoad(i)"
+          (click)="verImagen(foto.url)"
+          class="photo-img">
+        </ion-img>
+        <button class="heart-btn" (click)="toggleFavoritoFoto(foto, $event)">
+          <ion-icon [name]="foto.favorita ? 'heart' : 'heart-outline'"
+            [class.heart-active]="foto.favorita"></ion-icon>
+        </button>
+      </div>
+    </div>
 
   </ng-container>
-  <ion-modal #modalRef [isOpen]="imagenSeleccionada !== null"  (didDismiss)="imagenSeleccionada = null">
+
+  <!-- Modal imagen ampliada -->
+  <ion-modal [isOpen]="imagenSeleccionada !== null" (didDismiss)="imagenSeleccionada = null">
     <ng-template>
-      <div  (click)="cerrarImagen()" style="display: flex; justify-content: center; align-items: center; height: 100%; background: black;">
-        <img [src]="imagenSeleccionada" style="max-width: 100%; max-height: 100%;" />
+      <div class="img-modal-bg" (click)="cerrarImagen()">
+        <img [src]="imagenSeleccionada" class="img-modal-img" />
       </div>
     </ng-template>
   </ion-modal>

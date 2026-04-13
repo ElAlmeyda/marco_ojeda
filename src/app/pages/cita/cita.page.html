@@ -1,75 +1,117 @@
-<ion-content [fullscreen]="true" >
- 
-   <div *ngIf="citas.length === 0" class="center-card">
-    <ion-card>
-      <ion-card-content>
-        <ion-label class="center-text">
-          {{ 'NO_APPOINTMENTS' | translate }}
-        </ion-label>
-        <ion-button expand="block" fill="outline" [routerLink]="['/tabs/folder', usuario.uid]" >
-           {{ 'WANT_TO_BOOK' | translate }}
-        </ion-button>
-        <ion-button expand="block" fill="outline" routerLink="/mapa" >
-          {{ 'LOOK_NEARBY' | translate }}
-        </ion-button>
+<ion-content [fullscreen]="true" class="appointments-content">
+
+  <!-- Estado vacío -->
+  <div *ngIf="citas.length === 0" class="empty-state">
+    <div class="empty-icon-wrap">
+      <ion-icon name="calendar-outline"></ion-icon>
+    </div>
+    <h2 class="empty-title">{{ 'NO_APPOINTMENTS' | translate }}</h2>
+    <div class="empty-actions">
+      <ion-button expand="block" fill="outline" class="empty-btn" [routerLink]="['/tabs/folder', usuario.uid]">
+        <ion-icon slot="start" name="person-outline"></ion-icon>
+        {{ 'WANT_TO_BOOK' | translate }}
+      </ion-button>
+      <ion-button expand="block" fill="outline" class="empty-btn" routerLink="/mapa">
+        <ion-icon slot="start" name="location-outline"></ion-icon>
+        {{ 'LOOK_NEARBY' | translate }}
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Lista de citas -->
+  <div class="appointments-list" *ngIf="citas.length > 0">
+    <ion-card *ngFor="let cita of citas" class="appointment-card">
+
+      <!-- Franja de estado superior -->
+      <div class="status-bar"
+        [class.status-pending]="cita.estado === 'Pendiente'"
+        [class.status-accepted]="cita.estado === 'Aceptado'"
+        [class.status-edited]="cita.estado === 'Editada'">
+      </div>
+
+      <ion-card-header class="card-header">
+        <div class="header-row">
+          <div class="artist-info">
+            <span class="label-tag">{{ 'TATTOO_ARTIST' | translate }}</span>
+            <ion-card-title class="artist-name">{{ cita.nombreTatuador }}</ion-card-title>
+          </div>
+          <button class="whatsapp-btn" *ngIf="cita.tatuador?.telefono" (click)="abrirWhatsapp(cita.tatuador!.telefono!)">
+            <ion-icon name="logo-whatsapp"></ion-icon>
+          </button>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content class="card-body">
+
+        <!-- Fecha y hora -->
+        <div class="info-row date-row" *ngIf="cita.estado !== 'Editada'">
+          <ion-icon name="calendar-outline" class="row-icon"></ion-icon>
+          <span>{{ cita.dia | date:'dd/MM/yyyy' }} · {{ cita.hora }}</span>
+        </div>
+        <div class="info-row date-row date-edited" *ngIf="cita.estado === 'Editada'">
+          <ion-icon name="alert-circle-outline" class="row-icon"></ion-icon>
+          <span>{{ 'NEW_DATE' | translate }} {{ cita.dia | date:'dd/MM/yyyy' }} · {{ cita.hora }}</span>
+        </div>
+
+        <!-- Consulta -->
+        <div class="info-row consult-row" *ngIf="cita.consulta">
+          <ion-icon name="chatbubble-outline" class="row-icon"></ion-icon>
+          <span>{{ cita.consulta }}</span>
+        </div>
+
+        <!-- Tipo / estilo -->
+        <div class="info-row" *ngIf="cita.tipo !== 'Piercing'">
+          <ion-icon name="color-palette-outline" class="row-icon"></ion-icon>
+          <span>{{ 'STYLE.' + cita.estilo | translate }} · {{ 'APPOINTMENT.' + tipoKey(cita.tipo) | translate }}</span>
+        </div>
+        <div class="info-row" *ngIf="cita.tipo === 'Piercing'">
+          <ion-icon name="disc-outline" class="row-icon"></ion-icon>
+          <span>{{ cita.tipo }} · {{ 'APPOINTMENT.' + cita.zona | translate }}</span>
+        </div>
+
+        <!-- Dirección -->
+        <div class="info-row address-row" *ngIf="cita.direccion" (click)="abrirMaps(cita.direccion)">
+          <ion-icon name="location-outline" class="row-icon"></ion-icon>
+          <span>{{ cita.direccion }}</span>
+        </div>
+
+        <!-- Estado badge -->
+        <div class="status-badge-wrap">
+          <span class="status-badge"
+            [class.badge-pending]="cita.estado === 'Pendiente'"
+            [class.badge-accepted]="cita.estado === 'Aceptado'"
+            [class.badge-edited]="cita.estado === 'Editada'">
+            {{ 'APPOINTMENT_STATUS.' + cita.estado | translate }}
+          </span>
+        </div>
+
+        <!-- Divider -->
+        <div class="card-divider"></div>
+
+        <!-- Acciones -->
+        <div class="card-actions">
+          <!-- Cita normal: solo eliminar -->
+          <ion-button *ngIf="cita.estado !== 'Editada'" fill="clear" class="action-btn delete-btn"
+            (click)="eliminarCita(cita, cita.uidCita)">
+            <ion-icon slot="start" name="trash-outline"></ion-icon>
+            {{ 'DELETE' | translate }}
+          </ion-button>
+
+          <!-- Cita editada: aceptar / rechazar -->
+          <ng-container *ngIf="cita.estado === 'Editada'">
+            <ion-button class="action-btn accept-btn" (click)="aceptarCita(cita)">
+              <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+              {{ 'ACCEPT_APPOINTMENT' | translate }}
+            </ion-button>
+            <ion-button fill="outline" class="action-btn reject-btn" (click)="eliminarCita(cita, cita.uidCita)">
+              <ion-icon slot="start" name="close-outline"></ion-icon>
+              {{ 'REJECT_APPOINTMENT' | translate }}
+            </ion-button>
+          </ng-container>
+        </div>
+
       </ion-card-content>
     </ion-card>
-  </div>
- <!-- Contenedor principal que ocupa todo el alto y permite scroll -->
-  <div style="margin-top:60px; display: flex; flex-direction: column; min-height: 100%; padding: 16px; box-sizing: border-box;">
-    <div style="display: flex; flex-direction: column; gap: 12px; max-width: 500px; margin: auto;">
-      <ion-card *ngFor="let cita of citas" style="flex: 0 0 280px; display: flex; flex-direction: column; justify-content: space-between;">
-        <!-- Header -->
-        <ion-card-header style="padding: 0 16px; width: 100%;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; margin-top:10px">
-            <ion-card-title style="flex: 1; word-break: break-word; text-align: left; margin: 0;">
-              {{ 'TATTOO_ARTIST' | translate }}: {{ cita.nombreTatuador }}
-            </ion-card-title>
-
-            <ion-icon 
-              name="logo-whatsapp" 
-              style="font-size: 24px; cursor: pointer;" 
-              *ngIf="cita.tatuador?.telefono" 
-              (click)="abrirWhatsapp(cita.tatuador!.telefono!)" color="success">
-            </ion-icon>
-          </div>
-        </ion-card-header>
-
-        <!-- Contenido -->
-        <ion-card-content style="word-break: break-word; text-align: left; margin: 0; white-space: normal;">
-          <p *ngIf="cita.estado !== 'Editada'">{{ cita.dia | date:'dd/MM/yyyy' }} - {{ cita.hora }}</p>
-          <p *ngIf="cita.estado === 'Editada'" style="color:red">{{ 'NEW_DATE' | translate }}: {{ cita.dia | date:'dd/MM/yyyy' }} - {{ cita.hora }}</p>
-          <p *ngIf="cita.consulta" style="color:green">{{ cita.consulta }}</p>
-          <p *ngIf="cita.tipo !== 'Piercing'">{{ 'STYLE.' + cita.estilo | translate }} - {{ 'APPOINTMENT.' + tipoKey(cita.tipo) | translate }}</p>
-          <p *ngIf="cita.tipo === 'Piercing'">
-            {{ cita.tipo }} - {{ 'APPOINTMENT.' + cita.zona | translate }}
-          </p>
-          <p *ngIf="cita.direccion" (click)="abrirMaps(cita.direccion)" style="white-space: normal; word-break: break-word;">
-            {{ cita.direccion }}
-          </p>
-          <p [ngStyle]="{'color': cita.estado === 'Pendiente' ? 'red' : (cita.estado === 'Aceptado' ? 'green' : 'black')}">
-            {{ 'STATUS.' + cita.estado | translate }}
-          </p>
-        </ion-card-content>
-
-        <!-- Botón de basura -->
-        <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
-          <ion-button *ngIf="cita.estado !== 'Editada'" fill="clear" color="danger" (click)="eliminarCita(cita, cita.uidCita)" style="height: 24px; min-width: 24px; padding: 0;">
-            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-          </ion-button>
-        </div>
-        <div style="margin-top: 16px; text-align: center;" *ngIf="cita.estado === 'Editada'">
-          <ion-button expand="block" color="success" (click)="aceptarCita(cita)">
-            {{ 'ACCEPT_APPOINTMENT' | translate }}
-          </ion-button>
-          <ion-button expand="block" color="danger" (click)="eliminarCita(cita, cita.uidCita)">
-             {{ 'REJECT_APPOINTMENT' | translate }}
-          </ion-button>
-        </div>
-      </ion-card>
-
-
-    </div>
   </div>
 
 </ion-content>

@@ -49,7 +49,8 @@
     "VERIFICATION_SENT_MESSAGE": "Nous avons envoyé un e-mail de vérification à",
     "NOT_RECEIVED": "Vous n'avez pas reçu l'e-mail ?",
     "RESEND_EMAIL": "Renvoyer l'e-mail",
-    "ALREADY_VERIFIED": "J'ai déjà vérifié mon e-mail"
+    "ALREADY_VERIFIED": "J'ai déjà vérifié mon e-mail",
+    "DANGER_ZONE":"Actions irréversibles"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Connectez-vous pour avoir des tatoueurs favoris",
@@ -116,6 +117,7 @@
     "Watercolor": "Aquarelle",
     "Japanese": "Japonais",
     "Tribal": "Tribal",
+    "Sketch": "Sketch / Croquis",
     "Surrealismo": "Surréalisme",
     "Biomecánico": "Biomécanique",
     "Anime": "Anime",
@@ -222,7 +224,8 @@
     "ABOUT_US": "À propos de nous",
     "ABOUT_US_DESC": "Découvrez-en plus sur notre application.",
     "LANGUAGE": "Langue",
-    "SELECT_LANGUAGE": "Sélectionnez une langue"
+    "SELECT_LANGUAGE": "Sélectionnez une langue",
+    "THEME": "Thème"
   },
   "AVATAR": {
     "UPLOADING": "Téléchargement de l'avatar...",

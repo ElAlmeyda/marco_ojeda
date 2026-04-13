@@ -1,43 +1,85 @@
-  
-  .card-title {
-    position: absolute; /* El nombre se coloca encima de la imagen */
-    font-size: 14px;
-    bottom: 10px; /* Coloca el nombre cerca de la parte inferior de la imagen */
-    left: 0; /* Centra el nombre horizontalmente */
-    font-size: 18px; /* Tamaño del texto del nombre */
-    color: white; /* Color blanco para que resalte sobre la imagen */
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente para mejorar la legibilidad */
-    padding: 5px; /* Añade un poco de espaciado alrededor del texto */
-    border-radius: 5px; /* Bordes redondeados del fondo del nombre */
-    z-index:2;
-  }
-
-  ion-col {
-    --ion-grid-column-padding: 3px; /* Establece un margen entre las columnas */
-  }
-  
-  .toolbar-icon {
-    margin: 10px 8px;
-    font-size: 24px;
-  }
-
-
-  /* Estilos globales para las imágenes dentro de los cards */
-.card-img {
-  width: 100%; /* Ancho máximo de la imagen */
-  height: 200px; /* Alto fijo para la imagen */
-  object-fit: cover; /* Asegura que la imagen cubra el espacio sin distorsión */
-  border-radius: 10px; /* Bordes redondeados para las imágenes */
+// ── Toolbar ───────────────────────────────────────────────
+.main-toolbar {
+  --background: #121212;
+  --border-width: 0;
+  padding-top: var(--ion-safe-area-top);
+  padding-inline: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-/* Configuración de las columnas para mostrar dos elementos por fila */
-.user-col {
-  padding: 0; /* Eliminar padding extra en las columnas */
+.back-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  color: #C9A86A;
+  font-size: 20px;
+  transition: background 0.2s;
+
+  &:hover { background: rgba(201, 168, 106, 0.1); }
 }
 
-/* Estilo para los ion-card que contienen las imágenes */
-.user-card {
-  background-color: transparent; /* Fondo transparente */
-  box-shadow: none; /* Eliminar sombras para un diseño limpio */
-  border-radius: 15px; /* Bordes redondeados para los cards */
+.toolbar-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #C9A86A;
+}
+
+// ── Content ───────────────────────────────────────────────
+.events-content {
+  --background: #121212;
+}
+
+.events-wrapper {
+  padding: 16px 16px 48px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+// ── Empty state ───────────────────────────────────────────
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.empty-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid #C9A86A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+
+  ion-icon {
+    font-size: 28px;
+    color: #C9A86A;
+  }
+}
+
+.empty-text {
+  font-size: 0.9rem;
+  color: #808080;
+  margin: 0;
+}
+
+// ── Grid 2 columnas ───────────────────────────────────────
+.grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }

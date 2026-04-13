@@ -50,7 +50,8 @@
     "VERIFICATION_SENT_MESSAGE": "Enviamos um e-mail de verificação para",
     "NOT_RECEIVED": "Não recebeu o e-mail?",
     "RESEND_EMAIL": "Reenviar e-mail",
-    "ALREADY_VERIFIED": "Já verifiquei meu e-mail"
+    "ALREADY_VERIFIED": "Já verifiquei meu e-mail",
+    "DANGER_ZONE":"Ações irreversíveis"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Faça login para ter tatuadores favoritos",
@@ -113,6 +114,7 @@
     "Geométrico": "Geométrico",
     "Dotwork": "Dotwork",
     "Lettering": "Lettering",
+    "Sketch": "Sketch / Esboço",
     "Trash Polka": "Trash Polka",
     "Watercolor": "Aquarela",
     "Japanese": "Japonês",
@@ -203,7 +205,8 @@
     "ABOUT_US": "Sobre Nós",
     "ABOUT_US_DESC": "Saiba mais sobre nosso aplicativo.",
     "LANGUAGE": "Idioma",
-    "SELECT_LANGUAGE": "Selecione um idioma"
+    "SELECT_LANGUAGE": "Selecione um idioma",
+    "THEME": "Tema"
   },
   "APPOINTMENT_STATUS": {
     "Pendiente": "Pendente",

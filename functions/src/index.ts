@@ -5,6 +5,9 @@ import { logger } from "firebase-functions";
 import { onDocumentUpdated } from "firebase-functions/v2/firestore";
 import { onDocumentDeleted } from "firebase-functions/v2/firestore";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
+import * as crypto from "crypto";
+import { onRequest } from "firebase-functions/v2/https";
+import { getAuth } from "firebase-admin/auth";
 
 
 // Inicializa Firebase Admin
@@ -251,5 +254,94 @@ export const notificarCitaAceptada = onDocumentCreated(
 );
 
 
+
+export const registrarUsuario = onRequest(async (req, res) => {
+  try {
+    // Solo aceptamos POST
+    if (req.method !== "POST") {
+      res.status(405).send({ ok: false, message: "Método no permitido" });
+      return;
+    }
+
+    const body: { email?: string } = req.body;
+
+    if (!body.email) {
+      res.status(400).send({ ok: false, message: "Faltan campos obligatorios" });
+      return;
+    }
+
+    const auth = getAuth();
+
+    // Verificar si el usuario ya existe en Firebase Auth
+    let existingUser = null;
+    try {
+      existingUser = await auth.getUserByEmail(body.email);
+    } catch (e: any) {
+      if (e.code !== "auth/user-not-found") {
+        throw e;
+      }
+    }
+
+    if (existingUser) {
+      // Usuario ya registrado
+      res.status(200).send({
+        ok: true,
+        registrado: false,
+        message: "Usuario ya existe"
+      });
+      return;
+    }
+
+    // Generar contraseña aleatoria segura
+    const password = crypto.randomBytes(8).toString("hex"); // 16 caracteres hex
+
+    // Crear usuario en Firebase Auth
+    const userRecord = await auth.createUser({
+      email: body.email,
+      password,
+      displayName: body.email,
+      emailVerified: false,
+    });
+
+    // Crear usuario en Firestore
+    const userRef = db.collection("Usuarios").doc(userRecord.uid);
+    await userRef.set({
+      email: body.email,
+      nombre: body.email,
+      token: [],
+      creadoEn: new Date().toISOString(),
+      aceptaCondiciones: true,
+    });
+
+    // Respondemos a n8n con datos del usuario creado
+    res.status(200).send({
+      ok: true,
+      registrado: true,
+      message: "Usuario registrado exitosamente",
+      email: body.email,
+      password, // Opcional: puedes enviarlo por correo desde n8n
+    });
+
+    // Generar link para que el usuario establezca contraseña
+    const resetLink = await auth.generatePasswordResetLink(body.email);
+
+    res.status(200).send({
+      ok: true,
+      registrado: true,
+      message: "Usuario registrado exitosamente",
+      email: body.email,
+      resetLink
+    });
+
+  } catch (error: any) {
+    console.error("❌ Error en registrarUsuario:", error);
+    res.status(500).send({
+      ok: false,
+      registrado: false,
+      message: "Error interno",
+      error: error.message || JSON.stringify(error)
+    });
+  }
+});
 
 

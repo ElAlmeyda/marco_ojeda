@@ -49,7 +49,8 @@
     "VERIFICATION_SENT_MESSAGE": "We have sent a verification email to",
     "NOT_RECEIVED": "Didn't receive the email?",
     "RESEND_EMAIL": "Resend email",
-    "ALREADY_VERIFIED": "I have already verified my email"
+    "ALREADY_VERIFIED": "I have already verified my email",
+    "DANGER_ZONE":"Irreversible actions"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Log in to save favorite tattoo artists",
@@ -122,6 +123,7 @@
     "Watercolor": "Watercolor",
     "Japanese": "Japanese",
     "Tribal": "Tribal",
+    "Sketch": "Sketch / Outline",
     "Surrealismo": "Surrealism",
     "Biomecánico": "Biomechanical",
     "Anime": "Anime",
@@ -259,7 +261,8 @@
     "ABOUT_US": "About Us",
     "ABOUT_US_DESC": "Learn more about our application.",
     "LANGUAGE": "Language",
-    "SELECT_LANGUAGE": "Select a language"
+    "SELECT_LANGUAGE": "Select a language",
+    "THEME": "Theme"
   },
   "EDIT_FIELD": "Edit {{field}}",
   "PLACEHOLDER_NAME": "Enter the new name",
@@ -507,7 +510,14 @@
   "ADD_FAVORITE": "Add to favorites",
   "REMOVE_FAVORITE": "Remove from favorites",
   "VIEW_CONSENTS": "View consents"
-}
+},
+"PLANS": {
+    "RENEWAL_POLICY": "Subscription renews automatically unless cancelled at least 24 hours before the end of the current period",
+    "ACCEPT_TERMS": "By continuing, you accept the ",
+    "TERMS_OF_USE": "Terms of Use",
+    "AND": " and the ",
+    "PRIVACY_POLICY": "Privacy Policy"
+  }
 
 
 }

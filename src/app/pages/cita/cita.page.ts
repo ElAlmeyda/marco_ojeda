@@ -38,35 +38,42 @@ export class CitaPage implements OnInit {
 
   obtenerCitas(){
     this.tiendaService.getCitasUsuario(this.usuario.uid).subscribe((citas: any) => {
-     
-      console.log('Citas del usuario:', citas);
-      this.citas = citas;
-      console.log(this.citas);
-     
+
+      const ahora = new Date();
+
+      this.citas = citas.filter((cita: Cita) => {
+        const fechaCita = new Date(cita.dia);
+        const [hora, minuto] = cita.hora.split(':').map(Number);
+        fechaCita.setHours(hora, minuto, 0, 0);
+
+        return fechaCita.getTime() >= ahora.getTime();
+      });
+
+      // Ordenar después de filtrar
       this.citas.sort((a, b) => {
-        const fechaA = new Date(a.dia).getTime();
-        const fechaB = new Date(b.dia).getTime();
+        const fechaA = new Date(a.dia);
+        const fechaB = new Date(b.dia);
 
-        if (fechaA !== fechaB) {
-          return fechaA - fechaB; // orden por día
-        }
-
-        // Si es el mismo día, comparar por hora
-        // Suponiendo que `a.hora` y `b.hora` están en formato 'HH:mm'
         const [horaA, minA] = a.hora.split(':').map(Number);
         const [horaB, minB] = b.hora.split(':').map(Number);
 
-        return (horaA * 60 + minA) - (horaB * 60 + minB); // orden por hora
+        fechaA.setHours(horaA, minA, 0, 0);
+        fechaB.setHours(horaB, minB, 0, 0);
+
+        return fechaA.getTime() - fechaB.getTime();
       });
 
       this.citas.forEach(cita => {
-        if(cita.uidTatuador)
-        this.tiendaService.getTatuadorById(cita.uidTatuador).subscribe(res => {
-          cita.tatuador = res;
-        })
+        if (cita.uidTatuador) {
+          this.tiendaService.getTatuadorById(cita.uidTatuador).subscribe(res => {
+            cita.tatuador = res;
+          });
+        }
       });
+
     });
   }
+
 
   abrirWhatsapp(telefono: string) {
     if (telefono) {
@@ -89,33 +96,33 @@ export class CitaPage implements OnInit {
   }
 
   async eliminarCita(cita: Cita, uidCita: string) {
-  console.log('Borrar cita:', cita);
+    console.log('Borrar cita:', cita);
 
-  const header = await this.translate.get('DELETE_CONFIRM_HEADER').toPromise();
-  const message = await this.translate.get('DELETE_CONFIRM_MESSAGE', { name: cita.nombreUser, time: cita.hora }).toPromise();
-  const cancelText = await this.translate.get('CANCEL').toPromise();
-  const deleteText = await this.translate.get('DELETE').toPromise();
+    const header = await this.translate.get('DELETE_CONFIRM_HEADER').toPromise();
+    const message = await this.translate.get('DELETE_CONFIRM_MESSAGE', { name: cita.nombreUser, time: cita.hora }).toPromise();
+    const cancelText = await this.translate.get('CANCEL').toPromise();
+    const deleteText = await this.translate.get('DELETE').toPromise();
 
-  const alert = await this.alertController.create({
-    header,
-    message,
-    buttons: [
-      {
-        text: cancelText,
-        role: 'cancel',
-        cssClass: 'secondary'
-      },
-      {
-        text: deleteText,
-        handler: () => {
-          this.tiendaService.eliminarCita(cita, uidCita, this.usuario.uid);
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: cancelText,
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: deleteText,
+          handler: () => {
+            this.tiendaService.eliminarCita(cita, uidCita, this.usuario.uid);
+          }
         }
-      }
-    ]
-  });
+      ]
+    });
 
-  await alert.present();
-}
+    await alert.present();
+  }
 
   aceptarCita(cita: Cita) {
     return this.tiendaService.aceptarCita(cita.uidCita, cita.uidTatuador!, this.usuario.uid);

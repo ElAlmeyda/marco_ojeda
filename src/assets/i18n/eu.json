@@ -50,7 +50,8 @@
     "VERIFICATION_SENT_MESSAGE": "Balioztapen posta bidali dugu",
     "NOT_RECEIVED": "Ez duzu posta jaso?",
     "RESEND_EMAIL": "Berriro bidali posta",
-    "ALREADY_VERIFIED": "Dagoeneko balioztatu dut nire posta"
+    "ALREADY_VERIFIED": "Dagoeneko balioztatu dut nire posta",
+    "DANGER_ZONE":"Ekintza atzeraezinak"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Hasi saioa tatuatzaile gogokoak izan ahal izateko",
@@ -116,6 +117,7 @@
     "Trash Polka": "Trash Polka",
     "Watercolor": "Akvarela",
     "Japanese": "Japoniera",
+    "Sketch": "Sketch / Bocetoa",
     "Tribal": "Tribala",
     "Surrealismo": "Surrealismoa",
     "Biomecánico": "Biomekanikoa",
@@ -255,7 +257,8 @@
     "ABOUT_US": "Guri buruz",
     "ABOUT_US_DESC": "Ezagutu gure aplikazioari buruz gehiago.",
     "LANGUAGE": "Hizkuntza",
-    "SELECT_LANGUAGE": "Hautatu hizkuntza"
+    "SELECT_LANGUAGE": "Hautatu hizkuntza",
+    "THEME": "Gaia"
   },
   "APPOINTMENT_STATUS": {
     "Pendiente": "Zain",

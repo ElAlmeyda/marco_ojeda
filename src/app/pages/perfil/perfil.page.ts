@@ -9,6 +9,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NotificacionService } from 'src/app/service/notificacion.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage-angular';
+import { ThemeService } from 'src/app/backend/theme.service';
 
 
 @Component({
@@ -41,12 +42,14 @@ export class PerfilPage implements OnInit {
   phone: string='';
   numeroIncorrecto=false;
   usuariosBloqueados: Usuario[] = [];
+  temaActual: 'dark' | 'light' = 'dark';
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private alertController: AlertController,
-              public firestore: FirestoreService, private loadingCtrl: LoadingController, private afAuth: AngularFireAuth, public toast: ToastController,
+              private themeService: ThemeService, public firestore: FirestoreService, private loadingCtrl: LoadingController, private afAuth: AngularFireAuth, public toast: ToastController,
                public notificacion: NotificacionService, public translate: TranslateService, public storage: Storage
   ) { 
     this.translate.setDefaultLang('es');
+    this.temaActual = this.themeService.getTemaActual();
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
@@ -314,5 +317,10 @@ export class PerfilPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  cambiarTema(tema: 'dark' | 'light') {
+    this.temaActual = tema;
+    this.themeService.cambiarTema(tema);
   }
 }

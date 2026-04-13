@@ -1,160 +1,181 @@
-<ion-content [fullscreen]="true">
+<ion-header [translucent]="true">
+  <ion-toolbar style="padding-top: var(--ion-safe-area-top); padding-inline: 10px;">
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" class="explore-content">
 
-  <!-- Todo lo que se muestra antes de seleccionar un boceto -->
+  <!-- ── Vista principal (sin boceto seleccionado) ── -->
   <div *ngIf="!bocetoSeleccionado">
 
-    <!-- Segmento Noticias / Explorar -->
-    <ion-segment style="margin-top: 30%;" [(ngModel)]="segmentoSeleccionado" value="recientes" (ionChange)="onSegmentChange($event)">
-      <ion-segment-button value="recientes">
-        <ion-label style="color:white">{{ 'NOTICIA' | translate }}</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="antiguas">
-        <ion-label style="color:white">{{ 'EXPLORAR' | translate }}</ion-label>
-      </ion-segment-button>
-    </ion-segment>
+    <!-- Segmento -->
+    <div class="segment-wrapper">
+      <ion-segment [(ngModel)]="segmentoSeleccionado" value="recientes"
+        (ionChange)="onSegmentChange($event)" class="custom-segment">
+        <ion-segment-button value="recientes" class="custom-segment-btn">
+          <ion-label>{{ 'NOTICIA' | translate }}</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="antiguas" class="custom-segment-btn">
+          <ion-label>{{ 'EXPLORAR' | translate }}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
 
-    <!-- Noticias recientes -->
-    <ion-list *ngIf="segmentoSeleccionado === 'recientes'" lines="none" style="background-color: transparent;">
-      <ion-card *ngFor="let noticia of noticias" class="noticia-card" (click)="abrirModal(noticia)">
-        <ion-img 
-          *ngIf="noticia.imagenes" 
-          [src]="noticia.imagenes" 
-          style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px;">
-        </ion-img>
-        <ion-card-header>
-          <ion-card-title>{{ noticia.titulo }}</ion-card-title>
-          <ion-card-subtitle>{{ noticia.fecha?.toDate() | date:'short' }}</ion-card-subtitle>
-        </ion-card-header>
-      </ion-card>
-      <ion-modal #modal>
-        <ng-template>
-          <ion-card style="margin: 30% 16px 30px 16px; border-radius: 12px; overflow: hidden;">
-            
-            <!-- Imagen -->
-            <ion-img 
-              *ngIf="noticiaSeleccionada?.imagenes" 
-              [src]="noticiaSeleccionada.imagenes" 
-              style="width: 100%; height: 250px; object-fit: cover;">
-            </ion-img>
+    <!-- ── Noticias ── -->
+    <div class="news-list" *ngIf="segmentoSeleccionado === 'recientes'">
+      <div class="news-card" *ngFor="let noticia of noticias" (click)="abrirModal(noticia)">
+        <div class="news-img-wrap" *ngIf="noticia.imagenes">
+          <ion-img [src]="noticia.imagenes" class="news-img"></ion-img>
+          <div class="news-img-overlay"></div>
+        </div>
+        <div class="news-body">
+          <span class="news-date">{{ noticia.fecha?.toDate() | date:'shortDate' }}</span>
+          <h3 class="news-title">{{ noticia.titulo }}</h3>
+        </div>
+      </div>
+    </div>
 
-            <!-- Botón cerrar -->
-            <ion-buttons style="position: absolute; top: 10px; left: 10px; z-index: 10;">
-              <ion-button (click)="cerrarModal()"><ion-icon name="close-circle-outline" color="danger" size="large"></ion-icon></ion-button>
-            </ion-buttons>
+    <!-- Modal noticia -->
+    <ion-modal #modal>
+      <ng-template>
+        <div class="modal-inner">
+          <div class="modal-img-wrap" *ngIf="noticiaSeleccionada?.imagenes">
+            <ion-img [src]="noticiaSeleccionada.imagenes" class="modal-img"></ion-img>
+            <div class="modal-img-overlay"></div>
+          </div>
+          <button class="modal-close-btn" (click)="cerrarModal()">
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+          <div class="modal-body">
+            <span class="news-date">{{ noticiaSeleccionada?.fecha?.toDate() | date:'fullDate' }}</span>
+            <h2 class="modal-title">{{ noticiaSeleccionada?.titulo }}</h2>
+            <p class="modal-desc">{{ noticiaSeleccionada?.descripcion }}</p>
+          </div>
+        </div>
+      </ng-template>
+    </ion-modal>
 
-            <!-- Contenido del card -->
-            <ion-card-content style="padding: 16px;">
-              <h1 class="titulo-noticia" style="color:white;">{{ noticiaSeleccionada?.titulo }}</h1>
-              <p class="fecha-noticia" style="color:white;">{{ noticiaSeleccionada?.fecha?.toDate() | date:'fullDate' }}</p>
-              <p class="descripcion-noticia" style="color:white;">{{ noticiaSeleccionada?.descripcion }}</p>
-            </ion-card-content>
+    <!-- ── Explorar / Bocetos ── -->
+    <div class="explore-wrapper" *ngIf="segmentoSeleccionado === 'antiguas'">
 
-          </ion-card>
-        </ng-template>
-      </ion-modal>
-    </ion-list>
-
-    <!-- Segmento antiguas / bocetos -->
-    <ion-card-content class="card-content" *ngIf="segmentoSeleccionado === 'antiguas'">
-      <div #scrollContainer class="filtros-estilos" style="display: flex; overflow-x: auto; padding: 10px; gap: 10px; scroll-behavior: smooth;">
-        <div *ngFor="let estilo of estilos" style="flex: 0 0 auto; text-align: center; cursor: pointer;" (click)="seleccionarEstilo(estilo)">
-          <ion-avatar [style.border]="estiloSeleccionado === estilo.nombre ? '2px solid #3880ff' : '2px solid transparent'" style="width: 70px; height: 70px; margin: auto;">
+      <!-- Filtros de estilo -->
+      <div #scrollContainer class="styles-scroll">
+        <div class="style-chip" *ngFor="let estilo of estilos"
+          [class.style-chip-active]="estiloSeleccionado === estilo.nombre"
+          (click)="seleccionarEstilo(estilo)">
+          <div class="style-avatar">
             <img [src]="estilo.imagen" />
-          </ion-avatar>
-          <p style="font-size: 12px; margin-top: 5px; width: 80px; white-space: normal;">{{ ('STYLE.' + estilo.nombre) | translate }}</p>
-        </div>
-      </div>
-
-      <div *ngIf="cargando">{{ 'SKETCHES.LOADING' | translate }}</div>
-
-      <div *ngIf="!cargando" class="bocetos-grid">
-       <ion-grid *ngIf="bocetosFiltrados.length > 0">
-          <ion-row>
-            <ion-col size="6" size-md="4" size-lg="3" *ngFor="let boceto of bocetosFiltrados">
-              <div class="boceto-card" (click)="seleccionarBoceto(boceto)">
-                <img [src]="boceto.imagenUrl" alt="boceto" />
-                <ion-icon
-                  [name]="boceto.favorito ? 'heart' : 'heart-outline'"
-                  color="danger"
-                  style="position: absolute; top: 8px; right: 8px; font-size: 26px; background: rgba(255,255,255,0.8); border-radius: 50%; padding: 4px;"
-                  (click)="toggleFavoritoBoceto(boceto, $event)">
-                </ion-icon>
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-
-        <!-- Mensaje si no hay bocetos para el estilo seleccionado -->
-        <div *ngIf="bocetosFiltrados.length === 0">
-          {{ 'SKETCHES.NO_MATCHING' | translate }}
-        </div>
-      </div>
-      <div *ngIf="!cargando && bocetos.length === 0">
-        {{ 'SKETCHES.NO_SKETCHES' | translate }}
-      </div>
-    </ion-card-content>
-
-  </div> <!-- Fin de *ngIf="!bocetoSeleccionado" -->
-
-  <!-- Detalle del boceto seleccionado -->
-  <ion-card *ngIf="bocetoSeleccionado" style="margin: 30% 16px 30px 16px; border-radius:12px; padding: 16px;">
-    <div class="detalle-boceto">
-      <ion-toolbar style="--background: transparent !important; background: transparent !important;">
-        <ion-icon class="toolbar-icon" name="arrow-back-outline" slot="start" (click)="volverLista()"></ion-icon>
-        <p style="margin:0; font-weight:bold;">{{ tatuador.nombreTienda }}</p>
-        <ion-icon
-          [name]="bocetoSeleccionado.favorito ? 'heart' : 'heart-outline'"
-          color="danger"
-          style="position: absolute; top: 8px; right: 8px; font-size: 26px; background: rgba(255,255,255,0.8); border-radius: 50%; padding: 4px;"
-          (click)="toggleFavoritoBoceto(bocetoSeleccionado, $event)">
-        </ion-icon>
-      </ion-toolbar>
-
-      <img [src]="bocetoSeleccionado.imagenUrl" alt="boceto" style="width: 100%; border-radius: 12px; margin-top: 10px; height: 300px; object-fit: cover;" />
-      <div style="display: flex; flex-direction: column; gap: 15px; padding: 15px;">
-
-        <!-- Header: Avatar + nombre y ciudad -->
-        <div style="display: flex; align-items: center; gap: 15px;">
-          
-          <!-- Avatar -->
-          <div style="width: 70px; height: 70px; border-radius: 50%; overflow: hidden; flex-shrink: 0;">
-            <ion-img 
-              [src]="avatarUrl" 
-              alt="Avatar" 
-              style="width: 100%; height: 100%; object-fit: cover; display: block;" 
-              [routerLink]="['/tatuador', bocetoSeleccionado.uidTatuador]">
-            </ion-img>
           </div>
-
-          <!-- Nombre y ciudad -->
-          <div style="display: flex; flex-direction: column; justify-content: center; gap: 4px;">
-            
-            <p 
-              style="margin: 0; font-size: 14px; color: gray; cursor: pointer;" 
-              *ngIf="tatuador.ciudad" 
-              (click)="abrirMaps(tatuador.ciudad)">
-              {{ tatuador.ciudad }}
-            </p>
-            <ion-label *ngIf="bocetoSeleccionado.estilo.length !== 0">{{ 'STYLE.' + bocetoSeleccionado.estilo | translate }}</ion-label>
-
-            <ng-container *ngIf="!bocetoSeleccionado.estilo || bocetoSeleccionado.estilo.length === 0">
-              <ion-label>{{ 'NOT_SPECIFIED' | translate }}</ion-label>
-            </ng-container>
-          </div>
-
+          <span class="style-label">{{ ('STYLE.' + estilo.nombre) | translate }}</span>
         </div>
+      </div>
 
-        <!-- Descripción -->
-        <p style="margin: 0; font-size: 14px; text-align: center;">
-          {{ bocetoSeleccionado.descripcion }}
-        </p>
-        <ion-button size="small" (click)="consultaPrevia()" style="margin-top: 10px; text-align: center;">
-          {{ 'PRE_CONSULTATION' | translate }}
-        </ion-button>
+      <!-- Loading -->
+      <div class="loading-state" *ngIf="cargando">
+        <ion-spinner name="crescent" class="gold-spinner"></ion-spinner>
+        <span>{{ 'SKETCHES.LOADING' | translate }}</span>
+      </div>
+
+      <!-- Grid bocetos -->
+      <div class="bocetos-grid" *ngIf="!cargando && !estiloSeleccionado && bocetos.length > 0">
+        <div class="boceto-tile" *ngFor="let boceto of bocetos"
+          (click)="seleccionarBoceto(boceto)">
+          <img [src]="boceto.imagenUrl" alt="boceto" class="boceto-img" />
+          <div class="boceto-overlay"></div>
+          <button class="heart-btn" (click)="toggleFavoritoBoceto(boceto, $event)">
+            <ion-icon [name]="boceto.favorito ? 'heart' : 'heart-outline'"
+              [class.heart-active]="boceto.favorito"></ion-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Grid bocetos CON filtro (estilo seleccionado) -->
+      <div class="bocetos-grid" *ngIf="!cargando && estiloSeleccionado && bocetosFiltrados.length > 0">
+        <div class="boceto-tile" *ngFor="let boceto of bocetosFiltrados"
+          (click)="seleccionarBoceto(boceto)">
+          <img [src]="boceto.imagenUrl" alt="boceto" class="boceto-img" />
+          <div class="boceto-overlay"></div>
+          <button class="heart-btn" (click)="toggleFavoritoBoceto(boceto, $event)">
+            <ion-icon [name]="boceto.favorito ? 'heart' : 'heart-outline'"
+              [class.heart-active]="boceto.favorito"></ion-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty state solo cuando hay filtro activo y no hay resultados -->
+      <div class="empty-state" *ngIf="!cargando && estiloSeleccionado && bocetosFiltrados.length === 0">
+        <div class="empty-icon-wrap">
+          <ion-icon name="image-outline"></ion-icon>
+        </div>
+        <p class="empty-text">{{ 'SKETCHES.NO_MATCHING' | translate }}</p>
+      </div>
+
+      <!-- Empty state general sin filtro -->
+      <div class="empty-state" *ngIf="!cargando && !estiloSeleccionado && bocetos.length === 0">
+        <div class="empty-icon-wrap">
+          <ion-icon name="image-outline"></ion-icon>
+        </div>
+        <p class="empty-text">{{ 'SKETCHES.NO_SKETCHES' | translate }}</p>
       </div>
 
     </div>
-  </ion-card>
-  
+  </div>
+
+  <!-- ── Detalle del boceto ── -->
+  <div class="boceto-detail" *ngIf="bocetoSeleccionado">
+
+    <!-- Toolbar -->
+    <div class="detail-toolbar">
+      <button class="back-btn" (click)="volverLista()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </button>
+      <span class="detail-shop-name">{{ tatuador.nombreTienda }}</span>
+      <button class="heart-btn heart-btn-toolbar"
+        (click)="toggleFavoritoBoceto(bocetoSeleccionado, $event)">
+        <ion-icon [name]="bocetoSeleccionado.favorito ? 'heart' : 'heart-outline'"
+          [class.heart-active]="bocetoSeleccionado.favorito"></ion-icon>
+      </button>
+    </div>
+
+    <!-- Imagen principal -->
+    <div class="detail-img-wrap">
+      <img [src]="bocetoSeleccionado.imagenUrl" alt="boceto" class="detail-img" />
+      <div class="detail-img-overlay"></div>
+    </div>
+
+    <!-- Info -->
+    <div class="detail-body">
+
+      <!-- Avatar + ciudad + estilo -->
+      <div class="detail-artist-row">
+        <div class="detail-avatar" [routerLink]="['/tatuador', bocetoSeleccionado.uidTatuador]">
+          <ion-img [src]="avatarUrl" alt="Avatar"></ion-img>
+        </div>
+        <div class="detail-artist-info">
+          <span class="detail-city" *ngIf="tatuador.ciudad" (click)="abrirMaps(tatuador.ciudad)">
+            <ion-icon name="location-outline"></ion-icon>
+            {{ tatuador.ciudad }}
+          </span>
+          <span class="detail-style" *ngIf="bocetoSeleccionado.estilo?.length">
+            {{ 'STYLE.' + bocetoSeleccionado.estilo | translate }}
+          </span>
+          <span class="detail-style" *ngIf="!bocetoSeleccionado.estilo || !bocetoSeleccionado.estilo.length">
+            {{ 'NOT_SPECIFIED' | translate }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <p class="detail-desc" *ngIf="bocetoSeleccionado.descripcion">
+        {{ bocetoSeleccionado.descripcion }}
+      </p>
+
+      <!-- CTA -->
+      <ion-button expand="block" class="consult-btn" (click)="consultaPrevia()">
+        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        {{ 'PRE_CONSULTATION' | translate }}
+      </ion-button>
+
+    </div>
+  </div>
 
 </ion-content>

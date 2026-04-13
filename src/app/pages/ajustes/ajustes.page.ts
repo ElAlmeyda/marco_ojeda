@@ -230,18 +230,37 @@ export class AjustesPage implements OnInit {
 
   obtenerHistorial() {
     this.tiendaService.getCitasUsuario(this.usuarioActual.uid).subscribe((citas: any[]) => {
-      
-      // Filtrar solo citas aceptadas y que ya hayan pasado
+
       const ahora = new Date();
 
       this.citas = citas.filter(cita => {
-        const fechaCita = new Date(cita.fecha); // si tienes fecha + hora, ajusta: new Date(cita.fecha + ' ' + cita.hora)
-        return cita.estado === 'aceptada' && fechaCita < ahora;
+        // Crear fecha completa con hora
+        const fechaCita = new Date(cita.dia);
+        const [hora, minuto] = cita.hora.split(':').map(Number);
+        fechaCita.setHours(hora, minuto, 0, 0);
+
+        // Solo citas aceptadas que ya hayan pasado
+        return cita.estado === 'Aceptado' && fechaCita.getTime() < ahora.getTime();
+      });
+
+      // Ordenar del más reciente al más antiguo (opcional pero recomendable en historial)
+      this.citas.sort((a, b) => {
+        const fechaA = new Date(a.dia);
+        const fechaB = new Date(b.dia);
+
+        const [horaA, minA] = a.hora.split(':').map(Number);
+        const [horaB, minB] = b.hora.split(':').map(Number);
+
+        fechaA.setHours(horaA, minA, 0, 0);
+        fechaB.setHours(horaB, minB, 0, 0);
+
+        return fechaB.getTime() - fechaA.getTime(); // más reciente primero
       });
 
       console.log('Historial de citas pasadas y aceptadas:', this.citas);
     });
   }
+
 
 
   async ngOnInit() {
@@ -375,4 +394,35 @@ export class AjustesPage implements OnInit {
     this.router.navigate(['/pago']);
   }
 
+  async showActionSheetMovil(campo: string) {
+    const actionSheet = await this.alertController.create({
+      header: this.translate.instant('EDIT_FIELD'),
+      inputs: [
+        {
+          name: 'movil',
+          type: 'text',
+          placeholder: this.translate.instant('PLACEHOLDER_MOBILE'),
+          value: this.usuarioActual.movil
+        }
+      ],
+      buttons: [
+        {
+          text: this.translate.instant('BUTTON_EDIT'),
+        handler: (data: { movil: string; }) => {
+          if (data.movil) {
+            this.usuarioActual.movil = data.movil;
+            this.firestore.updateMovil(this.usuarioActual.movil, this.usuarioActual.uid);
+          }
+          }
+        },
+        {
+          text: this.translate.instant('BUTTON_CANCEL'),
+          role: 'cancel'
+        }
+      ]
+    });
+
+    await actionSheet.present();
+  }
+  
 }

@@ -49,7 +49,8 @@
     "VERIFICATION_SENT_MESSAGE": "Hemos enviado un correo de verificación a",
     "NOT_RECEIVED": "¿No recibiste el correo?",
     "RESEND_EMAIL": "Reenviar correo",
-    "ALREADY_VERIFIED": "Ya he verificado mi correo"
+    "ALREADY_VERIFIED": "Ya he verificado mi correo",
+    "DANGER_ZONE": "Acciones irreversibles"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Inicia sesión para poder tener tatuadores favoritos",
@@ -119,6 +120,7 @@
     "Surrealismo": "Surrealismo",
     "Biomecánico": "Biomecánico",
     "Anime": "Anime",
+    "Sketch": "Sketch / Boceto",
     "Oriental": "Oriental",
     "Microrealismo": "Microrealismo",
     "Mahori": "Mahori",
@@ -254,7 +256,8 @@
     "ABOUT_US": "Sobre Nosotros",
     "ABOUT_US_DESC": "Conoce más acerca de nuestra aplicación.",
     "LANGUAGE": "Idioma",
-    "SELECT_LANGUAGE": "Selecciona un idioma"
+    "SELECT_LANGUAGE": "Selecciona un idioma",
+    "THEME": "Tema"
   },
   "EDIT_FIELD": "Editar {{field}}",
   "PLACEHOLDER_NAME": "Ingrese el nuevo nombre",
@@ -505,6 +508,13 @@
   "ADD_FAVORITE": "Añadir a favoritos",
   "REMOVE_FAVORITE": "Quitar de favoritos",
   "VIEW_CONSENTS": "Ver consentimientos"
-}
+},
+"PLANS": {
+    "RENEWAL_POLICY": "La suscripción se renovará automáticamente a menos que se cancele con al menos 24 horas de antelación",
+    "ACCEPT_TERMS": "Al continuar, aceptas los ",
+    "TERMS_OF_USE": "Términos de uso",
+    "AND": " y la ",
+    "PRIVACY_POLICY": "Política de privacidad"
+  }
 
 }

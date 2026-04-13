@@ -50,7 +50,8 @@
     "VERIFICATION_SENT_MESSAGE": "Enviamos un correo de verificación a",
     "NOT_RECEIVED": "Non recibiches o correo?",
     "RESEND_EMAIL": "Reenviar correo",
-    "ALREADY_VERIFIED": "Xa verifiquei o meu correo"
+    "ALREADY_VERIFIED": "Xa verifiquei o meu correo",
+    "DANGER_ZONE":"Accións irreversibles"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Inicia sesión para poder ter tatuadores favoritos",
@@ -115,6 +116,7 @@
     "Lettering": "Lettering",
     "Trash Polka": "Trash Polka",
     "Watercolor": "Acuarela",
+    "Sketch": "Sketch / Boceto",
     "Japanese": "Xaponés",
     "Tribal": "Tribal",
     "Surrealismo": "Surrealismo",
@@ -255,7 +257,8 @@
     "ABOUT_US": "Sobre Nós",
     "ABOUT_US_DESC": "Coñece máis sobre a nosa aplicación.",
     "LANGUAGE": "Idioma",
-    "SELECT_LANGUAGE": "Selecciona un idioma"
+    "SELECT_LANGUAGE": "Selecciona un idioma",
+    "THEME": "Tema"
   },
   "APPOINTMENT_STATUS": {
     "Pendiente": "Pendente",

@@ -134,6 +134,7 @@ export class TatuadorPage implements OnInit {
 
   async abrirMenu() {
     const actionSheet = await this.actionSheetCtrl.create({
+      cssClass: 'custom-action-sheet',
       buttons: [
         {
           text: this.translate.instant('ACTIONSHEET.SHARE'),

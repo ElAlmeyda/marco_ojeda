@@ -49,7 +49,8 @@
     "VERIFICATION_SENT_MESSAGE": "Wir haben eine Bestätigungs-E-Mail gesendet an",
     "NOT_RECEIVED": "E-Mail nicht erhalten?",
     "RESEND_EMAIL": "E-Mail erneut senden",
-    "ALREADY_VERIFIED": "Meine E-Mail ist bereits verifiziert"
+    "ALREADY_VERIFIED": "Meine E-Mail ist bereits verifiziert",
+    "DANGER_ZONE":"Unumkehrbare Aktionen"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Melde dich an, um Lieblings-Tätowierer zu speichern",
@@ -116,6 +117,7 @@
     "Watercolor": "Aquarell",
     "Japanese": "Japanisch",
     "Tribal": "Tribal",
+    "Sketch": "Sketch / Skizze",
     "Surrealismo": "Surrealismus",
     "Biomecánico": "Biomechanisch",
     "Anime": "Anime",
@@ -254,7 +256,8 @@
     "ABOUT_US": "Über uns",
     "ABOUT_US_DESC": "Erfahre mehr über unsere App.",
     "LANGUAGE": "Sprache",
-    "SELECT_LANGUAGE": "Wähle eine Sprache"
+    "SELECT_LANGUAGE": "Wähle eine Sprache",
+    "THEME": "Thema"
   },
   "APPOINTMENT_STATUS": {
     "Pendiente": "Ausstehend",

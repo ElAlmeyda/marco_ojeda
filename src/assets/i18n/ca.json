@@ -49,7 +49,8 @@
     "VERIFICATION_SENT_MESSAGE": "Hem enviat un correu de verificació a",
     "NOT_RECEIVED": "No has rebut el correu?",
     "RESEND_EMAIL": "Reenviar correu",
-    "ALREADY_VERIFIED": "Ja he verificat el meu correu"
+    "ALREADY_VERIFIED": "Ja he verificat el meu correu",
+    "DANGER_ZONE": "Accions irreversibles"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Inicia sessió per poder tenir tatuadors favorits",
@@ -122,6 +123,7 @@
     "Oriental": "Oriental",
     "Microrealismo": "Microrealisme",
     "Mahori": "Mahori",
+    "Sketch": "Sketch / Boceto",
     "Chicano": "Chicano"
   },
   "COMMENT_PLACEHOLDER": "Escriu la teva opinió...",
@@ -254,7 +256,8 @@
     "ABOUT_US": "Sobre nosaltres",
     "ABOUT_US_DESC": "Coneix més sobre la nostra aplicació.",
     "LANGUAGE": "Idioma",
-    "SELECT_LANGUAGE": "Selecciona un idioma"
+    "SELECT_LANGUAGE": "Selecciona un idioma",
+    "THEME": "Tema"
   },
   "APPOINTMENT_STATUS": {
     "Pendiente": "Pendent",
@@ -522,5 +525,6 @@
   "REMOVE_FAVORITE": "Treure dels favorits",
   "VIEW_CONSENTS": "Veure consentiments"
 }
+
 
 }

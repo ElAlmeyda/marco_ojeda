@@ -1,109 +1,90 @@
-.center-text {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-  
-  ion-card {
-    padding: 20px;
-    margin: 10px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+// ── Toolbar ───────────────────────────────────────────────
+.pay-toolbar {
+  --background: #121212;
+  --border-color: transparent;
+  padding-top: var(--ion-safe-area-top);
+  padding-inline: 10px;
+}
 
-  ion-list {
-    background: transparent !important; /* Asegura que el fondo sea transparente */
-  }
-  
-  ion-item {
-    font-size:12px;
-    --background: transparent !important; /* Elimina el fondo del ion-item */
-    --ion-item-background: transparent !important; /* Otra propiedad que puede afectar el fondo */
-    color: black; /* Asegura que el texto sea visible */
-  }
-  
-  
-  ion-footer {
-    margin-top: auto; /* Esto empuja el footer al fondo */
-    padding: 20px;
-    text-align: center;
-  }
-  
-  ion-button {
-    margin-top: 20px;
-  }
-  
-  ion-label {
-    font-size: 16px;
-    text-align: center;
-  }
-  
-  .toolbar-sin-fondo {
-    --background: transparent;   /* fondo transparente */
-    --ion-toolbar-box-shadow: none;  /* elimina la sombra inferior */
-  }
+.pay-close-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #1A1A1A;
+  border: 1px solid #2E2E2E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #808080;
+  font-size: 18px;
+  margin-left: 4px;
+  transition: border-color 0.2s, color 0.2s;
 
+  &:hover {
+    border-color: #B14A44;
+    color: #B14A44;
+  }
+}
 
-  .user-card {
-    flex-shrink: 0;
-    width: 280px; /* Aumenta aún más el tamaño de las tarjetas */
-    height: 450px; /* Aumenta la altura */
-    margin-right: 20px; /* Espaciado entre tarjetas */
-    display: inline-block; /* Asegura que las tarjetas estén en fila */
-    border-radius: 12px;
-    border: 2px solid white;
-    background-color: #f4f4f4; /* Color de fondo de las tarjetas */
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  
-  .horizontal-scroll {
-    display: flex; /* Asegura que los hijos estén en fila */
-    overflow-x: auto; /* Permite el desplazamiento horizontal */
-    white-space: nowrap; /* Previene el salto de línea */
-    padding: 10px 0; /* Espaciado vertical */
-    gap: 20px; /* Espaciado entre los elementos dentro del scroll */
-    width: 100%;
-  }
-  
-  /* Ocultar la barra de desplazamiento en navegadores WebKit */
-  .horizontal-scroll::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* Ocultar la barra de desplazamiento en Firefox */
-  .horizontal-scroll {
-    scrollbar-width: none; /* Firefox */
-  }
-  
-  /* Para navegadores de Microsoft */
-  .horizontal-scroll {
-    -ms-overflow-style: none; /* Internet Explorer y Edge */
-  }
+// ── Page wrapper ──────────────────────────────────────────
+.pay-wrapper {
+  padding: 8px 20px 120px;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
 
-  .privacy-item a {
-    color: grey;
-    text-decoration: none;
-    font-size: 12px;
+// ── Hero ──────────────────────────────────────────────────
+.pay-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 12px;
+  gap: 6px;
+}
 
-  }
+.pay-hero-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 2px solid #C9A86A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  background: rgba(201, 168, 106, 0.06);
 
-  .privacy-item {
-    color: grey;
-    font-size: 12px;
+  ion-icon {
+    font-size: 32px;
+    color: #C9A86A;
   }
+}
 
-  .card-content{
-    display: flex;
-    flex-direction: column;
-    height: 70%;
-  }
+.explore-eyebrow {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #C9A86A;
+}
 
-  .price-item {
-    position: absolute;
-    bottom: 10px; /* Distancia desde la parte inferior */
-    left: 10px; /* Distancia desde la izquierda */
-    font-weight: bold;
-  }
-  
+.pay-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #EDEDED;
+  margin: 2px 0 0;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+.pay-subtitle {
+  font-size: 0.88rem;
+  color: #808080;
+  line-height: 1.5;
+  margin: 4px 0 0;
+  max-width: 300px;
+}

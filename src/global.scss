@@ -70,12 +70,3 @@ body {
   object-fit: cover;          /* Corta el video para llenar toda la pantalla sin distorsión */
   object-position: center;    /* Centra el video */
 }
-
-ion-app, ion-content {
-  --background: none;
-  background: url("assets/img/fondo.jpg") no-repeat center center / cover;
-}
-
-
-
-
