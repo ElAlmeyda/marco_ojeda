@@ -1,6 +1,6 @@
 // ── Toolbar ───────────────────────────────────────────────
 .pay-toolbar {
-  --background: #121212;
+  background: var(--ion-card-background);
   --border-color: transparent;
   padding-top: var(--ion-safe-area-top);
   padding-inline: 10px;
@@ -10,7 +10,7 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: #1A1A1A;
+  background: var(--ion-card-background);
   border: 1px solid #2E2E2E;
   display: flex;
   align-items: center;
@@ -56,7 +56,7 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 8px;
-  background: rgba(201, 168, 106, 0.06);
+  background: var(--ion-card-background);
 
   ion-icon {
     font-size: 32px;
@@ -75,7 +75,7 @@
 .pay-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #EDEDED;
+  color: var(--ion-text-color);
   margin: 2px 0 0;
   letter-spacing: 0.01em;
   line-height: 1.2;

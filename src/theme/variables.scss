@@ -172,10 +172,10 @@
 }
 
 .form-item {
-  --background: #1A1A1A;
+  background: var(--ion-card-background);
   --border-color: #2E2E2E;
   --border-radius: 10px;
-  --color: #EDEDED;
+  color: var(--ion-text-color);
   --placeholder-color: #808080;
   --highlight-color-focused: #C9A86A;
   --label-color: #808080;
@@ -744,7 +744,7 @@
 
 .logout-btn {
   --background: transparent;
-  --color: #EDEDED;
+  color: var(--ion-text-color);
   --border-color: #2E2E2E;
   --border-width: 1.5px;
   --border-radius: 12px;
@@ -895,7 +895,7 @@
 .artist-shop-name {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #EDEDED;
+  color: var(--ion-text-color);
   margin: 0 0 16px;
   letter-spacing: 0.01em;
 }
@@ -1653,7 +1653,7 @@
 
 // ── Info card del evento ──────────────────────────────────
 .event-info-card {
-  background: #1A1A1A;
+  background: var(--ion-card-background);
   border-radius: 14px;
   border: 1px solid #2E2E2E;
   padding: 16px 18px;
@@ -1662,7 +1662,7 @@
 
 .event-desc {
   font-size: 0.88rem;
-  color: #AAAAAA;
+  color: var(--ion-text-color);
   line-height: 1.5;
   margin: 0 0 12px;
 }
@@ -1741,14 +1741,6 @@
   text-transform: uppercase;
   color: #C9A86A;
   margin-bottom: 3px;
-}
-
-.artist-name {
-  font-size: 1.05rem !important;
-  font-weight: 700 !important;
-  color: #EDEDED !important;
-  word-break: break-word;
-  line-height: 1.3;
 }
 
 .whatsapp-btn {
@@ -2555,7 +2547,7 @@
 .artist-name {
   font-size: 0.88rem;
   font-weight: 700;
-  color: #EDEDED;
+  color: var(--ion-text-color);
   margin: 0;
   line-height: 1.3;
   overflow: hidden;
@@ -2985,7 +2977,7 @@
 .plan-name {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #EDEDED;
+  color: var(--ion-text-color);
   margin: 0;
   letter-spacing: 0.01em;
 }
@@ -3045,7 +3037,7 @@
   left: 0;
   right: 0;
   padding: 12px 20px calc(var(--ion-safe-area-bottom) + 16px);
-  background: linear-gradient(to top, #121212 70%, transparent);
+  background: var(--ion-card-background);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -3100,7 +3092,7 @@
 }
 
 .plan-card {
-  background: #1A1A1A;
+  background: var(--ion-card-background);
   border-radius: 14px;
   border: 1px solid #2E2E2E;
   padding: 16px 16px 16px 18px;
@@ -3175,10 +3167,10 @@
 }
 
 .form-item {
-  --background: #1A1A1A;
+  background: var(--ion-card-background);
   --border-color: #2E2E2E;
   --border-radius: 10px;
-  --color: #EDEDED;
+  color: var(--ion-text-color);
   --placeholder-color: #808080;
   --highlight-color-focused: #C9A86A;
   --padding-start: 14px;
@@ -3193,8 +3185,8 @@
 }
 
 ion-select.form-item {
-  --background: #1A1A1A;
-  --color: #EDEDED;
+  background: var(--ion-card-background);
+  color: var(--ion-text-color);
   --placeholder-color: #808080;
   padding: 13px 14px;
   border-radius: 10px;
@@ -3204,7 +3196,7 @@ ion-select.form-item {
 }
 
 .form-textarea {
-  --background: #1A1A1A;
+  background: var(--ion-card-background);
   --border-color: #2E2E2E;
   --border-radius: 10px;
   --color: #EDEDED;
@@ -3220,13 +3212,13 @@ ion-select.form-item {
 
 // ── Datetime ──────────────────────────────────────────────
 .datetime-wrap {
-  background: #1A1A1A;
+  background: var(--ion-card-background);
   border-radius: 12px;
   border: 1px solid #2E2E2E;
   overflow: hidden;
 
   ion-datetime {
-    --background: #1A1A1A;
+    background: var(--ion-card-background);
     --background-rgb: 26, 26, 26;
     --ion-color-primary: #C9A86A;
     --ion-color-primary-rgb: 201, 168, 106;
@@ -3357,8 +3349,8 @@ ion-select.form-item {
 .appt-cta-btn {
   width: 100%;
   height: 50px;
-  background: #C9A86A;
-  color: #121212;
+  background: var(--ion-card-background);
+  color: var(--ion-text-color);
   border: none;
   border-radius: 14px;
   font-size: 0.95rem;
@@ -3423,7 +3415,7 @@ ion-select.form-item {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: #1A1A1A;
+  background: var(--ion-card-background);
   border: 1px solid #2E2E2E;
   display: flex;
   align-items: center;
@@ -3449,7 +3441,7 @@ ion-select.form-item {
 .appt-title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #EDEDED;
+  color: var(--ion-text-color);
   margin: 0;
   letter-spacing: 0.01em;
 }
@@ -3492,19 +3484,19 @@ ion-select.form-item {
 
 .custom-action-sheet {
   .action-sheet-button {
-    color: #EDEDED !important;
+    color: var(--ion-text-color);
 
     .action-sheet-icon {
-      color: #EDEDED !important;
+      color: var(--ion-text-color);
     }
   }
 
   .action-sheet-group {
-    background: #1A1A1A !important;
+    background: var(--ion-card-background);
   }
 
   .action-sheet-cancel .action-sheet-button-inner {
-    color: #808080 !important;
+    color: var(--ion-text-color);
   }
 }
 
@@ -3692,9 +3684,9 @@ body.light-theme {
 
   // ── Action sheet ──────────────────────────────────────
   .custom-action-sheet {
-    .action-sheet-group  { background: #EDE8DF !important; }
-    .action-sheet-button { color: #1A1A1A !important; }
-    .action-sheet-icon   { color: #1A1A1A !important; }
+    .action-sheet-group  { background: var(--ion-card-background); }
+    .action-sheet-button { color: var(--ion-text-color); }
+    .action-sheet-icon   { color: var(--ion-text-color); }
   }
 }
 
