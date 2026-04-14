@@ -49,7 +49,8 @@
     "VERIFICATION_SENT_MESSAGE": "Hem enviat un correu de verificació a",
     "NOT_RECEIVED": "No has rebut el correu?",
     "RESEND_EMAIL": "Reenviar correu",
-    "ALREADY_VERIFIED": "Ja he verificat el meu correu"
+    "ALREADY_VERIFIED": "Ja he verificat el meu correu",
+    "DANGER_ZONE": "Accions irreversibles"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Inicia sessió per poder tenir tatuadors favorits",
@@ -91,6 +92,7 @@
   "WARNING": "Avís",
   "APPOINTMENT_WARNING": "El tatuador es pot negar a programar la cita si no s'ha fet una consulta prèvia. Vols continuar?",
   "CONTINUE": "Continuar",
+  "EVENTS": "Esdeveniments",
   "LOGIN_REQUIRED_APPOINTMENT": "Has d'iniciar sessió per demanar una cita",
   "REVIEW_REQUIRED": "Escriu un comentari o selecciona les estrelles",
   "SEARCH": "Cercar",
@@ -121,6 +123,7 @@
     "Oriental": "Oriental",
     "Microrealismo": "Microrealisme",
     "Mahori": "Mahori",
+    "Sketch": "Sketch / Boceto",
     "Chicano": "Chicano"
   },
   "COMMENT_PLACEHOLDER": "Escriu la teva opinió...",
@@ -132,7 +135,6 @@
     "TITLE": "Demanar cita a {{tienda}}",
     "WORKER": "Treballador",
     "TYPE": "Tipus de cita:",
-     "ACCEPT_TATTOO_TERMS": "He llegit i acceptat els consentiments del tatuador a qui li vull demanar una cita.",
     "SIZE_SMALL": "Petit (5-7cm)",
     "SIZE_MEDIUM": "Mitjà (10-13cm)",
     "SIZE_LARGE": "Gran (+15cm)",
@@ -152,6 +154,7 @@
     "ADD_COMMENTS": "Comentaris addicionals:",
     "UPLOAD_SKETCH": "Pujar esbós (opcional)",
     "ACCEPT_TERMS": "Accepto els termes i condicions i la política d'ús de l'app.",
+    "ACCEPT_TATTOO_TERMS": "He llegit i accepto les condicions del tatuador.",
     "BOOK": "Demanar cita",
     "NEXT": "Següent",
     "NO_HOURS": "No hi ha hores disponibles",
@@ -183,7 +186,6 @@
     "ZONE": "En quina zona:",
     "COMMENTS": "Comentaris addicionals:"
   },
-  "NOTICIA": "Notícies",
   "PLACEHOLDER": "Cercar",
   "TATTOOIST": {
     "EVENT_WARNING": "⚠️ El tatuador estarà a {{ciudad}}"
@@ -254,7 +256,8 @@
     "ABOUT_US": "Sobre nosaltres",
     "ABOUT_US_DESC": "Coneix més sobre la nostra aplicació.",
     "LANGUAGE": "Idioma",
-    "SELECT_LANGUAGE": "Selecciona un idioma"
+    "SELECT_LANGUAGE": "Selecciona un idioma",
+    "THEME": "Tema"
   },
   "APPOINTMENT_STATUS": {
     "Pendiente": "Pendent",
@@ -477,6 +480,7 @@
       "ANSWER": "Sí, pots actualitzar la teva informació personal, incloent nom, telèfon i foto de perfil, des de la secció 'Perfil'."
     }
   },
+  "NOTICIA": "Notícia",
   "PLANS": {
     "SELECT_PLAN": "Selecciona el teu pla",
     "NORMAL_PLAN": "Pla Bàsic",
@@ -496,7 +500,6 @@
     "AND": "i la nostra",
     "PRIVACY_POLICY": "Política de Privacitat"
   },
-  "EVENTS": "Esdeveniments",
   "PREFERIBLEMENTE": "Preferiblement",
   "MANANA": "Matí",
   "TARDE": "Tarda",
@@ -517,9 +520,11 @@
   "SKETCHES.NO_MATCHING": "No s'ha trobat cap esbós d'aquest estil.",
   "SKETCHES.NO_SKETCHES": "No hi ha esbossos disponibles",
   "ACTIONSHEET": {
-    "SHARE": "Compartir",
-    "ADD_FAVORITE": "Afegir als favorits",
-    "REMOVE_FAVORITE": "Treure dels favorits",
-    "VIEW_CONSENTS": "Veure consentiments"
-  }
+  "SHARE": "Compartir",
+  "ADD_FAVORITE": "Afegir als favorits",
+  "REMOVE_FAVORITE": "Treure dels favorits",
+  "VIEW_CONSENTS": "Veure consentiments"
+}
+
+
 }

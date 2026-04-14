@@ -1,6 +1,6 @@
 // ── Toolbar ───────────────────────────────────────────────
 .main-toolbar {
-  --background: #121212;
+  background: var(--ion-card-background);
   --border-width: 0;
   padding-top: var(--ion-safe-area-top);
   padding-inline: 12px;
@@ -36,7 +36,7 @@
 
 // ── Content ───────────────────────────────────────────────
 .events-content {
-  --background: #121212;
+  background: var(--ion-background-color);
 }
 
 .events-wrapper {

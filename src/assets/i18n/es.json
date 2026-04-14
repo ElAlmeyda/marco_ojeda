@@ -49,7 +49,8 @@
     "VERIFICATION_SENT_MESSAGE": "Hemos enviado un correo de verificación a",
     "NOT_RECEIVED": "¿No recibiste el correo?",
     "RESEND_EMAIL": "Reenviar correo",
-    "ALREADY_VERIFIED": "Ya he verificado mi correo"
+    "ALREADY_VERIFIED": "Ya he verificado mi correo",
+    "DANGER_ZONE": "Acciones irreversibles"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Inicia sesión para poder tener tatuadores favoritos",
@@ -76,10 +77,11 @@
     "NEW_PASSWORD": "Nueva Contraseña",
     "CHANGE_BUTTON": "Cambiar Contraseña"
   },
-  "TATTOO_SHOP": "Tienda de tatuajes",
+   "TATTOO_SHOP": "Tienda de tatuajes",
   "PRE_CONSULTATION": "Consulta Previa",
   "BOOK_APPOINTMENT": "Pedir Cita",
   "NO_PHOTOS": "No tiene fotos para mostrar.",
+  "EVENTS": "Eventos",
   "REVIEWS": "Reseñas",
   "NO_REVIEWS": "Este tatuador aún no tiene reseñas.",
   "LEAVE_REVIEW": "Deja tu reseña",
@@ -118,12 +120,12 @@
     "Surrealismo": "Surrealismo",
     "Biomecánico": "Biomecánico",
     "Anime": "Anime",
+    "Sketch": "Sketch / Boceto",
     "Oriental": "Oriental",
     "Microrealismo": "Microrealismo",
     "Mahori": "Mahori",
     "Chicano": "Chicano"
   },
-  "COMMENT_PLACEHOLDER": "Escribe tu opinión...",
   "APPOINTMENT": {
     "ACCEPT_CONDITIONS": "Debes aceptar las condiciones",
     "SAVED_SUCCESS": "La cita ha sido realizada, espera a que el tatuador conteste.",
@@ -132,7 +134,6 @@
     "TITLE": "Pedir Cita a {{tienda}}",
     "WORKER": "Trabajador",
     "TYPE": "Tipo de cita:",
-    "ACCEPT_TATTOO_TERMS": "He leído y aceptado los consentimientos del tatuador al que le voy a pedir una cita.",
     "SIZE_SMALL": "Pequeño (5-7cm)",
     "SIZE_MEDIUM": "Mediano (10-13cm)",
     "SIZE_LARGE": "Grande (+15cm)",
@@ -152,6 +153,7 @@
     "ADD_COMMENTS": "Comentarios adicionales:",
     "UPLOAD_SKETCH": "Subir boceto (opcional)",
     "ACCEPT_TERMS": "Acepto los términos y condiciones y la política de uso de la app.",
+    "ACCEPT_TATTOO_TERMS": "He leído y acepto las condiciones del tatuador.",
     "BOOK": "Pedir cita",
     "NEXT": "Siguiente",
     "NO_HOURS": "No hay horas disponibles",
@@ -183,7 +185,8 @@
     "ZONE": "En qué zona:",
     "COMMENTS": "Comentarios adicionales:"
   },
-  "PLACEHOLDER": "Buscar",
+  "NOTICIA": "Noticia",
+  "COMMENT_PLACEHOLDER": "Escribe tu opinión...",
   "TATTOOIST": {
     "EVENT_WARNING": "⚠️ El tatuador estará en {{ciudad}}"
   },
@@ -252,15 +255,11 @@
     "HELP_CENTER_DESC": "Encuentra respuestas a tus preguntas.",
     "ABOUT_US": "Sobre Nosotros",
     "ABOUT_US_DESC": "Conoce más acerca de nuestra aplicación.",
-     "LANGUAGE": "Idioma",
-    "SELECT_LANGUAGE": "Selecciona un idioma"
+    "LANGUAGE": "Idioma",
+    "SELECT_LANGUAGE": "Selecciona un idioma",
+    "THEME": "Tema"
   },
-  "APPOINTMENT_STATUS": {
-    "Pendiente": "Pendiente",
-    "Aceptado": "Aceptado",
-    "Editado": "Editado"
-  },
-  "EDIT_FIELD": "Editar",
+  "EDIT_FIELD": "Editar {{field}}",
   "PLACEHOLDER_NAME": "Ingrese el nuevo nombre",
   "PLACEHOLDER_MOBILE": "Ingrese el nuevo móvil",
   "BUTTON_EDIT": "Editar",
@@ -476,28 +475,15 @@
       "ANSWER": "Sí, puedes actualizar tu información personal, incluyendo nombre, teléfono y foto de perfil, desde la sección 'Perfil'."
     }
   },
-  "PLANS": {
-    "SELECT_PLAN": "Selecciona tu plan",
-    "NORMAL_PLAN": "Plan Básico",
-    "RECOMMENDED_PLAN": "Plan Recomendado",
-    "FULL_ACCESS": "Acceso completo a la plataforma",
-    "CALENDAR_MANAGEMENT": "Gestión de calendario y citas de clientes",
-    "STANDARD_SUPPORT": "Soporte estándar",
-    "INCLUDES_BASIC": "Todo lo del Plan Básico",
-    "HIGHLIGHTED_RECOMMENDATION": "Recomendación destacada en la app",
-    "PRIORITY_SEARCH": "Aparecerás antes que otros tatuadores en las búsquedas",
-    "MONTH": "mes",
-    "ONE_MONTH_DURATION": "1 mes de duración",
-
-    "RENEWAL_POLICY": "La suscripción tiene una duración de 1 mes y se renovará automáticamente por el mismo precio y período, salvo que la canceles al menos 24 horas antes del final del período actual.",
-    "MANAGE_SUBSCRIPTION": "Puedes administrar o cancelar tu suscripción en Ajustes > Apple ID > Suscripciones.",
-    "ACCEPT_TERMS": "Al suscribirte aceptas nuestros",
-    "TERMS_OF_USE": "Términos de Uso",
-    "AND": "y nuestra",
-    "PRIVACY_POLICY": "Política de Privacidad"
+  "LOADING_TATTOO_ARTISTS": "Estamos cargando los tatuadores...",
+  "ERROR_LOADING_TATTOO_ARTISTS": "Error al cargar los tatuadores.",
+  "RETRY": "Reintentar",
+  "PLACEHOLDER": "Buscar",
+  "STATUS": {
+    "Pendiente": "Pendiente",
+    "Aceptado": "Aceptado",
+    "Editada": "Editada"
   },
-  "NOTICIA":"Noticias",
-  "EVENTS": "Eventos",
   "PREFERIBLEMENTE": "Preferiblemente",
   "MANANA": "Mañana",
   "TARDE": "Tarde",
@@ -518,9 +504,17 @@
   "SKETCHES.NO_MATCHING": "No se encontró ningún boceto de este estilo.",
   "SKETCHES.NO_SKETCHES": "No hay bocetos",
   "ACTIONSHEET": {
-    "SHARE": "Compartir",
-    "ADD_FAVORITE": "Añadir a favoritos",
-    "REMOVE_FAVORITE": "Quitar de favoritos",
-    "VIEW_CONSENTS": "Ver consentimientos"
+  "SHARE": "Compartir",
+  "ADD_FAVORITE": "Añadir a favoritos",
+  "REMOVE_FAVORITE": "Quitar de favoritos",
+  "VIEW_CONSENTS": "Ver consentimientos"
+},
+"PLANS": {
+    "RENEWAL_POLICY": "La suscripción se renovará automáticamente a menos que se cancele con al menos 24 horas de antelación",
+    "ACCEPT_TERMS": "Al continuar, aceptas los ",
+    "TERMS_OF_USE": "Términos de uso",
+    "AND": " y la ",
+    "PRIVACY_POLICY": "Política de privacidad"
   }
+
 }

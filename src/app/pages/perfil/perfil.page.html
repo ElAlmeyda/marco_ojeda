@@ -3,10 +3,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="main-content">
+<ion-content [fullscreen]="true">
 
   <!-- ── LOGIN / REGISTRO ── -->
-  <div class="auth-wrapper" *ngIf="uid === ''">
+  <div class="auth-wrapper" *ngIf="usuario.uid === ''">
 
     <!-- Selector de idioma -->
     <div class="lang-row">
@@ -30,7 +30,7 @@
 
     <!-- Logo -->
     <div class="auth-logo-wrap">
-      <ion-img src="../../../assets/icon/icon.png" class="auth-logo" alt="App Logo"></ion-img>
+      <img [src]="temaActual === 'light' ? 'assets/icon/icon_ligt.png' : 'assets/icon/icon.png'" alt="App Logo"  class="auth-logo" />
     </div>
 
     <!-- ── Paso 1: verificar correo ── -->
@@ -234,6 +234,28 @@
       <!-- Idioma con select inline -->
       <div class="settings-row settings-row-select">
         <div class="settings-icon-wrap">
+          <ion-icon [name]="temaActual === 'dark' ? 'moon-outline' : 'sunny-outline'"></ion-icon>
+        </div>
+        <div class="settings-text">
+          <span class="settings-title">{{ 'SETTINGS.THEME' | translate }}</span>
+        </div>
+        <div class="theme-toggle-row">
+          <button
+            class="theme-btn"
+            [class.theme-btn-active]="temaActual === 'light'"
+            (click)="cambiarTema('light')">
+            <ion-icon name="sunny-outline"></ion-icon>
+          </button>
+          <button
+            class="theme-btn"
+            [class.theme-btn-active]="temaActual === 'dark'"
+            (click)="cambiarTema('dark')">
+            <ion-icon name="moon-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
+      <div class="settings-row settings-row-select">
+        <div class="settings-icon-wrap">
           <ion-icon name="language-outline"></ion-icon>
         </div>
         <div class="settings-text">
@@ -283,9 +305,8 @@
 
     <!-- Logo footer -->
     <div class="footer-logo">
-      <img src="../../../assets/icon/icon.png" alt="App Logo" class="footer-logo-img" />
+      <img [src]="temaActual === 'light' ? 'assets/icon/icon_ligt.png' : 'assets/icon/icon.png'" alt="App Logo" class="footer-logo-img" />
     </div>
-
   </div>
 
 </ion-content>

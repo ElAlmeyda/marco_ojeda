@@ -9,8 +9,6 @@ import { UsuariosService } from 'src/app/backend/usuarios.service';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage-angular';
-import { FirebaseCrashlytics } from '@capacitor-firebase/crashlytics';
-
 
 @Component({
   selector: 'app-ajustes',
@@ -23,7 +21,7 @@ export class AjustesPage implements OnInit {
   usuarioActual: Usuario = {
     uid: '',
     nombre: '',
-    email: '',
+    correo: '',
     token: ''
   };
   isDarkMode: boolean = false;
@@ -50,7 +48,7 @@ export class AjustesPage implements OnInit {
 
   usuariosBloqueados: Usuario[] = [];
   preguntas = [
- { titulo: 'FAQ.P1.TITLE', respuesta: 'FAQ.P1.ANSWER', abierto: false },
+    { titulo: 'FAQ.P1.TITLE', respuesta: 'FAQ.P1.ANSWER', abierto: false },
     { titulo: 'FAQ.P2.TITLE', respuesta: 'FAQ.P2.ANSWER', abierto: false },
     { titulo: 'FAQ.P3.TITLE', respuesta: 'FAQ.P3.ANSWER', abierto: false },
     { titulo: 'FAQ.P4.TITLE', respuesta: 'FAQ.P4.ANSWER', abierto: false },
@@ -71,6 +69,7 @@ export class AjustesPage implements OnInit {
     { titulo: 'FAQ.P19.TITLE', respuesta: 'FAQ.P19.ANSWER', abierto: false },
     { titulo: 'FAQ.P20.TITLE', respuesta: 'FAQ.P20.ANSWER', abierto: false }
   ];
+
   isPago: any;
   isPremium: any;
 
@@ -102,6 +101,22 @@ export class AjustesPage implements OnInit {
     });
   }
 
+   cargarPreguntas() {
+    const keys = Array.from({length: 20}, (_, i) => `P${i+1}`); // P1, P2, ..., P20
+    
+    this.preguntas = keys.map(key => ({
+      titulo: this.translate.instant(`FAQ.${key}.TITLE`),
+      respuesta: this.translate.instant(`FAQ.${key}.ANSWER`),
+      abierto: false
+    }));
+  }
+
+  async cambiarIdioma(lang: string) {
+    this.translate.use(lang);
+    await this.storage.set('app_language', lang);
+    this.cargarPreguntas();
+  }
+
   obtenerUsuario() {
     this.user.getUsuarios().subscribe(async () => {
       const usuario = this.user.getUsuarioConcreto(this.usuarioActual.uid);
@@ -121,22 +136,6 @@ export class AjustesPage implements OnInit {
 
   cancel() {
     this.modal.dismiss(null, 'cancel');
-  }
-
-  cargarPreguntas() {
-    const keys = Array.from({length: 20}, (_, i) => `P${i+1}`); // P1, P2, ..., P20
-    
-    this.preguntas = keys.map(key => ({
-      titulo: this.translate.instant(`FAQ.${key}.TITLE`),
-      respuesta: this.translate.instant(`FAQ.${key}.ANSWER`),
-      abierto: false
-    }));
-  }
-
-  async cambiarIdioma(lang: string) {
-    this.translate.use(lang);
-    await this.storage.set('app_language', lang);
-    this.cargarPreguntas();
   }
 
   obtenerResenas() {
@@ -197,14 +196,14 @@ export class AjustesPage implements OnInit {
 
   async eliminarResena(resena: any) {
     const alert = await this.alertController.create({
-     header: this.translate.instant('DELETE_REVIEW'),
+      header: this.translate.instant('DELETE_REVIEW'),
       message: this.translate.instant('DELETE_REVIEW_CONFIRM'),
       buttons: [
         {
           text: this.translate.instant('CANCEL'),
           role: 'cancel',
           handler: () => {
-            console.log('Eliminación cancelada');
+            console.log(this.translate.instant('DELETE_CANCELLED'));
           }
         },
         {
@@ -214,21 +213,11 @@ export class AjustesPage implements OnInit {
             this.tiendaService
               .eliminarResena(this.usuarioActual.uid, resena.uidTatuador, resena.id)
               .then(() => {
-                console.log('Reseña eliminada');
+                console.log(this.translate.instant('REVIEW_DELETED'));
                 this.obtenerResenas(); // Recarga la lista
               })
               .catch(err => {
                 console.error('Error eliminando la reseña:', err);
-                FirebaseCrashlytics.log({
-                  message: 'Error al elimknar una reseña'
-                });
-
-                FirebaseCrashlytics.setUserId({ userId: this.usuarioActual.uid });
-                FirebaseCrashlytics.setCustomKey({
-                  key: 'pantalla cliente',
-                  value: 'perfil_usuario',
-                  type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
-                });
               });
           }
         }
@@ -241,18 +230,37 @@ export class AjustesPage implements OnInit {
 
   obtenerHistorial() {
     this.tiendaService.getCitasUsuario(this.usuarioActual.uid).subscribe((citas: any[]) => {
-      
-      // Filtrar solo citas aceptadas y que ya hayan pasado
+
       const ahora = new Date();
 
       this.citas = citas.filter(cita => {
-        const fechaCita = new Date(cita.fecha); // si tienes fecha + hora, ajusta: new Date(cita.fecha + ' ' + cita.hora)
-        return cita.estado === 'aceptada' && fechaCita < ahora;
+        // Crear fecha completa con hora
+        const fechaCita = new Date(cita.dia);
+        const [hora, minuto] = cita.hora.split(':').map(Number);
+        fechaCita.setHours(hora, minuto, 0, 0);
+
+        // Solo citas aceptadas que ya hayan pasado
+        return cita.estado === 'Aceptado' && fechaCita.getTime() < ahora.getTime();
+      });
+
+      // Ordenar del más reciente al más antiguo (opcional pero recomendable en historial)
+      this.citas.sort((a, b) => {
+        const fechaA = new Date(a.dia);
+        const fechaB = new Date(b.dia);
+
+        const [horaA, minA] = a.hora.split(':').map(Number);
+        const [horaB, minB] = b.hora.split(':').map(Number);
+
+        fechaA.setHours(horaA, minA, 0, 0);
+        fechaB.setHours(horaB, minB, 0, 0);
+
+        return fechaB.getTime() - fechaA.getTime(); // más reciente primero
       });
 
       console.log('Historial de citas pasadas y aceptadas:', this.citas);
     });
   }
+
 
 
   async ngOnInit() {
@@ -264,12 +272,12 @@ export class AjustesPage implements OnInit {
     });
   }
 
-  async showActionSheet(campo: string) {
+  async showActionSheet(field: string) {
     const actionSheet = await this.alertController.create({
-      header:this.translate.instant('EDIT_FIELD'),
+      header: this.translate.instant('EDIT_FIELD', { field }),
       inputs: [
         {
-          name: 'nombre',
+          name: 'name',
           type: 'text',
           placeholder: this.translate.instant('PLACEHOLDER_NAME'),
           value: this.usuarioActual.nombre
@@ -278,11 +286,11 @@ export class AjustesPage implements OnInit {
       buttons: [
         {
           text: this.translate.instant('BUTTON_EDIT'),
-        handler: (data: { nombre: string; }) => {
-          if (data.nombre) {
-            this.usuarioActual.nombre = data.nombre;
-            this.firestore.updateNombre(this.usuarioActual.nombre, this.usuarioActual.uid);
-          }
+          handler: (data: { name: string }) => {
+            if (data.name) {
+              this.usuarioActual.nombre = data.name;
+              this.firestore.updateNombre(this.usuarioActual.nombre, this.usuarioActual.uid);
+            }
           }
         },
         {
@@ -295,12 +303,12 @@ export class AjustesPage implements OnInit {
     await actionSheet.present();
   }
 
-  async showActionSheetMovil(campo: string) {
+  async showActionSheetMobile(field: string) {
     const actionSheet = await this.alertController.create({
-      header: this.translate.instant('EDIT_FIELD'),
+      header: this.translate.instant('EDIT_FIELD', { field }),
       inputs: [
         {
-          name: 'movil',
+          name: 'mobile',
           type: 'text',
           placeholder: this.translate.instant('PLACEHOLDER_MOBILE'),
           value: this.usuarioActual.movil
@@ -309,11 +317,11 @@ export class AjustesPage implements OnInit {
       buttons: [
         {
           text: this.translate.instant('BUTTON_EDIT'),
-        handler: (data: { movil: string; }) => {
-          if (data.movil) {
-            this.usuarioActual.movil = data.movil;
-            this.firestore.updateMovil(this.usuarioActual.movil, this.usuarioActual.uid);
-          }
+          handler: (data: { mobile: string }) => {
+            if (data.mobile) {
+              this.usuarioActual.movil = data.mobile;
+              this.firestore.updateMovil(this.usuarioActual.movil, this.usuarioActual.uid);
+            }
           }
         },
         {
@@ -386,4 +394,35 @@ export class AjustesPage implements OnInit {
     this.router.navigate(['/pago']);
   }
 
+  async showActionSheetMovil(campo: string) {
+    const actionSheet = await this.alertController.create({
+      header: this.translate.instant('EDIT_FIELD'),
+      inputs: [
+        {
+          name: 'movil',
+          type: 'text',
+          placeholder: this.translate.instant('PLACEHOLDER_MOBILE'),
+          value: this.usuarioActual.movil
+        }
+      ],
+      buttons: [
+        {
+          text: this.translate.instant('BUTTON_EDIT'),
+        handler: (data: { movil: string; }) => {
+          if (data.movil) {
+            this.usuarioActual.movil = data.movil;
+            this.firestore.updateMovil(this.usuarioActual.movil, this.usuarioActual.uid);
+          }
+          }
+        },
+        {
+          text: this.translate.instant('BUTTON_CANCEL'),
+          role: 'cancel'
+        }
+      ]
+    });
+
+    await actionSheet.present();
+  }
+  
 }

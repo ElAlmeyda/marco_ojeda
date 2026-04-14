@@ -20,7 +20,7 @@ export class TatuadorPage implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: '',
-    email: '',
+    correo: '',
   };
   segmentoActivo: any;
   segmentoSeleccionado: string = 'info';

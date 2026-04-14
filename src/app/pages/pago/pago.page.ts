@@ -19,7 +19,7 @@ export class PagoPage implements OnInit {
   usuarioActual: Usuario = {
     uid: '',
     nombre: '',
-    email: '',
+    correo: '',
     token: ''
   };
   selectedPlan: any = null;

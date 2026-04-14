@@ -76,7 +76,7 @@ export class UsuariosService {
   }
 
   verificarCorreoExiste(email: string){
-    const usuarioExistente = this.usuario.find(usuario => usuario.email === email);
+    const usuarioExistente = this.usuario.find(usuario => usuario.correo === email);
     if(usuarioExistente){
       return false;
     } else {

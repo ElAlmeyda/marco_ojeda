@@ -9,8 +9,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NotificacionService } from 'src/app/service/notificacion.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage-angular';
-import { FirebaseCrashlytics } from '@capacitor-firebase/crashlytics';
-
+import { ThemeService } from 'src/app/backend/theme.service';
 
 
 @Component({
@@ -28,7 +27,7 @@ export class PerfilPage implements OnInit {
   usuario: Usuario = {
     nombre: '',
     uid: '',
-    email: '',
+    correo: '',
     movil: '',
   };
 
@@ -43,33 +42,34 @@ export class PerfilPage implements OnInit {
   phone: string='';
   numeroIncorrecto=false;
   usuariosBloqueados: Usuario[] = [];
+  temaActual: 'dark' | 'light' = 'dark';
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private alertController: AlertController,
-              public firestore: FirestoreService, private loadingCtrl: LoadingController, private afAuth: AngularFireAuth, public toast: ToastController,
-               public notificacion: NotificacionService, public translate: TranslateService, public storage: Storage
+              private themeService: ThemeService, public firestore: FirestoreService, private loadingCtrl: LoadingController, private afAuth: AngularFireAuth, public toast: ToastController,
+              public notificacion: NotificacionService, public translate: TranslateService, public storage: Storage
   ) { 
     this.translate.setDefaultLang('es');
+    this.temaActual = this.themeService.getTemaActual();
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
-        console.log("Uid del usuario", this.uid)
         this.obtenerUsuario();
       } else {
         this.uid= '';
-        this.usuario = { nombre: '', uid: '', email: '', movil: '', avatar: '' };
+        this.usuario = { nombre: '', uid: '', correo: '', movil: '', avatar: '' };
         this.resetearEstado();
       }
     });
   }
 
-  async cambiarIdioma(lang: string){
+  async cambiarIdioma(lang: string) {
     this.translate.use(lang);
     await this.storage.set('app_language', lang);
   }
 
   resetearEstado() {
     this.uid = '';
-    this.usuario = { nombre: '', uid: '', email: '', movil: '', avatar: '' };
+    this.usuario = { nombre: '', uid: '', correo: '', movil: '', avatar: '' };
     this.correo = '';
     this.password = '';
     this.nombre = '';
@@ -92,7 +92,7 @@ export class PerfilPage implements OnInit {
       const usuario = this.user.getUsuarioConcreto(this.uid);
       if (usuario) {
         this.usuario = usuario;
-        console.log(usuario);
+        console.log(usuario.movil);
       } else {
         console.log('Usuario no encontrado');
       }
@@ -105,7 +105,7 @@ export class PerfilPage implements OnInit {
       .then((userCredenciales) => {
         // Inicio de sesión exitoso
 
-        this.presentToast(this.translate.instant('LOGIN.SUCCESS'),'success');
+        this.presentToast(this.translate.instant('LOGIN.SUCCESS'), 'success');
         const uid = userCredenciales.user?.uid;
         if(uid){
           this.notificacion.inicializar(uid);
@@ -184,31 +184,11 @@ export class PerfilPage implements OnInit {
         await user.sendEmailVerification();
       } catch (error) {
         console.error('Error enviando correo de verificación:', error);
-        FirebaseCrashlytics.log({
-          message: 'Error al enviar el correo de verificacion'
-        });
-
-        FirebaseCrashlytics.setUserId({ userId: this.uid });
-        FirebaseCrashlytics.setCustomKey({
-          key: 'pantalla cliente',
-          value: 'perfil_usuario',
-          type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
-        });
       }
       // ✅ 8. Ocultar carga después de subir todo correctamente
       await loading.dismiss();
     } catch (error) {
       console.error('Error en el registro:', error);
-      FirebaseCrashlytics.log({
-        message: 'Error al con el registro'
-      });
-
-      FirebaseCrashlytics.setUserId({ userId: this.uid });
-      FirebaseCrashlytics.setCustomKey({
-        key: 'pantalla cliente',
-        value: 'perfil_usuario',
-        type: 'string' // obligatorio: 'string' | 'number' | 'boolean'
-      });
       // ⚠️ Ocultar carga en caso de error también
       await loading.dismiss();
       // Puedes mostrar aquí un toast o alerta si quieres notificar el fallo
@@ -295,7 +275,7 @@ export class PerfilPage implements OnInit {
       this.presentToast(this.translate.instant('AVATAR.UPDATED'), 'success');
     } catch (error) {
       console.error(error);
-      this.presentToast(this.translate.instant('AVATAR.ERROR'),'danger');
+      this.presentToast(this.translate.instant('AVATAR.ERROR'), 'danger');
     }
   }
 
@@ -323,13 +303,13 @@ export class PerfilPage implements OnInit {
         },
       },
       {
-        text:  this.translate.instant('AVATAR.CANCEL'),
+        text: this.translate.instant('AVATAR.CANCEL'),
         role: 'cancel'
       }
     );
 
     const alert = await this.alertController.create({
-     header: this.translate.instant('AVATAR.TITLE'),
+      header: this.translate.instant('AVATAR.TITLE'),
       message: tieneAvatar
         ? this.translate.instant('AVATAR.OPTIONS')
         : this.translate.instant('AVATAR.NO_AVATAR'),
@@ -339,6 +319,8 @@ export class PerfilPage implements OnInit {
     await alert.present();
   }
 
-
-
+  cambiarTema(tema: 'dark' | 'light') {
+    this.temaActual = tema;
+    this.themeService.cambiarTema(tema);
+  }
 }

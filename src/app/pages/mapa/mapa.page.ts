@@ -19,7 +19,7 @@ export class MapaPage implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: '',
-    email: '',
+    correo: '',
   };
   map: any;
   tatuadores !: Tatuador[]

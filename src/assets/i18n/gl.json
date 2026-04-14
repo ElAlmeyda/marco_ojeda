@@ -28,6 +28,7 @@
   "PASSWORD": "Contrasinal",
   "CONFIRM": "Confirmar",
   "ACCEPT": "Aceptar",
+  "NOTICIA": "Nova",
   "REAUTH_FAIL": "Non se puido reautenticar. Intenta novamente.",
   "DELETE_ACCOUNT_TITLE": "Eliminar conta",
   "DELETE_ACCOUNT_MESSAGE": "Estás seguro de que queres eliminar a túa conta? Esta acción non se pode desfacer.",
@@ -49,7 +50,8 @@
     "VERIFICATION_SENT_MESSAGE": "Enviamos un correo de verificación a",
     "NOT_RECEIVED": "Non recibiches o correo?",
     "RESEND_EMAIL": "Reenviar correo",
-    "ALREADY_VERIFIED": "Xa verifiquei o meu correo"
+    "ALREADY_VERIFIED": "Xa verifiquei o meu correo",
+    "DANGER_ZONE":"Accións irreversibles"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Inicia sesión para poder ter tatuadores favoritos",
@@ -57,7 +59,7 @@
     "HEADER": "Tatuadores favoritos",
     "NO_FAVORITES": "Non tes ningún tatuador favorito",
     "SEARCH_ARTISTS": "Queres buscar?",
-    "TATTOO_ARTISTS": "Tatuadores favoritos",
+     "TATTOO_ARTISTS": "Tatuadores favoritos",
     "PHOTOS": "Fotos favoritas"
   },
   "RESET": {
@@ -87,6 +89,7 @@
   "SELECT_PHOTO": "Seleccionar foto",
   "SEND_REVIEW": "Enviar reseña",
   "NOT_SPECIFIED": "Non especificado",
+  "EVENTS": "Eventos",
   "LOGIN_REQUIRED": "Tes que iniciar sesión",
   "WARNING": "Advertencia",
   "APPOINTMENT_WARNING": "O tatuador pode negarse a axendar a cita se non se realizou unha consulta previa. Queres continuar?",
@@ -113,6 +116,7 @@
     "Lettering": "Lettering",
     "Trash Polka": "Trash Polka",
     "Watercolor": "Acuarela",
+    "Sketch": "Sketch / Boceto",
     "Japanese": "Xaponés",
     "Tribal": "Tribal",
     "Surrealismo": "Surrealismo",
@@ -129,7 +133,6 @@
     "SAVED_SUCCESS": "A cita foi realizada, agarda a que o tatuador conteste.",
     "ERROR_SAVE": "Erro ao gardar a cita.",
     "MISSING_FIELDS": "Por favor completa todos os campos obrigatorios.",
-     "ACCEPT_TATTOO_TERMS": "Lin e aceptei os consentimentos do tatuador ao que lle vou pedir unha cita.",
     "TITLE": "Pedir cita a {{tienda}}",
     "WORKER": "Traballador",
     "TYPE": "Tipo de cita:",
@@ -152,6 +155,7 @@
     "ADD_COMMENTS": "Comentarios adicionais:",
     "UPLOAD_SKETCH": "Subir bosquejo (opcional)",
     "ACCEPT_TERMS": "Acepto os termos e condicións e a política de uso da app.",
+    "ACCEPT_TATTOO_TERMS": "Lin e acepto as condicións do tatuador.",
     "BOOK": "Pedir cita",
     "NEXT": "Seguinte",
     "NO_HOURS": "Non hai horas dispoñibles",
@@ -183,7 +187,6 @@
     "ZONE": "En que zona:",
     "COMMENTS": "Comentarios adicionais:"
   },
-  "NOTICIA": "Noticias",
   "PLACEHOLDER": "Buscar",
   "TATTOOIST": {
     "EVENT_WARNING": "⚠️ O tatuador estará en {{ciudad}}"
@@ -254,7 +257,8 @@
     "ABOUT_US": "Sobre Nós",
     "ABOUT_US_DESC": "Coñece máis sobre a nosa aplicación.",
     "LANGUAGE": "Idioma",
-    "SELECT_LANGUAGE": "Selecciona un idioma"
+    "SELECT_LANGUAGE": "Selecciona un idioma",
+    "THEME": "Tema"
   },
   "APPOINTMENT_STATUS": {
     "Pendiente": "Pendente",
@@ -496,7 +500,6 @@
     "AND": "e a nosa",
     "PRIVACY_POLICY": "Política de Privacidade"
   },
-  "EVENTS": "Eventos",
   "PREFERIBLEMENTE": "Preferiblemente",
   "MANANA": "Mañá",
   "TARDE": "Tarde",
@@ -517,9 +520,11 @@
   "SKETCHES.NO_MATCHING": "Non se atopou ningún bosquexo deste estilo.",
   "SKETCHES.NO_SKETCHES": "Non hai bosquexos dispoñibles",
   "ACTIONSHEET": {
-    "SHARE": "Compartir",
-    "ADD_FAVORITE": "Engadir aos favoritos",
-    "REMOVE_FAVORITE": "Quitar dos favoritos",
-    "VIEW_CONSENTS": "Ver consentimentos"
-  }
+  "SHARE": "Compartir",
+  "ADD_FAVORITE": "Engadir aos favoritos",
+  "REMOVE_FAVORITE": "Quitar dos favoritos",
+  "VIEW_CONSENTS": "Ver consentimentos"
+}
+
+
 }

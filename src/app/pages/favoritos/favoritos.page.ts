@@ -19,7 +19,7 @@ export class FavoritosPage implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: '',
-    email: '',
+    correo: '',
   };
   imagenSeleccionada: string | null = null;
   segmentoSeleccionado: string = 'tatuadores';

@@ -1,6 +1,6 @@
 // ── Toolbar ───────────────────────────────────────────────
 .main-toolbar {
-  --background: #121212;
+  background: var(--ion-card-background);
   --border-width: 0;
   padding-top: var(--ion-safe-area-top);
   padding-inline: 12px;
@@ -36,7 +36,7 @@
 
 // ── Content ───────────────────────────────────────────────
 .account-content {
-  --background: #121212;
+  --background: var(--ion-card-background);
 }
 
 .account-wrapper {
@@ -50,7 +50,7 @@
 
 // ── Sección principal ─────────────────────────────────────
 .account-section {
-  background: #1A1A1A;
+  background: var(--ion-card-background);
   border-radius: 14px;
   border: 1px solid #2E2E2E;
   overflow: hidden;
@@ -75,7 +75,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #121212;
+  background: var(--ion-card-background);
   border: 1px solid #2E2E2E;
   border-radius: 10px;
   padding: 11px 14px;
@@ -89,7 +89,7 @@
 
 .email-text {
   font-size: 0.9rem;
-  color: #EDEDED;
+  color: var(--ion-text-color);
   word-break: break-all;
 }
 

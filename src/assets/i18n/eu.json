@@ -28,6 +28,7 @@
   "PASSWORD": "Pasahitza",
   "CONFIRM": "Baieztatu",
   "ACCEPT": "Onartu",
+  "NOTICIA": "Albistea",
   "REAUTH_FAIL": "Ezin izan da berriro autentikatu. Saiatu berriro.",
   "DELETE_ACCOUNT_TITLE": "Kontua ezabatu",
   "DELETE_ACCOUNT_MESSAGE": "Ziur zaude zure kontua ezabatu nahi duzula? Ekintza hau ezin da atzera bota.",
@@ -49,7 +50,8 @@
     "VERIFICATION_SENT_MESSAGE": "Balioztapen posta bidali dugu",
     "NOT_RECEIVED": "Ez duzu posta jaso?",
     "RESEND_EMAIL": "Berriro bidali posta",
-    "ALREADY_VERIFIED": "Dagoeneko balioztatu dut nire posta"
+    "ALREADY_VERIFIED": "Dagoeneko balioztatu dut nire posta",
+    "DANGER_ZONE":"Ekintza atzeraezinak"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Hasi saioa tatuatzaile gogokoak izan ahal izateko",
@@ -94,6 +96,7 @@
   "LOGIN_REQUIRED_APPOINTMENT": "Saioa hasi behar duzu hitzordua eskatzeko",
   "REVIEW_REQUIRED": "Idatzi iritzia edo hautatu izarrak",
   "SEARCH": "Bilatu",
+  "EVENTS": "Gertaerak",
   "MORE_FILTERS": "Iragazki gehiago",
   "NO_RESULTS_STYLE": "Ez da hautatutako estiloko tatuatzailerik aurkitu.",
   "SEARCH_RESULTS": "Bilaketa emaitzak",
@@ -114,6 +117,7 @@
     "Trash Polka": "Trash Polka",
     "Watercolor": "Akvarela",
     "Japanese": "Japoniera",
+    "Sketch": "Sketch / Bocetoa",
     "Tribal": "Tribala",
     "Surrealismo": "Surrealismoa",
     "Biomecánico": "Biomekanikoa",
@@ -131,7 +135,6 @@
     "ERROR_SAVE": "Errorea hitzordua gordetzean.",
     "MISSING_FIELDS": "Mesedez, bete derrigorrezko eremu guztiak.",
     "TITLE": "{{tienda}}-ra hitzordua eskatu",
-     "ACCEPT_TATTOO_TERMS": "Irakurri eta onartu dut hitzordua eskatu nahi diodan tatuatzailearen baimenak.",
     "WORKER": "Langilea",
     "TYPE": "Hitzordu mota:",
     "SIZE_SMALL": "Txikia (5-7cm)",
@@ -153,6 +156,7 @@
     "ADD_COMMENTS": "Iruzkin osagarriak:",
     "UPLOAD_SKETCH": "Eskema igo (boluntarioa)",
     "ACCEPT_TERMS": "App-aren erabilera baldintzak eta politika onartzen ditut.",
+    "ACCEPT_TATTOO_TERMS": "Tatuatzailearen baldintzak irakurri eta onartzen ditut.",
     "BOOK": "Hitzordua eskatu",
     "NEXT": "Hurrengoa",
     "NO_HOURS": "Ez da ordutegirik eskuragarri",
@@ -184,7 +188,6 @@
     "ZONE": "Zein zonatan:",
     "COMMENTS": "Iruzkin osagarriak:"
   },
-  "NOTICIA": "Berriak",
   "TATTOOIST": {
     "EVENT_WARNING": "⚠️ Tatuatzailea {{ciudad}}-n egongo da"
   },
@@ -254,7 +257,8 @@
     "ABOUT_US": "Guri buruz",
     "ABOUT_US_DESC": "Ezagutu gure aplikazioari buruz gehiago.",
     "LANGUAGE": "Hizkuntza",
-    "SELECT_LANGUAGE": "Hautatu hizkuntza"
+    "SELECT_LANGUAGE": "Hautatu hizkuntza",
+    "THEME": "Gaia"
   },
   "APPOINTMENT_STATUS": {
     "Pendiente": "Zain",
@@ -496,7 +500,6 @@
     "AND": "eta gure",
     "PRIVACY_POLICY": "Pribatutasun Politika"
   },
-  "EVENTS": "Ekitaldiak",
   "PREFERIBLEMENTE": "Hobe",
   "MANANA": "Goiza",
   "TARDE": "Arratsaldea",
@@ -517,9 +520,10 @@
   "SKETCHES.NO_MATCHING": "Ez da estilo honetako marrazkirik aurkitu.",
   "SKETCHES.NO_SKETCHES": "Ez dago marrazkirik eskuragarri",
   "ACTIONSHEET": {
-    "SHARE": "Partekatu",
-    "ADD_FAVORITE": "Gogokoetara gehitu",
-    "REMOVE_FAVORITE": "Gogokoetatik kendu",
-    "VIEW_CONSENTS": "Baimenak ikusi"
-  }
+  "SHARE": "Partekatu",
+  "ADD_FAVORITE": "Gogokoetara gehitu",
+  "REMOVE_FAVORITE": "Gogokoetatik kendu",
+  "VIEW_CONSENTS": "Baimenak ikusi"
+}
+
 }

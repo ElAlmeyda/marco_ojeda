@@ -12,6 +12,7 @@ import { UbicacionService } from './service/ubicacion.service';
 import { AdMob, BannerAdOptions, BannerAdPosition, BannerAdSize } from '@capacitor-community/admob';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage-angular';
+import { ThemeService } from './backend/theme.service';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class AppComponent {
   usuario: Usuario = {
     nombre: '',
     uid: '',
-    email: '',
+    correo: '',
     movil: '',
     avatar: ''
   };
@@ -45,9 +46,10 @@ export class AppComponent {
     this.showList = !this.showList;
   }
 
-  constructor(private user: UsuariosService, public auth: FirestoreAuthService, public firestore: FirestoreService, public router: Router, public notificacion: NotificacionService,
+  constructor(private user: UsuariosService, public auth: FirestoreAuthService, public theme: ThemeService, public firestore: FirestoreService, public router: Router, public notificacion: NotificacionService,
               private menu: MenuController, public translate:TranslateService, public storage: Storage, private platform: Platform, public ubicacion: UbicacionService, private navController: NavController,  public alertController: AlertController) {
-    this.auth.stateAuth().subscribe(async res => {
+                this.theme.init();
+                this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.uid = res.uid;
         await this.obtenerUsuario();

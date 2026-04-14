@@ -28,6 +28,7 @@
   "PASSWORD": "Senha",
   "CONFIRM": "Confirmar",
   "ACCEPT": "Aceitar",
+  "NOTICIA": "Notícia",
   "REAUTH_FAIL": "Não foi possível reautenticar. Tente novamente.",
   "DELETE_ACCOUNT_TITLE": "Excluir conta",
   "DELETE_ACCOUNT_MESSAGE": "Tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita.",
@@ -49,7 +50,8 @@
     "VERIFICATION_SENT_MESSAGE": "Enviamos um e-mail de verificação para",
     "NOT_RECEIVED": "Não recebeu o e-mail?",
     "RESEND_EMAIL": "Reenviar e-mail",
-    "ALREADY_VERIFIED": "Já verifiquei meu e-mail"
+    "ALREADY_VERIFIED": "Já verifiquei meu e-mail",
+    "DANGER_ZONE":"Ações irreversíveis"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Faça login para ter tatuadores favoritos",
@@ -91,6 +93,7 @@
   "WARNING": "Aviso",
   "APPOINTMENT_WARNING": "O tatuador pode se recusar a agendar o compromisso se não houver consulta prévia. Deseja continuar?",
   "CONTINUE": "Continuar",
+  "EVENTS": "Eventos",
   "LOGIN_REQUIRED_APPOINTMENT": "Você precisa estar logado para agendar um compromisso",
   "REVIEW_REQUIRED": "Escreva um comentário ou selecione as estrelas",
   "SEARCH": "Buscar",
@@ -111,6 +114,7 @@
     "Geométrico": "Geométrico",
     "Dotwork": "Dotwork",
     "Lettering": "Lettering",
+    "Sketch": "Sketch / Esboço",
     "Trash Polka": "Trash Polka",
     "Watercolor": "Aquarela",
     "Japanese": "Japonês",
@@ -129,7 +133,6 @@
     "SAVED_SUCCESS": "O compromisso foi agendado, aguarde a resposta do tatuador.",
     "ERROR_SAVE": "Erro ao salvar o compromisso.",
     "MISSING_FIELDS": "Por favor, preencha todos os campos obrigatórios.",
-    "ACCEPT_TATTOO_TERMS": "Li e aceitei os consentimentos do tatuador a quem vou pedir uma consulta.",
     "TITLE": "Agendar compromisso com {{tienda}}",
     "WORKER": "Trabalhador",
     "TYPE": "Tipo de compromisso:",
@@ -152,6 +155,7 @@
     "ADD_COMMENTS": "Comentários adicionais:",
     "UPLOAD_SKETCH": "Enviar esboço (opcional)",
     "ACCEPT_TERMS": "Aceito os termos e condições e a política de uso do app.",
+    "ACCEPT_TATTOO_TERMS": "Li e aceito as condições do tatuador.",
     "BOOK": "Agendar compromisso",
     "NEXT": "Próximo",
     "NO_HOURS": "Nenhum horário disponível",
@@ -183,7 +187,6 @@
     "ZONE": "Em qual área:",
     "COMMENTS": "Comentários adicionais:"
   },
-  "NOTICIA": "Notícias",
   "PLACEHOLDER": "Buscar",
   "TATTOOIST": {
     "EVENT_WARNING": "⚠️ O tatuador estará em {{ciudad}}"
@@ -202,7 +205,8 @@
     "ABOUT_US": "Sobre Nós",
     "ABOUT_US_DESC": "Saiba mais sobre nosso aplicativo.",
     "LANGUAGE": "Idioma",
-    "SELECT_LANGUAGE": "Selecione um idioma"
+    "SELECT_LANGUAGE": "Selecione um idioma",
+    "THEME": "Tema"
   },
   "APPOINTMENT_STATUS": {
     "Pendiente": "Pendente",
@@ -444,7 +448,6 @@
     "AND": "e nossa",
     "PRIVACY_POLICY": "Política de Privacidade"
   },
-  "EVENTS": "Eventos",
   "PREFERIBLEMENTE": "Preferencialmente",
   "MANANA": "Manhã",
   "TARDE": "Tarde",
@@ -465,9 +468,10 @@
   "SKETCHES.NO_MATCHING": "Nenhum esboço encontrado para este estilo.",
   "SKETCHES.NO_SKETCHES": "Não há esboços disponíveis",
   "ACTIONSHEET": {
-    "SHARE": "Partilhar",
-    "ADD_FAVORITE": "Adicionar aos favoritos",
-    "REMOVE_FAVORITE": "Remover dos favoritos",
-    "VIEW_CONSENTS": "Ver consentimentos"
-  }
+  "SHARE": "Partilhar",
+  "ADD_FAVORITE": "Adicionar aos favoritos",
+  "REMOVE_FAVORITE": "Remover dos favoritos",
+  "VIEW_CONSENTS": "Ver consentimentos"
+}
+
 }

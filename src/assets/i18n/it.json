@@ -28,6 +28,7 @@
   "PASSWORD": "Password",
   "CONFIRM": "Conferma",
   "ACCEPT": "Accetta",
+  "NOTICIA": "Notizia",
   "REAUTH_FAIL": "Riautenticazione fallita. Riprova.",
   "DELETE_ACCOUNT_TITLE": "Elimina account",
   "DELETE_ACCOUNT_MESSAGE": "Sei sicuro di voler eliminare il tuo account? Questa azione non può essere annullata.",
@@ -57,7 +58,7 @@
     "HEADER": "Tatuatori preferiti",
     "NO_FAVORITES": "Non hai tatuatori preferiti",
     "SEARCH_ARTISTS": "Vuoi cercare?",
-     "TATTOO_ARTISTS": "Tatuatori preferiti",
+    "TATTOO_ARTISTS": "Tatuatori preferiti",
     "PHOTOS": "Foto preferite"
   },
   "RESET": {
@@ -86,6 +87,7 @@
   "WRITE_OPINION": "Scrivi la tua opinione...",
   "SELECT_PHOTO": "Seleziona foto",
   "SEND_REVIEW": "Invia recensione",
+  "EVENTS": "Eventi",
   "NOT_SPECIFIED": "Non specificato",
   "LOGIN_REQUIRED": "Devi effettuare il login",
   "WARNING": "Attenzione",
@@ -148,7 +150,9 @@
     "ABOUT_US": "Chi siamo",
     "ABOUT_US_DESC": "Scopri di più sulla nostra app.",
     "LANGUAGE": "Lingua",
-    "SELECT_LANGUAGE": "Seleziona una lingua"
+    "SELECT_LANGUAGE": "Seleziona una lingua",
+    "DANGER_ZONE":"Azioni irreversibili",
+    "THEME": "Tema"
   },
   "APPOINTMENT_STATUS": {
     "Pendiente": "In sospeso",
@@ -399,7 +403,6 @@
     "TITLE": "Prenota un appuntamento presso {{tienda}}",
     "WORKER": "Tatuatore",
     "TYPE": "Tipo di appuntamento:",
-    "ACCEPT_TATTOO_TERMS": "Ho letto e accettato i consensi del tatuatore con cui desidero fissare un appuntamento.",
     "SIZE_SMALL": "Piccolo (5-7 cm)",
     "SIZE_MEDIUM": "Medio (10-13 cm)",
     "SIZE_LARGE": "Grande (+15 cm)",
@@ -419,6 +422,7 @@
     "ADD_COMMENTS": "Commenti aggiuntivi:",
     "UPLOAD_SKETCH": "Carica bozzetto (opzionale)",
     "ACCEPT_TERMS": "Accetto i termini e le condizioni e l’informativa d’uso dell’app.",
+    "ACCEPT_TATTOO_TERMS": "Ho letto e accetto le condizioni del tatuatore.",
     "BOOK": "Prenota appuntamento",
     "NEXT": "Avanti",
     "NO_HOURS": "Nessun orario disponibile",
@@ -450,13 +454,13 @@
     "ZONE": "In quale zona:",
     "COMMENTS": "Commenti aggiuntivi:"
   },
-  "NOTICIA": "Notizie",
   "STYLE": {
     "Realismo": "Realismo",
     "Tradicional": "Tradizionale",
     "Neotradicional": "Neotradizionale",
     "Blackwork": "Blackwork",
     "Fineline": "Linea fine",
+    "Sketch": "Sketch / Bozzetto",
     "Geométrico": "Geometrico",
     "Dotwork": "Dotwork",
     "Lettering": "Lettering",
@@ -496,7 +500,6 @@
   "SIGN_IN": "Accedi",
   "FORGOT_PASSWORD": "Hai dimenticato la password?"
 },
-"EVENTS": "Eventi",
 "PREFERIBLEMENTE": "Preferibilmente",
   "MANANA": "Mattina",
   "TARDE": "Pomeriggio",
@@ -517,13 +520,10 @@
   "SKETCHES.NO_MATCHING": "Nessun bozzetto trovato per questo stile.",
   "SKETCHES.NO_SKETCHES": "Nessun bozzetto disponibile",
   "ACTIONSHEET": {
-    "SHARE": "Condividi",
-    "ADD_FAVORITE": "Aggiungi ai preferiti",
-    "REMOVE_FAVORITE": "Rimuovi dai preferiti",
-    "VIEW_CONSENTS": "Visualizza consensi"
-  }
-
-
-
+  "SHARE": "Condividi",
+  "ADD_FAVORITE": "Aggiungi ai preferiti",
+  "REMOVE_FAVORITE": "Rimuovi dai preferiti",
+  "VIEW_CONSENTS": "Visualizza consensi"
+}
 
 }

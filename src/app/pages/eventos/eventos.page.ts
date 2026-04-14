@@ -24,7 +24,7 @@ export class EventosPage implements OnInit {
    usuario: Usuario = {
       uid: '',
       nombre: '',
-      email: '',
+      correo: '',
     };
   cita: Cita = {} as Cita;consultaTrue: any;
   datosConsulta = {
@@ -36,7 +36,7 @@ export class EventosPage implements OnInit {
     notas: '',
     tatuador: '',
     telefono: '',
-    email: '',
+    correo: '',
     predeterminado: ''
   };
 
@@ -198,7 +198,7 @@ export class EventosPage implements OnInit {
         // Rellenar la cita
       this.datosConsulta.nombre = this.usuario.nombre
       this.datosConsulta.telefono = this.usuario.movil
-      this.datosConsulta.email = this.usuario.email
+      this.datosConsulta.correo = this.usuario.correo
       this.datosConsulta.diseno = this.estilo
       this.datosConsulta.notas = this.mensaje 
       this.datosConsulta.tatuador = this.tatuadorSeleccionado.nombre

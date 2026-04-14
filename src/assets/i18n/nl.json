@@ -49,7 +49,8 @@
     "VERIFICATION_SENT_MESSAGE": "We hebben een verificatie‑e‑mail verzonden naar",
     "NOT_RECEIVED": "Niet ontvangen?",
     "RESEND_EMAIL": "E‑mail opnieuw verzenden",
-    "ALREADY_VERIFIED": "Ik heb mijn e‑mail al geverifieerd"
+    "ALREADY_VERIFIED": "Ik heb mijn e‑mail al geverifieerd",
+    "DANGER_ZONE":"Onomkeerbare acties"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Log in om favoriete tatoeëerders te kunnen hebben",
@@ -116,6 +117,7 @@
     "Watercolor": "Aquarel",
     "Japanese": "Japans",
     "Tribal": "Tribal",
+    "Sketch": "Schets",
     "Surrealismo": "Surrealisme",
     "Biomecánico": "Biomechanisch",
     "Anime": "Anime",
@@ -254,7 +256,8 @@
     "ABOUT_US": "Over ons",
     "ABOUT_US_DESC": "Leer meer over onze app.",
     "LANGUAGE": "Taal",
-    "SELECT_LANGUAGE": "Selecteer een taal"
+    "SELECT_LANGUAGE": "Selecteer een taal",
+    "THEME": "Thema"
   },
   "EDIT_FIELD": "Bewerk {{field}}",
   "PLACEHOLDER_NAME": "Voer de nieuwe naam in",
@@ -500,10 +503,17 @@
   "SKETCHES.NO_MATCHING": "Geen bocet gevonden voor deze stijl.",
   "SKETCHES.NO_SKETCHES": "Geen bocetten beschikbaar",
   "ACTIONSHEET": {
-    "SHARE": "Delen",
-    "ADD_FAVORITE": "Aan favorieten toevoegen",
-    "REMOVE_FAVORITE": "Uit favorieten verwijderen",
-    "VIEW_CONSENTS": "Toestemmingen bekijken"
-    }
+  "SHARE": "Delen",
+  "ADD_FAVORITE": "Aan favorieten toevoegen",
+  "REMOVE_FAVORITE": "Uit favorieten verwijderen",
+  "VIEW_CONSENTS": "Toestemmingen bekijken"
+},
+"PLANS": {
+  "RENEWAL_POLICY": "Het abonnement wordt automatisch verlengd, tenzij het minimaal 24 uur vóór het einde van de huidige periode wordt geannuleerd",
+  "ACCEPT_TERMS": "Door verder te gaan, ga je akkoord met de ",
+  "TERMS_OF_USE": "Gebruiksvoorwaarden",
+  "AND": " en het ",
+  "PRIVACY_POLICY": "Privacybeleid"
+}
 
 }

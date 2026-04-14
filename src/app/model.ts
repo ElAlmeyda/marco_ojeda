@@ -3,7 +3,7 @@
 export interface Usuario {
     uid: string;
     nombre:string;
-    email:string;
+    correo:string;
     movil?:string;
     avatar?:string;
     token?:string;

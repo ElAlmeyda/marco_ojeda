@@ -24,7 +24,7 @@ export class PedirCitaPage implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: '',
-    email: '',
+    correo: '',
   };
   
   datosConsulta = {
@@ -301,7 +301,7 @@ export class PedirCitaPage implements OnInit {
 
     if(this.usuario.movil && this.horaSeleccionada && this.estilo && this.mensaje && this.tipo){
       // Rellenar la cita
-      this.cita.email = this.usuario.email;
+      this.cita.email = this.usuario.correo;
       this.cita.nombreUser = this.usuario.nombre;
       this.cita.movil = this.usuario.movil;
       this.cita.dia = this.fechaSeleccionada.split('T')[0];
@@ -416,7 +416,7 @@ export class PedirCitaPage implements OnInit {
       // Rellenar la cita
       this.datosConsulta.nombreUser = this.usuario.nombre
       this.datosConsulta.movil = this.usuario.movil
-      this.datosConsulta.correo = this.usuario.email
+      this.datosConsulta.correo = this.usuario.correo
       this.datosConsulta.estilo = this.estilo
       this.datosConsulta.mensaje = this.mensaje 
       this.datosConsulta.tipo = this.tipo

@@ -17,7 +17,7 @@ export class CitaPage implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: '',
-    email: '',
+    correo: '',
   };
 
   citas: Cita [] = [];

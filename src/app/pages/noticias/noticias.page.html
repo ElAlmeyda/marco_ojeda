@@ -76,7 +76,20 @@
       </div>
 
       <!-- Grid bocetos -->
-      <div class="bocetos-grid" *ngIf="!cargando && bocetosFiltrados.length > 0">
+      <div class="bocetos-grid" *ngIf="!cargando && !estiloSeleccionado && bocetos.length > 0">
+        <div class="boceto-tile" *ngFor="let boceto of bocetos"
+          (click)="seleccionarBoceto(boceto)">
+          <img [src]="boceto.imagenUrl" alt="boceto" class="boceto-img" />
+          <div class="boceto-overlay"></div>
+          <button class="heart-btn" (click)="toggleFavoritoBoceto(boceto, $event)">
+            <ion-icon [name]="boceto.favorito ? 'heart' : 'heart-outline'"
+              [class.heart-active]="boceto.favorito"></ion-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Grid bocetos CON filtro (estilo seleccionado) -->
+      <div class="bocetos-grid" *ngIf="!cargando && estiloSeleccionado && bocetosFiltrados.length > 0">
         <div class="boceto-tile" *ngFor="let boceto of bocetosFiltrados"
           (click)="seleccionarBoceto(boceto)">
           <img [src]="boceto.imagenUrl" alt="boceto" class="boceto-img" />
@@ -88,15 +101,16 @@
         </div>
       </div>
 
-      <!-- Empty states -->
-      <div class="empty-state" *ngIf="!cargando && bocetosFiltrados.length === 0">
+      <!-- Empty state solo cuando hay filtro activo y no hay resultados -->
+      <div class="empty-state" *ngIf="!cargando && estiloSeleccionado && bocetosFiltrados.length === 0">
         <div class="empty-icon-wrap">
           <ion-icon name="image-outline"></ion-icon>
         </div>
         <p class="empty-text">{{ 'SKETCHES.NO_MATCHING' | translate }}</p>
       </div>
 
-      <div class="empty-state" *ngIf="!cargando && bocetos.length === 0">
+      <!-- Empty state general sin filtro -->
+      <div class="empty-state" *ngIf="!cargando && !estiloSeleccionado && bocetos.length === 0">
         <div class="empty-icon-wrap">
           <ion-icon name="image-outline"></ion-icon>
         </div>

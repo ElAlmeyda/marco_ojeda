@@ -20,7 +20,7 @@ export class CuentaPage implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: '',
-    email: '',
+    correo: '',
     avatar: '',
   };
 
@@ -77,7 +77,7 @@ export class CuentaPage implements OnInit {
               {
                 text: acceptText,
                 handler: async () => {
-                    await this.auth.resetPassword(this.usuario.email);
+                    await this.auth.resetPassword(this.usuario.correo);
                     const successMsg = await this.translate.get('PASSWORD_CHANGE_SUCCESS').toPromise();
                     this.presentToast(successMsg, 'success');
                   }
@@ -107,10 +107,10 @@ export class CuentaPage implements OnInit {
       if (user.emailVerified) {
         try {
           // Verificar si el correo ha cambiado
-          if (user.email !== this.usuario.email) {
-            let correo = this.usuario.email;
+          if (user.email !== this.usuario.correo) {
+            let correo = this.usuario.correo;
             await this.reautenticarUsuario(user);
-            await user.updateEmail(this.usuario.email);
+            await user.updateEmail(this.usuario.correo);
             const check = await this.user.updateCorreo(this.nuevoCorreo, this.usuario.uid);
             if (check) {
               const successMsg = await this.translate.get('EMAIL_UPDATE_SUCCESS').toPromise();
@@ -122,7 +122,7 @@ export class CuentaPage implements OnInit {
           }
           
           // Enviar correo de verificación si se cambió el correo
-          if (user.email !== this.usuario.email) {
+          if (user.email !== this.usuario.correo) {
             await user.sendEmailVerification();
           }
           
@@ -405,7 +405,7 @@ export class CuentaPage implements OnInit {
     await this.authFire.signOut();   // Cierra sesión en Firebase
     
     // Limpia el objeto usuario para que no muestre nada
-    this.usuario = { uid: '', nombre: '', movil: '', avatar: '', email: '' };
+    this.usuario = { uid: '', nombre: '', movil: '', avatar: '', correo: '' };
     
     // Opcional: redirige a login o inicio
     this.router.navigate(['/tabs/folder', this.usuario.uid], { replaceUrl: true });

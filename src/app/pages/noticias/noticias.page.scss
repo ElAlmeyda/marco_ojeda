@@ -1,6 +1,6 @@
 // ── Content ───────────────────────────────────────────────
 .explore-content {
-  --background: #121212;
+  background: var(--ion-card-background);
 }
 
 // ── Segment ───────────────────────────────────────────────
@@ -9,11 +9,11 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  background: #121212;
+  background: var(--ion-card-background);
 }
 
 .custom-segment {
-  --background: #1A1A1A;
+  background: var(--ion-card-background);
   border-radius: 10px;
   border: 1px solid #2E2E2E;
   padding: 3px;
@@ -43,7 +43,7 @@
 }
 
 .news-card {
-  background: #1A1A1A;
+  background: var(--ion-card-background);
   border-radius: 14px;
   border: 1px solid #2E2E2E;
   overflow: hidden;
@@ -95,7 +95,7 @@
 .news-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #EDEDED;
+  color: var(--ion-text-color);
   margin: 0;
   line-height: 1.3;
 }

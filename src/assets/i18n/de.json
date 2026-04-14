@@ -49,7 +49,8 @@
     "VERIFICATION_SENT_MESSAGE": "Wir haben eine Bestätigungs-E-Mail gesendet an",
     "NOT_RECEIVED": "E-Mail nicht erhalten?",
     "RESEND_EMAIL": "E-Mail erneut senden",
-    "ALREADY_VERIFIED": "Meine E-Mail ist bereits verifiziert"
+    "ALREADY_VERIFIED": "Meine E-Mail ist bereits verifiziert",
+    "DANGER_ZONE":"Unumkehrbare Aktionen"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Melde dich an, um Lieblings-Tätowierer zu speichern",
@@ -84,6 +85,7 @@
   "NO_REVIEWS": "Dieser Tätowierer hat noch keine Bewertungen.",
   "LEAVE_REVIEW": "Bewertung abgeben",
   "WRITE_OPINION": "Schreibe deine Meinung...",
+  "EVENTS": "Veranstaltungen",
   "SELECT_PHOTO": "Foto auswählen",
   "SEND_REVIEW": "Bewertung senden",
   "NOT_SPECIFIED": "Nicht angegeben",
@@ -115,6 +117,7 @@
     "Watercolor": "Aquarell",
     "Japanese": "Japanisch",
     "Tribal": "Tribal",
+    "Sketch": "Sketch / Skizze",
     "Surrealismo": "Surrealismus",
     "Biomecánico": "Biomechanisch",
     "Anime": "Anime",
@@ -130,7 +133,6 @@
     "ERROR_SAVE": "Fehler beim Speichern des Termins.",
     "MISSING_FIELDS": "Bitte fülle alle Pflichtfelder aus.",
     "TITLE": "Termin buchen bei {{tienda}}",
-    "ACCEPT_TATTOO_TERMS": "Ich habe die Einverständniserklärungen des Tätowierers gelesen und akzeptiert, bei dem ich einen Termin vereinbaren möchte.",
     "WORKER": "Mitarbeiter",
     "TYPE": "Terminart:",
     "SIZE_SMALL": "Klein (5-7cm)",
@@ -152,6 +154,7 @@
     "ADD_COMMENTS": "Zusätzliche Kommentare:",
     "UPLOAD_SKETCH": "Skizze hochladen (optional)",
     "ACCEPT_TERMS": "Ich akzeptiere die Nutzungsbedingungen und die Richtlinien der App.",
+    "ACCEPT_TATTOO_TERMS": "Ich habe die Bedingungen des Tätowierers gelesen und akzeptiere sie.",
     "BOOK": "Termin buchen",
     "NEXT": "Weiter",
     "NO_HOURS": "Keine verfügbaren Zeiten",
@@ -183,7 +186,6 @@
     "ZONE": "In welcher Zone:",
     "COMMENTS": "Zusätzliche Kommentare:"
   },
-  "NOTICIA": "Nachrichten",
   "PLACEHOLDER": "Suchen",
   "TATTOOIST": {
     "EVENT_WARNING": "⚠️ Der Tätowierer wird in {{ciudad}} sein"
@@ -254,7 +256,8 @@
     "ABOUT_US": "Über uns",
     "ABOUT_US_DESC": "Erfahre mehr über unsere App.",
     "LANGUAGE": "Sprache",
-    "SELECT_LANGUAGE": "Wähle eine Sprache"
+    "SELECT_LANGUAGE": "Wähle eine Sprache",
+    "THEME": "Thema"
   },
   "APPOINTMENT_STATUS": {
     "Pendiente": "Ausstehend",
@@ -496,7 +499,7 @@
     "AND": "und unsere",
     "PRIVACY_POLICY": "Datenschutzerklärung"
   },
-  "EVENTS": "Veranstaltungen",
+  "NOTICIA": "Nachricht",
   "PREFERIBLEMENTE": "Bevorzugt",
   "MANANA": "Morgen",
   "TARDE": "Nachmittag",
@@ -517,9 +520,10 @@
   "SKETCHES.NO_MATCHING": "Keine Skizzen für diesen Stil gefunden.",
   "SKETCHES.NO_SKETCHES": "Keine Skizzen verfügbar",
   "ACTIONSHEET": {
-    "SHARE": "Teilen",
-    "ADD_FAVORITE": "Zu Favoriten hinzufügen",
-    "REMOVE_FAVORITE": "Aus Favoriten entfernen",
-    "VIEW_CONSENTS": "Einwilligungen anzeigen"
-  }
+  "SHARE": "Teilen",
+  "ADD_FAVORITE": "Zu Favoriten hinzufügen",
+  "REMOVE_FAVORITE": "Aus Favoriten entfernen",
+  "VIEW_CONSENTS": "Einwilligungen anzeigen"
+}
+
 }

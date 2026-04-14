@@ -49,7 +49,8 @@
     "VERIFICATION_SENT_MESSAGE": "We have sent a verification email to",
     "NOT_RECEIVED": "Didn't receive the email?",
     "RESEND_EMAIL": "Resend email",
-    "ALREADY_VERIFIED": "I have already verified my email"
+    "ALREADY_VERIFIED": "I have already verified my email",
+    "DANGER_ZONE":"Irreversible actions"
   },
   "FAVS": {
     "LOGIN_REQUIRED": "Log in to save favorite tattoo artists",
@@ -64,18 +65,16 @@
     "EMAIL_LABEL": "Email Address",
     "SEND_LINK": "Send Reset Link"
   },
+  "PLACEHOLDER": "Search",
+  "STATUS": {
+    "Pendiente": "Pending",
+    "Aceptado": "Accepted",
+    "Editada": "Edited"
+  },
   "CLOSE": "Close",
   "PLAN": {
-    "NO_ADS": "Ad-Free Plan",
-    "RENEWAL_POLICY": "The subscription lasts for 1 month and will automatically renew at the same price and period unless you cancel it at least 24 hours before the end of the current period.",
-    "MANAGE_SUBSCRIPTION": "You can manage or cancel your subscription in Settings > Apple ID > Subscriptions.",
-    "ACCEPT_TERMS": "By subscribing, you accept our",
-    "TERMS_OF_USE": "Terms of Use",
-    "AND": "and our",
-    "PRIVACY_POLICY": "Privacy Policy"
+    "NO_ADS": "Ad-Free Plan"
   },
-  "COMMENT_PLACEHOLDER": "Write your opinion...",
-
   "SUBSCRIPTION": {
     "RENEWAL": "Your subscription will automatically renew at the same price and period until you cancel it in the Play Store or App Store. By doing so, you agree to our",
     "TERMS": "Terms and Conditions"
@@ -88,6 +87,7 @@
   "PRE_CONSULTATION": "Pre-consultation",
   "BOOK_APPOINTMENT": "Book Appointment",
   "NO_PHOTOS": "No photos to show.",
+  "EVENTS": "Events",
   "REVIEWS": "Reviews",
   "NO_REVIEWS": "This tattoo artist has no reviews yet.",
   "LEAVE_REVIEW": "Leave a review",
@@ -123,6 +123,7 @@
     "Watercolor": "Watercolor",
     "Japanese": "Japanese",
     "Tribal": "Tribal",
+    "Sketch": "Sketch / Outline",
     "Surrealismo": "Surrealism",
     "Biomecánico": "Biomechanical",
     "Anime": "Anime",
@@ -131,7 +132,7 @@
     "Mahori": "Mahori",
     "Chicano": "Chicano"
   },
-  "NOTICIA": "News",
+  "COMMENT_PLACEHOLDER": "Write your opinion...",
   "APPOINTMENT": {
     "ACCEPT_CONDITIONS": "You must accept the terms and conditions",
     "SAVED_SUCCESS": "The appointment has been created, please wait for the tattoo artist to respond.",
@@ -159,6 +160,7 @@
     "ADD_COMMENTS": "Additional comments:",
     "UPLOAD_SKETCH": "Upload sketch (optional)",
     "ACCEPT_TERMS": "I accept the terms and conditions and the app usage policy.",
+    "ACCEPT_TATTOO_TERMS": "I have read and accept the tattoo artist's terms and conditions.",
     "BOOK": "Book Appointment",
     "NEXT": "Next",
     "NO_HOURS": "No available hours",
@@ -186,16 +188,9 @@
     "BELLY_BUTTON": "Belly button",
     "NIPPLE": "Nipple",
     "APPOINTMENT_TYPE": "Appointment type:",
-    "ACCEPT_TATTOO_TERMS": "I have read and accepted the consents of the tattoo artist I am requesting an appointment with.",
     "STYLES": "Styles:",
     "ZONE": "Zone:",
     "COMMENTS": "Additional comments:"
-  },
-  "PLACEHOLDER": "Search",
-  "APPOINTMENT_STATUS": {
-    "Pendiente": "Pending",
-    "Aceptado": "Accepted",
-    "Editado": "Edited"
   },
   "TATTOOIST": {
     "EVENT_WARNING": "⚠️ The tattoo artist will be in {{ciudad}}"
@@ -265,11 +260,11 @@
     "HELP_CENTER_DESC": "Find answers to your questions.",
     "ABOUT_US": "About Us",
     "ABOUT_US_DESC": "Learn more about our application.",
-    
     "LANGUAGE": "Language",
-    "SELECT_LANGUAGE": "Select a language"
+    "SELECT_LANGUAGE": "Select a language",
+    "THEME": "Theme"
   },
-  "EDIT_FIELD": "Edit",
+  "EDIT_FIELD": "Edit {{field}}",
   "PLACEHOLDER_NAME": "Enter the new name",
   "PLACEHOLDER_MOBILE": "Enter the new mobile number",
   "BUTTON_EDIT": "Edit",
@@ -487,7 +482,10 @@
       "ANSWER": "Yes, you can update your personal information, including name, phone, and profile picture, from the 'Profile' section."
     }
   },
-  "EVENTS": "Events",
+  "LOADING_TATTOO_ARTISTS": "Loading tattoo artists...",
+  "ERROR_LOADING_TATTOO_ARTISTS": "Error loading tattoo artists.",
+  "RETRY": "Retry",
+  "NOTICIA": "News",
   "PREFERIBLEMENTE": "Preferably",
   "MANANA": "Morning",
   "TARDE": "Afternoon",
@@ -508,10 +506,18 @@
   "SKETCHES.NO_MATCHING": "No sketches found for this style.",
   "SKETCHES.NO_SKETCHES": "No sketches available",
   "ACTIONSHEET": {
-    "SHARE": "Share",
-    "ADD_FAVORITE": "Add to favorites",
-    "REMOVE_FAVORITE": "Remove from favorites",
-    "VIEW_CONSENTS": "View consents"
+  "SHARE": "Share",
+  "ADD_FAVORITE": "Add to favorites",
+  "REMOVE_FAVORITE": "Remove from favorites",
+  "VIEW_CONSENTS": "View consents"
+},
+"PLANS": {
+    "RENEWAL_POLICY": "Subscription renews automatically unless cancelled at least 24 hours before the end of the current period",
+    "ACCEPT_TERMS": "By continuing, you accept the ",
+    "TERMS_OF_USE": "Terms of Use",
+    "AND": " and the ",
+    "PRIVACY_POLICY": "Privacy Policy"
   }
+
 
 }

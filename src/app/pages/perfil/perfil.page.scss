@@ -1,12 +1,12 @@
 // ── Content ───────────────────────────────────────────────
 .main-toolbar {
-  --background: #121212;
+  background: var(--ion-card-background);
   --border-width: 0;
   padding-top: var(--ion-safe-area-top);
 }
 
 .main-content {
-  --background: #121212;
+  background: var(--ion-card-background);
 }
 
 // ════════════════════════════════════════
@@ -30,7 +30,7 @@
 }
 
 .lang-select {
-  --background: #1A1A1A;
+  background: var(--ion-card-background);
   --color: #AAAAAA;
   --border-color: #2E2E2E;
   --border-radius: 8px;

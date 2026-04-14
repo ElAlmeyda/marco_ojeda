@@ -18,7 +18,7 @@
         <span class="section-label">{{ 'ACCOUNT.REMEMBER_PASSWORD' | translate }}</span>
         <div class="email-display">
           <ion-icon name="mail-outline" class="email-icon"></ion-icon>
-          <span class="email-text">{{ usuario.email }}</span>
+          <span class="email-text">{{ usuario.correo }}</span>
         </div>
       </div>
 
@@ -27,7 +27,7 @@
         <button class="action-row" (click)="showActionSheet('email')">
           <div class="action-left">
             <ion-icon name="pencil-outline" class="action-icon"></ion-icon>
-            <span>{{ 'ACCOUNT.UPDATE_EMAIL' | translate }}</span>
+            <span class="email-text">{{ 'ACCOUNT.UPDATE_EMAIL' | translate }}</span>
           </div>
           <ion-icon name="chevron-forward-outline" class="chevron"></ion-icon>
         </button>
@@ -37,7 +37,7 @@
         <button class="action-row" (click)="cambioContrasena()">
           <div class="action-left">
             <ion-icon name="lock-closed-outline" class="action-icon"></ion-icon>
-            <span>{{ 'ACCOUNT.FORGOT_PASSWORD' | translate }}</span>
+            <span class="email-text">{{ 'ACCOUNT.FORGOT_PASSWORD' | translate }}</span>
           </div>
           <ion-icon name="chevron-forward-outline" class="chevron"></ion-icon>
         </button>
@@ -72,7 +72,7 @@
       <h2 class="verification-title">{{ 'ACCOUNT.VERIFICATION_SENT_TITLE' | translate }}</h2>
       <p class="verification-text">
         {{ 'ACCOUNT.VERIFICATION_SENT_MESSAGE' | translate }}
-        <strong class="email-highlight">{{ usuario.email }}</strong>
+        <strong class="email-highlight">{{ usuario.correo }}</strong>
       </p>
       <p class="verification-sub">{{ 'ACCOUNT.NOT_RECEIVED' | translate }}</p>
       <div class="verification-actions">

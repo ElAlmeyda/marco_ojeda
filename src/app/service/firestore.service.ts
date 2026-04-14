@@ -166,7 +166,7 @@ export class FirestoreService {
   }
 
   verificarCorreoExistente(correo: string): Observable<boolean> {
-    return this.database.collection('Usuarios', ref => ref.where('email', '==', correo))
+    return this.database.collection('Usuarios', ref => ref.where('correo', '==', correo))
       .valueChanges()
       .pipe(map(usuarios => usuarios.length > 0));
   }

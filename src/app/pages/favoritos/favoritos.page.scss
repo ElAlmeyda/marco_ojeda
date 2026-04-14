@@ -1,6 +1,6 @@
 // ── Content ───────────────────────────────────────────────
 .favs-content {
-  --background: #121212;
+  background: var(--ion-background-color);
 }
 
 // ── Segment ───────────────────────────────────────────────
@@ -9,11 +9,11 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  background: #121212;
+  background: var(--ion-background-color);
 }
 
 .custom-segment {
-  --background: #1A1A1A;
+  background: var(--ion-background-color);
   border-radius: 10px;
   border: 1px solid #2E2E2E;
   padding: 3px;
@@ -86,8 +86,8 @@
   border-bottom: 1px solid #1E1E1E;
 
   &:last-child { border-bottom: none; }
-  &:hover { background: #1A1A1A; }
-  &:active { background: #222222; }
+  &:hover { background: var(--ion-background-color); }
+  &:active { background: var(--ion-background-color); }
 }
 
 .fav-avatar {
@@ -109,7 +109,7 @@
   flex: 1;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #EDEDED;
+  color: var(--ion-text-color);
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;

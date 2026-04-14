@@ -1,23 +1,22 @@
-  <ion-tabs>
-      <ion-tab-bar slot="bottom">
-        <ion-tab-button [routerLink]="['/tabs/folder', usuario.uid]" style="color:white">
-          <img src="assets/icon/icon.png" style="width: 40px; height: 40px;"/>
-        </ion-tab-button>
-        <ion-tab-button routerLink="/tabs/cita" style="color:white">
-          <ion-icon name="calendar-outline"></ion-icon>
-        </ion-tab-button>
-        <ion-tab-button routerLink="/tabs/noticias" style="color:white">
-          <ion-icon name="globe-outline"></ion-icon>
-        </ion-tab-button>
-        <ion-tab-button routerLink="/tabs/favoritos" style="color:white">
-          <ion-icon name="bookmark-outline"></ion-icon>
-        </ion-tab-button>
-        <ion-tab-button routerLink="/tabs/perfil" style="color:white">
-          <ion-icon name="person-outline" *ngIf="!usuario.avatar"></ion-icon>
-          <ion-avatar *ngIf="usuario.avatar">
-            <ion-img [src]="usuario.avatar[0]"></ion-img>
-          </ion-avatar>
-        </ion-tab-button>
-      </ion-tab-bar>
-    </ion-tabs>  
-
+<ion-tabs>
+  <ion-tab-bar slot="bottom" class="custom-tab-bar">
+    <ion-tab-button [routerLink]="['/tabs/folder', usuario.uid]" class="custom-tab-btn">
+      <img [src]="temaActual === 'light' ? 'assets/icon/icon_ligt.png' : 'assets/icon/icon.png'" style="width: 30px; height: 30px;"/>
+    </ion-tab-button>
+    <ion-tab-button routerLink="/tabs/cita" class="custom-tab-btn">
+      <ion-icon name="calendar-outline"></ion-icon>
+    </ion-tab-button>
+    <ion-tab-button routerLink="/tabs/noticias" class="custom-tab-btn">
+      <ion-icon name="globe-outline"></ion-icon>
+    </ion-tab-button>
+    <ion-tab-button routerLink="/tabs/favoritos" class="custom-tab-btn">
+      <ion-icon name="bookmark-outline"></ion-icon>
+    </ion-tab-button>
+    <ion-tab-button routerLink="/tabs/perfil" class="custom-tab-btn">
+      <ion-icon name="person-outline" *ngIf="!usuario.avatar"></ion-icon>
+      <ion-avatar *ngIf="usuario.avatar" style="width: 28px; height: 28px;">
+        <ion-img [src]="usuario.avatar[0]"></ion-img>
+      </ion-avatar>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

@@ -78,7 +78,6 @@
 
     <!-- Header artista -->
     <div class="artist-header">
-      <span class="section-label">{{ 'EVENTS.TITLE' | translate }}</span>
       <h2 class="artist-shop-name">{{ tatuadorSeleccionado.nombreTienda }}</h2>
 
       <!-- Redes sociales -->
@@ -132,7 +131,7 @@
 
           <ion-item fill="outline" class="form-item">
             <ion-label position="floating">{{ 'APPOINTMENT.USER_EMAIL' | translate }}</ion-label>
-            <ion-input [(ngModel)]="usuario.email" [ngModelOptions]="{standalone: true}"></ion-input>
+            <ion-input [(ngModel)]="usuario.correo" [ngModelOptions]="{standalone: true}"></ion-input>
           </ion-item>
 
           <ion-item fill="outline" class="form-item">
