@@ -117,6 +117,10 @@ export class AjustesPage implements OnInit {
     this.cargarPreguntas();
   }
 
+  get currentLang(): string {
+    return this.translate.currentLang || this.translate.defaultLang;
+  }
+
   obtenerUsuario() {
     this.user.getUsuarios().subscribe(async () => {
       const usuario = this.user.getUsuarioConcreto(this.usuarioActual.uid);

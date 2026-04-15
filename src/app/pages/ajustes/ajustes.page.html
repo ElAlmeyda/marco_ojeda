@@ -116,7 +116,7 @@
             <h3 class="history-artist">{{ cita.nombreTatuador }}</h3>
             <div class="history-meta">
               <ion-icon name="calendar-outline"></ion-icon>
-              <span>{{ cita.dia | date:'fullDate' }} · {{ cita.hora }}</span>
+              <span>{{ cita.dia | date:'fullDate':undefined:currentLang }} · {{ cita.hora }}</span>
             </div>
             <div class="history-meta" *ngIf="cita.estilo">
               <ion-icon name="color-palette-outline"></ion-icon>

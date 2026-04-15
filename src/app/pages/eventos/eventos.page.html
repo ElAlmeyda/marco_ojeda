@@ -135,13 +135,13 @@
           </ion-item>
 
           <ion-item fill="outline" class="form-item">
-            <ion-select label="{{ 'APPOINTMENT.STYLE' | translate }}" [(ngModel)]="estilo" [ngModelOptions]="{standalone: true}">
+            <ion-select label="{{ 'APPOINTMENT.STYLE' | translate }}" [(ngModel)]="estilo" [ngModelOptions]="{standalone: true}" interface="action-sheet" interfaceOptions="{ cssClass: 'custom-action-sheet' }">
               <ion-select-option *ngFor="let estilos of tatuadorSeleccionado.estilos">{{ estilos }}</ion-select-option>
             </ion-select>
           </ion-item>
 
           <ion-item fill="outline" class="form-item">
-            <ion-select label="{{ 'APPOINTMENT.BODY_ZONE' | translate }}" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}">
+            <ion-select label="{{ 'APPOINTMENT.BODY_ZONE' | translate }}" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}" interface="action-sheet" interfaceOptions="{ cssClass: 'custom-action-sheet' }">
               <ion-select-option value="Brazo">{{ 'APPOINTMENT.ZONE_ARM' | translate }}</ion-select-option>
               <ion-select-option value="Pierna">{{ 'APPOINTMENT.ZONE_LEG' | translate }}</ion-select-option>
               <ion-select-option value="Espalda">{{ 'APPOINTMENT.ZONE_BACK' | translate }}</ion-select-option>

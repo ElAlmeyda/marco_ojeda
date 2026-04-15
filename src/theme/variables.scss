@@ -3441,7 +3441,7 @@ ion-select.form-item {
 .appt-title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--ion-text-color);
+  color: #C9A86A;
   margin: 0;
   letter-spacing: 0.01em;
 }
@@ -3765,4 +3765,108 @@ ion-content {
   .detail-shop-name { color: #1A1A1A; }
   .detail-city   { color: #6B6560; }
   .detail-desc   { color: #6B6560; }
+}
+
+// ── Action Sheet global ────────────────────────────────
+.action-sheet-group {
+  background: #1A1A1A !important;
+}
+
+.action-sheet-title {
+  color: #EDEDED !important;
+  background: #1A1A1A !important;
+}
+
+.action-sheet-button {
+  color: #EDEDED !important;
+  background: #1A1A1A !important;
+}
+
+.action-sheet-button .action-sheet-button-inner {
+  color: #EDEDED !important;
+}
+
+.action-sheet-cancel .action-sheet-button-inner {
+  color: #C9A86A !important;
+}
+
+// ── Action Sheet en tema CLARO ─────────────────────────
+body.light-theme {
+  .action-sheet-group {
+    background: #EDE8DF !important;
+  }
+
+  .action-sheet-title {
+    color: #1A1A1A !important;
+    background: #EDE8DF !important;
+  }
+
+  .action-sheet-button {
+    color: #1A1A1A !important;
+    background: #EDE8DF !important;
+  }
+
+  .action-sheet-button .action-sheet-button-inner {
+    color: #1A1A1A !important;
+  }
+
+  .action-sheet-cancel .action-sheet-button-inner {
+    color: #C9A86A !important;
+  }
+}
+
+// ── Alert global ───────────────────────────────────────
+.alert-wrapper {
+  background: #1A1A1A !important;
+  border: 0.5px solid #2E2E2E !important;
+  border-radius: 14px !important;
+}
+
+.alert-head .alert-title {
+  color: #EDEDED !important;
+}
+
+.alert-message {
+  color: #808080 !important;
+}
+
+.alert-button-group {
+  border-top: 0.5px solid #2E2E2E !important;
+}
+
+.alert-button {
+  color: #C9A86A !important;
+}
+
+.alert-button.alert-button-role-cancel {
+  color: #808080 !important;
+}
+
+// ── Alert en tema CLARO ────────────────────────────────
+body.light-theme {
+
+  .alert-wrapper {
+    background: #EDE8DF !important;
+    border-color: #D8D0C4 !important;
+  }
+
+  .alert-head .alert-title {
+    color: #1A1A1A !important;
+  }
+
+  .alert-message {
+    color: #6B6560 !important;
+  }
+
+  .alert-button-group {
+    border-top-color: #D8D0C4 !important;
+  }
+
+  .alert-button {
+    color: #C9A86A !important;
+  }
+
+  .alert-button.alert-button-role-cancel {
+    color: #6B6560 !important;
+  }
 }

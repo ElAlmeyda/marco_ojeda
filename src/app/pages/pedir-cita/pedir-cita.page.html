@@ -58,7 +58,7 @@
             [(ngModel)]="tipo"
             (ionChange)="actualizarDuracionHoras()"
             [ngModelOptions]="{standalone: true}"
-            interface="action-sheet">
+            interface="action-sheet" interfaceOptions="{ cssClass: 'custom-action-sheet' }">
             <ion-select-option value="Chico">{{ 'APPOINTMENT.SIZE_SMALL' | translate }}</ion-select-option>
             <ion-select-option value="Mediano">{{ 'APPOINTMENT.SIZE_MEDIUM' | translate }}</ion-select-option>
             <ion-select-option value="Grande">{{ 'APPOINTMENT.SIZE_LARGE' | translate }}</ion-select-option>
@@ -118,7 +118,7 @@
 
           <div class="form-block">
             <span class="section-label">{{ 'APPOINTMENT.STYLES' | translate }}</span>
-            <ion-select class="form-item" [(ngModel)]="estilo" [ngModelOptions]="{standalone: true}" interface="action-sheet">
+            <ion-select class="form-item" [(ngModel)]="estilo" [ngModelOptions]="{standalone: true}" interface="action-sheet" interfaceOptions="{ cssClass: 'custom-action-sheet' }">
               <ion-select-option *ngFor="let estilos of tatuador.estilos" [value]="estilos">
                 {{ 'STYLE.' + estilos | translate }}
               </ion-select-option>
@@ -127,7 +127,7 @@
 
           <div class="form-block">
             <span class="section-label">{{ 'APPOINTMENT.ZONE' | translate }}</span>
-            <ion-select class="form-item" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}" interface="action-sheet">
+            <ion-select class="form-item" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}" interface="action-sheet" interfaceOptions="{ cssClass: 'custom-action-sheet' }">
               <ion-select-option value="Brazo">{{ 'APPOINTMENT.ZONE_ARM' | translate }}</ion-select-option>
               <ion-select-option value="Pierna">{{ 'APPOINTMENT.ZONE_LEG' | translate }}</ion-select-option>
               <ion-select-option value="Espalda">{{ 'APPOINTMENT.ZONE_BACK' | translate }}</ion-select-option>
@@ -191,7 +191,7 @@
 
           <div class="form-block">
             <span class="section-label">{{ 'APPOINTMENT.SELECT_PIERCING' | translate }}</span>
-            <ion-select class="form-item" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}" interface="action-sheet">
+            <ion-select class="form-item" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}" interface="action-sheet" interfaceOptions="{ cssClass: 'custom-action-sheet' }">
               <ion-select-option *ngFor="let p of piercings" [value]="p">
                 {{ 'APPOINTMENT.' + p | translate }}
               </ion-select-option>
@@ -309,7 +309,7 @@
 
           <div class="form-block" *ngIf="trabajadores.length > 1">
             <span class="section-label">{{ 'APPOINTMENT.WORKER' | translate }}</span>
-            <ion-select class="form-item" [(ngModel)]="tatuadorSeleccionado" (ionChange)="seleccionarTrabajador($event.detail.value)" [ngModelOptions]="{standalone: true}" interface="action-sheet">
+            <ion-select class="form-item" [(ngModel)]="tatuadorSeleccionado" (ionChange)="seleccionarTrabajador($event.detail.value)" [ngModelOptions]="{standalone: true}" interface="action-sheet" interfaceOptions="{ cssClass: 'custom-action-sheet' }">
               <ion-select-option *ngFor="let trabajador of trabajadores" [value]="trabajador">{{ trabajador.nombre }}</ion-select-option>
             </ion-select>
           </div>
@@ -323,14 +323,14 @@
 
           <div class="form-block">
             <span class="section-label">{{ 'APPOINTMENT.STYLE' | translate }}</span>
-            <ion-select class="form-item" [(ngModel)]="estilo" [ngModelOptions]="{standalone: true}" interface="action-sheet">
+            <ion-select class="form-item" [(ngModel)]="estilo" [ngModelOptions]="{standalone: true}" interface="action-sheet" interfaceOptions="{ cssClass: 'custom-action-sheet' }">
               <ion-select-option *ngFor="let estilos of tatuador.estilos">{{ estilos }}</ion-select-option>
             </ion-select>
           </div>
 
           <div class="form-block">
             <span class="section-label">{{ 'APPOINTMENT.BODY_ZONE' | translate }}</span>
-            <ion-select class="form-item" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}" interface="action-sheet">
+            <ion-select class="form-item" [(ngModel)]="zona" [ngModelOptions]="{standalone: true}" interface="action-sheet" interfaceOptions="{ cssClass: 'custom-action-sheet' }">
               <ion-select-option value="Brazo">{{ 'APPOINTMENT.ZONE_ARM' | translate }}</ion-select-option>
               <ion-select-option value="Pierna">{{ 'APPOINTMENT.ZONE_LEG' | translate }}</ion-select-option>
               <ion-select-option value="Espalda">{{ 'APPOINTMENT.ZONE_BACK' | translate }}</ion-select-option>
@@ -342,7 +342,7 @@
 
           <div class="form-block">
             <span class="section-label">{{ 'APPOINTMENT.TYPE' | translate }}</span>
-            <ion-select class="form-item" [(ngModel)]="tipo" [ngModelOptions]="{standalone: true}" interface="action-sheet">
+            <ion-select class="form-item" [(ngModel)]="tipo" [ngModelOptions]="{standalone: true}" interface="action-sheet" interfaceOptions="{ cssClass: 'custom-action-sheet' }">
               <ion-select-option value="Chico">{{ 'APPOINTMENT.SIZE_SMALL' | translate }}</ion-select-option>
               <ion-select-option value="Mediano">{{ 'APPOINTMENT.SIZE_MEDIUM' | translate }}</ion-select-option>
               <ion-select-option value="Grande">{{ 'APPOINTMENT.SIZE_LARGE' | translate }}</ion-select-option>
@@ -354,7 +354,7 @@
 
           <div class="form-block">
             <span class="section-label">{{ 'PREFERIBLEMENTE' | translate }}</span>
-            <ion-select class="form-item" [(ngModel)]="preferiblemente" [ngModelOptions]="{standalone: true}" interface="action-sheet">
+            <ion-select class="form-item" [(ngModel)]="preferiblemente" [ngModelOptions]="{standalone: true}" interface="action-sheet" interfaceOptions="{ cssClass: 'custom-action-sheet' }">
               <ion-select-option value="Mañana">{{ 'MANANA' | translate }}</ion-select-option>
               <ion-select-option value="Tarde">{{ 'TARDE' | translate }}</ion-select-option>
             </ion-select>
