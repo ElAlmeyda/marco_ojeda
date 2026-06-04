@@ -1,25 +1,311 @@
-/* Clase para contenedor del avatar */
-.center-title {
+// ── Content ───────────────────────────────────────────────────────────────────
+.perfil-content {
+  --background: #0e0e0f;
+}
+
+// ── Hero ──────────────────────────────────────────────────────────────────────
+.perfil-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 36px 20px 28px;
+  background: linear-gradient(160deg, #131315 0%, #1a1a1c 100%);
+  border-bottom: 1px solid #1e1e22;
+}
+
+.perfil-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(201, 168, 76, 0.1);
+  border: 2px solid rgba(201, 168, 76, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+
+  ion-icon {
+    font-size: 38px;
+    color: #c9a84c;
+  }
+}
+
+.perfil-nombre {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e8e8e0;
+  margin: 0 0 10px;
+  letter-spacing: 0.02em;
+}
+
+.perfil-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: #c9a84c;
+  font-weight: 500;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #c9a84c;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+// ── Segmento ──────────────────────────────────────────────────────────────────
+.segment-wrapper {
+  padding: 16px 16px 0;
+  background: #0e0e0f;
+
+  ion-segment {
+    --background: #131315;
+    border-radius: 12px;
+    border: 1px solid #1e1e22;
+    padding: 3px;
+  }
+
+  ion-segment-button {
+    --color: #666;
+    --color-checked: #c9a84c;
+    --background-checked: rgba(201, 168, 76, 0.1);
+    --indicator-color: transparent;
+    --border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    min-height: 36px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+}
+
+// ── Tab content ───────────────────────────────────────────────────────────────
+.tab-content {
+  padding: 16px;
+}
+
+// ── Secciones ─────────────────────────────────────────────────────────────────
+.info-section {
+  background: #131315;
+  border: 1px solid #1e1e22;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.section-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #c9a84c;
+  font-weight: 600;
+  margin: 0 0 14px;
+}
+
+.section-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+
+  .section-label { margin-bottom: 0; }
+
+  .toggle-icon {
+    color: #c9a84c;
+    font-size: 18px;
+  }
+}
+
+// ── Info rows ─────────────────────────────────────────────────────────────────
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #1e1e22;
+
+  &:last-child { border-bottom: none; }
+}
+
+.info-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(201, 168, 76, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  ion-icon {
+    color: #c9a84c;
+    font-size: 18px;
+  }
+}
+
+.info-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.info-caption {
+  font-size: 11px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.info-value {
+  font-size: 14px;
+  color: #e8e8e0;
+  font-weight: 500;
+}
+
+// ── Tarjetas de cita ──────────────────────────────────────────────────────────
+.cita-card {
+  background: #1a1a1c;
+  border: 1px solid #1e1e22;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+
+  &:last-child { margin-bottom: 0; }
+
+  &.accent {
+    border-color: rgba(201, 168, 76, 0.25);
+    background: rgba(201, 168, 76, 0.04);
+  }
+
+  &.confirmed {
+    border-color: rgba(52, 199, 89, 0.25);
+    background: rgba(52, 199, 89, 0.04);
+  }
+}
+
+.cita-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.cita-icon {
+  font-size: 18px;
+
+  &.warning   { color: #c9a84c; }
+  &.pending   { color: #888; }
+  &.confirmed { color: #34c759; }
+}
+
+.cita-tag {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #666;
+}
+
+.cita-nombre {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e8e8e0;
+  margin: 0 0 8px;
+}
+
+.cita-meta {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 6px;
+
+  span {
     display: flex;
-    justify-content: center;
     align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: #888;
+
+    ion-icon {
+      font-size: 14px;
+      color: #c9a84c;
+      flex-shrink: 0;
+    }
   }
-  
-  .raton-menu {
-    width: 110px; /* Ajusta el tamaño del avatar según lo necesario */
-    height: 110px;
-  }
-  
-  ion-toolbar {
-    --padding-start: 0px;
-    --padding-end: 0px;
+}
+
+// ── Botones aceptar/rechazar ───────────────────────────────────────────────────
+.cita-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn-accept,
+.btn-reject {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 0;
+  border-radius: 10px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  ion-icon { font-size: 16px; }
+
+  &:active { opacity: 0.75; }
+}
+
+.btn-accept {
+  background: rgba(201, 168, 76, 0.15);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  color: #c9a84c;
+}
+
+.btn-reject {
+  background: rgba(255, 69, 58, 0.1);
+  border: 1px solid rgba(255, 69, 58, 0.25);
+  color: #ff453a;
+}
+
+// ── Empty state ───────────────────────────────────────────────────────────────
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px;
+  color: #444;
+
+  ion-icon {
+    font-size: 44px;
+    margin-bottom: 10px;
   }
 
-  .custom-label {
-    color: #FFFF00; /* Cambia a cualquier color que desees */
+  p {
+    font-size: 14px;
+    margin: 0;
   }
+}
 
-  ion-input[disabled] {
-    color: #b0b0b0; /* Cambia el color del input cuando está deshabilitado */
-  }
-  
+.empty-msg {
+  text-align: center;
+  color: #444;
+  font-size: 13px;
+  padding: 16px 0 4px;
+  margin: 0;
+}

@@ -1,65 +1,137 @@
-<ion-header [translucent]="true">
-  <ion-toolbar >
+<ion-header>
+  <ion-toolbar class="custom-toolbar" mode="md" style="position: relative;">
+
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button *ngIf="vistaActual === 'home'"></ion-menu-button>
+      <ion-button *ngIf="vistaActual !== 'home'" (click)="volverVista()">
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-buttons>
-    <ion-item class="center-title">
-      <ion-avatar class="raton-menu">
-        <ion-img alt="avatar" src="../../../assets/icon/favicon.png" routerLink="/folder">
-        </ion-img>
-      </ion-avatar>
-      
-    </ion-item>
+
+    <div class="toolbar-center" routerLink="/folder">
+      <img src="../../../assets/icon/favicon.png" alt="Logo">
+    </div>
+
+    <ion-buttons slot="end">
+      <div style="width: 40px;"></div>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-label>
-    <h1 style="font-family: 'Montserrat', sans-serif; padding: 10px; margin-left: 10px;" id="novedades">
-      Las 10 novedades que nos hacen diferente
-    </h1>
-    <ion-modal trigger="novedades">
-      <ng-template>
-        <ion-header>
-          <ion-toolbar>
-            <ion-buttons slot="start">
-              <ion-back-button defaultHref (click)="cancel()"></ion-back-button>
-            </ion-buttons>
-            <ion-item class="center-title">
-              <ion-avatar class="raton-menu">
-                <ion-img alt="avatar" src="../../../assets/icon/favicon.png">
-                </ion-img>
-              </ion-avatar>
-              
-            </ion-item>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content>
-          <ion-label>
-            <ion-item style="font-family: 'Montserrat', sans-serif;" lines="none"> Las 10 novedades que nos hacen diferente </ion-item>
-            <ion-list style="padding-left: 20px;" lines="none"> 
-              <ion-item class="toggle"> 1. No parecemos una clinica</ion-item>
-              <ion-item class="toggle"> 2. Roof Terrace</ion-item>
-              <ion-item class="toggle"> 3. Mimamos al personal</ion-item>
-              <ion-item class="toggle"> 4. Plato TV</ion-item>
-              <ion-item class="toggle"> 5. Mini Bar</ion-item>
-              <ion-item class="toggle"> 6. Planta para niños</ion-item>
-              <ion-item class="toggle"> 7. Tour Dental</ion-item>
-              <ion-item class="toggle"> 8. No nos gustan las financieras</ion-item>
-              <ion-item class="toggle"> 9. Somos solidarios</ion-item>
-              <ion-item class="toggle"> 10. Siempre innovando</ion-item>
-            </ion-list>
-          </ion-label>
-        </ion-content>
-      </ng-template>
-    </ion-modal>
-    
-    <h1 style="font-family: 'Montserrat', sans-serif; padding: 10px; margin: 10px;" routerLink="/foto-clinica">
-      Imagenes de la clinica
-    </h1>
+<ion-content [fullscreen]="true" class="clinica-content">
 
-    
-    <div #mapElement style="width: 100%; height: 150px; margin: auto; margin-top: 30px;  width: 300px; height: 300px; border: 1px solid #ccc;"></div>
-    
-  </ion-label>
+  <!-- ── VISTA: HOME ── -->
+  <div *ngIf="vistaActual === 'home'" class="view-container">
+    <div class="hero-section">
+      <div class="hero-badge"><div class="dot"></div><span>Descubre</span></div>
+      <h1 class="hero-title">Lo que nos hace<br><em>diferentes</em></h1>
+      <p class="hero-sub">Una experiencia clínica que rompe con lo convencional</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="menu-list">
+      <div class="menu-card featured" (click)="irA('novedades')">
+        <div class="card-icon gold">
+          <ion-icon name="star-outline"></ion-icon>
+        </div>
+        <div class="card-body">
+          <h3>10 novedades únicas</h3>
+          <p>Lo que nos distingue del resto</p>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
+      </div>
+
+      <div class="menu-card" (click)="irA('plantas')">
+        <div class="card-icon">
+          <ion-icon name="business-outline"></ion-icon>
+        </div>
+        <div class="card-body">
+          <h3>Imágenes de la clínica</h3>
+          <p>Explora cada planta</p>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
+      </div>
+    </div>
+
+    <div class="map-wrapper">
+      <div #mapElement class="map-element"></div>
+    </div>
+  </div>
+
+  <!-- ── VISTA: NOVEDADES ── -->
+  <div *ngIf="vistaActual === 'novedades'" class="view-container">
+    <div class="hero-section">
+      <div class="hero-badge"><div class="dot"></div><span>Novedades</span></div>
+      <h1 class="hero-title">10 razones para<br><em>elegirnos</em></h1>
+      <p class="hero-sub">Lo que nos hace verdaderamente únicos</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="novedades-grid">
+      <div class="novedad-item" *ngFor="let novedad of novedades; let i = index">
+        <span class="novedad-num">{{ (i + 1).toString().padStart(2, '0') }}</span>
+        <span class="novedad-text">{{ novedad }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── VISTA: PLANTAS ── -->
+  <div *ngIf="vistaActual === 'plantas'" class="view-container">
+    <div class="hero-section">
+      <div class="hero-badge"><div class="dot"></div><span>Tour virtual</span></div>
+      <h1 class="hero-title">Explora<br><em>nuestra clínica</em></h1>
+      <p class="hero-sub">Selecciona una planta para ver las imágenes</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="plantas-grid">
+      <div class="planta-card" *ngFor="let planta of plantas" (click)="abrirCarrusel(planta)">
+        <div class="planta-num">{{ planta.label }}</div>
+        <div class="planta-body">
+          <h3>{{ planta.nombre }}</h3>
+          <p>{{ planta.desc }}</p>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── VISTA: CARRUSEL ── -->
+  <div *ngIf="vistaActual === 'carrusel'" class="view-container">
+    <div class="hero-section">
+      <div class="hero-badge"><div class="dot"></div><span>Tour</span></div>
+      <h1 class="hero-title">{{ plantaActual?.nombre }}<br><em>{{ plantaActual?.desc }}</em></h1>
+    </div>
+
+    <div class="carrusel-wrapper">
+      <div class="carrusel-stage">
+        <img
+          *ngIf="images[currentIndex]"
+          [src]="images[currentIndex]"
+          [alt]="'Foto ' + (currentIndex + 1)"
+          class="carrusel-img" />
+        <div *ngIf="!images[currentIndex]" class="carrusel-placeholder">
+          <ion-icon name="image-outline"></ion-icon>
+          <span>Foto {{ currentIndex + 1 }} de {{ images.length }}</span>
+        </div>
+      </div>
+
+      <div class="carrusel-controls">
+        <button class="ctrl-btn" (click)="showPrevious()">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+          Anterior
+        </button>
+        <span class="ctrl-counter">{{ currentIndex + 1 }} / {{ images.length }}</span>
+        <button class="ctrl-btn" (click)="showNext()">
+          Siguiente
+          <ion-icon name="arrow-forward-outline"></ion-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
 </ion-content>

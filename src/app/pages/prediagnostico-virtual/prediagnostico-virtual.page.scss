@@ -1,21 +1,273 @@
-ion-input {
-    margin: 5px;
+// ── Variables ─────────────────────────────────────────────
+$gold:        #c9a84c;
+$gold-dim:    rgba(201, 168, 76, 0.2);
+$gold-faint:  rgba(201, 168, 76, 0.08);
+$gold-border: rgba(201, 168, 76, 0.25);
+
+$bg-base:     #0e0e0f;
+$bg-card:     #131315;
+$bg-input:    #0c0c0d;
+$bg-featured: #161510;
+
+$border:      #1e1e22;
+$icon-bg:     #1a1a1c;
+$icon-border: #2a2a2e;
+
+$text-primary: #f0efea;
+$text-muted:   #5a5a55;
+$text-hint:    #3a3a38;
+
+// ── Content ───────────────────────────────────────────────
+.diag-content {
+  --background: #{$bg-base};
 }
 
+// ── Wrapper ───────────────────────────────────────────────
+.diag-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
 
-/* Clase para contenedor del avatar */
-.center-title {
+// ── Form header ───────────────────────────────────────────
+.diag-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 24px 20px;
+  border-bottom: 0.5px solid $border;
+
+  .diag-icon-ring {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 0.5px solid $gold-border;
+    background: $gold-faint;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    ion-icon {
+      font-size: 20px;
+      color: $gold;
+    }
   }
-  
-  .raton-menu {
-    width: 110px; /* Ajusta el tamaño del avatar según lo necesario */
-    height: 110px;
+
+  .diag-title-block {
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: $text-primary;
+      margin: 0 0 3px;
+      letter-spacing: 0.3px;
+    }
+
+    p {
+      font-size: 11px;
+      color: $text-muted;
+      margin: 0;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
   }
-  
-  ion-toolbar {
-    --padding-start: 0px;
-    --padding-end: 0px;
+}
+
+// ── Section labels ────────────────────────────────────────
+.section-label {
+  display: block;
+  font-size: 10px;
+  color: $text-hint;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 18px 24px 8px;
+}
+
+.section-divider {
+  height: 0.5px;
+  background: $border;
+  margin: 6px 24px 0;
+}
+
+// ── Fields group ──────────────────────────────────────────
+.fields-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 20px;
+}
+
+// ── Field item ────────────────────────────────────────────
+.field-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: $bg-card;
+  border: 0.5px solid $border;
+  border-radius: 12px;
+  padding: 13px 16px;
+  transition: border-color 0.2s ease;
+  cursor: default;
+
+  &:focus-within {
+    border-color: $gold-border;
   }
+
+  &.featured {
+    background: $bg-featured;
+    border-color: $gold-border;
+  }
+}
+
+// ── Field icon ────────────────────────────────────────────
+.field-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: $icon-bg;
+  border: 0.5px solid $icon-border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+
+  ion-icon {
+    font-size: 15px;
+    color: #4a4a50;
+  }
+
+  &.featured-icon {
+    background: $gold-faint;
+    border-color: $gold-border;
+
+    ion-icon {
+      color: $gold;
+    }
+  }
+}
+
+// ── Field inner ───────────────────────────────────────────
+.field-inner {
+  flex: 1;
+  min-width: 0;
+
+  .field-label {
+    display: block;
+    font-size: 10px;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  ion-input,
+  ion-textarea {
+    --background: transparent;
+    --color: #{$text-primary};
+    --placeholder-color: #{$text-hint};
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    font-size: 13px;
+    font-weight: 300;
+    font-family: 'Montserrat', sans-serif;
+    min-height: unset;
+  }
+
+  .file-text {
+    font-size: 12px;
+    color: $text-muted;
+    font-weight: 300;
+    display: block;
+    margin-top: 2px;
+
+    .file-link {
+      color: $gold;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+}
+
+// ── Radio buttons ─────────────────────────────────────────
+.radio-row {
+  display: flex;
+  gap: 20px;
+  padding-top: 4px;
+
+  ion-radio {
+    --color: #{$text-hint};
+    --color-checked: #{$gold};
+    font-size: 13px;
+    font-weight: 300;
+    color: $text-muted;
+    font-family: 'Montserrat', sans-serif;
+  }
+}
+
+// ── Terms row ─────────────────────────────────────────────
+.terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px 24px 0;
+
+  ion-checkbox {
+    --checkbox-background: transparent;
+    --checkbox-background-checked: #{$gold};
+    --border-color: #{$icon-border};
+    --border-color-checked: #{$gold};
+    --checkmark-color: #0e0e0f;
+    --border-radius: 4px;
+    --size: 17px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .terms-label {
+    font-size: 11px;
+    color: $text-muted;
+    font-weight: 300;
+    line-height: 1.7;
+    font-family: 'Montserrat', sans-serif;
+
+    a {
+      color: $gold;
+      text-decoration: none;
+    }
+  }
+}
+
+// ── Confirm button ────────────────────────────────────────
+.confirm-row {
+  padding: 18px 24px 0;
+
+  .confirm-btn {
+    --background: #{$gold};
+    --background-activated: #{$gold};
+    --background-hover: #{darken($gold, 6%)};
+    --color: #0e0e0f;
+    --border-radius: 12px;
+    --box-shadow: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    height: 52px;
+
+    ion-icon {
+      font-size: 16px;
+      margin-right: 8px;
+    }
+
+    &[disabled] {
+      --background: #2a2a2c;
+      --color: #{$text-hint};
+      opacity: 1;
+    }
+  }
+}

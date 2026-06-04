@@ -64,5 +64,15 @@ export class EquipoPage implements OnInit {
       }
     }
   }
+
+  especialistaSeleccionado: any = null;
+
+  verDetalle(item: any) {
+    this.especialistaSeleccionado = item;
+  }
+
+  volver() {
+    this.especialistaSeleccionado = null;
+  }
   
 }

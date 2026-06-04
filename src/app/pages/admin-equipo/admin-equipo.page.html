@@ -1,30 +1,194 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header>
+  <ion-toolbar class="custom-toolbar" mode="md" style="position: relative;">
+
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/administrador"></ion-back-button>
+      <ion-back-button
+        *ngIf="vista === 'home'"
+        defaultHref="/administrador"
+        text="">
+      </ion-back-button>
+      <ion-button *ngIf="vista !== 'home'" (click)="volver()">
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-buttons>
-    <ion-item class="center-title">
-      <ion-avatar class="raton-menu">
-        <ion-img alt="avatar" src="../../../assets/icon/favicon.png" routerLink="/folder">
-        </ion-img>
-      </ion-avatar>
-    </ion-item>
+
+    <div class="toolbar-center" routerLink="/folder">
+      <img src="../../../assets/icon/favicon.png" alt="Logo">
+    </div>
+
+    <ion-buttons slot="end">
+      <div style="width: 40px;"></div>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="home-content">
 
-  <div style="display: flex; justify-content: center; margin-top: 20px;">
-    <ion-button routerLink="/agregar-user" >Añadir Empleado</ion-button>
-  </div>
+  <!-- ── VISTA: LISTA ── -->
+  <ng-container *ngIf="vista === 'home'">
 
-  <ion-card *ngFor="let item of equipo" style="font-family: 'Montserrat', sans-serif;">
-    <ion-card-header [routerLink]="['/editar-user', item.id]">
-      <ion-card-title > {{item.nombre}} </ion-card-title>
-    </ion-card-header>
-    <ion-card-content> {{item.descripcion}}</ion-card-content>
-    <ion-card-content style="text-align: right;"> 
-      <ion-icon name="trash-outline" (click)="delete(item)" style="font-size: 24px;"></ion-icon>
-    </ion-card-content>
-  </ion-card>
+    <div class="hero-section">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span>Administración</span>
+      </div>
+      <h1 class="hero-title">Gestión del<br><em>equipo</em></h1>
+      <p class="hero-sub">Añade, edita o elimina miembros del equipo.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="add-row">
+      <button class="btn-add" (click)="irAnadir()">
+        <ion-icon name="person-add-outline"></ion-icon>
+        Añadir empleado
+      </button>
+    </div>
+
+    <div class="employee-list">
+      <div class="employee-card" *ngFor="let item of equipo">
+        <div class="employee-photo" *ngIf="item.imagenUrl">
+          <ion-img [src]="item.imagenUrl" [alt]="item.nombre"></ion-img>
+        </div>
+        <div class="employee-photo placeholder" *ngIf="!item.imagenUrl">
+          <ion-icon name="person-outline"></ion-icon>
+        </div>
+        <div class="employee-info">
+          <p class="employee-name">{{ item.nombre }}</p>
+          <p class="employee-role">{{ item.tipo }}</p>
+          <p class="employee-desc">{{ item.descripcion }}</p>
+        </div>
+        <div class="employee-actions">
+          <button class="action-btn edit" (click)="irEditar(item)">
+            <ion-icon name="create-outline"></ion-icon>
+          </button>
+          <button class="action-btn delete" (click)="confirmarDelete(item)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <!-- ── VISTA: AÑADIR ── -->
+  <ng-container *ngIf="vista === 'anadir'">
+
+    <div class="hero-section">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span>Nuevo empleado</span>
+      </div>
+      <h1 class="hero-title">Añadir<br><em>empleado</em></h1>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="form-wrapper">
+      <div class="field">
+        <ion-icon name="person-outline" class="field-icon"></ion-icon>
+        <ion-input
+          placeholder="Nombre completo"
+          [(ngModel)]="empleado.nombre">
+        </ion-input>
+      </div>
+
+      <div class="field">
+        <ion-icon name="clipboard-outline" class="field-icon"></ion-icon>
+        <ion-input
+          placeholder="Descripción"
+          [(ngModel)]="empleado.descripcion">
+        </ion-input>
+      </div>
+
+      <div class="field" (click)="openFileInput()">
+        <ion-icon name="images-outline" class="field-icon"></ion-icon>
+        <span class="field-placeholder">{{ mostrarTextoSeleccionarFoto() }}</span>
+        <input type="file" #fileInput style="display: none;" (change)="nuevaImagen($event)">
+      </div>
+
+      <div class="field select-field">
+        <ion-icon name="briefcase-outline" class="field-icon"></ion-icon>
+        <ion-select
+          placeholder="Categoría"
+          [(ngModel)]="empleado.tipo"
+          interface="popover">
+          <ion-select-option>Atención al paciente</ion-select-option>
+          <ion-select-option>Odontólogos</ion-select-option>
+          <ion-select-option>Auxiliares</ion-select-option>
+          <ion-select-option>Higienistas</ion-select-option>
+        </ion-select>
+      </div>
+
+      <button class="btn-primary" (click)="guardar()">
+        <ion-icon name="checkmark-outline"></ion-icon>
+        Guardar empleado
+      </button>
+    </div>
+
+  </ng-container>
+
+  <!-- ── VISTA: EDITAR ── -->
+  <ng-container *ngIf="vista === 'editar'">
+
+    <div class="hero-section">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span>Editar empleado</span>
+      </div>
+      <h1 class="hero-title"><em>{{ editarEmpleado?.nombre }}</em></h1>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="form-wrapper" *ngIf="editarEmpleado">
+      <div class="field">
+        <ion-icon name="person-outline" class="field-icon"></ion-icon>
+        <ion-input
+          placeholder="Nombre completo"
+          [(ngModel)]="editarEmpleado.nombre">
+        </ion-input>
+      </div>
+
+      <div class="field">
+        <ion-icon name="clipboard-outline" class="field-icon"></ion-icon>
+        <ion-input
+          placeholder="Descripción"
+          [(ngModel)]="editarEmpleado.descripcion">
+        </ion-input>
+      </div>
+
+      <div class="field" (click)="openFileInput()">
+        <ion-icon name="images-outline" class="field-icon"></ion-icon>
+        <span class="field-placeholder">{{ mostrarTextoSeleccionarFoto() }}</span>
+        <input type="file" #fileInput style="display: none;" (change)="nuevaImagen($event)">
+      </div>
+
+      <div class="field select-field">
+        <ion-icon name="briefcase-outline" class="field-icon"></ion-icon>
+        <ion-select
+          placeholder="Categoría"
+          [(ngModel)]="editarEmpleado.tipo"
+          interface="popover">
+          <ion-select-option>Atención al paciente</ion-select-option>
+          <ion-select-option>Odontólogos</ion-select-option>
+          <ion-select-option>Auxiliares</ion-select-option>
+          <ion-select-option>Higienistas</ion-select-option>
+        </ion-select>
+      </div>
+
+      <button class="btn-primary" (click)="editar()">
+        <ion-icon name="checkmark-outline"></ion-icon>
+        Guardar cambios
+      </button>
+
+      <button class="btn-danger" (click)="confirmarDelete(editarEmpleado)">
+        <ion-icon name="trash-outline"></ion-icon>
+        Eliminar empleado
+      </button>
+    </div>
+
+  </ng-container>
+
 </ion-content>

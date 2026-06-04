@@ -1,54 +1,160 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header>
+  <ion-toolbar class="custom-toolbar" mode="md" style="position: relative;">
+
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-item class="center-title">
-      <ion-avatar class="raton-menu">
-        <ion-img alt="avatar" src="../../../assets/icon/favicon.png" routerLink="/folder">
-        </ion-img>
-      </ion-avatar>
-      
-    </ion-item>
+
+    <div class="toolbar-center" routerLink="/folder">
+      <img src="../../../assets/icon/favicon.png" alt="Logo">
+    </div>
+
+    <ion-buttons slot="end">
+      <div style="width: 40px;"></div>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-card>
-    <ion-card-header>
+<ion-content [fullscreen]="true" class="auth-content">
+  <div class="auth-wrapper">
 
-      <ion-item> 
-        <ion-card-title style="margin: auto;">Inicia Sesion </ion-card-title>
-      </ion-item>
+    <div class="scene">
+      <div class="card-inner" [class.flipped]="isFlipped">
 
+        <!-- FRONT: Login -->
+        <div class="card-face front">
+          <div class="face-badge">
+            <div class="dot"></div>
+            <span>Acceso</span>
+          </div>
+          <h2 class="face-title">Bienvenido de<br><em>nuevo</em></h2>
+          <p class="face-sub">Accede a tu cuenta para continuar</p>
 
-    </ion-card-header>
-    <ion-card-content>
+          <form class="field-group" #loginForm="ngForm">
+            <div class="field">
+              <ion-icon name="at-circle-outline" class="field-icon"></ion-icon>
+              <ion-input
+                #loginEmail="ngModel"
+                [(ngModel)]="credenciales.correo"
+                name="correo"
+                type="email"
+                placeholder="Correo electrónico"
+                required>
+              </ion-input>
+            </div>
 
-      <form style="text-align: center;" #miForm="ngForm">
-        <ion-item>
-          <ion-icon name="at-circle" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input [(ngModel)]="credenciales.correo" name="correo" placeholder="Correo" required></ion-input>
-        </ion-item>
-      
-        <ion-item>
-          <ion-icon name="key" style=" font-size: 30px; padding-right: 10px;"></ion-icon>
-          <ion-input type="password" [(ngModel)]="credenciales.password" name="password" placeholder="Contraseña" required></ion-input>
-        </ion-item>
-        <div class="forgot-password-container">
-          <ion-label class="forgot-password"> 
-            <a routerLink="/forgot-password"> Olvidastes la contraseña </a>
-          </ion-label>
+            <div class="field">
+              <ion-icon name="lock-closed-outline" class="field-icon"></ion-icon>
+              <ion-input
+                [(ngModel)]="credenciales.password"
+                name="password"
+                type="password"
+                placeholder="Contraseña"
+                required>
+              </ion-input>
+            </div>
+          </form>
+
+          <p class="forgot" routerLink="/forgot-password">¿Olvidaste tu contraseña?</p>
+
+          <ion-button class="btn-primary" expand="block" (click)="login()" [disabled]="loginForm.invalid">
+            Iniciar sesión
+          </ion-button>
+
+          <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-text">o</span>
+            <div class="divider-line"></div>
+          </div>
+
+          <ion-button class="btn-ghost" expand="block" fill="outline" (click)="flipCard()">
+            <ion-icon name="person-add-outline" slot="start"></ion-icon>
+            Crear cuenta nueva
+          </ion-button>
+
+          <p class="flip-hint">¿No tienes cuenta? <span (click)="flipCard()">Regístrate gratis</span></p>
         </div>
-        
-        
-        <br>
-        <ion-button color="primary" (click)="login()" [disabled]="miForm.invalid"> Login </ion-button>
-        <ion-button color="primary" routerLink="/registrarse"> Registrate </ion-button>
-      </form>
-    
-    </ion-card-content>
-    
-  </ion-card>
-  
+
+        <!-- BACK: Registro -->
+        <div class="card-face back">
+          <div class="face-badge">
+            <div class="dot"></div>
+            <span>Registro</span>
+          </div>
+          <h2 class="face-title"><em>Únete</em> hoy</h2>
+          <p class="face-sub">Crea tu cuenta en menos de un minuto</p>
+
+          <form class="field-group" #registerForm="ngForm">
+            <div class="field" [class.field-invalid]="nombreInvalido">
+              <ion-icon name="person-outline" class="field-icon"></ion-icon>
+              <ion-input
+                [(ngModel)]="crearUser.nombre"
+                name="nombre"
+                placeholder="Nombre completo"
+                required
+                minlength="4"
+                (ngModelChange)="validacionFormulario()">
+              </ion-input>
+            </div>
+
+            <div class="field" [class.field-invalid]="movilInvalido">
+              <ion-icon name="call-outline" class="field-icon"></ion-icon>
+              <ion-input
+                [(ngModel)]="crearUser.movil"
+                name="movil"
+                placeholder="Móvil (9 dígitos)"
+                required
+                pattern="[0-9]{9}"
+                (ngModelChange)="validacionFormulario()">
+              </ion-input>
+            </div>
+
+            <div class="field" [class.field-invalid]="correoInvalido">
+              <ion-icon name="at-circle-outline" class="field-icon"></ion-icon>
+              <ion-input
+                [(ngModel)]="crearUser.correo"
+                name="correo"
+                type="email"
+                placeholder="Correo electrónico"
+                required
+                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                (ngModelChange)="validacionFormulario()">
+              </ion-input>
+            </div>
+
+            <div class="field" [class.field-invalid]="passwordInvalido">
+              <ion-icon name="lock-closed-outline" class="field-icon"></ion-icon>
+              <ion-input
+                [(ngModel)]="crearUser.password"
+                name="password"
+                type="password"
+                placeholder="Contraseña"
+                required
+                pattern="(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_]).{6,}"
+                (ionBlur)="mostrarErrorContrasena()"
+                (ngModelChange)="validacionFormulario()">
+              </ion-input>
+              <div class="validation-dot" [class.valid]="!passwordInvalido && crearUser.password"></div>
+            </div>
+          </form>
+
+          <div class="terms-row">
+            <div class="terms-check" [class.checked]="terminosAceptados" (click)="terminosAceptados = !terminosAceptados"></div>
+            <p class="terms-label">
+              Acepto los <a routerLink="/terminos">términos y condiciones</a> y la política de privacidad
+            </p>
+          </div>
+
+          <ion-button class="btn-primary" expand="block" (click)="guardar()" [disabled]="registerForm.invalid || !terminosAceptados">
+            Crear cuenta
+          </ion-button>
+
+          <p class="flip-hint">¿Ya tienes cuenta? <span (click)="flipCard()">Inicia sesión</span></p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 </ion-content>

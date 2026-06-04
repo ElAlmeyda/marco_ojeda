@@ -1,103 +1,227 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header>
+  <ion-toolbar class="custom-toolbar" mode="md" style="position: relative;">
+
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-item class="center-title">
-      <ion-avatar class="raton-menu">
-        <ion-img alt="avatar" src="../../../assets/icon/favicon.png" routerLink="/folder">
-        </ion-img>
-      </ion-avatar>
-      
-    </ion-item>
+
+    <div class="toolbar-center" routerLink="/folder">
+      <img src="../../../assets/icon/favicon.png" alt="Logo">
+    </div>
+
+    <ion-buttons slot="end">
+      <div style="width: 40px;"></div>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
+<ion-content [fullscreen]="true" class="diag-content">
 
+  <div class="diag-wrap">
 
-<ion-content [fullscreen]="true">
+    <!-- Header del formulario -->
+    <div class="diag-header">
+      <div class="diag-icon-ring">
+        <ion-icon name="medkit-outline"></ion-icon>
+      </div>
+      <div class="diag-title-block">
+        <h2>Prediagnóstico Virtual</h2>
+        <p>Evaluación inicial · Confidencial</p>
+      </div>
+    </div>
 
-  <ion-card-content>
-    <ion-item> 
-      <ion-card-title style="margin: auto;"> Prediagnostico Virtual </ion-card-title>
-    </ion-item>
+    <form #miForm="ngForm">
 
-    <form style="text-align: center;" #miForm="ngForm">
-      <ion-item lines="none">
-        <ion-icon name="person-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-input name="nombre" [(ngModel)]="urgencia.nombre" placeholder="Nombre" required autocapitalize="on"></ion-input>
-      </ion-item>
-      <ion-item lines="none">
-        <ion-icon name="call" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-input name="movil" [(ngModel)]="urgencia.movil" placeholder="Telefono" required type="tel"></ion-input>
-      </ion-item>
-      
-      <ion-item lines="none">
-        <ion-icon name="calendar-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-input name="fecha" [(ngModel)]="urgencia.fecha" placeholder="Fecha de nacimiento" required (ionInput)="formatFecha($event)" type="tel"></ion-input>
-      </ion-item>
-      
-      <ion-item lines="none">
-        <ion-icon name="clipboard-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-input name="enfermedad" [(ngModel)]="urgencia.enfermedad" placeholder="Padece alguna enfermedad" required autocapitalize="on"></ion-input>
-      </ion-item>
+      <!-- ── Sección: Datos personales ── -->
+      <span class="section-label">Datos personales</span>
+      <div class="fields-group">
 
-      <ion-item lines="none">
-        <ion-icon name="bag-add-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-input name="medicamento" [(ngModel)]="urgencia.medicamento" placeholder="Medicamento" required autocapitalize="on"></ion-input>
-      </ion-item>
+        <div class="field-item">
+          <div class="field-icon">
+            <ion-icon name="person-outline"></ion-icon>
+          </div>
+          <div class="field-inner">
+            <span class="field-label">Nombre completo</span>
+            <ion-input
+              name="nombre"
+              [(ngModel)]="urgencia.nombre"
+              placeholder="Tu nombre"
+              required
+              autocapitalize="on">
+            </ion-input>
+          </div>
+        </div>
 
-      <ion-item lines="none">
-        <ion-icon name="woman-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-label>Embarazada</ion-label>
-        <ion-radio-group name="embarazo" [(ngModel)]="urgencia.embarazo" required>
-          <ion-grid>
-            <ion-row>
-              <ion-col col-6>
-                <ion-radio  value="true"> Si</ion-radio>
-              </ion-col>
-              <ion-col col-6>
-                <ion-radio value="false"> No</ion-radio>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-radio-group>
-        
-      </ion-item>
+        <div class="field-item">
+          <div class="field-icon">
+            <ion-icon name="call-outline"></ion-icon>
+          </div>
+          <div class="field-inner">
+            <span class="field-label">Teléfono móvil</span>
+            <ion-input
+              name="movil"
+              [(ngModel)]="urgencia.movil"
+              placeholder="600 000 000"
+              required
+              type="tel">
+            </ion-input>
+          </div>
+        </div>
 
-      <ion-item lines="none">
-        <ion-icon name="id-card-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-input name="alergias" [(ngModel)]="urgencia.alergias" placeholder="Alergias" required autocapitalize="on"></ion-input>
-      </ion-item>
-      <ion-item lines="none">
-        <ion-icon name="bandage-outline" style="font-size: 25px; padding-right: 10px;"></ion-icon>
-        <ion-textarea name="sintomas" [(ngModel)]="urgencia.sintomas" placeholder="Sintomas que tiene" required autocapitalize="on"></ion-textarea>
-      </ion-item>
+        <div class="field-item">
+          <div class="field-icon">
+            <ion-icon name="calendar-outline"></ion-icon>
+          </div>
+          <div class="field-inner">
+            <span class="field-label">Fecha de nacimiento</span>
+            <ion-input
+              name="fecha"
+              [(ngModel)]="urgencia.fecha"
+              placeholder="DD / MM / AAAA"
+              required
+              (ionInput)="formatFecha($event)"
+              type="tel">
+            </ion-input>
+          </div>
+        </div>
 
-      <ion-item lines="none">
-        <ion-icon name="images" style="font-size: 30px; padding-right: 10px;"></ion-icon>
-        <a (click)="openFileInput()" style="text-decoration: none; color: inherit;">{{ mostrarTextoSeleccionarFoto() }}</a>
-        <input type="file" #fileInput style="display: none;" (change)="nuevaImagen($event)">
-      </ion-item>
+      </div>
 
-      <ion-item lines="none">
-        <ion-checkbox 
-          class="small-label" 
-          [(ngModel)]="terminosAceptados" 
-          [ngModelOptions]="{ standalone: true }" >
+      <!-- ── Sección: Historial médico ── -->
+      <div class="section-divider"></div>
+      <span class="section-label">Historial médico</span>
+      <div class="fields-group">
+
+        <div class="field-item">
+          <div class="field-icon">
+            <ion-icon name="clipboard-outline"></ion-icon>
+          </div>
+          <div class="field-inner">
+            <span class="field-label">Enfermedades conocidas</span>
+            <ion-input
+              name="enfermedad"
+              [(ngModel)]="urgencia.enfermedad"
+              placeholder="Diabetes, hipertensión…"
+              required
+              autocapitalize="on">
+            </ion-input>
+          </div>
+        </div>
+
+        <div class="field-item">
+          <div class="field-icon">
+            <ion-icon name="bag-add-outline"></ion-icon>
+          </div>
+          <div class="field-inner">
+            <span class="field-label">Medicación actual</span>
+            <ion-input
+              name="medicamento"
+              [(ngModel)]="urgencia.medicamento"
+              placeholder="Nombre del medicamento"
+              required
+              autocapitalize="on">
+            </ion-input>
+          </div>
+        </div>
+
+        <div class="field-item">
+          <div class="field-icon">
+            <ion-icon name="id-card-outline"></ion-icon>
+          </div>
+          <div class="field-inner">
+            <span class="field-label">Alergias</span>
+            <ion-input
+              name="alergias"
+              [(ngModel)]="urgencia.alergias"
+              placeholder="Penicilina, látex…"
+              required
+              autocapitalize="on">
+            </ion-input>
+          </div>
+        </div>
+
+        <div class="field-item featured">
+          <div class="field-icon featured-icon">
+            <ion-icon name="woman-outline"></ion-icon>
+          </div>
+          <div class="field-inner">
+            <span class="field-label">Embarazo</span>
+            <ion-radio-group name="embarazo" [(ngModel)]="urgencia.embarazo" required>
+              <div class="radio-row">
+                <ion-radio value="true">Sí</ion-radio>
+                <ion-radio value="false">No</ion-radio>
+              </div>
+            </ion-radio-group>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── Sección: Síntomas ── -->
+      <div class="section-divider"></div>
+      <span class="section-label">Síntomas actuales</span>
+      <div class="fields-group">
+
+        <div class="field-item">
+          <div class="field-icon">
+            <ion-icon name="bandage-outline"></ion-icon>
+          </div>
+          <div class="field-inner">
+            <span class="field-label">Descripción de síntomas</span>
+            <ion-textarea
+              name="sintomas"
+              [(ngModel)]="urgencia.sintomas"
+              placeholder="Describe los síntomas que presentas…"
+              required
+              autocapitalize="on"
+              [autoGrow]="true">
+            </ion-textarea>
+          </div>
+        </div>
+
+        <div class="field-item" (click)="openFileInput()">
+          <div class="field-icon">
+            <ion-icon name="images-outline"></ion-icon>
+          </div>
+          <div class="field-inner">
+            <span class="field-label">Imagen adjunta</span>
+            <span class="file-text">
+              <span class="file-link">{{ mostrarTextoSeleccionarFoto() }}</span>
+              · opcional
+            </span>
+            <input type="file" #fileInput style="display: none;" (change)="nuevaImagen($event)">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── Términos ── -->
+      <div class="terms-row">
+        <ion-checkbox
+          [(ngModel)]="terminosAceptados"
+          [ngModelOptions]="{ standalone: true }">
         </ion-checkbox>
-        <ion-label style="font-family: 'Montserrat', sans-serif; padding: 5px; margin-left: 5px; font-size: 13px;" >
-          Acepto los <a routerLink="/terminos"> términos y condiciones </a>
-        </ion-label>
-        </ion-item>
-        
+        <label class="terms-label">
+          He leído y acepto los
+          <a routerLink="/terminos">términos y condiciones</a>
+          del servicio.
+        </label>
+      </div>
 
-      <ion-item lines="none">
-        <ion-button slot="end" color="primary" [disabled]="miForm.invalid || !terminosAceptados" (click)=" aceptar()"> Confirmar </ion-button>
-      </ion-item>
+      <!-- ── Botón confirmar ── -->
+      <div class="confirm-row">
+        <ion-button
+          expand="block"
+          class="confirm-btn"
+          [disabled]="miForm.invalid || !terminosAceptados"
+          (click)="aceptar()">
+          <ion-icon name="send-outline" slot="start"></ion-icon>
+          Confirmar prediagnóstico
+        </ion-button>
+      </div>
+
     </form>
-  
-  </ion-card-content>
-
+  </div>
 
 </ion-content>

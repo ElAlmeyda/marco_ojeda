@@ -1,37 +1,336 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
 
-.forgot-password-container {
-    display: flex;
-    justify-content: center; /* Centra horizontalmente el contenido */
-    margin-top: 15px; /* Espacio superior para separar del botón de inicio de sesión */
-  }
-/* Contenedor del enlace "Olvidaste la contraseña" */
-.forgot-password {
-    text-align: center; /* Centra el enlace dentro del contenedor */
-  }
-  
-  .forgot-password a {
-    font-size: 0.8rem; /* Tamaño de fuente más pequeño */
-    color: #007bff; /* Color del enlace, ajusta según sea necesario */
-    text-decoration: none; /* Sin subrayado por defecto */
-  }
-  
-  .forgot-password a:hover {
-    text-decoration: underline; /* Subrayado al pasar el ratón */
-  }
-
-  /* Clase para contenedor del avatar */
-.center-title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.raton-menu {
-  width: 110px; /* Ajusta el tamaño del avatar según lo necesario */
-  height: 110px;
-}
-
+// ── Toolbar ──
 ion-toolbar {
-  --padding-start: 0px;
-  --padding-end: 0px;
+  --background: #131315;
+  --border-width: 0 0 0.5px 0;
+  --border-color: #1e1e20;
+  position: relative;
+}
+
+.toolbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.brand-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c9a84c, #f0d060);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.brand-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: #e8e8e0;
+  letter-spacing: 0.5px;
+}
+
+// ── Content ──
+.auth-content {
+  --background: #0e0e0f;
+}
+
+.auth-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: 24px 20px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+// ── Flip Scene ──
+// ── Flip Scene ──
+.scene {
+  width: 100%;
+  max-width: 360px;
+  height: 640px; // ← sube de 540px a 640px
+  perspective: 1200px;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.flipped {
+    transform: rotateY(180deg);
+  }
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background: #131315;
+  border: 0.5px solid #1e1e22;
+  border-radius: 20px;
+  padding: 32px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  &.back {
+    transform: rotateY(180deg);
+  }
+}
+
+// ── Badge ──
+.face-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #1a1810;
+  border: 0.5px solid rgba(201, 168, 76, 0.25);
+  border-radius: 20px;
+  padding: 5px 13px;
+  margin-bottom: 20px;
+  align-self: flex-start;
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #c9a84c;
+  }
+
+  span {
+    font-size: 11px;
+    color: #c9a84c;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+}
+
+// ── Typography ──
+.face-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 300;
+  color: #f0efea;
+  line-height: 1.2;
+  margin-bottom: 6px;
+
+  em {
+    font-style: italic;
+    color: #c9a84c;
+  }
+}
+
+.face-sub {
+  font-size: 12px;
+  color: #4a4a48;
+  font-weight: 300;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+// ── Fields ──
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #0e0e0f;
+  border: 0.5px solid #2a2a2e;
+  border-radius: 12px;
+  padding: 4px 16px;
+  transition: border-color 0.2s ease;
+
+  &:focus-within {
+    border-color: rgba(201, 168, 76, 0.4);
+  }
+
+  &.field-invalid {
+    border-color: rgba(180, 60, 60, 0.5);
+  }
+
+  .field-icon {
+    font-size: 18px;
+    color: #4a4a50;
+    flex-shrink: 0;
+  }
+
+  ion-input {
+    --color: #e8e8e0;
+    --placeholder-color: #3a3a38;
+    --placeholder-font-weight: 300;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    --padding-start: 0;
+  }
+}
+
+.validation-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3a3a38;
+  flex-shrink: 0;
+  transition: background 0.25s ease;
+
+  &.valid {
+    background: #4a9a4a;
+  }
+}
+
+// ── Forgot ──
+.forgot {
+  font-size: 11px;
+  color: #4a4a48;
+  text-align: right;
+  margin-bottom: 20px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+
+  &:hover {
+    color: #c9a84c;
+  }
+}
+
+// ── Buttons ──
+.btn-primary {
+  --background: #c9a84c;
+  --background-activated: rgba(201, 168, 76, 0.85);
+  --color: #0e0e0f;
+  --border-radius: 12px;
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  margin: 0 0 4px;
+  height: auto;
+}
+
+.btn-ghost {
+  --background: transparent;
+  --background-hover: rgba(201, 168, 76, 0.05);
+  --color: #7a7a72;
+  --border-color: #2a2a2e;
+  --border-width: 0.5px;
+  --border-style: solid;
+  --border-radius: 12px;
+  --padding-top: 13px;
+  --padding-bottom: 13px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  margin: 0;
+  height: auto;
+
+  &:hover {
+    --color: #c9a84c;
+    --border-color: rgba(201, 168, 76, 0.3);
+  }
+}
+
+// ── Divider ──
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+
+  .divider-line {
+    flex: 1;
+    height: 0.5px;
+    background: #1e1e20;
+  }
+
+  .divider-text {
+    font-size: 11px;
+    color: #3a3a38;
+    letter-spacing: 0.5px;
+  }
+}
+
+// ── Terms ──
+.terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.terms-check {
+  width: 17px;
+  height: 17px;
+  border-radius: 5px;
+  border: 0.5px solid #2a2a2e;
+  background: #0e0e0f;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+
+  &.checked {
+    background: #c9a84c;
+    border-color: #c9a84c;
+
+    &::after {
+      content: '✓';
+      font-size: 11px;
+      color: #0e0e0f;
+      font-weight: 700;
+    }
+  }
+}
+
+.terms-label {
+  font-size: 12px;
+  color: #4a4a48;
+  line-height: 1.55;
+
+  a {
+    color: #c9a84c;
+    text-decoration: none;
+  }
+}
+
+// ── Flip hint ──
+.flip-hint {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 11px;
+  color: #3a3a38;
+
+  span {
+    color: #c9a84c;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
 }

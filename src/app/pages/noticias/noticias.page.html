@@ -1,25 +1,105 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header>
+  <ion-toolbar class="custom-toolbar" mode="md" style="position: relative;">
+
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button *ngIf="!noticiaSeleccionada"></ion-menu-button>
+      <ion-button *ngIf="noticiaSeleccionada" (click)="volver()">
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-buttons>
-    <ion-item class="center-title">
-      <ion-avatar class="raton-menu">
-        <ion-img alt="avatar" src="../../../assets/icon/favicon.png" routerLink="/folder">
-        </ion-img>
-      </ion-avatar>
-      
-    </ion-item>
+
+    <div class="toolbar-center" routerLink="/folder">
+      <img src="../../../assets/icon/favicon.png" alt="Logo">
+    </div>
+
+    <ion-buttons slot="end">
+      <div style="width: 40px;"></div>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="home-content" [fullscreen]="true">
 
-  <ion-card *ngFor="let item of noticias" style="font-family: 'Montserrat', sans-serif;">
-    <ion-card-header [routerLink]="['/noticia', item.id]">
-      <ion-card-title > {{item.titulo}} </ion-card-title>
-    </ion-card-header>
-    <ion-card-content> {{item.informacion}}</ion-card-content>
-  </ion-card>
-  
+  <!-- ── VISTA LISTA ── -->
+  <ng-container *ngIf="!noticiaSeleccionada">
+
+    <!-- Hero -->
+    <div class="hero-section">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>Actualidad clínica</span>
+      </div>
+      <h1 class="hero-title">Noticias <em>Dentales</em></h1>
+      <p class="hero-sub">
+        Información actualizada sobre salud dental, tratamientos y avances de nuestra clínica.
+      </p>
+    </div>
+
+    <!-- Lista -->
+    <div class="news-list">
+      <div
+        class="news-card"
+        *ngFor="let item of noticia"
+        (click)="verDetalle(item)">
+
+        <div class="news-image">
+          <ion-img [src]="item.imagenUrl"></ion-img>
+        </div>
+
+        <div class="news-body">
+          <p class="news-category">{{ item.categoria || 'Clínica' }}</p>
+          <h3 class="news-title">{{ item.titulo }}</h3>
+          <p class="news-desc">{{ item.descripcion }}</p>
+          <div class="news-footer">
+            <span class="news-date">{{ item.fecha }}</span>
+            <span class="news-arrow">
+              <ion-icon name="arrow-forward-outline"></ion-icon>
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </ng-container>
+
+  <!-- ── VISTA DETALLE ── -->
+  <ng-container *ngIf="noticiaSeleccionada">
+
+    <!-- Botón volver arriba -->
+    <div class="back-row">
+      <button class="back-btn" (click)="volver()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        Volver a noticias
+      </button>
+    </div>
+
+    <!-- Imagen -->
+    <div class="detail-hero">
+      <ion-img [src]="noticiaSeleccionada.imagenUrl" class="detail-img"></ion-img>
+    </div>
+
+    <!-- Cuerpo -->
+    <div class="detail-body">
+      <p class="detail-category">{{ noticiaSeleccionada.categoria || 'Clínica' }}</p>
+      <h1 class="detail-title">{{ noticiaSeleccionada.titulo }}</h1>
+      <p class="detail-date">{{ noticiaSeleccionada.fecha }}</p>
+      <div class="detail-divider"></div>
+      <p class="detail-text">{{ noticiaSeleccionada.descripcion }}</p>
+      <p class="detail-text" *ngIf="noticiaSeleccionada.contenido">
+        {{ noticiaSeleccionada.contenido }}
+      </p>
+    </div>
+
+    <!-- Botón volver abajo -->
+    <div class="back-row bottom">
+      <button class="back-btn" (click)="volver()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        Volver a noticias
+      </button>
+    </div>
+
+  </ng-container>
+
 </ion-content>

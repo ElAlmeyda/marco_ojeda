@@ -1,13 +1,12 @@
 export const environment = {
   production: true,
   firebaseConfig: {
-    apiKey: "AIzaSyBSx_zX2iUbKScJo__1dV9_luyxQzTpJpk",
-    authDomain: "servicio-4f831.firebaseapp.com",
-    databaseURL: "https://servicio-4f831-default-rtdb.firebaseio.com",
-    projectId: "servicio-4f831",
-    storageBucket: "servicio-4f831.appspot.com",
-    messagingSenderId: "867441361379",
-    appId: "1:867441361379:web:4048cbd33afbfb169ee0d6",
-    measurementId: "G-12GCW4T1V0"
+    apiKey: "AIzaSyAoQa4TGQvyISGZM25svZVLUmzCZVrDiwg",
+    authDomain: "policlinicamarcoojeda.firebaseapp.com",
+    projectId: "policlinicamarcoojeda",
+    storageBucket: "policlinicamarcoojeda.firebasestorage.app",
+    messagingSenderId: "1004734402673",
+    appId: "1:1004734402673:web:73e43531ea09eae8d38bd0",
+    measurementId: "G-KG297PK477"
   }
 };

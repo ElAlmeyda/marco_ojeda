@@ -1,14 +1,14 @@
 {
   "targets": {
-    "servicio-4f831": {
+    "policlinicamarcoojeda": {
       "hosting": {
         "app": [
-          "servicio-4f831"
+          "policlinicamarcoojeda"
         ]
       }
     }
   },
   "projects": {
-    "default": "servicio-4f831"
+    "default": "policlinicamarcoojeda"
   }
 }

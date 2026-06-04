@@ -9,7 +9,6 @@ import { Platform, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { FirestoreAuthService } from './firestore-auth.service';
 import { FirestoreService } from './firestore.service';
-import { alertController } from '@ionic/vue';
 
 @Injectable({
   providedIn: 'root'

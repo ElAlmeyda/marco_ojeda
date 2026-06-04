@@ -1,27 +1,94 @@
+<ion-header>
+  <ion-toolbar class="custom-toolbar" mode="md" style="position: relative;">
 
-<ion-header [translucent]="true">
-  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-item class="center-title">
-      <ion-avatar class="raton-menu">
-        <ion-img alt="avatar" src="../../../assets/icon/favicon.png" >
-        </ion-img>
-      </ion-avatar>
-    </ion-item>
+
+    <div class="toolbar-center" routerLink="/folder">
+      <img src="../../../assets/icon/favicon.png" alt="Logo">
+    </div>
+
+    <ion-buttons slot="end">
+      <div style="width: 40px;"></div>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div style="font-family: 'Montserrat', sans-serif; text-align: center;">
-    <h1 style="font-size: 40px; padding: 10px;"> Marco Ojeda </h1>
-    <p style="font-size: 40px; padding: 10px; margin: 10px;"> Policlinica Dental</p>
+<ion-content [fullscreen]="true" class="home-content">
+
+  <!-- Hero -->
+  <div class="hero-section">
+    <h1 class="hero-title">ODONTOLOGÍA EMOCIONAL.<br><em>Como profesionales de la salud,</em></h1>
+    <p class="hero-sub">tenemos la gran oportunidad de tratar no solo la enfermedad física, sino ir más allá y ayudar a curar en el plano mental y en el espiritual.</p>
   </div>
-  <ion-label style="font-family: 'Montserrat', sans-serif; text-align: center; padding: 150px;">
-    <h1 style="font-size: 25px; padding: 15px;" routerLink="/la-clinica"> La Clinica </h1>
-    <p style="font-size: 25px; padding: 15px;" routerLink="/noticias"> Noticias </p>
-    <h1 style="font-size: 25px; padding: 15px;" routerLink="/equipo"> Cuadro Clinico </h1>
-    <!-- <p style="font-size: 25px; padding: 15px;" routerLink="/kid_planet"> Kids Dental Planet </p>. --> 
-  </ion-label>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-item">
+      <span class="stat-num">18+</span>
+      <span class="stat-label">Años</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">4.9</span>
+      <span class="stat-label">Valoración</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">2K+</span>
+      <span class="stat-label">Pacientes</span>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Cards -->
+  <div class="menu-list">
+
+    <div class="menu-card featured" routerLink="/la-clinica" button>
+      <div class="card-icon featured-icon">
+        <ion-icon name="business-outline"></ion-icon>
+      </div>
+      <div class="card-body">
+        <h3>La Clínica</h3>
+        <p>Conócenos y descubre nuestras instalaciones</p>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
+    </div>
+
+    <div class="menu-card" routerLink="/noticias" button>
+      <div class="card-icon">
+        <ion-icon name="newspaper-outline"></ion-icon>
+      </div>
+      <div class="card-body">
+        <h3>Noticias</h3>
+        <p>Actualidad y consejos de salud dental</p>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
+    </div>
+
+    <div class="menu-card" routerLink="/equipo" button>
+      <div class="card-icon">
+        <ion-icon name="people-outline"></ion-icon>
+      </div>
+      <div class="card-body">
+        <h3>Equipo Clínico</h3>
+        <p>Profesionales a tu servicio</p>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-bar" routerLink="/prediagnostico-virtual">
+    <div>
+      <p class="cta-title">Prediagnostico Virtual</p>
+      <p class="cta-sub">Te cuidamos desde tu casa</p>
+    </div>
+    <div class="cta-icon">
+      <ion-icon name="calendar-outline"></ion-icon>
+    </div>
+  </div>
+
 </ion-content>

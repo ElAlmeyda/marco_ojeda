@@ -1,22 +1,362 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
 
-
-.toggle{
-    font-family: 'Montserrat', sans-serif;
+// ── Toolbar ──
+ion-toolbar {
+  --background: #131315;
+  --border-width: 0 0 0.5px 0;
+  --border-color: #1e1e20;
+  position: relative;
 }
 
-/* Clase para contenedor del avatar */
-.center-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.toolbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.brand-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c9a84c, #f0d060);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.brand-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #e8e8e0;
+  letter-spacing: 0.5px;
+}
+
+// ── Content ──
+.clinica-content {
+  --background: #0e0e0f;
+}
+
+.view-container {
+  padding-bottom: 32px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+// ── Hero ──
+.hero-section {
+  padding: 28px 20px 16px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #1a1810;
+  border: 0.5px solid rgba(201, 168, 76, 0.25);
+  border-radius: 20px;
+  padding: 5px 13px;
+  margin-bottom: 16px;
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #c9a84c;
   }
-  
-  .raton-menu {
-    width: 110px; /* Ajusta el tamaño del avatar según lo necesario */
-    height: 110px;
+
+  span {
+    font-size: 11px;
+    color: #c9a84c;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
   }
-  
-  ion-toolbar {
-    --padding-start: 0px;
-    --padding-end: 0px;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 300;
+  color: #f0efea;
+  line-height: 1.2;
+  margin-bottom: 6px;
+
+  em {
+    font-style: italic;
+    color: #c9a84c;
   }
+}
+
+.hero-sub {
+  font-size: 12px;
+  color: #4a4a48;
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+// ── Divider ──
+.section-divider {
+  height: 0.5px;
+  background: #1e1e20;
+  margin: 0 20px 20px;
+}
+
+// ── Menu Cards ──
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 20px;
+}
+
+.menu-card {
+  background: #131315;
+  border: 0.5px solid #1e1e22;
+  border-radius: 16px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+
+  &:active { opacity: 0.82; }
+
+  &.featured {
+    background: #161510;
+    border-color: rgba(201, 168, 76, 0.2);
+  }
+}
+
+.card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #1a1a1c;
+  border: 0.5px solid #2a2a2c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  ion-icon {
+    font-size: 19px;
+    color: #4a4a50;
+  }
+
+  &.gold {
+    background: rgba(201, 168, 76, 0.08);
+    border-color: rgba(201, 168, 76, 0.2);
+
+    ion-icon { color: #c9a84c; }
+  }
+}
+
+.card-body {
+  flex: 1;
+
+  h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #e8e8e0;
+    margin: 0 0 2px;
+  }
+
+  p {
+    font-size: 12px;
+    color: #4a4a48;
+    font-weight: 300;
+    margin: 0;
+  }
+}
+
+.card-arrow {
+  color: #2a2a2c;
+  font-size: 14px;
+  flex-shrink: 0;
+
+  .featured & { color: rgba(201, 168, 76, 0.4); }
+}
+
+// ── Map ──
+.map-wrapper {
+  padding: 20px 20px 0;
+}
+
+.map-element {
+  width: 100%;
+  height: 200px;
+  border-radius: 16px;
+  border: 0.5px solid #1e1e22;
+  overflow: hidden;
+}
+
+// ── Novedades ──
+.novedades-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 20px;
+}
+
+.novedad-item {
+  background: #131315;
+  border: 0.5px solid #1e1e22;
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: border-color 0.2s;
+
+  &:hover { border-color: rgba(201, 168, 76, 0.25); }
+}
+
+.novedad-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: #c9a84c;
+  min-width: 28px;
+  line-height: 1;
+}
+
+.novedad-text {
+  font-size: 13px;
+  color: #c8c8c0;
+  font-weight: 300;
+}
+
+// ── Plantas ──
+.plantas-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 20px;
+}
+
+.planta-card {
+  background: #131315;
+  border: 0.5px solid #1e1e22;
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+
+  &:active { opacity: 0.82; }
+  &:hover { border-color: rgba(201, 168, 76, 0.3); }
+}
+
+.planta-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 300;
+  color: #c9a84c;
+  min-width: 36px;
+}
+
+.planta-body {
+  flex: 1;
+
+  h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #e8e8e0;
+    margin: 0 0 2px;
+  }
+
+  p {
+    font-size: 12px;
+    color: #4a4a48;
+    font-weight: 300;
+    margin: 0;
+  }
+}
+
+// ── Carrusel ──
+.carrusel-wrapper {
+  padding: 0 20px;
+}
+
+.carrusel-stage {
+  background: #131315;
+  border: 0.5px solid #1e1e22;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carrusel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carrusel-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #3a3a38;
+
+  ion-icon { font-size: 40px; }
+  span { font-size: 12px; }
+}
+
+.carrusel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.ctrl-btn {
+  background: #131315;
+  border: 0.5px solid #2a2a2e;
+  border-radius: 10px;
+  padding: 10px 18px;
+  cursor: pointer;
+  color: #7a7a72;
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: border-color 0.2s, color 0.2s;
+
+  &:active { opacity: 0.8; }
+
+  ion-icon { font-size: 14px; }
+}
+
+.ctrl-counter {
+  font-size: 12px;
+  color: #4a4a48;
+}
+
+.carrusel-caption {
+  margin-top: 16px;
+  background: #161510;
+  border: 0.5px solid rgba(201, 168, 76, 0.15);
+  border-radius: 12px;
+  padding: 14px 16px;
+
+  p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    color: #7a7a70;
+    font-weight: 300;
+    line-height: 1.6;
+    margin: 0;
+  }
+}

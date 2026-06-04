@@ -6,18 +6,13 @@
   
   <ion-menu color="primary" contentId="main-content" type="overlay">
     <ion-content class="custom-dropdown-menu">
-      <ion-list id="inbox-list" lines="none" >
+      <ion-list id="inbox-list" lines="none">
         <ion-item *ngIf="change == false" routerLink="/inicio-sesion" (click)="closeMenu()">
-          <ion-avatar>
-            <ion-icon name="person-outline" style="font-size: 30px;" ></ion-icon>
-          </ion-avatar>
-          <ion-list-header style="font-size: 16px;"> Iniciar sesion </ion-list-header>  
+          <ion-icon name="person-outline" style="font-size: 30px; padding-right: 10px;"></ion-icon>
+          Iniciar sesion
         </ion-item>
         <ion-item *ngIf="change == true" routerLink="/perfil" (click)="closeMenu()">
-          <ion-avatar>
-            <ion-icon name="person-outline" style="font-size: 30px;" ></ion-icon>
-          </ion-avatar>
-          <ion-list-header style="font-size: 16px;">{{userName}}</ion-list-header>
+          {{userName}}
           <ion-icon name="log-out" style="font-size: 30px;" (click)="logout()"></ion-icon>
         </ion-item>
       </ion-list>
@@ -36,11 +31,6 @@
         </ion-item> 
       </ion-list>
       <ion-list lines="none">
-        <ion-item *ngIf="uid">
-          Su cita:
-          <ion-icon slot="end" name="chevron-down-outline" *ngIf="!showList" (click)="toggleList()"></ion-icon>
-          <ion-icon slot="end" name="chevron-up-outline" *ngIf="showList" (click)="toggleList()"></ion-icon>
-        </ion-item>
         <div style="margin-left: 1em;" *ngIf="showList" >
           <ion-item *ngFor="let item of cita"> {{item.dia | date: 'dd/MM/yyyy'}} {{item.hora}}</ion-item> 
         </div>
@@ -70,10 +60,6 @@
   <ion-content [fullscreen]="true">
     <ion-tabs>
       <ion-tab-bar slot="bottom">
-        <ion-tab-button routerLink="/pide-cita">
-          <ion-icon name="calendar"></ion-icon>
-          Cita Online
-        </ion-tab-button>
         <ion-tab-button routerLink="/tienda-dental">
           <ion-icon name="storefront-outline"></ion-icon>
           Tienda Dental

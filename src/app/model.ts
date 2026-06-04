@@ -10,32 +10,35 @@ export interface Usuario {
 }
 
 export interface Producto {
-    nombre: string;
-    descripcion: string;
-    foto: string;
-    precio: number;
-    id: string;
+  id: string;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  categoria: string;
+  imagenUrl: string;
 }
 
 export interface Blog {
-    [x: string]: unknown;
-    titulo: string;
-    descripcion: string;
-    foto: string;
-    id: string;
-    fecha: Date;
+  id: string;
+  titulo: string;
+  resumen: string;
+  contenido: string;
+  imagenUrl: string;
+  categoria: string;
+  fecha: string;
 }
 
 export interface Empleado {
-    nombre: string;
-    descripcion: string;
-    foto: string;
-    tipo: string;
-    id: string;
+  id: string;
+  nombre: string;
+  descripcion: string;
+  tipo: string;
+  imagenUrl: string;
 }
 
 export interface Pedido {
     cliente: Usuario;
+    clienteId: string;
     productos: ProductoPedido [];
     precioTotal: number;
     estado: string;
@@ -77,4 +80,11 @@ export interface Fotos {
     planta: string;
     imagen: string;
     id?:  string;
+}
+
+export interface Planta {
+    id: string; 
+    label: string;
+    nombre: string; 
+    desc: string;
 }

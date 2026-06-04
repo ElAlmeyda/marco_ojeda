@@ -1,33 +1,146 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header>
+  <ion-toolbar class="custom-toolbar" mode="md">
+
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/administrador"></ion-back-button>
+      <ion-back-button *ngIf="vista === 'home'" defaultHref="/administrador" text=""></ion-back-button>
+      <ion-button *ngIf="vista !== 'home'" (click)="volver()">
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-buttons>
-    <ion-item class="center-title">
-      <ion-avatar class="raton-menu">
-        <ion-img alt="avatar" src="../../../assets/icon/favicon.png" routerLink="/folder">
-        </ion-img>
-      </ion-avatar>
-    </ion-item>
+
+    <div class="toolbar-center" routerLink="/folder">
+      <img src="../../../assets/icon/favicon.png" alt="Logo">
+    </div>
+
+    <ion-buttons slot="end">
+      <div style="width: 40px;"></div>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  
-  <div style="display: flex; justify-content: center; margin-top: 20px;">
-    <ion-label> Numero de pedidos: {{pedidos.length}}</ion-label>
-  </div>
+<ion-content [fullscreen]="true" class="home-content">
 
-  <ion-card *ngFor="let item of pedidos" style="font-family: 'Montserrat', sans-serif;">
-    <ion-card-header [routerLink]="['/editar-user', item.id]">
-      <ion-card-title > {{item.cliente.nombre}} </ion-card-title>
-    </ion-card-header>
-    <ion-card-content> {{item.precioTotal}} €
-    </ion-card-content>
-    <ion-label style="margin-left: 15px;" *ngFor="let producto of item.productos"> {{producto.producto.nombre}} <br></ion-label>
-    <ion-card-content style="text-align: right;"> 
-      <ion-icon name="checkmark-done-outline" style="font-size: 24px;"></ion-icon>
-    </ion-card-content>
-  </ion-card>
+  <!-- ── VISTA: LISTA ── -->
+  <ng-container *ngIf="vista === 'home'">
+
+    <div class="hero-section">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span>Administración</span>
+      </div>
+      <h1 class="hero-title">Gestión de<br><em>pedidos</em></h1>
+      <p class="hero-sub">Consulta y gestiona todos los pedidos.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Filtros -->
+    <div class="filter-row">
+      <button
+        class="filter-chip"
+        [class.active]="filtroEstado === 'todos'"
+        (click)="filtroEstado = 'todos'">
+        Todos <span class="chip-count">{{ pedidos.length }}</span>
+      </button>
+      <button
+        *ngFor="let estado of ESTADOS"
+        class="filter-chip"
+        [class.active]="filtroEstado === estado"
+        (click)="filtroEstado = estado">
+        {{ estado | titlecase }}
+      </button>
+    </div>
+
+    <!-- Lista -->
+    <div class="news-list">
+      <div class="news-card" *ngFor="let item of pedidosFiltrados" (click)="verDetalle(item)">
+
+        <div class="news-image placeholder">
+          <ion-icon name="bag-handle-outline"></ion-icon>
+          <div class="news-category-badge">
+            <ion-badge [color]="badgeColor(item.estado)">{{ item.estado }}</ion-badge>
+          </div>
+        </div>
+
+        <div class="news-body">
+          <p class="news-title">{{ item.cliente?.nombre }}</p>
+          <p class="news-excerpt">{{ item.productos?.length }} producto(s) · {{ item.precioTotal }} €</p>
+        </div>
+
+        <div class="news-actions">
+          <button class="action-btn delete" (click)="$event.stopPropagation(); confirmarDelete(item)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </button>
+        </div>
+
+      </div>
+
+      <div class="empty-state" *ngIf="pedidosFiltrados.length === 0">
+        <ion-icon name="bag-handle-outline"></ion-icon>
+        <p>No hay pedidos en este estado.</p>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <!-- ── VISTA: DETALLE ── -->
+  <ng-container *ngIf="vista === 'detalle' && pedidoSeleccionado">
+
+    <div class="hero-section">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span>Detalle del pedido</span>
+      </div>
+      <h1 class="hero-title"><em>{{ pedidoSeleccionado.cliente?.nombre }}</em></h1>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="form-wrapper">
+
+      <!-- Info cliente -->
+      <div class="detail-block">
+        <p class="detail-label">Cliente</p>
+        <p class="detail-value">{{ pedidoSeleccionado.cliente?.nombre }}</p>
+      </div>
+
+      <div class="detail-block">
+        <p class="detail-label">Total</p>
+        <p class="detail-value">{{ pedidoSeleccionado.precioTotal }} €</p>
+      </div>
+
+      <!-- Productos -->
+      <div class="detail-block">
+        <p class="detail-label">Productos</p>
+        <div class="product-row" *ngFor="let p of pedidoSeleccionado.productos">
+          <ion-icon name="cube-outline"></ion-icon>
+          <span>{{ p.producto?.nombre }}</span>
+          <span class="product-price">{{ p.producto?.precio }} €</span>
+        </div>
+      </div>
+
+      <!-- Cambiar estado -->
+      <div class="detail-block">
+        <p class="detail-label">Estado</p>
+        <div class="estado-chips">
+          <button
+            *ngFor="let estado of ESTADOS"
+            class="filter-chip"
+            [class.active]="pedidoSeleccionado.estado === estado"
+            (click)="cambiarEstado(pedidoSeleccionado, estado)">
+            {{ estado | titlecase }}
+          </button>
+        </div>
+      </div>
+
+      <button class="btn-danger" (click)="confirmarDelete(pedidoSeleccionado)">
+        <ion-icon name="trash-outline"></ion-icon>
+        Eliminar pedido
+      </button>
+
+    </div>
+
+  </ng-container>
 
 </ion-content>

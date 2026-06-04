@@ -1,30 +1,247 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header>
+  <ion-toolbar class="custom-toolbar" mode="md" style="position: relative;">
+
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/administrador"></ion-back-button>
+      <ion-back-button
+        *ngIf="vista === 'home'"
+        defaultHref="/administrador"
+        text="">
+      </ion-back-button>
+      <ion-button *ngIf="vista !== 'home'" (click)="volver()">
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-buttons>
-    <ion-item class="center-title">
-      <ion-avatar class="raton-menu">
-        <ion-img alt="avatar" src="../../../assets/icon/favicon.png" routerLink="/folder">
-        </ion-img>
-      </ion-avatar>
-    </ion-item>
+
+    <div class="toolbar-center" routerLink="/folder">
+      <img src="../../../assets/icon/favicon.png" alt="Logo">
+    </div>
+
+    <ion-buttons slot="end">
+      <div style="width: 40px;"></div>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="home-content">
 
-  <div style="display: flex; justify-content: center; margin-top: 20px;">
-    <ion-button routerLink="/agregar-noticia" >Añadir Noticia</ion-button>
-  </div>
+  <!-- ── VISTA: LISTA ── -->
+  <ng-container *ngIf="vista === 'home'">
 
-  <ion-card *ngFor="let item of noticia" style="font-family: 'Montserrat', sans-serif;">
-    <ion-card-header [routerLink]="['/editar-noticia', item.id]">
-      <ion-card-title > {{item.titulo}} </ion-card-title>
-    </ion-card-header>
-    <ion-card-content> {{item.descripcion}}</ion-card-content>
-    <ion-card-content style="text-align: right;"> 
-      <ion-icon name="trash-outline" (click)="delete(item)" style="font-size: 24px;"></ion-icon>
-    </ion-card-content>
-  </ion-card>
+    <div class="hero-section">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span>Administración</span>
+      </div>
+      <h1 class="hero-title">Gestión de<br><em>noticias</em></h1>
+      <p class="hero-sub">Añade, edita o elimina noticias y novedades.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="add-row">
+      <button class="btn-add" (click)="irAnadir()">
+        <ion-icon name="newspaper-outline"></ion-icon>
+        Añadir noticia
+      </button>
+    </div>
+
+    <div class="news-list">
+      <div class="news-card" *ngFor="let item of noticias">
+
+        <div class="news-image" *ngIf="item.imagenUrl">
+          <ion-img [src]="item.imagenUrl" [alt]="item.titulo"></ion-img>
+          <div class="news-category-badge">{{ item.categoria }}</div>
+        </div>
+        <div class="news-image placeholder" *ngIf="!item.imagenUrl">
+          <ion-icon name="newspaper-outline"></ion-icon>
+          <div class="news-category-badge" *ngIf="item.categoria">{{ item.categoria }}</div>
+        </div>
+
+        <div class="news-body">
+          <div class="news-meta">
+            <span class="news-date">
+              <ion-icon name="calendar-outline"></ion-icon>
+              {{ item.fecha }}
+            </span>
+          </div>
+          <p class="news-title">{{ item.titulo }}</p>
+          <p class="news-excerpt">{{ item.resumen }}</p>
+        </div>
+
+        <div class="news-actions">
+          <button class="action-btn edit" (click)="irEditar(item)">
+            <ion-icon name="create-outline"></ion-icon>
+          </button>
+          <button class="action-btn delete" (click)="confirmarDelete(item)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </ng-container>
+
+  <!-- ── VISTA: AÑADIR ── -->
+  <ng-container *ngIf="vista === 'anadir'">
+
+    <div class="hero-section">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span>Nueva noticia</span>
+      </div>
+      <h1 class="hero-title">Añadir<br><em>noticia</em></h1>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="form-wrapper">
+
+      <div class="field">
+        <ion-icon name="text-outline" class="field-icon"></ion-icon>
+        <ion-input
+          placeholder="Título de la noticia"
+          [(ngModel)]="noticia.titulo">
+        </ion-input>
+      </div>
+
+      <div class="field">
+        <ion-icon name="reorder-two-outline" class="field-icon"></ion-icon>
+        <ion-input
+          placeholder="Resumen breve"
+          [(ngModel)]="noticia.resumen">
+        </ion-input>
+      </div>
+
+      <div class="field field-textarea">
+        <ion-icon name="document-text-outline" class="field-icon field-icon-top"></ion-icon>
+        <ion-textarea
+          placeholder="Contenido completo"
+          [(ngModel)]="noticia.contenido"
+          [autoGrow]="true"
+          rows="4">
+        </ion-textarea>
+      </div>
+
+      <div class="field" (click)="openFileInput()">
+        <ion-icon name="images-outline" class="field-icon"></ion-icon>
+        <span class="field-placeholder">{{ mostrarTextoSeleccionarFoto() }}</span>
+        <input type="file" #fileInput style="display: none;" (change)="nuevaImagen($event)">
+      </div>
+
+      <div class="field select-field">
+        <ion-icon name="pricetag-outline" class="field-icon"></ion-icon>
+        <ion-select
+          placeholder="Categoría"
+          [(ngModel)]="noticia.categoria"
+          interface="popover">
+          <ion-select-option>Clínica</ion-select-option>
+          <ion-select-option>Promociones</ion-select-option>
+          <ion-select-option>Salud dental</ion-select-option>
+          <ion-select-option>Novedades</ion-select-option>
+          <ion-select-option>Eventos</ion-select-option>
+        </ion-select>
+      </div>
+
+      <div class="field">
+        <ion-icon name="calendar-outline" class="field-icon"></ion-icon>
+        <ion-input
+          placeholder="Fecha (ej. 4 jun 2025)"
+          [(ngModel)]="noticia.fecha">
+        </ion-input>
+      </div>
+
+      <button class="btn-primary" (click)="guardar()">
+        <ion-icon name="checkmark-outline"></ion-icon>
+        Publicar noticia
+      </button>
+
+    </div>
+
+  </ng-container>
+
+  <!-- ── VISTA: EDITAR ── -->
+  <ng-container *ngIf="vista === 'editar'">
+
+    <div class="hero-section">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span>Editar noticia</span>
+      </div>
+      <h1 class="hero-title"><em>{{ editarNoticia?.titulo }}</em></h1>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="form-wrapper" *ngIf="editarNoticia">
+
+      <div class="field">
+        <ion-icon name="text-outline" class="field-icon"></ion-icon>
+        <ion-input
+          placeholder="Título de la noticia"
+          [(ngModel)]="editarNoticia.titulo">
+        </ion-input>
+      </div>
+
+      <div class="field">
+        <ion-icon name="reorder-two-outline" class="field-icon"></ion-icon>
+        <ion-input
+          placeholder="Resumen breve"
+          [(ngModel)]="editarNoticia.resumen">
+        </ion-input>
+      </div>
+
+      <div class="field field-textarea">
+        <ion-icon name="document-text-outline" class="field-icon field-icon-top"></ion-icon>
+        <ion-textarea
+          placeholder="Contenido completo"
+          [(ngModel)]="editarNoticia.contenido"
+          [autoGrow]="true"
+          rows="4">
+        </ion-textarea>
+      </div>
+
+      <div class="field" (click)="openFileInput()">
+        <ion-icon name="images-outline" class="field-icon"></ion-icon>
+        <span class="field-placeholder">{{ mostrarTextoSeleccionarFoto() }}</span>
+        <input type="file" #fileInput style="display: none;" (change)="nuevaImagen($event)">
+      </div>
+
+      <div class="field select-field">
+        <ion-icon name="pricetag-outline" class="field-icon"></ion-icon>
+        <ion-select
+          placeholder="Categoría"
+          [(ngModel)]="editarNoticia.categoria"
+          interface="popover">
+          <ion-select-option>Clínica</ion-select-option>
+          <ion-select-option>Promociones</ion-select-option>
+          <ion-select-option>Salud dental</ion-select-option>
+          <ion-select-option>Novedades</ion-select-option>
+          <ion-select-option>Eventos</ion-select-option>
+        </ion-select>
+      </div>
+
+      <div class="field">
+        <ion-icon name="calendar-outline" class="field-icon"></ion-icon>
+        <ion-input
+          placeholder="Fecha (ej. 4 jun 2025)"
+          [(ngModel)]="editarNoticia.fecha">
+        </ion-input>
+      </div>
+
+      <button class="btn-primary" (click)="editar()">
+        <ion-icon name="checkmark-outline"></ion-icon>
+        Guardar cambios
+      </button>
+
+      <button class="btn-danger" (click)="confirmarDelete(editarNoticia)">
+        <ion-icon name="trash-outline"></ion-icon>
+        Eliminar noticia
+      </button>
+
+    </div>
+
+  </ng-container>
+
 </ion-content>

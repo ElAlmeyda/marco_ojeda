@@ -33,7 +33,8 @@ export class CarritoService {
       productos: [],
       precioTotal: 0,
       estado: '',
-      id: this.uid
+      id: this.uid,
+      clienteId: this.uid,
     }
     this.pedido$.next(this.pedido);
   }
