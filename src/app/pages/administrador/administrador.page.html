@@ -1,28 +1,74 @@
-<ion-toolbar>
-  <ion-buttons slot="start">
-    <ion-menu-button></ion-menu-button>
-  </ion-buttons>
-  <ion-title></ion-title>
-  <ion-item class="center-title">
-    <ion-avatar class="raton-menu">
-      <ion-img alt="avatar" src="../../../assets/icon/favicon.png" routerLink="/folder">
-      </ion-img>
-    </ion-avatar>
-    
-  </ion-item>
-</ion-toolbar>
+<ion-header>
+  <ion-toolbar class="custom-toolbar" mode="md" style="position: relative;">
 
-<ion-content [fullscreen]="true">
-  
-  <ion-list style="padding: 10px;">
-    <ion-item routerLink="/admin-equipo"> Equipo <ion-icon slot="end" name="chevron-forward-outline" ></ion-icon>
-    </ion-item>
-    
-    <ion-item routerLink="/admin-noticia"> Noticia <ion-icon slot="end" name="chevron-forward-outline" ></ion-icon>
-    </ion-item>
-    <ion-item routerLink="/admin-producto"> Producto <ion-icon slot="end" name="chevron-forward-outline" ></ion-icon>
-    </ion-item>
-    <ion-item routerLink="/admin-pedidos"> Pedidos <ion-icon slot="end" name="chevron-forward-outline" ></ion-icon>
-    </ion-item>
-  </ion-list>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <div class="toolbar-center" routerLink="/folder">
+      <img src="../../../assets/icon/favicon.png" alt="Logo">
+    </div>
+
+    <ion-buttons slot="end">
+      <div style="width: 40px;"></div>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="admin-content">
+
+  <div class="admin-list">
+
+    <p class="section-label">Administración</p>
+
+    <div class="menu-card featured" routerLink="/admin-equipo">
+      <div class="card-icon featured-icon">
+        <ion-icon name="people-outline"></ion-icon>
+      </div>
+      <div class="card-body">
+        <h3>Equipo</h3>
+        <p>Gestión de miembros</p>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="card-arrow featured"></ion-icon>
+    </div>
+
+    <div class="menu-card" routerLink="/admin-noticia">
+      <div class="card-icon">
+        <ion-icon name="newspaper-outline"></ion-icon>
+      </div>
+      <div class="card-body">
+        <h3>Noticia</h3>
+        <p>Publicaciones y contenido</p>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
+    </div>
+
+    <div class="menu-card" routerLink="/admin-producto">
+      <div class="card-icon">
+        <ion-icon name="cube-outline"></ion-icon>
+      </div>
+      <div class="card-body">
+        <h3>Producto</h3>
+        <p>Catálogo y stock</p>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="menu-card" routerLink="/admin-pedidos">
+      <div class="card-icon">
+        <ion-icon name="receipt-outline"></ion-icon>
+      </div>
+      <div class="card-body">
+        <h3>Pedidos</h3>
+        <p>Gestión de órdenes</p>
+      </div>
+      <span class="badge-new">Nuevo</span>
+      <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
+    </div>
+
+  </div>
+
 </ion-content>

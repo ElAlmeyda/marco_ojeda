@@ -64,8 +64,8 @@
         </div>
 
         <div class="news-body">
-          <p class="news-title">{{ item.cliente?.nombre }}</p>
-          <p class="news-excerpt">{{ item.productos?.length }} producto(s) · {{ item.precioTotal }} €</p>
+          <p class="news-title">{{ item.cliente.nombre }}</p>
+          <p class="news-excerpt">{{ item.productos.length }} producto(s) · {{ item.precioTotal }} €</p>
         </div>
 
         <div class="news-actions">
@@ -92,7 +92,7 @@
         <div class="badge-dot"></div>
         <span>Detalle del pedido</span>
       </div>
-      <h1 class="hero-title"><em>{{ pedidoSeleccionado.cliente?.nombre }}</em></h1>
+      <h1 class="hero-title"><em>{{ pedidoSeleccionado.cliente.nombre }}</em></h1>
     </div>
 
     <div class="section-divider"></div>
@@ -102,7 +102,7 @@
       <!-- Info cliente -->
       <div class="detail-block">
         <p class="detail-label">Cliente</p>
-        <p class="detail-value">{{ pedidoSeleccionado.cliente?.nombre }}</p>
+        <p class="detail-value">{{ pedidoSeleccionado.cliente.nombre }}</p>
       </div>
 
       <div class="detail-block">
@@ -115,8 +115,8 @@
         <p class="detail-label">Productos</p>
         <div class="product-row" *ngFor="let p of pedidoSeleccionado.productos">
           <ion-icon name="cube-outline"></ion-icon>
-          <span>{{ p.producto?.nombre }}</span>
-          <span class="product-price">{{ p.producto?.precio }} €</span>
+          <span>{{ p.producto.nombre }}</span>
+          <span class="product-price">{{ p.producto.precio }} €</span>
         </div>
       </div>
 

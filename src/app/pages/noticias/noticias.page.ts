@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NoticiasService } from 'src/app/backend/noticias.service';
+import { FirestoreService } from 'src/app/service/firestore.service';
+import { Blog } from 'src/app/model';
 
 @Component({
   selector: 'app-noticias',
@@ -8,20 +9,21 @@ import { NoticiasService } from 'src/app/backend/noticias.service';
 })
 export class NoticiasPage implements OnInit {
 
-  noticia: any[] = [];
-  noticiaSeleccionada: any = null;
+  noticia: Blog[] = [];
+  noticiaSeleccionada: Blog | null = null;
 
-  constructor(private producto: NoticiasService) { }
+  readonly PATH = 'Blog';
+
+  constructor(public firestore: FirestoreService) {}
 
   ngOnInit() {
-    this.producto.getBlog().subscribe(() => {
-      this.noticia = this.producto.getNoticias();
+    this.firestore.getCollection<Blog>(this.PATH).subscribe(data => {
+      this.noticia = data;
     });
   }
 
-  verDetalle(item: any) {
+  verDetalle(item: Blog) {
     this.noticiaSeleccionada = item;
-    // Sube al inicio del scroll al abrir el detalle
     const content = document.querySelector('ion-content');
     if (content) (content as any).scrollToTop(300);
   }
@@ -31,5 +33,4 @@ export class NoticiasPage implements OnInit {
     const content = document.querySelector('ion-content');
     if (content) (content as any).scrollToTop(300);
   }
-
 }

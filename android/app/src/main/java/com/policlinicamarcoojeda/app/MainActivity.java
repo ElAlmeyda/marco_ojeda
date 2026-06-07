@@ -1,4 +1,4 @@
-package com.MarcoOjeda.app;
+package com.policlinicamarcoojeda.app;
 
 import com.getcapacitor.BridgeActivity;
 

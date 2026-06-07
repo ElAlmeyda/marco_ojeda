@@ -26,14 +26,18 @@ export interface Blog {
   imagenUrl: string;
   categoria: string;
   fecha: string;
+  descripcion?:string;
 }
 
 export interface Empleado {
   id: string;
   nombre: string;
   descripcion: string;
-  tipo: string;
+  tipo: string;       // 'odontologo' | 'higienista' | 'auxiliar' | 'atencion'
   imagenUrl: string;
+  rol?: string;
+  experiencia?: number;
+  especialidad?: string;
 }
 
 export interface Pedido {

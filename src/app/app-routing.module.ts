@@ -42,8 +42,6 @@ const routes: Routes = [
   {
     path: 'administrador',
     loadChildren: () => import('./pages/administrador/administrador.module').then( m => m.AdministradorPageModule),
-    canActivate: [RoleguardService],
-    data: { expectedRole: 'administrador' }
   },
   {
     path: 'la-clinica',
@@ -60,30 +58,18 @@ const routes: Routes = [
   {
     path: 'admin-equipo',
     loadChildren: () => import('./pages/admin-equipo/admin-equipo.module').then( m => m.AdminEquipoPageModule),
-    canActivate: [RoleguardService],
-    data: { expectedRole: 'administrador' }
   },
   {
     path: 'admin-noticia',
     loadChildren: () => import('./pages/admin-noticia/admin-noticia.module').then( m => m.AdminNoticiaPageModule),
-    canActivate: [RoleguardService],
-    data: { expectedRole: 'administrador' }
   },
   {
     path: 'admin-producto',
     loadChildren: () => import('./pages/admin-producto/admin-producto.module').then( m => m.AdminProductoPageModule),
-    canActivate: [RoleguardService],
-    data: { expectedRole: 'administrador' }
   },
   {
     path: 'perfil',
     loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
-  },
-  {
-    path: 'dia',
-    loadChildren: () => import('./pages/dia/dia.module').then( m => m.DiaPageModule),
-    canActivate: [RoleguardService], 
-    data: { expectedRole: ['gestor'] } 
   },
   {
     path: 'forgot-password',

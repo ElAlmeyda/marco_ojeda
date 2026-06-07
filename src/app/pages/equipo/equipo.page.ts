@@ -1,8 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Empleado } from 'src/app/model';
-import { EquipoServiceService } from 'src/app/backend/equipo-service.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
-import { LoadingService } from 'src/app/backend/loading.service';
 
 @Component({
   selector: 'app-equipo',
@@ -10,62 +8,55 @@ import { LoadingService } from 'src/app/backend/loading.service';
   styleUrls: ['./equipo.page.scss'],
 })
 export class EquipoPage implements OnInit {
-  [x: string]: any;
-
-  public odontologo: Empleado[]=[];
-  public higuienista: any = [];
-  public auxiliares: any = [];
-  public atencionAlcliente: any = [];
 
   public equipo: Empleado[] = [];
-  private path = 'EquipoClinico/';
+  public tiposEspecialistas: any[] = [];
+  public especialistaSeleccionado: any = null;
 
-  public tiposEspecialistas: any = [];
+  readonly PATH = 'Equipo';
 
-  constructor(private empleado: EquipoServiceService, public database: FirestoreService, private loadingService: LoadingService) { 
-
-  }
+  constructor(public firestore: FirestoreService) {}
 
   ngOnInit() {
-    this.empleado.getEquipo().subscribe(() => {
-      this.odontologo = this.empleado.getOdontologos();
-      this.actualizarImagenes(this.odontologo);
-      this.higuienista = this.empleado.getHigienistas();
-      this.actualizarImagenes(this.higuienista);
-      this.auxiliares = this.empleado.getAuxiliares();
-      this.actualizarImagenes(this.auxiliares);
-      this.atencionAlcliente = this.empleado.getAtencion();
-      this.actualizarImagenes(this.atencionAlcliente);
-      this.tiposEspecialistas = [
-        { tipo: 'odontologo', nombre: 'Odontólogos', datos: this.odontologo },
-        { tipo: 'higienista', nombre: 'Higienistas', datos: this.higuienista },
-        { tipo: 'auxiliar', nombre: 'Auxiliares', datos: this.auxiliares },
-        { tipo: 'atencion', nombre: 'Atención al Paciente', datos: this.atencionAlcliente }
-      ];
+    this.cargarEquipo();
+  }
+
+  cargarEquipo() {
+    this.firestore.getCollection<Empleado>(this.PATH).subscribe(data => {
+      console.log('Datos de Firestore:', data); // <-- mira qué valor tiene "tipo"
+      this.equipo = data;
+      this.agruparPorTipo();
     });
   }
 
-  actualizarImagenes(equipo: any[]) {
-    for (const odontologo of equipo) {
-      if (odontologo.foto) {
-        try {
-          const url = this.empleado.getDownloadUrl(odontologo.foto).subscribe(
-            (url: string) => {
-              odontologo.imagenUrl = url;
-            },
-            (error) => {
-              console.error('Error al obtener URL de descarga:', error);
-            }
-          );
-          odontologo.imagenUrl = url;
-        } catch (error) {
-          console.error('Error al obtener URL de descarga:', error);
-        }
-      }
+  agruparPorTipo() {
+    // Agrupa dinámicamente por lo que venga de Firestore
+    const grupos: { [key: string]: Empleado[] } = {};
+
+    for (const empleado of this.equipo) {
+      const tipo = empleado.tipo || 'otros';
+      if (!grupos[tipo]) grupos[tipo] = [];
+      grupos[tipo].push(empleado);
     }
+
+    this.tiposEspecialistas = Object.keys(grupos).map(tipo => ({
+      tipo,
+      nombre: this.nombreLegible(tipo),
+      datos: grupos[tipo]
+    }));
+
+    console.log('tiposEspecialistas:', this.tiposEspecialistas); // <-- verifica que se llena
   }
 
-  especialistaSeleccionado: any = null;
+  nombreLegible(tipo: string): string {
+    const mapa: { [key: string]: string } = {
+      odontologo:  'Odontólogos',
+      higienista:  'Higienistas',
+      auxiliar:    'Auxiliares',
+      atencion:    'Atención al Paciente',
+    };
+    return mapa[tipo] || tipo;
+  }
 
   verDetalle(item: any) {
     this.especialistaSeleccionado = item;
@@ -74,5 +65,4 @@ export class EquipoPage implements OnInit {
   volver() {
     this.especialistaSeleccionado = null;
   }
-  
 }

@@ -67,14 +67,6 @@
   <!-- ── VISTA DETALLE ── -->
   <ng-container *ngIf="noticiaSeleccionada">
 
-    <!-- Botón volver arriba -->
-    <div class="back-row">
-      <button class="back-btn" (click)="volver()">
-        <ion-icon name="arrow-back-outline"></ion-icon>
-        Volver a noticias
-      </button>
-    </div>
-
     <!-- Imagen -->
     <div class="detail-hero">
       <ion-img [src]="noticiaSeleccionada.imagenUrl" class="detail-img"></ion-img>
@@ -91,15 +83,6 @@
         {{ noticiaSeleccionada.contenido }}
       </p>
     </div>
-
-    <!-- Botón volver abajo -->
-    <div class="back-row bottom">
-      <button class="back-btn" (click)="volver()">
-        <ion-icon name="arrow-back-outline"></ion-icon>
-        Volver a noticias
-      </button>
-    </div>
-
   </ng-container>
 
 </ion-content>

@@ -148,15 +148,9 @@
           <ion-icon name="cart-outline"></ion-icon>
         </div>
       </div>
-
-      <div class="btn-secondary" (click)="volverLista()">
-        <ion-icon name="arrow-back-outline"></ion-icon>
-        <span>Seguir comprando</span>
-      </div>
     </div>
 
   </div>
-  <!-- /VISTA DETALLE -->
 
   <ion-infinite-scroll (ionInfinite)="cargarMas($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>

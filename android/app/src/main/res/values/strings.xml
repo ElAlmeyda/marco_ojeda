@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">marco_ojeda</string>
-    <string name="title_activity_main">marco_ojeda</string>
-    <string name="package_name">com.MarcoOjeda.app</string>
-    <string name="custom_url_scheme">com.MarcoOjeda.app</string>
+    <string name="app_name">Policlinica Dental Marco Ojeda</string>
+    <string name="title_activity_main">Policlinica Dental Marco Ojeda</string>
+    <string name="package_name">com.policlinicamarcoojeda.app</string>
+    <string name="custom_url_scheme">com.policlinicamarcoojeda.app</string>
 </resources>
