@@ -671,7 +671,7 @@
 }
 
 .delete-btn {
-  --color: #808080;
+  --color: #B14A44;
   align-self: flex-end;
   height: 34px;
 
@@ -3349,7 +3349,7 @@ ion-select.form-item {
 .appt-cta-btn {
   width: 100%;
   height: 50px;
-  background: var(--ion-card-background);
+  background: #C9A86A;
   color: var(--ion-text-color);
   border: none;
   border-radius: 14px;
@@ -3688,14 +3688,40 @@ body.light-theme {
     .action-sheet-button { color: var(--ion-text-color); }
     .action-sheet-icon   { color: var(--ion-text-color); }
   }
+  // ── Appointment cards (light theme) ──────────────────────
+.appointment-card {
+  background: #EDE8DF !important;
+  border-radius: 14px !important;
+  margin: 0 !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45) !important;
+  overflow: hidden;
+  border: 1px solid #2E2E2E;
+  position: relative;
+
+
+  .label-tag         { color: #C9A86A; }
+  .artist-name       { color: #1A1A1A; }
+  .info-row          { color: #4A4540; }
+  .row-icon          { color: #C9A86A; }
+  .date-edited       { color: #B8861E; .row-icon { color: #B8861E; } }
+  .consult-row       { color: #2A8A6A; .row-icon { color: #2A8A6A; } }
+  .address-row       { color: #4A4540; &:hover { color: #C9A86A; } }
+  .card-divider      { background: #D8D0C4; }
+  .delete-btn        { --color: #B14A44; }
+  .whatsapp-btn      {
+    background: rgba(0, 160, 100, 0.1);
+    border-color: rgba(0, 160, 100, 0.3);
+    ion-icon { color: #007A50; }
+  }
 }
 
-.custom-tab-bar {
-  background: #2E2E2E;
-  border-radius: 20px;
-  overflow: hidden;
-  margin: 5px;
-  border: none;
+// ── Empty state (light theme) ─────────────────────────────
+.empty-title { color: #1A1A1A; }
+.empty-sub   { color: #6B6560; }
+.empty-btn   {
+  --border-color: #C9A86A;
+  --color: #C9A86A;
+}
 }
 
 .custom-tab-btn {
@@ -3708,20 +3734,6 @@ body.light-theme {
   ion-icon {
     font-size: 24px;
   }
-}
-
-// ── Tema claro ────────────────────────────────────────────
-body.light-theme {
-  .custom-tab-bar {
-    background: #EDE8DF;
-    border: 1px solid #D8D0C4;
-  }
-}
-
-.custom-tab-bar {
-  background: rgba(245, 240, 232, 0.85) !important;
-  backdrop-filter: blur(10px);
-  border: 1px solid #D8D0C4;
 }
 
 ion-header {
@@ -3799,4 +3811,108 @@ ion-content {
   .detail-shop-name { color: #1A1A1A; }
   .detail-city   { color: #6B6560; }
   .detail-desc   { color: #6B6560; }
+}
+
+// ── Action Sheet global ────────────────────────────────
+.action-sheet-group {
+  background: #1A1A1A !important;
+}
+
+.action-sheet-title {
+  color: #EDEDED !important;
+  background: #1A1A1A !important;
+}
+
+.action-sheet-button {
+  color: #EDEDED !important;
+  background: #1A1A1A !important;
+}
+
+.action-sheet-button .action-sheet-button-inner {
+  color: #EDEDED !important;
+}
+
+.action-sheet-cancel .action-sheet-button-inner {
+  color: #C9A86A !important;
+}
+
+// ── Action Sheet en tema CLARO ─────────────────────────
+body.light-theme {
+  .action-sheet-group {
+    background: #EDE8DF !important;
+  }
+
+  .action-sheet-title {
+    color: #1A1A1A !important;
+    background: #EDE8DF !important;
+  }
+
+  .action-sheet-button {
+    color: #1A1A1A !important;
+    background: #EDE8DF !important;
+  }
+
+  .action-sheet-button .action-sheet-button-inner {
+    color: #1A1A1A !important;
+  }
+
+  .action-sheet-cancel .action-sheet-button-inner {
+    color: #C9A86A !important;
+  }
+}
+
+// ── Alert global ───────────────────────────────────────
+.alert-wrapper {
+  background: #1A1A1A !important;
+  border: 0.5px solid #2E2E2E !important;
+  border-radius: 14px !important;
+}
+
+.alert-head .alert-title {
+  color: #EDEDED !important;
+}
+
+.alert-message {
+  color: #808080 !important;
+}
+
+.alert-button-group {
+  border-top: 0.5px solid #2E2E2E !important;
+}
+
+.alert-button {
+  color: #C9A86A !important;
+}
+
+.alert-button.alert-button-role-cancel {
+  color: #808080 !important;
+}
+
+// ── Alert en tema CLARO ────────────────────────────────
+body.light-theme {
+
+  .alert-wrapper {
+    background: #EDE8DF !important;
+    border-color: #D8D0C4 !important;
+  }
+
+  .alert-head .alert-title {
+    color: #1A1A1A !important;
+  }
+
+  .alert-message {
+    color: #6B6560 !important;
+  }
+
+  .alert-button-group {
+    border-top-color: #D8D0C4 !important;
+  }
+
+  .alert-button {
+    color: #C9A86A !important;
+  }
+
+  .alert-button.alert-button-role-cancel {
+    color: #6B6560 !important;
+  }
 }

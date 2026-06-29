@@ -263,9 +263,9 @@ export const registrarUsuario = onRequest(async (req, res) => {
       return;
     }
 
-    const body: { email?: string } = req.body;
+    const body: { correo?: string } = req.body;
 
-    if (!body.email) {
+    if (!body.correo) {
       res.status(400).send({ ok: false, message: "Faltan campos obligatorios" });
       return;
     }
@@ -275,7 +275,7 @@ export const registrarUsuario = onRequest(async (req, res) => {
     // Verificar si el usuario ya existe en Firebase Auth
     let existingUser = null;
     try {
-      existingUser = await auth.getUserByEmail(body.email);
+      existingUser = await auth.getUserByEmail(body.correo);
     } catch (e: any) {
       if (e.code !== "auth/user-not-found") {
         throw e;
@@ -297,17 +297,17 @@ export const registrarUsuario = onRequest(async (req, res) => {
 
     // Crear usuario en Firebase Auth
     const userRecord = await auth.createUser({
-      email: body.email,
+      email: body.correo,
       password,
-      displayName: body.email,
+      displayName: body.correo,
       emailVerified: false,
     });
 
     // Crear usuario en Firestore
     const userRef = db.collection("Usuarios").doc(userRecord.uid);
     await userRef.set({
-      email: body.email,
-      nombre: body.email,
+      correo: body.correo,
+      nombre: body.correo,
       token: [],
       creadoEn: new Date().toISOString(),
       aceptaCondiciones: true,
@@ -318,18 +318,18 @@ export const registrarUsuario = onRequest(async (req, res) => {
       ok: true,
       registrado: true,
       message: "Usuario registrado exitosamente",
-      email: body.email,
+      email: body.correo,
       password, // Opcional: puedes enviarlo por correo desde n8n
     });
 
     // Generar link para que el usuario establezca contraseña
-    const resetLink = await auth.generatePasswordResetLink(body.email);
+    const resetLink = await auth.generatePasswordResetLink(body.correo);
 
     res.status(200).send({
       ok: true,
       registrado: true,
       message: "Usuario registrado exitosamente",
-      email: body.email,
+      email: body.correo,
       resetLink
     });
 

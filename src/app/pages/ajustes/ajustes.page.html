@@ -92,8 +92,7 @@
     <h2 class="legal-h2">{{ 'MODIFICATION_TERMS' | translate }}</h2>
     <p class="legal-text">{{ 'MODIFICATION_TERMS_DESC' | translate }}</p>
 
-    <h2 class="legal-h2">{{ 'EFFECTIVE_DATE' | translate }}</h2>
-    <p class="legal-date"><strong>{{ 'LAST_UPDATE' | translate }}</strong> 28/02/2025</p>
+    <p class="legal-date"><strong>{{ 'LAST_UPDATE' | translate }}</strong></p>
   </div>
 </ion-content>
 
@@ -284,16 +283,26 @@
   <div class="legal-wrapper">
     <p class="legal-intro">{{ 'PRIVACY_INTRO' | translate }}</p>
 
+    <!-- Sección 1 -->
+    <div class="legal-section">
+      <h2 class="legal-h2">{{ 'PRIVACY_SECTION_1_TITLE' | translate }}</h2>
+      <p class="legal-text">{{ 'PRIVACY_SECTION_1_TEXT' | translate }}</p>
+    </div>
+
+    <!-- Sección 2: con lista -->
+    <div class="legal-section">
+      <h2 class="legal-h2">{{ 'PRIVACY_SECTION_2_TITLE' | translate }}</h2>
+      <p class="legal-text">{{ 'PRIVACY_SECTION_2_TEXT' | translate }}</p>
+      <ul class="legal-list">
+        <li *ngFor="let i of [1,2,3,4,5,6,7]">{{ ('PRIVACY_SECTION_2_POINT_' + i) | translate }}</li>
+      </ul>
+    </div>
+
+    <!-- Secciones 3, 4, 5 -->
     <ng-container *ngFor="let section of [
-      { title: 'PRIVACY_SECTION_1_TITLE',  text: 'PRIVACY_SECTION_1_TEXT'  },
-      { title: 'PRIVACY_SECTION_2_TITLE',  text: 'PRIVACY_SECTION_2_TEXT'  },
-      { title: 'PRIVACY_SECTION_3_TITLE',  text: 'PRIVACY_SECTION_3_TEXT'  },
-      { title: 'PRIVACY_SECTION_4_TITLE',  text: 'PRIVACY_SECTION_4_TEXT'  },
-      { title: 'PRIVACY_SECTION_5_TITLE',  text: 'PRIVACY_SECTION_5_TEXT'  },
-      { title: 'PRIVACY_SECTION_8_TITLE',  text: 'PRIVACY_SECTION_8_TEXT'  },
-      { title: 'PRIVACY_SECTION_9_TITLE',  text: 'PRIVACY_SECTION_9_TEXT'  },
-      { title: 'PRIVACY_SECTION_10_TITLE', text: 'PRIVACY_SECTION_10_TEXT' },
-      { title: 'PRIVACY_SECTION_12_TITLE', text: 'PRIVACY_SECTION_12_TEXT' }
+      { title: 'PRIVACY_SECTION_3_TITLE', text: 'PRIVACY_SECTION_3_TEXT' },
+      { title: 'PRIVACY_SECTION_4_TITLE', text: 'PRIVACY_SECTION_4_TEXT' },
+      { title: 'PRIVACY_SECTION_5_TITLE', text: 'PRIVACY_SECTION_5_TEXT' }
     ]">
       <div class="legal-section">
         <h2 class="legal-h2">{{ section.title | translate }}</h2>
@@ -301,34 +310,45 @@
       </div>
     </ng-container>
 
-    <!-- Section 2 list -->
-    <div class="legal-section">
-      <h2 class="legal-h2">{{ 'PRIVACY_SECTION_2_TITLE' | translate }}</h2>
-      <p class="legal-text">{{ 'PRIVACY_SECTION_2_TEXT' | translate }}</p>
-      <ul class="legal-list">
-        <li *ngFor="let i of [1,2,3,4,5,6,7,8]">{{ ('PRIVACY_SECTION_2_POINT_' + i) | translate }}</li>
-      </ul>
-    </div>
-
-    <!-- Section 6 list -->
+    <!-- Sección 6: con lista -->
     <div class="legal-section">
       <h2 class="legal-h2">{{ 'PRIVACY_SECTION_6_TITLE' | translate }}</h2>
       <p class="legal-text">{{ 'PRIVACY_SECTION_6_TEXT' | translate }}</p>
       <ul class="legal-list">
-        <li *ngFor="let i of [1,2,3,4]">{{ ('PRIVACY_SECTION_6_POINT_' + i) | translate }}</li>
+        <li *ngFor="let i of [1,2,3,4,5,6]">{{ ('PRIVACY_SECTION_6_POINT_' + i) | translate }}</li>
       </ul>
     </div>
 
-    <!-- Section 11 -->
+    <!-- Secciones 7, 8, 9, 10 -->
+    <ng-container *ngFor="let section of [
+      { title: 'PRIVACY_SECTION_7_TITLE',  text: 'PRIVACY_SECTION_7_TEXT'  },
+      { title: 'PRIVACY_SECTION_8_TITLE',  text: 'PRIVACY_SECTION_8_TEXT'  },
+      { title: 'PRIVACY_SECTION_9_TITLE',  text: 'PRIVACY_SECTION_9_TEXT'  },
+      { title: 'PRIVACY_SECTION_10_TITLE', text: 'PRIVACY_SECTION_10_TEXT' }
+    ]">
+      <div class="legal-section">
+        <h2 class="legal-h2">{{ section.title | translate }}</h2>
+        <p class="legal-text">{{ section.text | translate }}</p>
+      </div>
+    </ng-container>
+
+    <!-- Sección 11: dos párrafos -->
     <div class="legal-section">
       <h2 class="legal-h2">{{ 'PRIVACY_SECTION_11_TITLE' | translate }}</h2>
       <p class="legal-text">{{ 'PRIVACY_SECTION_11_TEXT_1' | translate }}</p>
       <p class="legal-text">{{ 'PRIVACY_SECTION_11_TEXT_2' | translate }}</p>
-      <p class="legal-text">{{ 'PRIVACY_SECTION_11_TEXT_3' | translate }}</p>
-      <ul class="legal-list">
-        <li *ngFor="let i of [1,2,3]">{{ ('PRIVACY_SECTION_11_POINT_' + i) | translate }}</li>
-      </ul>
     </div>
+
+    <!-- Secciones 12, 13 -->
+    <ng-container *ngFor="let section of [
+      { title: 'PRIVACY_SECTION_12_TITLE', text: 'PRIVACY_SECTION_12_TEXT' },
+      { title: 'PRIVACY_SECTION_13_TITLE', text: 'PRIVACY_SECTION_13_TEXT' }
+    ]">
+      <div class="legal-section">
+        <h2 class="legal-h2">{{ section.title | translate }}</h2>
+        <p class="legal-text">{{ section.text | translate }}</p>
+      </div>
+    </ng-container>
 
     <p class="legal-date"><strong>{{ 'PRIVACY_LAST_UPDATED' | translate }}</strong></p>
   </div>

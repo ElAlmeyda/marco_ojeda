@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActionSheetController, AlertController, NavController, Platform, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -77,9 +77,10 @@ export class TatuadorPage implements OnInit {
   segmentoSeleccionado: string = 'info';
   favoritosUsuario: any[] = [];
   fotosTatuador: { url: string; favorita: boolean }[] = [];
+  valoracionMedia: number = 0;
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private route: ActivatedRoute, public tiendaTatuador: TiendaService, public toast: ToastController,
-    private router: Router, public navCtrl: NavController, private alertController: AlertController, private actionSheetCtrl: ActionSheetController, public translate: TranslateService, private platform: Platform, public toastCtrl: ToastController
+    private router: Router, public navCtrl: NavController, private cdr: ChangeDetectorRef, private alertController: AlertController, private actionSheetCtrl: ActionSheetController, public translate: TranslateService, private platform: Platform, public toastCtrl: ToastController
   ) {
     this.auth.stateAuth().subscribe(async res => {
       if (res != null) {
@@ -325,10 +326,12 @@ export class TatuadorPage implements OnInit {
   }
 
   cargarResenas() {
-    const uidTatuador = this.tatuador.uid;
-    this.tiendaTatuador.getResenaTatuador(uidTatuador).subscribe(res => {
+    this.tiendaTatuador.getResenaTatuador(this.tatuador.uid).subscribe(res => {
       this.resenas = res as Resena[];
-      console.log(this.resenas);
+      if (this.resenas.length > 0) {
+        const suma = this.resenas.reduce((acc, r) => acc + (r.estrella || 0), 0);
+        this.valoracionMedia = suma / this.resenas.length;
+      }
     });
   }
 
@@ -362,6 +365,7 @@ export class TatuadorPage implements OnInit {
 
   seleccionarEstrella(valor: number) {
     this.estrellaSeleccionada = valor;
+    this.cdr.detectChanges();
   }
 
   abrirRedSocial(red: string, usuario: string) {

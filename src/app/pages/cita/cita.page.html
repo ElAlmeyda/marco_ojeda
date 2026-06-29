@@ -1,3 +1,8 @@
+<ion-header [translucent]="true">
+  <ion-toolbar style="padding-top: var(--ion-safe-area-top); padding-inline: 10px;">
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true" class="appointments-content">
 
   <!-- Estado vacío -->
@@ -91,9 +96,9 @@
         <!-- Acciones -->
         <div class="card-actions">
           <!-- Cita normal: solo eliminar -->
-          <ion-button *ngIf="cita.estado !== 'Editada'" fill="clear" class="action-btn delete-btn"
+          <ion-button *ngIf="cita.estado !== 'Editada'" fill="clear"  class="action-btn delete-btn"
             (click)="eliminarCita(cita, cita.uidCita)">
-            <ion-icon slot="start" name="trash-outline"></ion-icon>
+            <ion-icon slot="start" name="trash-outline" color="danger"></ion-icon>
             {{ 'DELETE' | translate }}
           </ion-button>
 

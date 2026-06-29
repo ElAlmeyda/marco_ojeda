@@ -24,7 +24,7 @@
     </ion-segment>
   </div>
 
-  <!-- ── Info ── -->
+  <!-- Info -->
   <div *ngIf="segmentoSeleccionado === 'info'" class="info-wrapper">
 
     <!-- Avatar + bio -->
@@ -33,10 +33,18 @@
         <ion-img [src]="avatarUrl" alt="Avatar"></ion-img>
       </div>
       <div class="hero-info">
+
         <div class="hero-city" *ngIf="tatuador.ciudad" (click)="abrirMaps(tatuador.ciudad)">
           <ion-icon name="location-outline"></ion-icon>
           <span>{{ tatuador.ciudad }}</span>
         </div>
+
+        <div class="hero-rating" *ngIf="valoracionMedia > 0">
+          <ion-icon name="star" class="rating-star-icon"></ion-icon>
+          <span class="rating-value">{{ valoracionMedia | number:'1.1-1' }}</span>
+          <span class="rating-count" *ngIf="resenas?.length">({{ resenas.length }})</span>
+        </div>
+
         <p class="hero-bio">{{ tatuador.biografia }}</p>
       </div>
     </div>
@@ -83,7 +91,7 @@
       </div>
     </div>
 
-    <!-- Objetivos / Badges -->
+    <!-- Badges -->
     <div class="badges-row" *ngIf="objetivos.length > 0">
       <ng-container *ngFor="let objetivo of objetivos">
         <img *ngIf="objetivo.alcanzado"
@@ -110,7 +118,7 @@
 
     <!-- Reseñas -->
     <div class="reviews-section">
-      <span class="section-label">Reseñas</span>
+      <span class="section-label">{{ 'REVIEWS' | translate }}</span>
 
       <!-- Carrusel -->
       <div class="review-carousel" *ngIf="resenas && resenas.length > 0">
@@ -121,15 +129,16 @@
         <div class="review-card" *ngIf="resenas[resenaActual] as resena">
           <div class="review-header">
             <span class="review-author">{{ resena.nombreUsuario }}</span>
+            <!-- Estrellas con *ngIf en lugar de [name] dinamico -->
             <div class="review-stars">
-              <ion-icon *ngFor="let star of [1,2,3,4,5]"
-                [name]="(resena.estrella || 0) >= star ? 'star' : 'star-outline'"
-                class="star-icon">
-              </ion-icon>
+              <ng-container *ngFor="let star of [1,2,3,4,5]">
+                <ion-icon *ngIf="(resena.estrella ?? 0) >= star" name="star"         class="star-icon"></ion-icon>
+                <ion-icon *ngIf="(resena.estrella ?? 0) <  star" name="star-outline" class="star-icon"></ion-icon>
+              </ng-container>
             </div>
           </div>
           <p class="review-msg">{{ resena.mensaje }}</p>
-          <div class="review-photos" *ngIf="resena.imagen.length">
+          <div class="review-photos" *ngIf="resena.imagen?.length">
             <div class="review-photo-tile" *ngFor="let foto of resena.imagen"
               (click)="verImagen(foto)">
               <ion-img [src]="foto"></ion-img>
@@ -154,12 +163,22 @@
       <div class="review-form" *ngIf="!resenaExistente && usuario.uid">
         <span class="section-label">{{ 'LEAVE_REVIEW' | translate }}</span>
 
+        <!-- Selector de estrellas con *ngIf en lugar de [name] dinamico -->
         <div class="star-picker">
-          <ion-icon *ngFor="let star of [1,2,3,4,5]"
-            [name]="estrellaSeleccionada >= star ? 'star' : 'star-outline'"
-            class="star-pick-icon"
-            (click)="seleccionarEstrella(star)">
-          </ion-icon>
+          <ng-container *ngFor="let star of [1,2,3,4,5]">
+            <ion-icon
+              *ngIf="estrellaSeleccionada >= star"
+              name="star"
+              class="star-pick-icon"
+              (click)="seleccionarEstrella(star)">
+            </ion-icon>
+            <ion-icon
+              *ngIf="estrellaSeleccionada < star"
+              name="star-outline"
+              class="star-pick-icon"
+              (click)="seleccionarEstrella(star)">
+            </ion-icon>
+          </ng-container>
         </div>
 
         <ion-textarea
@@ -185,11 +204,12 @@
           {{ 'SEND_REVIEW' | translate }}
         </ion-button>
       </div>
+
     </div>
 
   </div>
 
-  <!-- ── Fotos ── -->
+  <!-- Fotos -->
   <ng-container *ngIf="segmentoSeleccionado === 'fotos'">
 
     <div class="empty-state" *ngIf="!fotosTatuador || fotosTatuador.length === 0">
@@ -211,9 +231,10 @@
           (click)="verImagen(foto.url)"
           class="photo-img">
         </ion-img>
+        <!-- Heart con *ngIf en lugar de [name] y [class] dinamicos -->
         <button class="heart-btn" (click)="toggleFavoritoFoto(foto, $event)">
-          <ion-icon [name]="foto.favorita ? 'heart' : 'heart-outline'"
-            [class.heart-active]="foto.favorita"></ion-icon>
+          <ion-icon *ngIf=" foto.favorita" name="heart"         class="heart-active"></ion-icon>
+          <ion-icon *ngIf="!foto.favorita" name="heart-outline"                     ></ion-icon>
         </button>
       </div>
     </div>

@@ -228,15 +228,16 @@ export class FirestoreService {
       });
   }
 
-   obtenerAvatar(uid: string): Observable<string> {
-    const imagenesDocRef = this.database.doc(`Usuarios/${uid}/avatar`);
-
-    return imagenesDocRef.snapshotChanges().pipe(
-      map(action => {
-        const data = action.payload.data() as { url: string };
-        return data?.url || '';
-      })
-    );
+   // firestore.service.ts
+  obtenerAvatar(uid: string): Observable<string> {
+    return this.database.doc(`Usuarios/${uid}/avatar/avatar`)
+      .snapshotChanges()
+      .pipe(
+        map(action => {
+          const data = action.payload.data() as { url: string } | undefined;
+          return data?.url || '';
+        })
+      );
   }
 
   async verificarFavorito(uidUsuario: string, uidTatuador: string): Promise<boolean> {
@@ -748,4 +749,10 @@ export class FirestoreService {
     );
   }
 
+  getWhere(path: string, campo: string, operador: any, valor: any) {
+    return this.database.collection(path, ref => 
+      ref.where(campo, operador, valor)
+    ).valueChanges();
+  }
+  
 }

@@ -7,6 +7,7 @@ export interface Usuario {
     movil?:string;
     avatar?:string;
     token?:string;
+    codigoSorteo?:string;
 }
 
 

@@ -46,6 +46,12 @@ export class FavoritosPage implements OnInit {
     this.router.navigate(['/tatuador', fav.uid]);
   }
 
+  irAlTatuadorFav(tatuadorId: string) {
+    if (tatuadorId && tatuadorId !== 'sinTatuador') {
+      this.router.navigate(['/tatuador', tatuadorId]);
+    }
+  }
+
   obtenerFavoritos() {
     this.tiendaService.obtenerFavorito(this.usuario.uid).subscribe(res => {
       this.favoritos = res || [];

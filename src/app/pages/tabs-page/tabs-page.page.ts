@@ -22,6 +22,8 @@ export class TabsPagePage implements OnInit {
 
   constructor(private themeService: ThemeService, public firestroreAuth: FirestoreAuthService, public user: UsuariosService) {
     this.temaActual = this.themeService.getTemaActual();
+
+    this.temaActual = this.themeService.getTemaActual();
     this.firestroreAuth.stateAuth().subscribe(async res => {
       if (res != null) {
         this.usuario.uid = res.uid;

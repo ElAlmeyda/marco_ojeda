@@ -1,7 +1,7 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom" class="custom-tab-bar">
     <ion-tab-button [routerLink]="['/tabs/folder', usuario.uid]" class="custom-tab-btn">
-      <img src="assets/icon/icon_ligt.png" style="width: 30px; height: 30px; border-radius: 12px;"/>
+      <img [src]="temaActual === 'light' ? 'assets/icon/icon_ligt.png' : 'assets/icon/icon.png'" style="width: 30px; height: 30px; border-radius: 12px;"/>
     </ion-tab-button>
     <ion-tab-button routerLink="/tabs/cita" class="custom-tab-btn">
       <ion-icon name="calendar-outline"></ion-icon>

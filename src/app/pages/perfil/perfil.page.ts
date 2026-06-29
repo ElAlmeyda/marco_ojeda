@@ -10,6 +10,7 @@ import { NotificacionService } from 'src/app/service/notificacion.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage-angular';
 import { ThemeService } from 'src/app/backend/theme.service';
+import { take } from 'rxjs';
 
 
 @Component({
@@ -43,6 +44,10 @@ export class PerfilPage implements OnInit {
   numeroIncorrecto=false;
   usuariosBloqueados: Usuario[] = [];
   temaActual: 'dark' | 'light' = 'dark';
+
+  codigoDescuento: string = '';
+  codigoValido: boolean = false;
+  codigoTimer: any;
 
   constructor(public auth: FirestoreAuthService, public user: UsuariosService, private alertController: AlertController,
               private themeService: ThemeService, public firestore: FirestoreService, private loadingCtrl: LoadingController, private afAuth: AngularFireAuth, public toast: ToastController,
@@ -92,9 +97,14 @@ export class PerfilPage implements OnInit {
       const usuario = this.user.getUsuarioConcreto(this.uid);
       if (usuario) {
         this.usuario = usuario;
-        console.log(usuario.movil);
-      } else {
-        console.log('Usuario no encontrado');
+
+        // Esta suscripción mantendrá el avatar siempre actualizado
+        this.user.getAvatar(usuario.uid).subscribe(url => {
+          console.log("Avatar recibido:", url);
+          if (url) {
+            this.usuario = { ...this.usuario, avatar: url };
+          }
+        });
       }
     });
   }
@@ -256,20 +266,25 @@ export class PerfilPage implements OnInit {
 
   async subirFotoAvatar(file: File) {
     try {
-      const loading = await this.mostrarLoading(this.translate.instant('AVATAR.UPLOADING'));
-      // Subes la imagen y recibes el URL (un string)
-      const urls = await this.user.subirImagen([file], this.usuario.uid); // urls: string[]
+      const loading = await this.mostrarLoading(
+        this.translate.instant('AVATAR.UPLOADING')
+      );
 
-      // Verifica que urls[0] exista y no sea undefined
-      if (!urls || !urls[0]) {
-        throw new Error('No se recibió URL de la imagen');
-      }
+      // Preview local inmediato
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.usuario = { ...this.usuario, avatar: e.target?.result as string };
+      };
+      reader.readAsDataURL(file);
 
-      // Actualiza la propiedad avatar con el URL, asegurándote que no sea undefined
-      this.usuario.avatar = urls[0];
+      const urls = await this.user.subirImagen([file], this.usuario.uid);
+      if (!urls || !urls[0]) throw new Error('No se recibió URL');
 
-      // Ahora actualiza en Firestore, asegurándote que no envías undefined
-      await this.user.actualizarAvatar(this.usuario.uid,this.usuario.avatar);
+      // Guarda en Firestore — getAvatar() lo detectará y actualizará
+      await this.user.actualizarAvatar(this.usuario.uid, urls[0]);
+
+      // ✅ Quita la línea: this.usuario = { ...this.usuario, avatar: urls[0] }
+      // ya lo hará la suscripción de getAvatar automáticamente
 
       loading.dismiss();
       this.presentToast(this.translate.instant('AVATAR.UPDATED'), 'success');
@@ -291,36 +306,44 @@ export class PerfilPage implements OnInit {
     return loading;
   }
 
-  async actualizarAvatar() {
-    const tieneAvatar = !!this.usuario.avatar;
-
-    const buttons: any[] = [];
-    buttons.push(
-      {
-        text: tieneAvatar ? this.translate.instant('AVATAR.UPDATE') : this.translate.instant('AVATAR.UPLOAD'),
-        handler: () => {
-          this.fileInput.nativeElement.click();
-        },
-      },
-      {
-        text: this.translate.instant('AVATAR.CANCEL'),
-        role: 'cancel'
-      }
-    );
-
-    const alert = await this.alertController.create({
-      header: this.translate.instant('AVATAR.TITLE'),
-      message: tieneAvatar
-        ? this.translate.instant('AVATAR.OPTIONS')
-        : this.translate.instant('AVATAR.NO_AVATAR'),
-      buttons
-    });
-
-    await alert.present();
-  }
-
   cambiarTema(tema: 'dark' | 'light') {
     this.temaActual = tema;
     this.themeService.cambiarTema(tema);
   }
+
+  codigoSorteo: string = '';
+  codigoSorteoValido: boolean = false;
+
+  verificarCodigoSorteo() {
+    this.codigoSorteoValido = false;
+    clearTimeout(this.codigoTimer);
+
+    const codigo = this.codigoSorteo?.trim().toUpperCase();
+
+    if (!codigo) {
+      return;
+    }
+
+    this.codigoTimer = setTimeout(() => {
+      this.firestore.getWhere('codigosSorteo', 'codigo', '==', codigo)
+        .pipe(take(1))
+        .subscribe({
+          next: (docs: any[]) => {
+            const doc = docs?.[0];
+            const valido = docs?.length > 0 && doc?.activo === true;
+            this.codigoSorteoValido = valido;
+            if (valido) {
+              this.codigoSorteo = codigo;
+              // Aquí puedes guardar que el usuario participa en el sorteo
+              // por ejemplo: this.usuario.codigoSorteo = codigo;
+            }
+          },
+          error: () => {
+            this.codigoSorteoValido = false;
+          }
+        });
+    }, 600);
+  }
+
+  
 }

@@ -119,8 +119,9 @@ export class EventosPage implements OnInit {
     });
   }
 
-
-
+  irAlTatuador(fav: any) {
+    this.router.navigate(['/tatuador', fav.uid]);
+  }
 
   seleccionarEvento(evento: any) {
     this.eventoSeleccionado = evento;
