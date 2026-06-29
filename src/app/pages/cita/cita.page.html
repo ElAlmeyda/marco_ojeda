@@ -98,7 +98,7 @@
           <!-- Cita normal: solo eliminar -->
           <ion-button *ngIf="cita.estado !== 'Editada'" fill="clear" class="action-btn delete-btn"
             (click)="eliminarCita(cita, cita.uidCita)">
-            <ion-icon slot="start" name="trash-outline"></ion-icon>
+            <ion-icon slot="start" name="trash-outline" color="danger"></ion-icon>
             {{ 'DELETE' | translate }}
           </ion-button>
 

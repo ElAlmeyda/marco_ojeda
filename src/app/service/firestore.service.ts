@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
+import { Observable, catchError, combineLatest, forkJoin, from, map, of, switchMap, tap } from 'rxjs';
 import { idToken } from '@angular/fire/auth';
 import { Cita, Evento, Tatuador } from '../model';
-import { getDownloadURL, getStorage, listAll, ref } from 'firebase/storage';
 import firebase from 'firebase/compat/app';
+
 
 @Injectable({
   providedIn: 'root'
@@ -205,7 +205,7 @@ export class FirestoreService {
     docRef.get().toPromise().then((docSnapshot) => {
       if (docSnapshot && docSnapshot.exists) {
         // El documento existe, procedemos a actualizar
-        return docRef.update({ email: nuevoCorreo });
+        return docRef.update({ correo: nuevoCorreo });
       } else {
         // El documento no existe, maneja el caso
         return Promise.reject('El documento no existe');
@@ -228,15 +228,16 @@ export class FirestoreService {
       });
   }
 
-   obtenerAvatar(uid: string): Observable<string> {
-    const imagenesDocRef = this.database.doc(`Usuarios/${uid}/avatar`);
-
-    return imagenesDocRef.snapshotChanges().pipe(
-      map(action => {
-        const data = action.payload.data() as { url: string };
-        return data?.url || '';
-      })
-    );
+   // firestore.service.ts
+  obtenerAvatar(uid: string): Observable<string> {
+    return this.database.doc(`Usuarios/${uid}/avatar/avatar`)
+      .snapshotChanges()
+      .pipe(
+        map(action => {
+          const data = action.payload.data() as { url: string } | undefined;
+          return data?.url || '';
+        })
+      );
   }
 
   async verificarFavorito(uidUsuario: string, uidTatuador: string): Promise<boolean> {
@@ -254,6 +255,110 @@ export class FirestoreService {
       }))
     );
   }
+
+  async guardarFavoritoFoto(uidUsuario: string, tatuadorId: string, fotoUrl: string): Promise<void> {
+    const docRef = this.database.doc(`Usuarios/${uidUsuario}/favoritosFotos/${this.database.createId()}`);
+    await docRef.set({
+      tatuadorId,
+      url: fotoUrl,
+      fecha: new Date()
+    });
+  }
+
+  async verificarFavoritoFoto(uidUsuario: string, fotoUrl: string): Promise<boolean> {
+    const idFoto = btoa(fotoUrl); // usar la misma clave que al guardar
+    const docRef = this.database.doc(`Usuarios/${uidUsuario}/favoritosFotos/${idFoto}`);
+    const docSnap = await docRef.get().toPromise();
+    return !!docSnap?.exists;
+  }
+
+  async eliminarFavoritoFoto(uidUsuario: string, idFavorito: string): Promise<void> {
+    const docRef = this.database.doc(`Usuarios/${uidUsuario}/favoritosFotos/${idFavorito}`);
+
+    return docRef.delete()
+      .then(() => console.log('✅ Favorito eliminado correctamente:', idFavorito))
+      .catch((err) => console.error('❌ Error al eliminar favorito:', err));
+  }
+
+   obtenerFavoritosFotos(uidUsuario: string) {
+    return this.database.collection(`Usuarios/${uidUsuario}/favoritosFotos`)
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data() as any;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        }))
+      );
+  }
+
+  async puedeRecibirCitas(uidTatuador: string): Promise<boolean> {
+    console.log("uidTatuador", uidTatuador)
+    try {
+      // 1️⃣ Obtener tatuador
+      const tatuadorSnap = await this.database
+        .collection('Tatuador')
+        .doc(uidTatuador)
+        .ref
+        .get();
+
+      if (!tatuadorSnap.exists) {
+        // Si no existe el tatuador, por seguridad no permitir
+        return false;
+      }
+
+      const tatuadorData = tatuadorSnap.data() as Tatuador;
+      console.log('isPremium:', tatuadorData.isPremium);
+
+      // 2️⃣ Premium → ilimitado
+      if (tatuadorData.isPremium === true) {
+        return true;
+      }
+
+      // 3️⃣ Rango del mes actual en UTC
+      const now = new Date();
+
+      const inicioMesUTC = new Date(Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        1,
+        0, 0, 0
+      ));
+
+      const finMesUTC = new Date(Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth() + 1,
+        0,
+        23, 59, 59
+      ));
+
+      const inicioTimestamp = firebase.firestore.Timestamp.fromDate(inicioMesUTC);
+      const finTimestamp = firebase.firestore.Timestamp.fromDate(finMesUTC);
+
+      // 4️⃣ Contar citas del tatuador este mes
+      const citasSnap = await this.database.collection('Tatuador')
+      .doc(uidTatuador)
+      .collection('citas', ref =>
+        ref
+          .where('uidTatuador', '==', uidTatuador)
+          .where('fechaCreacion', '>=', inicioTimestamp)
+          .where('fechaCreacion', '<=', finTimestamp)
+      ).get().toPromise();
+
+      console.log('Citas este mes:', citasSnap?.size);
+
+      const LIMITE_DEMO = 10;
+
+      // 5️⃣ Devuelve true solo si NO ha llegado al límite
+      return (citasSnap?.size ?? 0) <  LIMITE_DEMO;
+
+    } catch (error) {
+      console.error('Error en puedeRecibirCitas:', error);
+      // En caso de error, bloqueamos por seguridad
+      return false;
+    }
+  }
+
 
 
   setDocument(path: string, data: any) {
@@ -554,54 +659,6 @@ export class FirestoreService {
     });
   }
 
-  obtenerTodosLosBocetos(): Observable<any[]> {
-    // collectionGroup busca en todas las subcolecciones llamadas 'bocetos'
-    return this.database.collectionGroup('bocetos').valueChanges({ idField: 'id' });
-  }
-
-  getEvento(): Observable<any[]> {
-    return this.database
-      .collection(`Eventos/`)
-      .valueChanges({ idField: 'id' });
-  }
-
-  async guardarFavoritoFoto(uidUsuario: string, tatuadorId: string, fotoUrl: string): Promise<void> {
-    const docRef = this.database.doc(`Usuarios/${uidUsuario}/favoritosFotos/${this.database.createId()}`);
-    await docRef.set({
-      tatuadorId,
-      url: fotoUrl,
-      fecha: new Date()
-    });
-  }
-
-  async verificarFavoritoFoto(uidUsuario: string, fotoUrl: string): Promise<boolean> {
-    const idFoto = btoa(fotoUrl); // usar la misma clave que al guardar
-    const docRef = this.database.doc(`Usuarios/${uidUsuario}/favoritosFotos/${idFoto}`);
-    const docSnap = await docRef.get().toPromise();
-    return !!docSnap?.exists;
-  }
-
-  async eliminarFavoritoFoto(uidUsuario: string, idFavorito: string): Promise<void> {
-    const docRef = this.database.doc(`Usuarios/${uidUsuario}/favoritosFotos/${idFavorito}`);
-
-    return docRef.delete()
-      .then(() => console.log('✅ Favorito eliminado correctamente:', idFavorito))
-      .catch((err) => console.error('❌ Error al eliminar favorito:', err));
-  }
-
-   obtenerFavoritosFotos(uidUsuario: string) {
-    return this.database.collection(`Usuarios/${uidUsuario}/favoritosFotos`)
-      .snapshotChanges()
-      .pipe(
-        map(actions => actions.map(a => {
-          const data = a.payload.doc.data() as any;
-          const id = a.payload.doc.id;
-          return { id, ...data };
-        }))
-      );
-  }
-
-
   getCitasDelDia(estudioId: string, trabajadorId: string, fecha: string) {
     // fecha en formato 'YYYY-MM-DD'
     return this.database.collection(`Tatuador/${estudioId}/citas`, ref =>
@@ -617,7 +674,18 @@ export class FirestoreService {
       .valueChanges({ idField: 'id' });
   }
 
-   isPremium(uid: string): Observable<boolean> {
+  obtenerTodosLosBocetos(): Observable<any[]> {
+    // collectionGroup busca en todas las subcolecciones llamadas 'bocetos'
+    return this.database.collectionGroup('bocetos').valueChanges({ idField: 'id' });
+  }
+
+  getEvento(): Observable<any[]> {
+    return this.database
+      .collection(`Eventos/`)
+      .valueChanges({ idField: 'id' });
+  }
+
+  isPremium(uid: string): Observable<boolean> {
     return this.database.collection('Usuarios').doc(uid).valueChanges().pipe(
       map((data: any) => {
         return data?.isPremium === true;
@@ -649,6 +717,7 @@ export class FirestoreService {
     }
   }
 
+
   getEventoPorId(id: string) {
     return this.database.doc<Evento>(`Eventos/${id}`).valueChanges({ idField: 'id' });
   }
@@ -660,71 +729,30 @@ export class FirestoreService {
     ).valueChanges({ idField: 'uid' });
   }
 
-  async puedeRecibirCitas(uidTatuador: string): Promise<boolean> {
-    console.log("uidTatuador", uidTatuador)
-    try {
-      // 1️⃣ Obtener tatuador
-      const tatuadorSnap = await this.database
-        .collection('Tatuador')
-        .doc(uidTatuador)
-        .ref
-        .get();
+  getTatuadorPorTrabajadorId(trabajadorId: string) {
+    return this.database.collection('Tatuador').get().pipe(
+      switchMap(snapshot => {
+        const observables = snapshot.docs.map(doc =>
+          doc.ref.collection('trabajadores').doc(trabajadorId).get()
+        );
 
-      if (!tatuadorSnap.exists) {
-        // Si no existe el tatuador, por seguridad no permitir
-        return false;
-      }
+        return from(Promise.all(observables)).pipe(
+          map(results => {
+            const match = results.find(r => r.exists);
+            if (!match) return null;
 
-      const tatuadorData = tatuadorSnap.data() as Tatuador;
-      console.log('isPremium:', tatuadorData.isPremium);
-
-      // 2️⃣ Premium → ilimitado
-      if (tatuadorData.isPremium === true) {
-        return true;
-      }
-
-      // 3️⃣ Rango del mes actual en UTC
-      const now = new Date();
-
-      const inicioMesUTC = new Date(Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        1,
-        0, 0, 0
-      ));
-
-      const finMesUTC = new Date(Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth() + 1,
-        0,
-        23, 59, 59
-      ));
-
-      const inicioTimestamp = firebase.firestore.Timestamp.fromDate(inicioMesUTC);
-      const finTimestamp = firebase.firestore.Timestamp.fromDate(finMesUTC);
-
-      // 4️⃣ Contar citas del tatuador este mes
-      const citasSnap = await this.database.collection('Tatuador')
-      .doc(uidTatuador)
-      .collection('citas', ref =>
-        ref
-          .where('uidTatuador', '==', uidTatuador)
-          .where('fechaCreacion', '>=', inicioTimestamp)
-          .where('fechaCreacion', '<=', finTimestamp)
-      ).get().toPromise();
-
-      console.log('Citas este mes:', citasSnap?.size);
-
-      const LIMITE_DEMO = 10;
-
-      // 5️⃣ Devuelve true solo si NO ha llegado al límite
-      return (citasSnap?.size ?? 0) <  LIMITE_DEMO;
-
-    } catch (error) {
-      console.error('Error en puedeRecibirCitas:', error);
-      // En caso de error, bloqueamos por seguridad
-      return false;
-    }
+            const tatuadorId = match.ref.parent.parent?.id;
+            return { id: tatuadorId };
+          })
+        );
+      })
+    );
   }
 
+  getWhere(path: string, campo: string, operador: any, valor: any) {
+    return this.database.collection(path, ref => 
+      ref.where(campo, operador, valor)
+    ).valueChanges();
+  }
+  
 }

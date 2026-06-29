@@ -3,8 +3,6 @@ import { Router } from '@angular/router';
 import { TiendaService } from 'src/app/backend/tienda.service';
 import { Tatuador, Usuario } from 'src/app/model';
 import { FirestoreAuthService } from 'src/app/service/firestore-auth.service';
-import { FirebaseCrashlytics } from '@capacitor-firebase/crashlytics';
-
 
 @Component({
   selector: 'app-favoritos',
@@ -22,9 +20,9 @@ export class FavoritosPage implements OnInit {
     correo: '',
   };
   imagenSeleccionada: string | null = null;
+
   segmentoSeleccionado: string = 'tatuadores';
   fotosFavoritas: any[] = []; 
-
   imagenCargada: boolean[] = [];
   favoritosUsuario: any[] = [];
   fotosTatuador: { url: string; favorita: boolean }[] = [];
@@ -42,11 +40,16 @@ export class FavoritosPage implements OnInit {
    }
 
   ngOnInit() {
-
   }
 
   irAlTatuador(fav: any) {
     this.router.navigate(['/tatuador', fav.uid]);
+  }
+
+  irAlTatuadorFav(tatuadorId: string) {
+    if (tatuadorId && tatuadorId !== 'sinTatuador') {
+      this.router.navigate(['/tatuador', tatuadorId]);
+    }
   }
 
   obtenerFavoritos() {
@@ -64,22 +67,33 @@ export class FavoritosPage implements OnInit {
     });
   }
 
-  obtenerFavoritosFotos() {
+   obtenerFavoritosFotos() {
     this.tiendaService.obtenerFavoritosFotos(this.usuario.uid).subscribe({
-      next: (favoritos: any[]) => {
+      next: (favoritos) => {
         this.fotosFavoritas = favoritos.map(f => ({
           id: f.id,
           url: f.url,
           tatuadorId: f.tatuadorId,
           favorita: true
         }));
-        console.log('📸 Fotos favoritas cargadas:', this.fotosFavoritas);
       },
-      error: (err: any) => console.error('❌ Error al cargar favoritos de fotos', err)
+      error: (err) => console.error('❌ Error al cargar favoritos de fotos', err)
     });
   }
 
-   async toggleFavoritoFoto(foto: any, event: Event) {
+
+  disfav(fav: any) {
+    fav.favorito = false;
+    this.tiendaService.quitarFavorito(this.usuario.uid, fav.uid); 
+  }
+
+  like(fav: any) {
+    fav.favorito = true;
+    this.tiendaService.agregarFavorito(this.usuario.uid, fav.uid); 
+  }
+  
+
+  async toggleFavoritoFoto(foto: any, event: Event) {
     event.stopPropagation();
 
     if (!this.usuario.uid) return;
@@ -89,7 +103,6 @@ export class FavoritosPage implements OnInit {
       await this.tiendaService.eliminarFavoritoFoto(this.usuario.uid, foto.id);
       foto.favorita = false;
       this.fotosFavoritas = this.fotosFavoritas.filter(f => f.id !== foto.id);
-      console.log('🗑️ Foto eliminada de favoritos:', foto.url);
     } else {
       // ❤️ Guardar como favorita
       const nuevoId = await this.tiendaService.guardarFavoritoFoto(
@@ -99,7 +112,6 @@ export class FavoritosPage implements OnInit {
       );
       foto.favorita = true;
       foto.id = nuevoId;
-      console.log('❤️ Foto guardada como favorita:', foto.url);
     }
   }
 
@@ -118,17 +130,5 @@ export class FavoritosPage implements OnInit {
   cerrarImagen() {
     this.imagenSeleccionada = null;
   }
-
-
-  disfav(fav: any) {
-    fav.favorito = false;
-    this.tiendaService.quitarFavorito(this.usuario.uid, fav.uid); 
-  }
-
-  like(fav: any) {
-    fav.favorito = true;
-    this.tiendaService.agregarFavorito(this.usuario.uid, fav.uid); 
-  }
-  
 
 }

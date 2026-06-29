@@ -1,12 +1,12 @@
 // ── Content ───────────────────────────────────────────────
 .main-toolbar {
-  background: var(--ion-card-background);
+  --background: #121212;
   --border-width: 0;
   padding-top: var(--ion-safe-area-top);
 }
 
 .main-content {
-  background: var(--ion-card-background);
+  --background: #121212;
 }
 
 // ════════════════════════════════════════
@@ -51,4 +51,41 @@
   width: 90px;
   height: 90px;
   border-radius: 20px;
+}
+
+ion-content {
+  --background: var(--ion-background-color);
+}
+
+.main-toolbar {
+  --background: var(--ion-background-color);
+  --border-color: transparent;
+}
+
+.codigo-descuento-wrap {
+  margin-top: 12px;
+}
+
+.codigo-input-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  ion-input {
+    flex: 1;
+  }
+}
+
+.codigo-icon {
+  font-size: 24px;
+  margin-left: 8px;
+
+  &.codigo-ok    { color: #2dd36f; }
+  &.codigo-error { color: #eb445a; }
+}
+
+.field-success {
+  color: #2dd36f;
+  font-size: 12px;
+  margin: 4px 0 0 4px;
 }

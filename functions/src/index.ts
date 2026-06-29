@@ -250,6 +250,23 @@ export const notificarCitaAceptada = onDocumentCreated(
   }
 );
 
+const { onNewFatalIssuePublished } = require("firebase-functions/v2/alerts/crashlytics");
+const axios = require("axios");
+
+const N8N_WEBHOOK_URL = "https://n8n.srv1309383.hstgr.cloud/webhook/f1e9b4b9-798b-4686-968f-4f2c98666843";
+
+exports.crashlyticsToN8n = onNewFatalIssuePublished(async (event: any) => {
+  const issue = event.data.payload.issue;
+
+  await axios.post(N8N_WEBHOOK_URL, {
+    type: "fatal_crash",
+    appId: event.appId,
+    title: issue.title,
+    subtitle: issue.subtitle,
+    appVersion: issue.appVersion,
+    url: `https://console.firebase.google.com/project/itattoo-9f978/crashlytics/app/${event.appId}/issues/${issue.id}`
+  });
+});
 
 
 

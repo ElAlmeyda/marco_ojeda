@@ -1,6 +1,6 @@
 // ── Toolbar ───────────────────────────────────────────────
 .main-toolbar {
-  background: var(--ion-card-background);
+  --background: #121212;
   --border-width: 0;
   padding-top: var(--ion-safe-area-top);
   padding-inline: 12px;
@@ -32,7 +32,7 @@
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.03em;
-  color: var(--ion-text-color);
+  color: #EDEDED;
   text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -41,7 +41,7 @@
 
 // ── Content ───────────────────────────────────────────────
 .profile-content {
-  background: var(--ion-card-background);
+  --background: #121212;
 }
 
 // ── Segment ───────────────────────────────────────────────
@@ -50,11 +50,11 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  background: var(--ion-card-background);
+  background: #121212;
 }
 
 .custom-segment {
-  background: var(--ion-card-background);
+  --background: #1A1A1A;
   border-radius: 10px;
   border: 1px solid #2E2E2E;
   padding: 3px;
@@ -135,4 +135,102 @@
   color: #AAAAAA;
   line-height: 1.55;
   margin: 0;
+}
+
+.main-toolbar {
+  --background: var(--ion-background-color);
+  --border-width: 0;
+  padding-top: var(--ion-safe-area-top);
+  padding-inline: 12px;
+}
+
+.toolbar-title {
+  color: var(--ion-text-color);
+}
+
+.profile-content {
+  --background: var(--ion-background-color);
+}
+
+.segment-wrapper {
+  background: var(--ion-background-color);
+  padding: 14px 20px 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.custom-segment {
+  --background: var(--ion-card-background);
+  border-radius: 10px;
+  border: 1px solid var(--ion-border-color);
+  padding: 3px;
+}
+
+.hero-bio {
+  color: var(--ion-text-color);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.hero-city {
+  color: #808080;
+}
+
+.review-card {
+  background: var(--ion-card-background);
+  border-color: var(--ion-border-color);
+}
+
+.review-author { color: var(--ion-text-color); }
+.review-msg    { color: #808080; }
+
+.carousel-arrow {
+  background: var(--ion-card-background);
+  border-color: var(--ion-border-color);
+}
+
+.photo-skeleton {
+  background: var(--ion-card-background);
+}
+
+.photo-tile {
+  background: var(--ion-card-background);
+  border-color: var(--ion-border-color);
+}
+
+.review-textarea {
+  --background: var(--ion-card-background);
+  --border-color: var(--ion-border-color);
+  --color: var(--ion-text-color);
+}
+
+.photo-pick-btn {
+  background: var(--ion-card-background);
+  border-color: var(--ion-border-color);
+  color: var(--ion-text-color);
+}
+
+.hero-rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.rating-star-icon {
+  font-size: 14px;
+  color: #E5B85C;
+}
+
+.rating-value {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #EDEDED;
+}
+
+.rating-count {
+  font-size: 0.78rem;
+  color: #808080;
 }

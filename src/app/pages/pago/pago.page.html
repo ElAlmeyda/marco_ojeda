@@ -56,20 +56,19 @@
   </div>
 
   <!-- ── Footer ───────────────────────────────────────────── -->
-  <div class="pay-footer">
-    <p class="pay-legal">
-      • {{ 'PLANS.RENEWAL_POLICY' | translate }}<br/>
-      • {{ 'PLANS.MANAGE_SUBSCRIPTION' | translate }}<br/><br/>
-      {{ 'PLANS.ACCEPT_TERMS' | translate }}
-      <a class="pay-legal-link" href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank">
-        {{ 'PLANS.TERMS_OF_USE' | translate }}
-      </a>
-      {{ 'PLANS.AND' | translate }}
-      <a class="pay-legal-link" href="https://doc-hosting.flycricket.io/privacy-policy/c513bb80-96fb-498d-b73d-860d530bda0a/privacy" target="_blank">
-        {{ 'PLANS.PRIVACY_POLICY' | translate }}
-      </a>.
-    </p>
-    <button class="pay-cta-btn" (click)="pagar()">{{ buyText }}</button>
-  </div>
+   <div class="pay-legal-block">
+      <p class="pay-legal">
+        • {{ 'PLANS.RENEWAL_POLICY' | translate }}<br/>
+        {{ 'PLANS.ACCEPT_TERMS' | translate }}
+        <a class="pay-legal-link" href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank">
+          {{ 'PLANS.TERMS_OF_USE' | translate }}
+        </a>
+        {{ 'PLANS.AND' | translate }}
+        <a class="pay-legal-link" href="https://almeyda-studio.web.app/privacidad?app=itattoo" target="_blank">
+          {{ 'PLANS.PRIVACY_POLICY' | translate }}
+        </a>.
+      </p>
+      <button class="pay-cta-btn" (click)="pagar()">{{ buyText }}</button>
+    </div>
 
 </ion-content>

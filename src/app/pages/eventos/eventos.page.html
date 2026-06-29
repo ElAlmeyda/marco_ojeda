@@ -64,7 +64,7 @@
         <div class="card-img-wrap">
           <img [src]="tipo.avatar || 'assets/icon/sin_avatar.png'" class="card-img" />
           <div class="card-img-overlay"></div>
-          <span class="artist-name-tag">{{ tipo.nombreTienda }}</span>
+          <span class="artist-name-tag" >{{ tipo.nombreTienda }}</span>
         </div>
       </div>
     </div>
@@ -78,7 +78,7 @@
 
     <!-- Header artista -->
     <div class="artist-header">
-      <h2 class="artist-shop-name">{{ tatuadorSeleccionado.nombreTienda }}</h2>
+      <h2 class="artist-shop-name" (click)="irAlTatuador(tatuadorSeleccionado)">{{ tatuadorSeleccionado.nombreTienda }}</h2>
 
       <!-- Redes sociales -->
       <div class="social-row">

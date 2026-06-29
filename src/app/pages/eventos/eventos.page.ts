@@ -234,4 +234,9 @@ export class EventosPage implements OnInit {
 
     await toast.present();
   }
+
+  irAlTatuador(fav: any) {
+    console.log("Evento ",fav)
+    this.router.navigate(['/tatuador', fav.uid]);
+  }
 }

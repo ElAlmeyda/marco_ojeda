@@ -136,6 +136,33 @@
       </div>
       <p class="field-error" *ngIf="!isValidPassword()">{{ 'REGISTER.INVALID_PASSWORD' | translate }}</p>
 
+      <div class="codigo-descuento-wrap">
+        <div class="codigo-input-row">
+          <ion-input
+            label-placement="floating"
+            fill="outline"
+            class="auth-input"
+            label="Código de descuento (opcional)"
+            [(ngModel)]="codigoDescuento"
+            (ngModelChange)="verificarCodigoSorteo()"
+            [ngModelOptions]="{standalone: true}">
+          </ion-input>
+          <!-- Icono de estado -->
+          <ion-icon
+            *ngIf="codigoDescuento && codigoValido"
+            name="checkmark-circle"
+            class="codigo-icon codigo-ok">
+          </ion-icon>
+          <ion-icon
+            *ngIf="codigoDescuento && !codigoValido"
+            name="close-circle"
+            class="codigo-icon codigo-error">
+          </ion-icon>
+        </div>
+        <p class="field-success" *ngIf="codigoDescuento && codigoValido">✅ Código válido</p>
+        <p class="field-error"   *ngIf="codigoDescuento && !codigoValido">❌ Código no válido</p>
+      </div>
+
       <ion-button expand="block" class="auth-btn"
         (click)="crearUsuario()"
         [disabled]="!registro || nombreInvcalido || numeroIncorrecto || correoInvalido || !isValidPassword() || !nombre || !phone || !correo || !password">
@@ -162,7 +189,7 @@
 
     <!-- Header usuario -->
     <div class="user-hero">
-      <div class="user-avatar-wrap" (click)="actualizarAvatar()">
+      <div class="user-avatar-wrap" (click)="fileInput.click()">
         <img [src]="usuario.avatar || 'assets/icon/sin_avatar.png'" alt="Avatar" class="user-avatar" />
         <div class="avatar-edit-badge">
           <ion-icon name="camera-outline"></ion-icon>
